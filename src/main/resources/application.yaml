@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: jobnest
+
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+
+  api:
+    security:
+      token:
+        secret: ${JWT_SECRET}
+
+  jpa:
+    hibernate:
+      ddl-auto: update
