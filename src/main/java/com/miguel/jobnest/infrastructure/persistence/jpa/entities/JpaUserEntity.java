@@ -2,6 +2,7 @@ package com.miguel.jobnest.infrastructure.persistence.jpa.entities;
 
 import com.miguel.jobnest.domain.entities.User;
 import com.miguel.jobnest.domain.enums.AuthorizationRole;
+import com.miguel.jobnest.domain.enums.UserStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -17,24 +18,34 @@ public class JpaUserEntity {
     @Column(nullable = false, length = 36)
     private String id;
 
-    @Column(name = "full_name", nullable = false)
-    private String fullName;
+    @Column(name = "name", nullable = false, length = 100)
+    private String name;
 
     @Column(nullable = false, unique = true)
     private String email;
 
-    @Column(name = "phone_number", nullable = false, length = 15)
-    private String phoneNumber;
+    @Column(length = 1000)
+    private String description;
 
     @Column(nullable = false, length = 100)
     private String password;
 
-    @Column(name = "curriculum_url", nullable = false)
-    private String curriculumUrl;
+    @Column(name = "status", nullable = false, length = 10)
+    @Enumerated(EnumType.STRING)
+    private UserStatus userStatus;
 
     @Column(name = "authorization_role", nullable = false, length = 10)
     @Enumerated(EnumType.STRING)
     private AuthorizationRole authorizationRole;
+
+    @Column(nullable = false, length = 50)
+    private String city;
+
+    @Column(nullable = false, length = 50)
+    private String state;
+
+    @Column(nullable = false, length = 50)
+    private String country;
 
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
@@ -42,12 +53,15 @@ public class JpaUserEntity {
     public static JpaUserEntity from(User user) {
         return new JpaUserEntity(
                 user.getId(),
-                user.getFullName(),
+                user.getName(),
                 user.getEmail(),
-                user.getPhoneNumber(),
+                user.getDescription(),
                 user.getPassword(),
-                user.getCurriculumUrl(),
+                user.getUserStatus(),
                 user.getAuthorizationRole(),
+                user.getCity(),
+                user.getState(),
+                user.getCountry(),
                 user.getCreatedAt()
         );
     }
@@ -55,12 +69,15 @@ public class JpaUserEntity {
     public User toEntity() {
         return User.with(
                 this.id,
-                this.fullName,
+                this.name,
                 this.email,
-                this.phoneNumber,
+                this.description,
                 this.password,
-                this.curriculumUrl,
+                this.userStatus,
                 this.authorizationRole,
+                this.city,
+                this.state,
+                this.country,
                 this.createdAt
         );
     }

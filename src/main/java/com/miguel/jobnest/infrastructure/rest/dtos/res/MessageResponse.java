@@ -1,4 +1,4 @@
-package com.miguel.jobnest.infrastructure.web.dtos.res;
+package com.miguel.jobnest.infrastructure.rest.dtos.res;
 
 public record MessageResponse(
         String message

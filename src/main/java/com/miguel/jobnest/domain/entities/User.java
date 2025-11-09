@@ -1,6 +1,7 @@
 package com.miguel.jobnest.domain.entities;
 
 import com.miguel.jobnest.domain.enums.AuthorizationRole;
+import com.miguel.jobnest.domain.enums.UserStatus;
 import com.miguel.jobnest.domain.utils.IdentifierUtils;
 import com.miguel.jobnest.domain.utils.TimeUtils;
 
@@ -8,71 +9,91 @@ import java.time.LocalDateTime;
 
 public class User {
     private final String id;
-    private final String fullName;
+    private final String name;
     private final String email;
-    private final String phoneNumber;
+    private final String description;
     private final String password;
-    private final String curriculumUrl;
+    private final UserStatus userStatus;
     private final AuthorizationRole authorizationRole;
+    private final String city;
+    private final String state;
+    private final String country;
     private final LocalDateTime createdAt;
 
     private User(
             String id,
-            String fullName,
+            String name,
             String email,
-            String phoneNumber,
+            String description,
             String password,
-            String curriculumUrl,
+            UserStatus userStatus,
             AuthorizationRole authorizationRole,
+            String city,
+            String state,
+            String country,
             LocalDateTime createdAt
     ) {
         this.id = id;
-        this.fullName = fullName;
+        this.name = name;
         this.email = email;
-        this.phoneNumber = phoneNumber;
+        this.description = description;
         this.password = password;
-        this.curriculumUrl = curriculumUrl;
+        this.userStatus = userStatus;
         this.authorizationRole = authorizationRole;
+        this.city = city;
+        this.state = state;
+        this.country = country;
         this.createdAt = createdAt;
     }
 
     public static User newUser(
-        String fullName,
-        String email,
-        String phoneNumber,
-        String password,
-        String curriculumUrl
+            String name,
+            String email,
+            String password,
+            AuthorizationRole authorizationRole,
+            String city,
+            String state,
+            String country
     ) {
         return new User(
                 IdentifierUtils.generateUUID(),
-                fullName,
+                name,
                 email,
-                phoneNumber,
+                null,
                 password,
-                curriculumUrl,
-                AuthorizationRole.CANDIDATE,
+                UserStatus.UNVERIFIED,
+                authorizationRole,
+                city,
+                state,
+                country,
                 TimeUtils.now()
         );
     }
 
     public static User with(
             String id,
-            String fullName,
+            String name,
             String email,
-            String phoneNumber,
+            String description,
             String password,
-            String curriculumUrl,
+            UserStatus userStatus,
             AuthorizationRole authorizationRole,
+            String city,
+            String state,
+            String country,
             LocalDateTime createdAt
     ) {
         return new User(
                 id,
-                fullName,
+                name,
                 email,
-                phoneNumber,
+                description,
                 password,
-                curriculumUrl,
+                userStatus,
                 authorizationRole,
+                city,
+                state,
+                country,
                 createdAt
         );
     }
@@ -81,28 +102,40 @@ public class User {
         return this.id;
     }
 
-    public String getFullName() {
-        return this.fullName;
+    public String getName() {
+        return this.name;
     }
 
     public String getEmail() {
         return this.email;
     }
 
-    public String getPhoneNumber() {
-        return this.phoneNumber;
+    public String getDescription() {
+        return this.description;
     }
 
     public String getPassword() {
         return this.password;
     }
 
-    public String getCurriculumUrl() {
-        return this.curriculumUrl;
+    public UserStatus getUserStatus() {
+        return this.userStatus;
     }
 
     public AuthorizationRole getAuthorizationRole() {
         return this.authorizationRole;
+    }
+
+    public String getCity() {
+        return this.city;
+    }
+
+    public String getState() {
+        return this.state;
+    }
+
+    public String getCountry() {
+        return this.country;
     }
 
     public LocalDateTime getCreatedAt() {
@@ -113,12 +146,15 @@ public class User {
     public String toString() {
         return "User{" +
                 "id='" + this.id + '\'' +
-                ", fullName='" + this.fullName + '\'' +
+                ", name='" + this.name + '\'' +
                 ", email='" + this.email + '\'' +
-                ", phoneNumber='" + this.phoneNumber + '\'' +
-                ", password='" + this.password + '\'' +
-                ", curriculumUrl='" + this.curriculumUrl + '\'' +
+                ", description='" + this.description + '\'' +
+                ", password='" +this. password + '\'' +
+                ", userStatus=" + this.userStatus +
                 ", authorizationRole=" + this.authorizationRole +
+                ", city='" +this.city + '\'' +
+                ", state='" + this.state + '\'' +
+                ", country='" + this.country + '\'' +
                 ", createdAt=" + this.createdAt +
                 '}';
     }
