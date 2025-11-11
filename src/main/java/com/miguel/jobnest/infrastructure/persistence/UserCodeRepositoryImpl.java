@@ -34,4 +34,9 @@ public class UserCodeRepositoryImpl implements UserCodeRepository {
     public void deleteById(String id) {
         this.jpaUserCodeRepository.deleteById(id);
     }
+
+    @Override
+    public Optional<UserCode> findByCodeAndCodeType(String code, String codeType) {
+        return this.jpaUserCodeRepository.findByCodeAndCodeType(code, codeType).map(JpaUserCodeEntity::toEntity);
+    }
 }

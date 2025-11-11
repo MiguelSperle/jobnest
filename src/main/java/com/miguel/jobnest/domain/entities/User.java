@@ -98,6 +98,22 @@ public class User {
         );
     }
 
+    public User withUserStatus(UserStatus userStatus) {
+        return new User(
+                this.id,
+                this.name,
+                this.email,
+                this.description,
+                this.password,
+                userStatus,
+                this.authorizationRole,
+                this.city,
+                this.state,
+                this.country,
+                this.createdAt
+        );
+    }
+
     public String getId() {
         return this.id;
     }

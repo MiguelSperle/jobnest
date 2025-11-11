@@ -2,9 +2,13 @@ package com.miguel.jobnest.infrastructure.configuration.usecases.user;
 
 import com.miguel.jobnest.application.abstractions.producer.MessageProducer;
 import com.miguel.jobnest.application.abstractions.providers.PasswordEncryptorProvider;
+import com.miguel.jobnest.application.abstractions.repositories.UserCodeRepository;
 import com.miguel.jobnest.application.abstractions.repositories.UserRepository;
+import com.miguel.jobnest.application.abstractions.transaction.TransactionExecutor;
 import com.miguel.jobnest.application.abstractions.usecases.user.RegisterUserUseCase;
+import com.miguel.jobnest.application.abstractions.usecases.user.UpdateUserToVerifiedUseCase;
 import com.miguel.jobnest.application.usecases.user.RegisterUserUseCaseImpl;
+import com.miguel.jobnest.application.usecases.user.UpdateUserToVerifiedUseCaseImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -20,6 +24,19 @@ public class UserUseCasesConfiguration {
                 userRepository,
                 passwordEncryptorProvider,
                 messageProducer
+        );
+    }
+
+    @Bean
+    public UpdateUserToVerifiedUseCase updateUserToVerifiedUseCase(
+            UserCodeRepository userCodeRepository,
+            UserRepository userRepository,
+            TransactionExecutor transactionExecutor
+    ) {
+        return new UpdateUserToVerifiedUseCaseImpl(
+                userCodeRepository,
+                userRepository,
+                transactionExecutor
         );
     }
 }
