@@ -34,4 +34,9 @@ public class UserRepositoryImpl implements UserRepository {
     public void deleteById(String id) {
         this.jpaUserRepository.deleteById(id);
     }
+
+    @Override
+    public boolean existsByEmail(String email) {
+        return this.jpaUserRepository.existsByEmail(email);
+    }
 }

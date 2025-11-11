@@ -1,7 +1,5 @@
 package com.miguel.jobnest.application.usecases.user.inputs;
 
-import com.miguel.jobnest.domain.enums.AuthorizationRole;
-
 public record CreateUserUseCaseInput(
         String name,
         String email,

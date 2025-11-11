@@ -1,0 +1,29 @@
+package com.miguel.jobnest.infrastructure.configuration.broker;
+
+
+import com.miguel.jobnest.infrastructure.configuration.broker.annotations.exchanges.UserCreatedDlqExchange;
+import com.miguel.jobnest.infrastructure.configuration.broker.annotations.exchanges.UserCreatedExchange;
+import com.miguel.jobnest.infrastructure.configuration.broker.annotations.queues.UserCreatedDlqQueue;
+import com.miguel.jobnest.infrastructure.configuration.broker.annotations.queues.UserCreatedQueue;
+import org.springframework.amqp.core.*;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+public class BindingConfiguration {
+    @Bean
+    public Binding userCreatedBinding(
+            @UserCreatedQueue Queue queue,
+            @UserCreatedExchange DirectExchange directExchange
+    ) {
+        return BindingBuilder.bind(queue).to(directExchange).with("user.created.routing.key");
+    }
+
+    @Bean
+    public Binding userCreatedDlqBinding(
+            @UserCreatedDlqQueue Queue queue,
+            @UserCreatedDlqExchange DirectExchange directExchange
+    ) {
+        return BindingBuilder.bind(queue).to(directExchange).with("user.created.dlq.routing.key");
+    }
+}
