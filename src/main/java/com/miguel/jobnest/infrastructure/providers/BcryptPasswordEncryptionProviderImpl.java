@@ -1,13 +1,13 @@
 package com.miguel.jobnest.infrastructure.providers;
 
-import com.miguel.jobnest.application.abstractions.providers.PasswordEncryptorProvider;
+import com.miguel.jobnest.application.abstractions.providers.PasswordEncryptionProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class PasswordEncryptorProviderImpl implements PasswordEncryptorProvider {
+public class BcryptPasswordEncryptionProviderImpl  implements PasswordEncryptionProvider {
     private final PasswordEncoder passwordEncoder;
 
     @Override

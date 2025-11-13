@@ -3,6 +3,7 @@ package com.miguel.jobnest.infrastructure.rest.controllers;
 import com.miguel.jobnest.application.abstractions.usecases.user.RegisterUserUseCase;
 import com.miguel.jobnest.infrastructure.rest.dtos.req.RegisterUserRequest;
 import com.miguel.jobnest.infrastructure.rest.dtos.res.MessageResponse;
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,6 +20,7 @@ public class AuthController {
     private final RegisterUserUseCase registerUserUseCase;
 
     @PostMapping("/register")
+    @RateLimiter(name = "rateLimitConfiguration")
     public ResponseEntity<MessageResponse> registerUser(@RequestBody @Valid RegisterUserRequest registerUserRequest) {
         this.registerUserUseCase.execute(registerUserRequest.toInput());
 

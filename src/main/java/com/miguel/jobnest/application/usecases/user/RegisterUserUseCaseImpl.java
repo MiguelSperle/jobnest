@@ -1,7 +1,7 @@
 package com.miguel.jobnest.application.usecases.user;
 
 import com.miguel.jobnest.application.abstractions.producer.MessageProducer;
-import com.miguel.jobnest.application.abstractions.providers.PasswordEncryptorProvider;
+import com.miguel.jobnest.application.abstractions.providers.PasswordEncryptionProvider;
 import com.miguel.jobnest.application.abstractions.repositories.UserRepository;
 import com.miguel.jobnest.application.abstractions.usecases.user.RegisterUserUseCase;
 import com.miguel.jobnest.application.usecases.user.inputs.CreateUserUseCaseInput;
@@ -12,7 +12,7 @@ import com.miguel.jobnest.domain.exceptions.DomainException;
 
 public class RegisterUserUseCaseImpl implements RegisterUserUseCase {
     private final UserRepository userRepository;
-    private final PasswordEncryptorProvider passwordEncryptorProvider;
+    private final PasswordEncryptionProvider passwordEncryptorProvider;
     private final MessageProducer messageProducer;
 
     private static final String USER_CREATED_EXCHANGE = "user.created.exchange";
@@ -20,7 +20,7 @@ public class RegisterUserUseCaseImpl implements RegisterUserUseCase {
 
     public RegisterUserUseCaseImpl(
             UserRepository userRepository,
-            PasswordEncryptorProvider passwordEncryptorProvider,
+            PasswordEncryptionProvider passwordEncryptorProvider,
             MessageProducer messageProducer
     ) {
         this.userRepository = userRepository;

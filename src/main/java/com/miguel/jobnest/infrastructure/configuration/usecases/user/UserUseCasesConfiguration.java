@@ -1,7 +1,7 @@
 package com.miguel.jobnest.infrastructure.configuration.usecases.user;
 
 import com.miguel.jobnest.application.abstractions.producer.MessageProducer;
-import com.miguel.jobnest.application.abstractions.providers.PasswordEncryptorProvider;
+import com.miguel.jobnest.application.abstractions.providers.PasswordEncryptionProvider;
 import com.miguel.jobnest.application.abstractions.repositories.UserCodeRepository;
 import com.miguel.jobnest.application.abstractions.repositories.UserRepository;
 import com.miguel.jobnest.application.abstractions.transaction.TransactionExecutor;
@@ -17,12 +17,12 @@ public class UserUseCasesConfiguration {
     @Bean
     public RegisterUserUseCase createUserUseCase(
             UserRepository userRepository,
-            PasswordEncryptorProvider passwordEncryptorProvider,
+            PasswordEncryptionProvider passwordEncryptionProvider,
             MessageProducer messageProducer
     ) {
         return new RegisterUserUseCaseImpl(
                 userRepository,
-                passwordEncryptorProvider,
+                passwordEncryptionProvider,
                 messageProducer
         );
     }
