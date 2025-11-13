@@ -1,10 +1,9 @@
-package com.miguel.jobnest.application.usecases.user;
+package com.miguel.jobnest.application.usecases.user.update.status;
 
 import com.miguel.jobnest.application.abstractions.repositories.UserCodeRepository;
 import com.miguel.jobnest.application.abstractions.repositories.UserRepository;
 import com.miguel.jobnest.application.abstractions.transaction.TransactionExecutor;
 import com.miguel.jobnest.application.abstractions.usecases.user.UpdateUserToVerifiedUseCase;
-import com.miguel.jobnest.application.usecases.user.inputs.UpdateUserToVerifiedUseCaseInput;
 import com.miguel.jobnest.domain.entities.User;
 import com.miguel.jobnest.domain.entities.UserCode;
 import com.miguel.jobnest.domain.enums.UserCodeType;
@@ -56,9 +55,8 @@ public class UpdateUserToVerifiedUseCaseImpl implements UpdateUserToVerifiedUseC
         this.userCodeRepository.deleteById(id);
     }
 
-    private User getUserById(String userId) {
-        return this.userRepository.findById(userId)
-                .orElseThrow(() -> NotFoundException.with("User not found"));
+    private User getUserById(String id) {
+        return this.userRepository.findById(id).orElseThrow(() -> NotFoundException.with("User not found"));
     }
 
     private void saveUser(User user) {

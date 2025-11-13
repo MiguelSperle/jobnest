@@ -1,4 +1,4 @@
-package com.miguel.jobnest.application.usecases.user.inputs;
+package com.miguel.jobnest.application.usecases.user.update.status;
 
 public record UpdateUserToVerifiedUseCaseInput(
         String code

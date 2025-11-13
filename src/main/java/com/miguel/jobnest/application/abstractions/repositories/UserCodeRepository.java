@@ -11,4 +11,5 @@ public interface UserCodeRepository {
     UserCode save(UserCode userCode);
     void deleteById(String id);
     Optional<UserCode> findByCodeAndCodeType(String code, String codeType);
+    Optional<UserCode> findByUserIdAndCodeType(String userId, String codeType);
 }

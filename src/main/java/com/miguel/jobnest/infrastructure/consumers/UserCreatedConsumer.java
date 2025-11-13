@@ -30,7 +30,7 @@ public class UserCreatedConsumer {
 
     @RabbitListener(queues = USER_CREATED_QUEUE)
     public void onMessage(UserCreatedEvent userCreatedEvent) {
-        final String codeGenerated = this.generateCode();
+        final String codeGenerated = this.codeProvider.generateCode(CODE_LENGTH, ALPHANUMERIC_CHARACTERS);
 
         final UserCode newUserCode = UserCode.newUserCode(userCreatedEvent.id(), codeGenerated, UserCodeType.USER_VERIFICATION);
 
@@ -38,7 +38,7 @@ public class UserCreatedConsumer {
             final UserCode savedUserCode = this.saveUserCode(newUserCode);
 
             final String text = "Hello, your verification code is " + savedUserCode.getCode() + " and it will expire in 15 minutes";
-            final String subject = "User Verification Code";
+            final String subject = "Verification Code";
 
             final User user = this.getUserById(savedUserCode.getUserId());
 
@@ -46,16 +46,11 @@ public class UserCreatedConsumer {
         });
     }
 
-    private String generateCode() {
-        return this.codeProvider.generateCode(CODE_LENGTH, ALPHANUMERIC_CHARACTERS);
-    }
-
     private UserCode saveUserCode(UserCode userCode) {
         return this.userCodeRepository.save(userCode);
     }
 
-    private User getUserById(String userId) {
-        return this.userRepository.findById(userId)
-                .orElseThrow(() -> NotFoundException.with("User not found"));
+    private User getUserById(String id) {
+        return this.userRepository.findById(id).orElseThrow(() -> NotFoundException.with("User not found"));
     }
 }

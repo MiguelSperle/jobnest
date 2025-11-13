@@ -15,4 +15,14 @@ public class ExchangeConfiguration {
     public DirectExchange userCreatedDlqExchange() {
         return new DirectExchange("user.created.dlq.exchange");
     }
+
+    @Bean
+    public DirectExchange userCodeCreatedExchange() {
+        return new DirectExchange("user.code.created.exchange");
+    }
+
+    @Bean
+    public DirectExchange userCodeCreatedDlqExchange() {
+        return new DirectExchange("user.code.created.dlq.exchange");
+    }
 }

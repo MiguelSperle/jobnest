@@ -39,4 +39,9 @@ public class UserCodeRepositoryImpl implements UserCodeRepository {
     public Optional<UserCode> findByCodeAndCodeType(String code, String codeType) {
         return this.jpaUserCodeRepository.findByCodeAndCodeType(code, codeType).map(JpaUserCodeEntity::toEntity);
     }
+
+    @Override
+    public Optional<UserCode> findByUserIdAndCodeType(String userId, String codeType) {
+        return this.jpaUserCodeRepository.findByUserIdAndCodeType(userId, codeType).map(JpaUserCodeEntity::toEntity);
+    }
 }

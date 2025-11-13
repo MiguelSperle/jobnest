@@ -1,8 +1,8 @@
 package com.miguel.jobnest.infrastructure.rest.controllers;
 
 import com.miguel.jobnest.application.abstractions.usecases.user.RegisterUserUseCase;
-import com.miguel.jobnest.infrastructure.rest.dtos.req.RegisterUserRequest;
-import com.miguel.jobnest.infrastructure.rest.dtos.res.MessageResponse;
+import com.miguel.jobnest.infrastructure.rest.dtos.user.req.RegisterUserRequest;
+import com.miguel.jobnest.infrastructure.rest.dtos.MessageResponse;
 import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

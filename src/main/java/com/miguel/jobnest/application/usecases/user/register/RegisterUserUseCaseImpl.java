@@ -1,10 +1,9 @@
-package com.miguel.jobnest.application.usecases.user;
+package com.miguel.jobnest.application.usecases.user.register;
 
 import com.miguel.jobnest.application.abstractions.producer.MessageProducer;
 import com.miguel.jobnest.application.abstractions.providers.PasswordEncryptionProvider;
 import com.miguel.jobnest.application.abstractions.repositories.UserRepository;
 import com.miguel.jobnest.application.abstractions.usecases.user.RegisterUserUseCase;
-import com.miguel.jobnest.application.usecases.user.inputs.CreateUserUseCaseInput;
 import com.miguel.jobnest.domain.entities.User;
 import com.miguel.jobnest.domain.enums.AuthorizationRole;
 import com.miguel.jobnest.domain.events.UserCreatedEvent;
@@ -29,12 +28,12 @@ public class RegisterUserUseCaseImpl implements RegisterUserUseCase {
     }
 
     @Override
-    public void execute(CreateUserUseCaseInput input) {
+    public void execute(RegisterUserUseCaseInput input) {
         if (this.verifyUserAlreadyExistsByEmail(input.email())) {
             throw DomainException.with("This email is already being used", 409);
         }
 
-        final String encodedPassword = this.encryptPassword(input.password());
+        final String encodedPassword = this.passwordEncryptorProvider.encode(input.password());
 
         final var authorizationRoleConverted = AuthorizationRole.valueOf(input.authorizationRole());
 
@@ -57,10 +56,6 @@ public class RegisterUserUseCaseImpl implements RegisterUserUseCase {
 
     private boolean verifyUserAlreadyExistsByEmail(String email) {
         return this.userRepository.existsByEmail(email);
-    }
-
-    private String encryptPassword(String password) {
-        return this.passwordEncryptorProvider.encode(password);
     }
 
     private User saveUser(User user) {

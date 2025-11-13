@@ -1,6 +1,6 @@
-package com.miguel.jobnest.application.usecases.user.inputs;
+package com.miguel.jobnest.application.usecases.user.register;
 
-public record CreateUserUseCaseInput(
+public record RegisterUserUseCaseInput(
         String name,
         String email,
         String password,
@@ -9,7 +9,7 @@ public record CreateUserUseCaseInput(
         String state,
         String country
 ) {
-    public static CreateUserUseCaseInput with(
+    public static RegisterUserUseCaseInput with(
             String name,
             String email,
             String password,
@@ -18,7 +18,7 @@ public record CreateUserUseCaseInput(
             String state,
             String country
     ) {
-        return new CreateUserUseCaseInput(
+        return new RegisterUserUseCaseInput(
                 name,
                 email,
                 password,

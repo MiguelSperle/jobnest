@@ -1,16 +1,16 @@
 package com.miguel.jobnest.infrastructure.annotations.validatiors;
 
-import com.miguel.jobnest.infrastructure.annotations.ValidEnum;
+import com.miguel.jobnest.infrastructure.annotations.EnumCheck;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
 import java.util.Arrays;
 
-public class EnumValidator implements ConstraintValidator<ValidEnum, String> {
+public class EnumValidator implements ConstraintValidator<EnumCheck, String> {
     private Enum<?>[] enumValues;
 
     @Override
-    public void initialize(ValidEnum constraintAnnotation) {
+    public void initialize(EnumCheck constraintAnnotation) {
         this.enumValues = constraintAnnotation.enumClass().getEnumConstants();
     }
 
