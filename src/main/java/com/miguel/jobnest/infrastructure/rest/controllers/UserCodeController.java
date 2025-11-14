@@ -2,7 +2,7 @@ package com.miguel.jobnest.infrastructure.rest.controllers;
 
 import com.miguel.jobnest.application.abstractions.usecases.usercode.ResendVerificationCodeUseCase;
 import com.miguel.jobnest.infrastructure.rest.dtos.usercode.req.ResendVerificationCodeRequest;
-import com.miguel.jobnest.infrastructure.rest.dtos.MessageResponse;
+import com.miguel.jobnest.infrastructure.rest.dtos.common.res.MessageResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

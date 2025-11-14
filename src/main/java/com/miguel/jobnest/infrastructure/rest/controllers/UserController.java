@@ -2,7 +2,7 @@ package com.miguel.jobnest.infrastructure.rest.controllers;
 
 import com.miguel.jobnest.application.abstractions.usecases.user.UpdateUserToVerifiedUseCase;
 import com.miguel.jobnest.application.usecases.user.update.status.UpdateUserToVerifiedUseCaseInput;
-import com.miguel.jobnest.infrastructure.rest.dtos.MessageResponse;
+import com.miguel.jobnest.infrastructure.rest.dtos.common.res.MessageResponse;
 import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
