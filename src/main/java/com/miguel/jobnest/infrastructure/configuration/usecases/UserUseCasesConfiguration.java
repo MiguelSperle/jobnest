@@ -6,14 +6,14 @@ import com.miguel.jobnest.application.abstractions.repositories.UserCodeReposito
 import com.miguel.jobnest.application.abstractions.repositories.UserRepository;
 import com.miguel.jobnest.application.abstractions.services.JwtService;
 import com.miguel.jobnest.application.abstractions.transaction.TransactionExecutor;
-import com.miguel.jobnest.application.abstractions.usecases.user.authenticate.AuthenticateUserUseCase;
-import com.miguel.jobnest.application.abstractions.usecases.user.register.RegisterUserUseCase;
-import com.miguel.jobnest.application.abstractions.usecases.user.reset.password.ResetUserPasswordUseCase;
-import com.miguel.jobnest.application.abstractions.usecases.user.update.status.UpdateUserToVerifiedUseCase;
-import com.miguel.jobnest.application.usecases.user.authenticate.AuthenticateUserUseCaseImpl;
-import com.miguel.jobnest.application.usecases.user.register.RegisterUserUseCaseImpl;
-import com.miguel.jobnest.application.usecases.user.reset.password.ResetUserPasswordUseCaseImpl;
-import com.miguel.jobnest.application.usecases.user.update.status.UpdateUserToVerifiedUseCaseImpl;
+import com.miguel.jobnest.application.abstractions.usecases.user.AuthenticateUserUseCase;
+import com.miguel.jobnest.application.abstractions.usecases.user.RegisterUserUseCase;
+import com.miguel.jobnest.application.abstractions.usecases.user.ResetUserPasswordUseCase;
+import com.miguel.jobnest.application.abstractions.usecases.user.UpdateUserToVerifiedUseCase;
+import com.miguel.jobnest.application.usecases.user.AuthenticateUserUseCaseImpl;
+import com.miguel.jobnest.application.usecases.user.RegisterUserUseCaseImpl;
+import com.miguel.jobnest.application.usecases.user.ResetUserPasswordUseCaseImpl;
+import com.miguel.jobnest.application.usecases.user.UpdateUserToVerifiedUseCaseImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

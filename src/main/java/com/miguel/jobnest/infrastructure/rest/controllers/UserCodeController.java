@@ -1,12 +1,12 @@
 package com.miguel.jobnest.infrastructure.rest.controllers;
 
-import com.miguel.jobnest.application.abstractions.usecases.usercode.send.password.SendPasswordResetCodeUseCase;
-import com.miguel.jobnest.application.abstractions.usecases.usercode.resend.verification.ResendVerificationCodeUseCase;
-import com.miguel.jobnest.application.abstractions.usecases.usercode.validate.password.ValidatePasswordResetCodeUseCase;
-import com.miguel.jobnest.application.usecases.usercode.validate.password.ValidatePasswordResetCodeUseCaseInput;
-import com.miguel.jobnest.infrastructure.rest.dtos.usercode.req.SendPasswordResetCodeRequest;
-import com.miguel.jobnest.infrastructure.rest.dtos.usercode.req.ResendVerificationCodeRequest;
-import com.miguel.jobnest.infrastructure.rest.dtos.common.res.MessageResponse;
+import com.miguel.jobnest.application.abstractions.usecases.usercode.SendPasswordResetCodeUseCase;
+import com.miguel.jobnest.application.abstractions.usecases.usercode.ResendVerificationCodeUseCase;
+import com.miguel.jobnest.application.abstractions.usecases.usercode.ValidatePasswordResetCodeUseCase;
+import com.miguel.jobnest.application.usecases.usercode.inputs.ValidatePasswordResetCodeUseCaseInput;
+import com.miguel.jobnest.infrastructure.rest.dtos.usercode.requests.SendPasswordResetCodeRequest;
+import com.miguel.jobnest.infrastructure.rest.dtos.usercode.requests.ResendVerificationCodeRequest;
+import com.miguel.jobnest.infrastructure.rest.dtos.common.responses.MessageResponse;
 import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

@@ -1,10 +1,10 @@
 package com.miguel.jobnest.infrastructure.rest.controllers;
 
-import com.miguel.jobnest.application.abstractions.usecases.user.reset.password.ResetUserPasswordUseCase;
-import com.miguel.jobnest.application.abstractions.usecases.user.update.status.UpdateUserToVerifiedUseCase;
-import com.miguel.jobnest.application.usecases.user.update.status.UpdateUserToVerifiedUseCaseInput;
-import com.miguel.jobnest.infrastructure.rest.dtos.common.res.MessageResponse;
-import com.miguel.jobnest.infrastructure.rest.dtos.user.req.ResetUserPasswordRequest;
+import com.miguel.jobnest.application.abstractions.usecases.user.ResetUserPasswordUseCase;
+import com.miguel.jobnest.application.abstractions.usecases.user.UpdateUserToVerifiedUseCase;
+import com.miguel.jobnest.application.usecases.user.inputs.UpdateUserToVerifiedUseCaseInput;
+import com.miguel.jobnest.infrastructure.rest.dtos.common.responses.MessageResponse;
+import com.miguel.jobnest.infrastructure.rest.dtos.user.requests.ResetUserPasswordRequest;
 import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

@@ -4,12 +4,12 @@ import com.miguel.jobnest.application.abstractions.producer.MessageProducer;
 import com.miguel.jobnest.application.abstractions.providers.CodeProvider;
 import com.miguel.jobnest.application.abstractions.repositories.UserCodeRepository;
 import com.miguel.jobnest.application.abstractions.repositories.UserRepository;
-import com.miguel.jobnest.application.abstractions.usecases.usercode.resend.verification.ResendVerificationCodeUseCase;
-import com.miguel.jobnest.application.abstractions.usecases.usercode.send.password.SendPasswordResetCodeUseCase;
-import com.miguel.jobnest.application.abstractions.usecases.usercode.validate.password.ValidatePasswordResetCodeUseCase;
-import com.miguel.jobnest.application.usecases.usercode.send.password.SendPasswordResetCodeUseCaseImpl;
-import com.miguel.jobnest.application.usecases.usercode.validate.password.ValidatePasswordResetCodeUseCaseImpl;
-import com.miguel.jobnest.application.usecases.usercode.resend.verification.ResendVerificationCodeUseCaseImpl;
+import com.miguel.jobnest.application.abstractions.usecases.usercode.ResendVerificationCodeUseCase;
+import com.miguel.jobnest.application.abstractions.usecases.usercode.SendPasswordResetCodeUseCase;
+import com.miguel.jobnest.application.abstractions.usecases.usercode.ValidatePasswordResetCodeUseCase;
+import com.miguel.jobnest.application.usecases.usercode.SendPasswordResetCodeUseCaseImpl;
+import com.miguel.jobnest.application.usecases.usercode.ValidatePasswordResetCodeUseCaseImpl;
+import com.miguel.jobnest.application.usecases.usercode.ResendVerificationCodeUseCaseImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

@@ -1,12 +1,12 @@
 package com.miguel.jobnest.infrastructure.rest.controllers;
 
-import com.miguel.jobnest.application.abstractions.usecases.user.authenticate.AuthenticateUserUseCase;
-import com.miguel.jobnest.application.abstractions.usecases.user.register.RegisterUserUseCase;
-import com.miguel.jobnest.application.usecases.user.authenticate.AuthenticateUserUseCaseOutput;
-import com.miguel.jobnest.infrastructure.rest.dtos.user.req.AuthenticateUserRequest;
-import com.miguel.jobnest.infrastructure.rest.dtos.user.req.RegisterUserRequest;
-import com.miguel.jobnest.infrastructure.rest.dtos.common.res.MessageResponse;
-import com.miguel.jobnest.infrastructure.rest.dtos.user.res.AuthenticateUserResponse;
+import com.miguel.jobnest.application.abstractions.usecases.user.AuthenticateUserUseCase;
+import com.miguel.jobnest.application.abstractions.usecases.user.RegisterUserUseCase;
+import com.miguel.jobnest.application.usecases.user.outputs.AuthenticateUserUseCaseOutput;
+import com.miguel.jobnest.infrastructure.rest.dtos.user.requests.AuthenticateUserRequest;
+import com.miguel.jobnest.infrastructure.rest.dtos.user.requests.RegisterUserRequest;
+import com.miguel.jobnest.infrastructure.rest.dtos.common.responses.MessageResponse;
+import com.miguel.jobnest.infrastructure.rest.dtos.user.responses.AuthenticateUserResponse;
 import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
