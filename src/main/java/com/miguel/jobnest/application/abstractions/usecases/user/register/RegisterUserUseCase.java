@@ -1,4 +1,4 @@
-package com.miguel.jobnest.application.abstractions.usecases.user;
+package com.miguel.jobnest.application.abstractions.usecases.user.register;
 
 import com.miguel.jobnest.application.abstractions.usecases.UnitUseCase;
 import com.miguel.jobnest.application.usecases.user.register.RegisterUserUseCaseInput;

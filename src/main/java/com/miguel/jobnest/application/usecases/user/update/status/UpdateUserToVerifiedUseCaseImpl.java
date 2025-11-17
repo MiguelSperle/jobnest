@@ -3,7 +3,7 @@ package com.miguel.jobnest.application.usecases.user.update.status;
 import com.miguel.jobnest.application.abstractions.repositories.UserCodeRepository;
 import com.miguel.jobnest.application.abstractions.repositories.UserRepository;
 import com.miguel.jobnest.application.abstractions.transaction.TransactionExecutor;
-import com.miguel.jobnest.application.abstractions.usecases.user.UpdateUserToVerifiedUseCase;
+import com.miguel.jobnest.application.abstractions.usecases.user.update.status.UpdateUserToVerifiedUseCase;
 import com.miguel.jobnest.domain.entities.User;
 import com.miguel.jobnest.domain.entities.UserCode;
 import com.miguel.jobnest.domain.enums.UserCodeType;

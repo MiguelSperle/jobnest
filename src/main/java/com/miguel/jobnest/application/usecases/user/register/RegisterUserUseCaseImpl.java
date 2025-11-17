@@ -3,7 +3,7 @@ package com.miguel.jobnest.application.usecases.user.register;
 import com.miguel.jobnest.application.abstractions.producer.MessageProducer;
 import com.miguel.jobnest.application.abstractions.providers.PasswordEncryptionProvider;
 import com.miguel.jobnest.application.abstractions.repositories.UserRepository;
-import com.miguel.jobnest.application.abstractions.usecases.user.RegisterUserUseCase;
+import com.miguel.jobnest.application.abstractions.usecases.user.register.RegisterUserUseCase;
 import com.miguel.jobnest.domain.entities.User;
 import com.miguel.jobnest.domain.enums.AuthorizationRole;
 import com.miguel.jobnest.domain.events.UserCreatedEvent;

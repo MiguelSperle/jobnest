@@ -1,7 +1,7 @@
 package com.miguel.jobnest.application.usecases.usercode.validate.password;
 
 import com.miguel.jobnest.application.abstractions.repositories.UserCodeRepository;
-import com.miguel.jobnest.application.abstractions.usecases.usercode.ValidatePasswordResetCodeUseCase;
+import com.miguel.jobnest.application.abstractions.usecases.usercode.validate.password.ValidatePasswordResetCodeUseCase;
 import com.miguel.jobnest.domain.entities.UserCode;
 import com.miguel.jobnest.domain.enums.UserCodeType;
 import com.miguel.jobnest.domain.exceptions.DomainException;

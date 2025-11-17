@@ -1,6 +1,6 @@
 package com.miguel.jobnest.infrastructure.rest.controllers;
 
-import com.miguel.jobnest.application.abstractions.usecases.user.RegisterUserUseCase;
+import com.miguel.jobnest.application.abstractions.usecases.user.register.RegisterUserUseCase;
 import com.miguel.jobnest.infrastructure.rest.dtos.user.req.RegisterUserRequest;
 import com.miguel.jobnest.infrastructure.rest.dtos.common.res.MessageResponse;
 import io.github.resilience4j.ratelimiter.annotation.RateLimiter;

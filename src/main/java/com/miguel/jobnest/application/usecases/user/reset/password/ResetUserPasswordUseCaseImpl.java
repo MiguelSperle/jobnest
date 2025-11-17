@@ -4,7 +4,7 @@ import com.miguel.jobnest.application.abstractions.providers.PasswordEncryptionP
 import com.miguel.jobnest.application.abstractions.repositories.UserCodeRepository;
 import com.miguel.jobnest.application.abstractions.repositories.UserRepository;
 import com.miguel.jobnest.application.abstractions.transaction.TransactionExecutor;
-import com.miguel.jobnest.application.abstractions.usecases.user.ResetUserPasswordUseCase;
+import com.miguel.jobnest.application.abstractions.usecases.user.reset.password.ResetUserPasswordUseCase;
 import com.miguel.jobnest.domain.entities.User;
 import com.miguel.jobnest.domain.entities.UserCode;
 import com.miguel.jobnest.domain.enums.UserCodeType;

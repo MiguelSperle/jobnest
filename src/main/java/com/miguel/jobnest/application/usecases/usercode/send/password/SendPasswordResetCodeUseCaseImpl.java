@@ -4,7 +4,7 @@ import com.miguel.jobnest.application.abstractions.producer.MessageProducer;
 import com.miguel.jobnest.application.abstractions.providers.CodeProvider;
 import com.miguel.jobnest.application.abstractions.repositories.UserCodeRepository;
 import com.miguel.jobnest.application.abstractions.repositories.UserRepository;
-import com.miguel.jobnest.application.abstractions.usecases.usercode.SendPasswordResetCodeUseCase;
+import com.miguel.jobnest.application.abstractions.usecases.usercode.send.password.SendPasswordResetCodeUseCase;
 import com.miguel.jobnest.domain.entities.User;
 import com.miguel.jobnest.domain.entities.UserCode;
 import com.miguel.jobnest.domain.enums.UserCodeType;
