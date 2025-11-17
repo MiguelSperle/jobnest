@@ -10,9 +10,6 @@ public record ResetUserPasswordRequest(
         String password
 ) {
     public ResetUserPasswordUseCaseInput toInput(String code) {
-        return ResetUserPasswordUseCaseInput.with(
-                code,
-                this.password
-        );
+        return ResetUserPasswordUseCaseInput.with(code, this.password);
     }
 }
