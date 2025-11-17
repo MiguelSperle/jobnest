@@ -5,7 +5,9 @@ import com.miguel.jobnest.application.abstractions.providers.CodeProvider;
 import com.miguel.jobnest.application.abstractions.repositories.UserCodeRepository;
 import com.miguel.jobnest.application.abstractions.repositories.UserRepository;
 import com.miguel.jobnest.application.abstractions.usecases.usercode.ResendVerificationCodeUseCase;
-import com.miguel.jobnest.application.usecases.usercode.resend.ResendVerificationCodeUseCaseImpl;
+import com.miguel.jobnest.application.abstractions.usecases.usercode.SendPasswordResetCodeUseCase;
+import com.miguel.jobnest.application.usecases.usercode.password.send.SendPasswordResetCodeUseCaseImpl;
+import com.miguel.jobnest.application.usecases.usercode.verification.resend.ResendVerificationCodeUseCaseImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -23,6 +25,21 @@ public class UserCodeUseCasesConfiguration {
                 userRepository,
                 messageProducer,
                 codeProvider
+        );
+    }
+
+    @Bean
+    public SendPasswordResetCodeUseCase sendPasswordResetCodeUseCase(
+            UserRepository userRepository,
+            UserCodeRepository userCodeRepository,
+            CodeProvider codeProvider,
+            MessageProducer messageProducer
+    ) {
+        return new SendPasswordResetCodeUseCaseImpl(
+                userRepository,
+                userCodeRepository,
+                codeProvider,
+                messageProducer
         );
     }
 }

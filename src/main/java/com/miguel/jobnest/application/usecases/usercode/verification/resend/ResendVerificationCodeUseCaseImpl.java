@@ -1,4 +1,4 @@
-package com.miguel.jobnest.application.usecases.usercode.resend;
+package com.miguel.jobnest.application.usecases.usercode.verification.resend;
 
 import com.miguel.jobnest.application.abstractions.producer.MessageProducer;
 import com.miguel.jobnest.application.abstractions.providers.CodeProvider;
