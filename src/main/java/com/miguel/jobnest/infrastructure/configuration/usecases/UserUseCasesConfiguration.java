@@ -6,8 +6,10 @@ import com.miguel.jobnest.application.abstractions.repositories.UserCodeReposito
 import com.miguel.jobnest.application.abstractions.repositories.UserRepository;
 import com.miguel.jobnest.application.abstractions.transaction.TransactionExecutor;
 import com.miguel.jobnest.application.abstractions.usecases.user.RegisterUserUseCase;
+import com.miguel.jobnest.application.abstractions.usecases.user.ResetUserPasswordUseCase;
 import com.miguel.jobnest.application.abstractions.usecases.user.UpdateUserToVerifiedUseCase;
 import com.miguel.jobnest.application.usecases.user.register.RegisterUserUseCaseImpl;
+import com.miguel.jobnest.application.usecases.user.reset.password.ResetUserPasswordUseCaseImpl;
 import com.miguel.jobnest.application.usecases.user.update.status.UpdateUserToVerifiedUseCaseImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -36,6 +38,21 @@ public class UserUseCasesConfiguration {
         return new UpdateUserToVerifiedUseCaseImpl(
                 userCodeRepository,
                 userRepository,
+                transactionExecutor
+        );
+    }
+
+    @Bean
+    public ResetUserPasswordUseCase resetUserPasswordUseCase(
+            UserRepository userRepository,
+            UserCodeRepository userCodeRepository,
+            PasswordEncryptionProvider passwordEncryptionProvider,
+            TransactionExecutor transactionExecutor
+    ) {
+        return new ResetUserPasswordUseCaseImpl(
+                userRepository,
+                userCodeRepository,
+                passwordEncryptionProvider,
                 transactionExecutor
         );
     }

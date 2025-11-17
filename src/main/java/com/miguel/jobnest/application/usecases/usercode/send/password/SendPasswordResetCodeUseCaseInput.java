@@ -1,4 +1,4 @@
-package com.miguel.jobnest.application.usecases.usercode.password.send;
+package com.miguel.jobnest.application.usecases.usercode.send.password;
 
 public record SendPasswordResetCodeUseCaseInput(
         String email

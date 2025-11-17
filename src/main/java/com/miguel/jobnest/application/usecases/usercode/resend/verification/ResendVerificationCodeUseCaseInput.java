@@ -1,4 +1,4 @@
-package com.miguel.jobnest.application.usecases.usercode.verification.resend;
+package com.miguel.jobnest.application.usecases.usercode.resend.verification;
 
 public record ResendVerificationCodeUseCaseInput(
         String email

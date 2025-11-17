@@ -7,9 +7,9 @@ import com.miguel.jobnest.application.abstractions.repositories.UserRepository;
 import com.miguel.jobnest.application.abstractions.usecases.usercode.ResendVerificationCodeUseCase;
 import com.miguel.jobnest.application.abstractions.usecases.usercode.SendPasswordResetCodeUseCase;
 import com.miguel.jobnest.application.abstractions.usecases.usercode.ValidatePasswordResetCodeUseCase;
-import com.miguel.jobnest.application.usecases.usercode.password.send.SendPasswordResetCodeUseCaseImpl;
-import com.miguel.jobnest.application.usecases.usercode.password.validate.ValidatePasswordResetCodeUseCaseImpl;
-import com.miguel.jobnest.application.usecases.usercode.verification.resend.ResendVerificationCodeUseCaseImpl;
+import com.miguel.jobnest.application.usecases.usercode.send.password.SendPasswordResetCodeUseCaseImpl;
+import com.miguel.jobnest.application.usecases.usercode.validate.password.ValidatePasswordResetCodeUseCaseImpl;
+import com.miguel.jobnest.application.usecases.usercode.resend.verification.ResendVerificationCodeUseCaseImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

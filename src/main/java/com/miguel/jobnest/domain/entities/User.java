@@ -114,6 +114,22 @@ public class User {
         );
     }
 
+    public User withPassword(String password) {
+        return new User(
+                this.id,
+                this.name,
+                this.email,
+                this.description,
+                password,
+                this.userStatus,
+                this.authorizationRole,
+                this.city,
+                this.state,
+                this.country,
+                this.createdAt
+        );
+    }
+
     public String getId() {
         return this.id;
     }

@@ -1,6 +1,6 @@
 package com.miguel.jobnest.infrastructure.rest.dtos.usercode.req;
 
-import com.miguel.jobnest.application.usecases.usercode.verification.resend.ResendVerificationCodeUseCaseInput;
+import com.miguel.jobnest.application.usecases.usercode.resend.verification.ResendVerificationCodeUseCaseInput;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 

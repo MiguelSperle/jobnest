@@ -1,4 +1,4 @@
-package com.miguel.jobnest.application.usecases.usercode.password.validate;
+package com.miguel.jobnest.application.usecases.usercode.validate.password;
 
 import com.miguel.jobnest.application.abstractions.repositories.UserCodeRepository;
 import com.miguel.jobnest.application.abstractions.usecases.usercode.ValidatePasswordResetCodeUseCase;

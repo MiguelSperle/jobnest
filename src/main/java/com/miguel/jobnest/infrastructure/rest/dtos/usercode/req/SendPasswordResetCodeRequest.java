@@ -1,6 +1,6 @@
 package com.miguel.jobnest.infrastructure.rest.dtos.usercode.req;
 
-import com.miguel.jobnest.application.usecases.usercode.password.send.SendPasswordResetCodeUseCaseInput;
+import com.miguel.jobnest.application.usecases.usercode.send.password.SendPasswordResetCodeUseCaseInput;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 

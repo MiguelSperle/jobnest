@@ -3,7 +3,7 @@ package com.miguel.jobnest.infrastructure.rest.controllers;
 import com.miguel.jobnest.application.abstractions.usecases.usercode.SendPasswordResetCodeUseCase;
 import com.miguel.jobnest.application.abstractions.usecases.usercode.ResendVerificationCodeUseCase;
 import com.miguel.jobnest.application.abstractions.usecases.usercode.ValidatePasswordResetCodeUseCase;
-import com.miguel.jobnest.application.usecases.usercode.password.validate.ValidatePasswordResetCodeUseCaseInput;
+import com.miguel.jobnest.application.usecases.usercode.validate.password.ValidatePasswordResetCodeUseCaseInput;
 import com.miguel.jobnest.infrastructure.rest.dtos.usercode.req.SendPasswordResetCodeRequest;
 import com.miguel.jobnest.infrastructure.rest.dtos.usercode.req.ResendVerificationCodeRequest;
 import com.miguel.jobnest.infrastructure.rest.dtos.common.res.MessageResponse;

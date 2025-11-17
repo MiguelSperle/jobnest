@@ -11,7 +11,7 @@ import com.miguel.jobnest.domain.exceptions.DomainException;
 
 public class RegisterUserUseCaseImpl implements RegisterUserUseCase {
     private final UserRepository userRepository;
-    private final PasswordEncryptionProvider passwordEncryptorProvider;
+    private final PasswordEncryptionProvider passwordEncryptionProvider;
     private final MessageProducer messageProducer;
 
     private static final String USER_CREATED_EXCHANGE = "user.created.exchange";
@@ -19,11 +19,11 @@ public class RegisterUserUseCaseImpl implements RegisterUserUseCase {
 
     public RegisterUserUseCaseImpl(
             UserRepository userRepository,
-            PasswordEncryptionProvider passwordEncryptorProvider,
+            PasswordEncryptionProvider passwordEncryptionProvider,
             MessageProducer messageProducer
     ) {
         this.userRepository = userRepository;
-        this.passwordEncryptorProvider = passwordEncryptorProvider;
+        this.passwordEncryptionProvider = passwordEncryptionProvider;
         this.messageProducer = messageProducer;
     }
 
@@ -33,7 +33,7 @@ public class RegisterUserUseCaseImpl implements RegisterUserUseCase {
             throw DomainException.with("This email is already being used", 409);
         }
 
-        final String encodedPassword = this.passwordEncryptorProvider.encode(input.password());
+        final String encodedPassword = this.passwordEncryptionProvider.encode(input.password());
 
         final var authorizationRoleConverted = AuthorizationRole.valueOf(input.authorizationRole());
 
