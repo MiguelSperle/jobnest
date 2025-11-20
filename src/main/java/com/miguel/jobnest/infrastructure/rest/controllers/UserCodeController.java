@@ -4,9 +4,9 @@ import com.miguel.jobnest.application.abstractions.usecases.usercode.SendPasswor
 import com.miguel.jobnest.application.abstractions.usecases.usercode.ResendVerificationCodeUseCase;
 import com.miguel.jobnest.application.abstractions.usecases.usercode.ValidatePasswordResetCodeUseCase;
 import com.miguel.jobnest.application.usecases.usercode.inputs.ValidatePasswordResetCodeUseCaseInput;
-import com.miguel.jobnest.infrastructure.rest.dtos.usercode.requests.SendPasswordResetCodeRequest;
-import com.miguel.jobnest.infrastructure.rest.dtos.usercode.requests.ResendVerificationCodeRequest;
-import com.miguel.jobnest.infrastructure.rest.dtos.common.responses.MessageResponse;
+import com.miguel.jobnest.infrastructure.rest.dtos.usercode.req.SendPasswordResetCodeRequest;
+import com.miguel.jobnest.infrastructure.rest.dtos.usercode.req.ResendVerificationCodeRequest;
+import com.miguel.jobnest.infrastructure.rest.dtos.common.res.MessageResponse;
 import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

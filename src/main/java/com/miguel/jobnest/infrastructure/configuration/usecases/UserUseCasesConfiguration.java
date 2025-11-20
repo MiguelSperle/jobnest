@@ -5,15 +5,10 @@ import com.miguel.jobnest.application.abstractions.providers.PasswordEncryptionP
 import com.miguel.jobnest.application.abstractions.repositories.UserCodeRepository;
 import com.miguel.jobnest.application.abstractions.repositories.UserRepository;
 import com.miguel.jobnest.application.abstractions.services.JwtService;
+import com.miguel.jobnest.application.abstractions.services.SecurityContextService;
 import com.miguel.jobnest.application.abstractions.transaction.TransactionExecutor;
-import com.miguel.jobnest.application.abstractions.usecases.user.AuthenticateUserUseCase;
-import com.miguel.jobnest.application.abstractions.usecases.user.RegisterUserUseCase;
-import com.miguel.jobnest.application.abstractions.usecases.user.ResetUserPasswordUseCase;
-import com.miguel.jobnest.application.abstractions.usecases.user.UpdateUserToVerifiedUseCase;
-import com.miguel.jobnest.application.usecases.user.AuthenticateUserUseCaseImpl;
-import com.miguel.jobnest.application.usecases.user.RegisterUserUseCaseImpl;
-import com.miguel.jobnest.application.usecases.user.ResetUserPasswordUseCaseImpl;
-import com.miguel.jobnest.application.usecases.user.UpdateUserToVerifiedUseCaseImpl;
+import com.miguel.jobnest.application.abstractions.usecases.user.*;
+import com.miguel.jobnest.application.usecases.user.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -70,6 +65,17 @@ public class UserUseCasesConfiguration {
                 userRepository,
                 passwordEncryptionProvider,
                 jwtService
+        );
+    }
+
+    @Bean
+    public GetAuthenticatedUserUseCase getAuthenticatedUserUseCase(
+            UserRepository userRepository,
+            SecurityContextService securityContextService
+    ) {
+        return new GetAuthenticatedUserUseCaseImpl(
+                userRepository,
+                securityContextService
         );
     }
 }

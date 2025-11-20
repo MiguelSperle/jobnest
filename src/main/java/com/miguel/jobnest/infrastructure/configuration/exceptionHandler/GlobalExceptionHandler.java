@@ -67,7 +67,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(RequestNotPermitted.class)
     public ResponseEntity<ApiError> handleRequestNotPermitted(RequestNotPermitted ex) {
-        log.warn("Handling request not permitted exception due to rate limit exceed", ex);
+        log.info("Handling request not permitted exception due to rate limit exceed", ex);
         return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).body(ApiError.from(
                 Collections.singletonList("Too many requests occurred at the same time"), HttpStatus.TOO_MANY_REQUESTS.getReasonPhrase()
         ));
