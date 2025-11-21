@@ -7,14 +7,18 @@ spring:
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
 
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+  redis:
+    host: ${REDIS_HOST}
+    port: ${REDIS_PORT}
+
   api:
     security:
       token:
         secret: ${JWT_SECRET}
-
-  jpa:
-    hibernate:
-      ddl-auto: update
 
   rabbitmq:
     username: ${RABBITMQ_USERNAME}
@@ -46,5 +50,5 @@ resilience4j:
     instances:
       rateLimitConfiguration:
         limitForPeriod: 5
-        limitRefreshPeriod: 15s
+        limitRefreshPeriod: 10s
         timeoutDuration: 0

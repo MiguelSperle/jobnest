@@ -4,6 +4,7 @@ import com.miguel.jobnest.application.abstractions.producer.MessageProducer;
 import com.miguel.jobnest.application.abstractions.providers.PasswordEncryptionProvider;
 import com.miguel.jobnest.application.abstractions.repositories.UserCodeRepository;
 import com.miguel.jobnest.application.abstractions.repositories.UserRepository;
+import com.miguel.jobnest.application.abstractions.services.CacheService;
 import com.miguel.jobnest.application.abstractions.services.JwtService;
 import com.miguel.jobnest.application.abstractions.services.SecurityContextService;
 import com.miguel.jobnest.application.abstractions.transaction.TransactionExecutor;
@@ -71,10 +72,12 @@ public class UserUseCasesConfiguration {
     @Bean
     public GetAuthenticatedUserUseCase getAuthenticatedUserUseCase(
             UserRepository userRepository,
+            CacheService cacheService,
             SecurityContextService securityContextService
     ) {
         return new GetAuthenticatedUserUseCaseImpl(
                 userRepository,
+                cacheService,
                 securityContextService
         );
     }
