@@ -6,6 +6,7 @@ import java.util.Optional;
 public interface CacheService {
     <T> Optional<T> get(String id, Class<T> type);
     <T> void set(String id, T value, Duration ttl);
+    <T> void setWithoutTTL(String id, T value);
     void evict(String id);
 }
 

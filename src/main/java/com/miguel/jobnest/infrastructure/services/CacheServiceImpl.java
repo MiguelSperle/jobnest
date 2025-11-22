@@ -24,6 +24,11 @@ public class CacheServiceImpl implements CacheService {
     }
 
     @Override
+    public <T> void setWithoutTTL(String id, T value) {
+        this.redisTemplate.opsForValue().set(id, value);
+    }
+
+    @Override
     public void evict(String id) {
         this.redisTemplate.delete(id);
     }

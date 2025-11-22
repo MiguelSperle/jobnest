@@ -8,8 +8,6 @@ import com.miguel.jobnest.application.usecases.user.outputs.GetAuthenticatedUser
 import com.miguel.jobnest.domain.entities.User;
 import com.miguel.jobnest.domain.exceptions.NotFoundException;
 
-import java.time.Duration;
-
 public class GetAuthenticatedUserUseCaseImpl implements GetAuthenticatedUserUseCase {
     private final UserRepository userRepository;
     private final CacheService cacheService;
@@ -31,7 +29,7 @@ public class GetAuthenticatedUserUseCaseImpl implements GetAuthenticatedUserUseC
 
         final User user = this.cacheService.get(authenticatedUserId, User.class).orElseGet(() -> {
             final User userFromDatabase = this.getUserById(authenticatedUserId);
-            this.cacheService.set(userFromDatabase.getId(), userFromDatabase, Duration.ofMinutes(10));
+            this.cacheService.setWithoutTTL(userFromDatabase.getId(), userFromDatabase);
             return userFromDatabase;
         });
 
