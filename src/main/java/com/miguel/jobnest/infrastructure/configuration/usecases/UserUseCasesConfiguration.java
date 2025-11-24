@@ -92,4 +92,15 @@ public class UserUseCasesConfiguration {
                 cacheService
         );
     }
+
+    @Bean
+    public UpdateUserPasswordUseCase updateUserPasswordUseCase(
+            UserRepository userRepository,
+            PasswordEncryptionProvider passwordEncryptionProvider
+    ) {
+        return new UpdateUserPasswordUseCaseImpl(
+                userRepository,
+                passwordEncryptionProvider
+        );
+    }
 }

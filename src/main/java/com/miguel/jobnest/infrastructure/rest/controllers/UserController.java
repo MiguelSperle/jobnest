@@ -1,15 +1,13 @@
 package com.miguel.jobnest.infrastructure.rest.controllers;
 
-import com.miguel.jobnest.application.abstractions.usecases.user.GetAuthenticatedUserUseCase;
-import com.miguel.jobnest.application.abstractions.usecases.user.ResetUserPasswordUseCase;
-import com.miguel.jobnest.application.abstractions.usecases.user.UpdateUserInformationUseCase;
-import com.miguel.jobnest.application.abstractions.usecases.user.UpdateUserToVerifiedUseCase;
+import com.miguel.jobnest.application.abstractions.usecases.user.*;
 import com.miguel.jobnest.application.usecases.user.inputs.UpdateUserInformationUseCaseInput;
 import com.miguel.jobnest.application.usecases.user.inputs.UpdateUserToVerifiedUseCaseInput;
 import com.miguel.jobnest.application.usecases.user.outputs.GetAuthenticatedUserUseCaseOutput;
 import com.miguel.jobnest.infrastructure.rest.dtos.common.res.MessageResponse;
 import com.miguel.jobnest.infrastructure.rest.dtos.user.req.ResetUserPasswordRequest;
 import com.miguel.jobnest.infrastructure.rest.dtos.user.req.UpdateUserInformationRequest;
+import com.miguel.jobnest.infrastructure.rest.dtos.user.req.UpdateUserPasswordRequest;
 import com.miguel.jobnest.infrastructure.rest.dtos.user.res.GetAuthenticatedUserResponse;
 import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import jakarta.validation.Valid;
@@ -25,6 +23,7 @@ public class UserController {
     private final ResetUserPasswordUseCase resetUserPasswordUseCase;
     private final GetAuthenticatedUserUseCase getAuthenticatedUserUseCase;
     private final UpdateUserInformationUseCase updateUserInformationUseCase;
+    private final UpdateUserPasswordUseCase updateUserPasswordUseCase;
 
     @PatchMapping("/verification/{code}")
     @RateLimiter(name = "rateLimitConfiguration")
@@ -62,5 +61,16 @@ public class UserController {
         this.updateUserInformationUseCase.execute(request.toInput(id));
 
         return ResponseEntity.ok().body(MessageResponse.from("User information updated successfully"));
+    }
+
+    @PatchMapping("/{id}/password")
+    @RateLimiter(name = "rateLimitConfiguration")
+    public ResponseEntity<MessageResponse> updateUserPassword(
+            @PathVariable String id,
+            @RequestBody @Valid UpdateUserPasswordRequest request
+    ) {
+        this.updateUserPasswordUseCase.execute(request.toInput(id));
+
+        return ResponseEntity.ok().body(MessageResponse.from("User password updated successfully"));
     }
 }
