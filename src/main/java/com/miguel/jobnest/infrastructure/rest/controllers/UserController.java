@@ -1,6 +1,7 @@
 package com.miguel.jobnest.infrastructure.rest.controllers;
 
 import com.miguel.jobnest.application.abstractions.usecases.user.*;
+import com.miguel.jobnest.application.usecases.user.inputs.DeleteUserUseCaseInput;
 import com.miguel.jobnest.application.usecases.user.inputs.UpdateUserInformationUseCaseInput;
 import com.miguel.jobnest.application.usecases.user.inputs.UpdateUserToVerifiedUseCaseInput;
 import com.miguel.jobnest.application.usecases.user.outputs.GetAuthenticatedUserUseCaseOutput;
@@ -24,6 +25,7 @@ public class UserController {
     private final GetAuthenticatedUserUseCase getAuthenticatedUserUseCase;
     private final UpdateUserInformationUseCase updateUserInformationUseCase;
     private final UpdateUserPasswordUseCase updateUserPasswordUseCase;
+    private final DeleteUserUseCase deleteUserUseCase;
 
     @PatchMapping("/verification/{code}")
     @RateLimiter(name = "rateLimitConfiguration")
@@ -72,5 +74,13 @@ public class UserController {
         this.updateUserPasswordUseCase.execute(request.toInput(id));
 
         return ResponseEntity.ok().body(MessageResponse.from("User password updated successfully"));
+    }
+
+    @DeleteMapping("/{id}/deletion")
+    @RateLimiter(name = "rateLimitConfiguration")
+    public ResponseEntity<MessageResponse> deleteUser(@PathVariable String id) {
+        this.deleteUserUseCase.execute(DeleteUserUseCaseInput.with(id));
+
+        return ResponseEntity.ok().body(MessageResponse.from("User deleted successfully"));
     }
 }

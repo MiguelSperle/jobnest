@@ -103,4 +103,9 @@ public class UserUseCasesConfiguration {
                 passwordEncryptionProvider
         );
     }
+
+    @Bean
+    public DeleteUserUseCase deleteUserUseCase(UserRepository userRepository) {
+        return new DeleteUserUseCaseImpl(userRepository);
+    }
 }
