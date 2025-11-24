@@ -99,6 +99,102 @@ public class User implements Serializable {
         );
     }
 
+    public User withName(String name) {
+        return new User(
+                this.id,
+                name,
+                this.email,
+                this.description,
+                this.password,
+                this.userStatus,
+                this.authorizationRole,
+                this.city,
+                this.state,
+                this.country,
+                this.createdAt
+        );
+    }
+
+    public User withEmail(String email) {
+        return new User(
+                this.id,
+                this.name,
+                email,
+                this.description,
+                this.password,
+                this.userStatus,
+                this.authorizationRole,
+                this.city,
+                this.state,
+                this.country,
+                this.createdAt
+        );
+    }
+
+    public User withDescription(String description) {
+        return new User(
+                this.id,
+                this.name,
+                this.email,
+                description,
+                this.password,
+                this.userStatus,
+                this.authorizationRole,
+                this.city,
+                this.state,
+                this.country,
+                this.createdAt
+        );
+    }
+
+    public User withCity(String city) {
+        return new User(
+                this.id,
+                this.name,
+                this.email,
+                this.description,
+                this.password,
+                this.userStatus,
+                this.authorizationRole,
+                city,
+                this.state,
+                this.country,
+                this.createdAt
+        );
+    }
+
+    public User withState(String state) {
+        return new User(
+                this.id,
+                this.name,
+                this.email,
+                this.description,
+                this.password,
+                this.userStatus,
+                this.authorizationRole,
+                this.city,
+                state,
+                this.country,
+                this.createdAt
+        );
+    }
+
+    public User withCountry(String country) {
+        return new User(
+                this.id,
+                this.name,
+                this.email,
+                this.description,
+                this.password,
+                this.userStatus,
+                this.authorizationRole,
+                this.city,
+                this.state,
+                country,
+                this.createdAt
+        );
+    }
+
     public User withUserStatus(UserStatus userStatus) {
         return new User(
                 this.id,
@@ -182,10 +278,10 @@ public class User implements Serializable {
                 ", name='" + this.name + '\'' +
                 ", email='" + this.email + '\'' +
                 ", description='" + this.description + '\'' +
-                ", password='" +this. password + '\'' +
+                ", password='" + this.password + '\'' +
                 ", userStatus=" + this.userStatus +
                 ", authorizationRole=" + this.authorizationRole +
-                ", city='" +this.city + '\'' +
+                ", city='" + this.city + '\'' +
                 ", state='" + this.state + '\'' +
                 ", country='" + this.country + '\'' +
                 ", createdAt=" + this.createdAt +

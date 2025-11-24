@@ -81,4 +81,15 @@ public class UserUseCasesConfiguration {
                 securityContextService
         );
     }
+
+    @Bean
+    public UpdateUserInformationUseCase updateUserInformationUseCase(
+            UserRepository userRepository,
+            CacheService cacheService
+    ) {
+        return new UpdateUserInformationUseCaseImpl(
+                userRepository,
+                cacheService
+        );
+    }
 }

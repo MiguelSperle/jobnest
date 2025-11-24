@@ -23,16 +23,16 @@ public class UserCodeController {
 
     @PostMapping("/verification/resending")
     @RateLimiter(name = "rateLimitConfiguration")
-    public ResponseEntity<MessageResponse> resendVerificationCode(@RequestBody @Valid ResendVerificationCodeRequest resendVerificationCodeRequest) {
-        this.resendVerificationCodeUseCase.execute(resendVerificationCodeRequest.toInput());
+    public ResponseEntity<MessageResponse> resendVerificationCode(@RequestBody @Valid ResendVerificationCodeRequest request) {
+        this.resendVerificationCodeUseCase.execute(request.toInput());
 
         return ResponseEntity.ok().body(MessageResponse.from("Verification code sent again successfully"));
     }
 
     @PostMapping("/password-recovery")
     @RateLimiter(name = "rateLimitConfiguration")
-    public ResponseEntity<MessageResponse> sendPasswordResetCode(@RequestBody @Valid SendPasswordResetCodeRequest sendPasswordResetCodeRequest) {
-        this.sendPasswordResetCodeUseCase.execute(sendPasswordResetCodeRequest.toInput());
+    public ResponseEntity<MessageResponse> sendPasswordResetCode(@RequestBody @Valid SendPasswordResetCodeRequest request) {
+        this.sendPasswordResetCodeUseCase.execute(request.toInput());
 
         return ResponseEntity.ok().body(MessageResponse.from("Password reset code sent successfully"));
     }

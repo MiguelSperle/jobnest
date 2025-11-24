@@ -26,17 +26,17 @@ public class AuthController {
 
     @PostMapping("/register")
     @RateLimiter(name = "rateLimitConfiguration")
-    public ResponseEntity<MessageResponse> registerUser(@RequestBody @Valid RegisterUserRequest registerUserRequest) {
-        this.registerUserUseCase.execute(registerUserRequest.toInput());
+    public ResponseEntity<MessageResponse> registerUser(@RequestBody @Valid RegisterUserRequest request) {
+        this.registerUserUseCase.execute(request.toInput());
 
         return ResponseEntity.status(HttpStatus.CREATED).body(MessageResponse.from("User registered successfully"));
     }
 
     @PostMapping("/login")
     @RateLimiter(name = "rateLimitConfiguration")
-    public ResponseEntity<AuthenticateUserResponse> authenticateUser(@RequestBody @Valid AuthenticateUserRequest authenticateUserRequest) {
+    public ResponseEntity<AuthenticateUserResponse> authenticateUser(@RequestBody @Valid AuthenticateUserRequest request) {
         final AuthenticateUserUseCaseOutput authenticateUserUseCaseOutput =
-                this.authenticateUserUseCase.execute(authenticateUserRequest.toInput());
+                this.authenticateUserUseCase.execute(request.toInput());
 
         return ResponseEntity.ok().body(AuthenticateUserResponse.from(authenticateUserUseCaseOutput));
     }
