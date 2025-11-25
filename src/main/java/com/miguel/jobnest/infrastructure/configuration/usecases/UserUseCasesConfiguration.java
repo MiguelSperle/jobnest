@@ -83,11 +83,11 @@ public class UserUseCasesConfiguration {
     }
 
     @Bean
-    public UpdateUserInformationUseCase updateUserInformationUseCase(
+    public UpdateUserUseCase updateUserUseCase(
             UserRepository userRepository,
             CacheService cacheService
     ) {
-        return new UpdateUserInformationUseCaseImpl(
+        return new UpdateUserUseCaseImpl(
                 userRepository,
                 cacheService
         );

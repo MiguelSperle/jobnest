@@ -31,12 +31,12 @@ public class SecurityConfiguration {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize ->
                         authorize
-                                .requestMatchers(HttpMethod.GET, "/api/v1/users/me").authenticated()
-                                .requestMatchers(HttpMethod.PATCH, "/api/v1/users/{id}/information").authenticated()
-                                .requestMatchers(HttpMethod.PATCH, "/api/v1/users/{id}/password").authenticated()
-                                .requestMatchers(HttpMethod.DELETE, "/api/v1/users/{id}/deletion").authenticated()
+                                .requestMatchers("/api/v1/auth/**").permitAll()
+                                .requestMatchers("/api/v1/user-codes/**").permitAll()
+                                .requestMatchers( "/api/v1/users/verification/{code}").permitAll()
+                                .requestMatchers( "/api/v1/users/password-reset/{code}").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/api/v1/jobs").hasRole("RECRUITER")
-                                .anyRequest().permitAll())
+                                .anyRequest().authenticated())
                 .exceptionHandling((exceptions) -> exceptions.authenticationEntryPoint(this.authenticationEntryPoint).accessDeniedHandler(this.accessDeniedHandler))
                 .addFilterBefore(this.securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();

@@ -2,7 +2,6 @@ package com.miguel.jobnest.infrastructure.rest.controllers;
 
 import com.miguel.jobnest.application.abstractions.usecases.user.*;
 import com.miguel.jobnest.application.usecases.user.inputs.DeleteUserUseCaseInput;
-import com.miguel.jobnest.application.usecases.user.inputs.UpdateUserInformationUseCaseInput;
 import com.miguel.jobnest.application.usecases.user.inputs.UpdateUserToVerifiedUseCaseInput;
 import com.miguel.jobnest.application.usecases.user.outputs.GetAuthenticatedUserUseCaseOutput;
 import com.miguel.jobnest.infrastructure.rest.dtos.common.res.MessageResponse;
@@ -23,7 +22,7 @@ public class UserController {
     private final UpdateUserToVerifiedUseCase updateUserToVerifiedUseCase;
     private final ResetUserPasswordUseCase resetUserPasswordUseCase;
     private final GetAuthenticatedUserUseCase getAuthenticatedUserUseCase;
-    private final UpdateUserInformationUseCase updateUserInformationUseCase;
+    private final UpdateUserUseCase updateUserUseCase;
     private final UpdateUserPasswordUseCase updateUserPasswordUseCase;
     private final DeleteUserUseCase deleteUserUseCase;
 
@@ -54,15 +53,15 @@ public class UserController {
         return ResponseEntity.ok().body(GetAuthenticatedUserResponse.from(output));
     }
 
-    @PatchMapping("/{id}/information")
+    @PatchMapping("/{id}")
     @RateLimiter(name = "rateLimitConfiguration")
-    public ResponseEntity<MessageResponse> updateUserInformation(
+    public ResponseEntity<MessageResponse> updateUserUseCase(
             @PathVariable String id,
             @RequestBody @Valid UpdateUserInformationRequest request
     ) {
-        this.updateUserInformationUseCase.execute(request.toInput(id));
+        this.updateUserUseCase.execute(request.toInput(id));
 
-        return ResponseEntity.ok().body(MessageResponse.from("User information updated successfully"));
+        return ResponseEntity.ok().body(MessageResponse.from("User updated successfully"));
     }
 
     @PatchMapping("/{id}/password")
@@ -76,7 +75,7 @@ public class UserController {
         return ResponseEntity.ok().body(MessageResponse.from("User password updated successfully"));
     }
 
-    @DeleteMapping("/{id}/deletion")
+    @DeleteMapping("/{id}")
     @RateLimiter(name = "rateLimitConfiguration")
     public ResponseEntity<MessageResponse> deleteUser(@PathVariable String id) {
         this.deleteUserUseCase.execute(DeleteUserUseCaseInput.with(id));

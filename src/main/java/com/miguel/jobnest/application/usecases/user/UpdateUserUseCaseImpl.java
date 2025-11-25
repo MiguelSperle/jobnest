@@ -2,16 +2,16 @@ package com.miguel.jobnest.application.usecases.user;
 
 import com.miguel.jobnest.application.abstractions.repositories.UserRepository;
 import com.miguel.jobnest.application.abstractions.services.CacheService;
-import com.miguel.jobnest.application.abstractions.usecases.user.UpdateUserInformationUseCase;
+import com.miguel.jobnest.application.abstractions.usecases.user.UpdateUserUseCase;
 import com.miguel.jobnest.application.usecases.user.inputs.UpdateUserInformationUseCaseInput;
 import com.miguel.jobnest.domain.entities.User;
 import com.miguel.jobnest.domain.exceptions.NotFoundException;
 
-public class UpdateUserInformationUseCaseImpl implements UpdateUserInformationUseCase {
+public class UpdateUserUseCaseImpl implements UpdateUserUseCase {
     private final UserRepository userRepository;
     private final CacheService cacheService;
 
-    public UpdateUserInformationUseCaseImpl(
+    public UpdateUserUseCaseImpl(
             UserRepository userRepository,
             CacheService cacheService
     ) {

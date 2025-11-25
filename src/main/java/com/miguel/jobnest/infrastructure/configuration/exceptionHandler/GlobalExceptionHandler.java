@@ -2,7 +2,6 @@ package com.miguel.jobnest.infrastructure.configuration.exceptionHandler;
 
 import com.miguel.jobnest.domain.exceptions.DomainException;
 import com.miguel.jobnest.domain.exceptions.NotFoundException;
-import com.miguel.jobnest.infrastructure.services.exceptions.JwtTokenCreationFailedException;
 import com.miguel.jobnest.infrastructure.services.exceptions.JwtTokenValidationFailedException;
 import com.miguel.jobnest.infrastructure.utils.ApiError;
 import io.github.resilience4j.ratelimiter.RequestNotPermitted;
@@ -27,13 +26,6 @@ public class GlobalExceptionHandler {
         final List<String> errors = ex.getBindingResult().getFieldErrors().stream().map(FieldError::getDefaultMessage).toList();
 
         return ResponseEntity.badRequest().body(ApiError.from(errors, HttpStatus.BAD_REQUEST.getReasonPhrase()));
-    }
-
-    @ExceptionHandler(JwtTokenCreationFailedException.class)
-    public ResponseEntity<ApiError> handleJwtTokenCreationFailedException(JwtTokenCreationFailedException ex) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ApiError.from(
-                Collections.singletonList(ex.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase()
-        ));
     }
 
     @ExceptionHandler(JwtTokenValidationFailedException.class)
