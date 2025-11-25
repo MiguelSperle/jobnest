@@ -36,13 +36,13 @@ public class RegisterUserUseCaseImpl implements RegisterUserUseCase {
 
         final String encodedPassword = this.passwordEncryptionProvider.encode(input.password());
 
-        final var authorizationRoleConverted = AuthorizationRole.valueOf(input.authorizationRole());
+        final AuthorizationRole convertedAuthorizationRole = AuthorizationRole.valueOf(input.authorizationRole());
 
         final User newUser = User.newUser(
                 input.name(),
                 input.email().toLowerCase(),
                 encodedPassword,
-                authorizationRoleConverted,
+                convertedAuthorizationRole,
                 input.city(),
                 input.state(),
                 input.country()

@@ -16,10 +16,10 @@ public class CreateJobUseCaseImpl implements CreateJobUseCase {
 
     @Override
     public void execute(CreateJobUseCaseInput input) {
-        final SeniorityLevel seniorityLevel = SeniorityLevel.valueOf(input.seniorityLevel());
-        final Modality modality = Modality.valueOf(input.modality());
+        final SeniorityLevel convertedSeniorityLevel = SeniorityLevel.valueOf(input.seniorityLevel());
+        final Modality convertedModality = Modality.valueOf(input.modality());
 
-        final Job newJob = Job.newJob(input.userId(), input.title(), input.description(), seniorityLevel, modality);
+        final Job newJob = Job.newJob(input.userId(), input.title(), input.description(), convertedSeniorityLevel, convertedModality);
 
         this.saveJob(newJob);
     }
