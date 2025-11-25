@@ -18,7 +18,7 @@ public class JpaUserEntity {
     @Column(nullable = false, length = 36)
     private String id;
 
-    @Column(name = "name", nullable = false, length = 100)
+    @Column(nullable = false, length = 100)
     private String name;
 
     @Column(nullable = false, unique = true)

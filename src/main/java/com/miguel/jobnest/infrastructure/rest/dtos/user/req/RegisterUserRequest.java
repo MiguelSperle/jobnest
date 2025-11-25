@@ -22,7 +22,7 @@ public record RegisterUserRequest(
         @Size(min = 5, max = 100, message = "Password should contain between 5 and 100 characters")
         String password,
 
-        @EnumCheck(enumClass = AuthorizationRole.class, message = "Authorization role should be either CANDIDATE or COMPANY")
+        @EnumCheck(enumClass = AuthorizationRole.class, message = "Authorization role should be either CANDIDATE or RECRUITER")
         String authorizationRole,
 
         @NotBlank(message = "City should not be neither null nor blank")

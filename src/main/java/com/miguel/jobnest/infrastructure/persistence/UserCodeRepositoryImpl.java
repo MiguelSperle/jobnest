@@ -7,18 +7,12 @@ import com.miguel.jobnest.infrastructure.persistence.jpa.repositories.JpaUserCod
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
 import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
 public class UserCodeRepositoryImpl implements UserCodeRepository {
     private final JpaUserCodeRepository jpaUserCodeRepository;
-
-    @Override
-    public List<UserCode> findAll() {
-        return this.jpaUserCodeRepository.findAll().stream().map(JpaUserCodeEntity::toEntity).toList();
-    }
 
     @Override
     public Optional<UserCode> findById(String id) {

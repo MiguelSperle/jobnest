@@ -3,6 +3,7 @@ package com.miguel.jobnest.infrastructure.configuration.security;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -30,7 +31,11 @@ public class SecurityConfiguration {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize ->
                         authorize
-                                .requestMatchers(Routes.USER_AUTHENTICATED_ENDPOINTS).authenticated()
+                                .requestMatchers(HttpMethod.GET, "/api/v1/users/me").authenticated()
+                                .requestMatchers(HttpMethod.PATCH, "/api/v1/users/{id}/information").authenticated()
+                                .requestMatchers(HttpMethod.PATCH, "/api/v1/users/{id}/password").authenticated()
+                                .requestMatchers(HttpMethod.DELETE, "/api/v1/users/{id}/deletion").authenticated()
+                                .requestMatchers(HttpMethod.POST, "/api/v1/jobs").hasRole("RECRUITER")
                                 .anyRequest().permitAll())
                 .exceptionHandling((exceptions) -> exceptions.authenticationEntryPoint(this.authenticationEntryPoint).accessDeniedHandler(this.accessDeniedHandler))
                 .addFilterBefore(this.securityFilter, UsernamePasswordAuthenticationFilter.class)
