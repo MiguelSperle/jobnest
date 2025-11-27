@@ -55,4 +55,31 @@ public class JobRepositoryImpl implements JobRepository {
 
         return new Pagination<>(paginationMetadata, jobs);
     }
+
+    @Override
+    public Pagination<Job> findAllPaginated(SearchQuery searchQuery) {
+        final Sort sort = searchQuery.direction().equalsIgnoreCase("asc")
+                ? Sort.by(searchQuery.sort()).ascending() : Sort.by(searchQuery.sort()).descending();
+
+        final PageRequest pageable = PageRequest.of(searchQuery.page(), searchQuery.perPage(), sort);
+
+        Specification<JpaJobEntity> specification = Specification.unrestricted();
+
+        if (!searchQuery.terms().isBlank()) {
+            specification = specification.and(JpaJobSpecification.filterByTerms(searchQuery.terms()));
+        }
+
+        final Page<JpaJobEntity> pageResult = this.jpaJobRepository.findAll(specification, pageable);
+
+        final List<Job> jobs = pageResult.getContent().stream().map(JpaJobEntity::toEntity).toList();
+
+        final PaginationMetadata paginationMetadata = new PaginationMetadata(
+                pageResult.getNumber(),
+                pageResult.getSize(),
+                pageResult.getTotalPages(),
+                pageResult.getTotalElements()
+        );
+
+        return new Pagination<>(paginationMetadata, jobs);
+    }
 }

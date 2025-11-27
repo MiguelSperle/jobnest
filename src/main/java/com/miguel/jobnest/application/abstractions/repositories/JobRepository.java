@@ -7,4 +7,5 @@ import com.miguel.jobnest.domain.pagination.SearchQuery;
 public interface JobRepository {
     Job save(Job job);
     Pagination<Job> findAllPaginatedByUserId(String userId, SearchQuery searchQuery);
+    Pagination<Job> findAllPaginated(SearchQuery searchQuery);
 }
