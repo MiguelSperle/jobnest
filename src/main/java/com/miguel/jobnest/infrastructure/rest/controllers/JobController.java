@@ -1,8 +1,14 @@
 package com.miguel.jobnest.infrastructure.rest.controllers;
 
 import com.miguel.jobnest.application.abstractions.usecases.job.CreateJobUseCase;
+import com.miguel.jobnest.application.abstractions.usecases.job.ListJobsByUserIdUseCase;
+import com.miguel.jobnest.application.usecases.job.inputs.ListJobsByUserIdUseCaseInput;
+import com.miguel.jobnest.application.usecases.job.outputs.ListJobsByUserIdUseCaseOutput;
+import com.miguel.jobnest.domain.pagination.Pagination;
+import com.miguel.jobnest.domain.pagination.SearchQuery;
 import com.miguel.jobnest.infrastructure.rest.dtos.common.res.MessageResponse;
 import com.miguel.jobnest.infrastructure.rest.dtos.job.req.CreateJobRequest;
+import com.miguel.jobnest.infrastructure.rest.dtos.job.res.ListJobsByUserIdResponse;
 import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class JobController {
     private final CreateJobUseCase createJobUseCase;
+    private final ListJobsByUserIdUseCase listJobsByUserIdUseCase;
 
     @PostMapping
     @RateLimiter(name = "rateLimitConfiguration")
@@ -22,5 +29,22 @@ public class JobController {
         this.createJobUseCase.execute(request.toInput());
 
         return ResponseEntity.status(HttpStatus.CREATED).body(MessageResponse.from("Job created successfully"));
+    }
+
+    @GetMapping("/{userId}")
+    @RateLimiter(name = "rateLimitConfiguration")
+    public ResponseEntity<Pagination<ListJobsByUserIdResponse>> listJobsByUserId(
+            @PathVariable String userId,
+            @RequestParam(name = "page", required = false, defaultValue = "0") int page,
+            @RequestParam(name = "perPage", required = false, defaultValue = "10") int perPage,
+            @RequestParam(name = "search", required = false, defaultValue = "") String search,
+            @RequestParam(name = "sort", required = false, defaultValue = "createdAt") String sort,
+            @RequestParam(name = "direction", required = false, defaultValue = "desc") String direction
+    ) {
+        final ListJobsByUserIdUseCaseOutput output = this.listJobsByUserIdUseCase.execute(
+                ListJobsByUserIdUseCaseInput.with(userId, SearchQuery.newSearchQuery(page, perPage, search, sort, direction))
+        );
+
+        return ResponseEntity.ok().body(ListJobsByUserIdResponse.from(output));
     }
 }

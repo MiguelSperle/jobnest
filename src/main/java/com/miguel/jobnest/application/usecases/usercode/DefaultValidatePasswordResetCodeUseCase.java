@@ -9,10 +9,10 @@ import com.miguel.jobnest.domain.exceptions.DomainException;
 import com.miguel.jobnest.domain.exceptions.NotFoundException;
 import com.miguel.jobnest.domain.utils.TimeUtils;
 
-public class ValidatePasswordResetCodeUseCaseImpl implements ValidatePasswordResetCodeUseCase {
+public class DefaultValidatePasswordResetCodeUseCase implements ValidatePasswordResetCodeUseCase {
     private final UserCodeRepository userCodeRepository;
 
-    public ValidatePasswordResetCodeUseCaseImpl(UserCodeRepository userCodeRepository) {
+    public DefaultValidatePasswordResetCodeUseCase(UserCodeRepository userCodeRepository) {
         this.userCodeRepository = userCodeRepository;
     }
 

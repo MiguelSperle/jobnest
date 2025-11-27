@@ -13,12 +13,12 @@ import com.miguel.jobnest.domain.exceptions.DomainException;
 import com.miguel.jobnest.domain.exceptions.NotFoundException;
 import com.miguel.jobnest.domain.utils.TimeUtils;
 
-public class UpdateUserToVerifiedUseCaseImpl implements UpdateUserToVerifiedUseCase {
+public class DefaultUpdateUserToVerifiedUseCase implements UpdateUserToVerifiedUseCase {
     private final UserCodeRepository userCodeRepository;
     private final UserRepository userRepository;
     private final TransactionExecutor transactionExecutor;
 
-    public UpdateUserToVerifiedUseCaseImpl(
+    public DefaultUpdateUserToVerifiedUseCase(
             UserCodeRepository userCodeRepository,
             UserRepository userRepository,
             TransactionExecutor transactionExecutor

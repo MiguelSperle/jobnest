@@ -35,9 +35,8 @@ public class AuthController {
     @PostMapping("/login")
     @RateLimiter(name = "rateLimitConfiguration")
     public ResponseEntity<AuthenticateUserResponse> authenticateUser(@RequestBody @Valid AuthenticateUserRequest request) {
-        final AuthenticateUserUseCaseOutput authenticateUserUseCaseOutput =
-                this.authenticateUserUseCase.execute(request.toInput());
+        final AuthenticateUserUseCaseOutput output = this.authenticateUserUseCase.execute(request.toInput());
 
-        return ResponseEntity.ok().body(AuthenticateUserResponse.from(authenticateUserUseCaseOutput));
+        return ResponseEntity.ok().body(AuthenticateUserResponse.from(output));
     }
 }

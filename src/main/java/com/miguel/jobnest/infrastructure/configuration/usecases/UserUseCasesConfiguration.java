@@ -4,9 +4,8 @@ import com.miguel.jobnest.application.abstractions.producer.MessageProducer;
 import com.miguel.jobnest.application.abstractions.providers.PasswordEncryptionProvider;
 import com.miguel.jobnest.application.abstractions.repositories.UserCodeRepository;
 import com.miguel.jobnest.application.abstractions.repositories.UserRepository;
-import com.miguel.jobnest.application.abstractions.services.CacheService;
 import com.miguel.jobnest.application.abstractions.services.JwtService;
-import com.miguel.jobnest.application.abstractions.services.SecurityContextService;
+import com.miguel.jobnest.application.abstractions.services.SecurityService;
 import com.miguel.jobnest.application.abstractions.transaction.TransactionExecutor;
 import com.miguel.jobnest.application.abstractions.usecases.user.*;
 import com.miguel.jobnest.application.usecases.user.*;
@@ -21,7 +20,7 @@ public class UserUseCasesConfiguration {
             PasswordEncryptionProvider passwordEncryptionProvider,
             MessageProducer messageProducer
     ) {
-        return new RegisterUserUseCaseImpl(
+        return new DefaultRegisterUserUseCase(
                 userRepository,
                 passwordEncryptionProvider,
                 messageProducer
@@ -34,7 +33,7 @@ public class UserUseCasesConfiguration {
             UserRepository userRepository,
             TransactionExecutor transactionExecutor
     ) {
-        return new UpdateUserToVerifiedUseCaseImpl(
+        return new DefaultUpdateUserToVerifiedUseCase(
                 userCodeRepository,
                 userRepository,
                 transactionExecutor
@@ -48,7 +47,7 @@ public class UserUseCasesConfiguration {
             PasswordEncryptionProvider passwordEncryptionProvider,
             TransactionExecutor transactionExecutor
     ) {
-        return new ResetUserPasswordUseCaseImpl(
+        return new DefaultResetUserPasswordUseCase(
                 userRepository,
                 userCodeRepository,
                 passwordEncryptionProvider,
@@ -62,7 +61,7 @@ public class UserUseCasesConfiguration {
             PasswordEncryptionProvider passwordEncryptionProvider,
             JwtService jwtService
     ) {
-        return new AuthenticateUserUseCaseImpl(
+        return new DefaultAuthenticateUserUseCase(
                 userRepository,
                 passwordEncryptionProvider,
                 jwtService
@@ -72,25 +71,17 @@ public class UserUseCasesConfiguration {
     @Bean
     public GetAuthenticatedUserUseCase getAuthenticatedUserUseCase(
             UserRepository userRepository,
-            CacheService cacheService,
-            SecurityContextService securityContextService
+            SecurityService securityService
     ) {
-        return new GetAuthenticatedUserUseCaseImpl(
+        return new DefaultGetAuthenticatedUserUseCase(
                 userRepository,
-                cacheService,
-                securityContextService
+                securityService
         );
     }
 
     @Bean
-    public UpdateUserUseCase updateUserUseCase(
-            UserRepository userRepository,
-            CacheService cacheService
-    ) {
-        return new UpdateUserUseCaseImpl(
-                userRepository,
-                cacheService
-        );
+    public UpdateUserUseCase updateUserUseCase(UserRepository userRepository) {
+        return new DefaultUpdateUserUseCase(userRepository);
     }
 
     @Bean
@@ -98,14 +89,14 @@ public class UserUseCasesConfiguration {
             UserRepository userRepository,
             PasswordEncryptionProvider passwordEncryptionProvider
     ) {
-        return new UpdateUserPasswordUseCaseImpl(
+        return new DefaultUpdateUserPasswordUseCase(
                 userRepository,
                 passwordEncryptionProvider
         );
     }
 
     @Bean
-    public DeleteUserUseCase deleteUserUseCase(UserRepository userRepository) {
-        return new DeleteUserUseCaseImpl(userRepository);
+    public SoftDeleteUserUseCase deleteUserUseCase(UserRepository userRepository) {
+        return new DefaultSoftDeleteUserUseCase(userRepository);
     }
 }

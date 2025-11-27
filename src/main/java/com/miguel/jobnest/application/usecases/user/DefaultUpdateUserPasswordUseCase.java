@@ -8,11 +8,11 @@ import com.miguel.jobnest.domain.entities.User;
 import com.miguel.jobnest.domain.exceptions.DomainException;
 import com.miguel.jobnest.domain.exceptions.NotFoundException;
 
-public class UpdateUserPasswordUseCaseImpl implements UpdateUserPasswordUseCase {
+public class DefaultUpdateUserPasswordUseCase implements UpdateUserPasswordUseCase {
     private final UserRepository userRepository;
     private final PasswordEncryptionProvider passwordEncryptionProvider;
 
-    public UpdateUserPasswordUseCaseImpl(
+    public DefaultUpdateUserPasswordUseCase(
             UserRepository userRepository,
             PasswordEncryptionProvider passwordEncryptionProvider
     ) {

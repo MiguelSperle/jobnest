@@ -7,10 +7,10 @@ import com.miguel.jobnest.domain.entities.Job;
 import com.miguel.jobnest.domain.enums.Modality;
 import com.miguel.jobnest.domain.enums.SeniorityLevel;
 
-public class CreateJobUseCaseImpl implements CreateJobUseCase {
+public class DefaultCreateJobUseCase implements CreateJobUseCase {
     private final JobRepository jobRepository;
 
-    public CreateJobUseCaseImpl(JobRepository jobRepository) {
+    public DefaultCreateJobUseCase(JobRepository jobRepository) {
         this.jobRepository = jobRepository;
     }
 

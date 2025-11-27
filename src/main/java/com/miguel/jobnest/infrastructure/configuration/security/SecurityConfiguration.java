@@ -33,9 +33,10 @@ public class SecurityConfiguration {
                         authorize
                                 .requestMatchers("/api/v1/auth/**").permitAll()
                                 .requestMatchers("/api/v1/user-codes/**").permitAll()
-                                .requestMatchers( "/api/v1/users/verification/{code}").permitAll()
-                                .requestMatchers( "/api/v1/users/password-reset/{code}").permitAll()
+                                .requestMatchers("/api/v1/users/verification/{code}").permitAll()
+                                .requestMatchers("/api/v1/users/password-reset/{code}").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/api/v1/jobs").hasRole("RECRUITER")
+                                .requestMatchers(HttpMethod.GET, "/api/v1/jobs/{userId}").hasRole("RECRUITER")
                                 .anyRequest().authenticated())
                 .exceptionHandling((exceptions) -> exceptions.authenticationEntryPoint(this.authenticationEntryPoint).accessDeniedHandler(this.accessDeniedHandler))
                 .addFilterBefore(this.securityFilter, UsernamePasswordAuthenticationFilter.class)

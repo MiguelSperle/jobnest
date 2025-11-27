@@ -24,7 +24,7 @@ public class UserController {
     private final GetAuthenticatedUserUseCase getAuthenticatedUserUseCase;
     private final UpdateUserUseCase updateUserUseCase;
     private final UpdateUserPasswordUseCase updateUserPasswordUseCase;
-    private final DeleteUserUseCase deleteUserUseCase;
+    private final SoftDeleteUserUseCase softDeleteUserUseCase;
 
     @PatchMapping("/verification/{code}")
     @RateLimiter(name = "rateLimitConfiguration")
@@ -78,7 +78,7 @@ public class UserController {
     @DeleteMapping("/{id}")
     @RateLimiter(name = "rateLimitConfiguration")
     public ResponseEntity<MessageResponse> deleteUser(@PathVariable String id) {
-        this.deleteUserUseCase.execute(DeleteUserUseCaseInput.with(id));
+        this.softDeleteUserUseCase.execute(DeleteUserUseCaseInput.with(id));
 
         return ResponseEntity.ok().body(MessageResponse.from("User deleted successfully"));
     }

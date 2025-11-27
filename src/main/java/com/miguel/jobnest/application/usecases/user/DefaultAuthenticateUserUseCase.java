@@ -10,12 +10,12 @@ import com.miguel.jobnest.domain.entities.User;
 import com.miguel.jobnest.domain.enums.UserStatus;
 import com.miguel.jobnest.domain.exceptions.DomainException;
 
-public class AuthenticateUserUseCaseImpl implements AuthenticateUserUseCase {
+public class DefaultAuthenticateUserUseCase implements AuthenticateUserUseCase {
     private final UserRepository userRepository;
     private final PasswordEncryptionProvider passwordEncryptionProvider;
     private final JwtService jwtService;
 
-    public AuthenticateUserUseCaseImpl(
+    public DefaultAuthenticateUserUseCase(
             UserRepository userRepository,
             PasswordEncryptionProvider passwordEncryptionProvider,
             JwtService jwtService

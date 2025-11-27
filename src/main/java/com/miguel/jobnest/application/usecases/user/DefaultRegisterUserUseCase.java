@@ -10,7 +10,7 @@ import com.miguel.jobnest.domain.enums.AuthorizationRole;
 import com.miguel.jobnest.domain.events.UserCreatedEvent;
 import com.miguel.jobnest.domain.exceptions.DomainException;
 
-public class RegisterUserUseCaseImpl implements RegisterUserUseCase {
+public class DefaultRegisterUserUseCase implements RegisterUserUseCase {
     private final UserRepository userRepository;
     private final PasswordEncryptionProvider passwordEncryptionProvider;
     private final MessageProducer messageProducer;
@@ -18,7 +18,7 @@ public class RegisterUserUseCaseImpl implements RegisterUserUseCase {
     private static final String USER_CREATED_EXCHANGE = "user.created.exchange";
     private static final String USER_CREATED_ROUTING_KEY = "user.created.routing.key";
 
-    public RegisterUserUseCaseImpl(
+    public DefaultRegisterUserUseCase(
             UserRepository userRepository,
             PasswordEncryptionProvider passwordEncryptionProvider,
             MessageProducer messageProducer

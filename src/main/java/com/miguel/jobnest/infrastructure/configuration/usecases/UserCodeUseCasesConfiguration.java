@@ -7,9 +7,9 @@ import com.miguel.jobnest.application.abstractions.repositories.UserRepository;
 import com.miguel.jobnest.application.abstractions.usecases.usercode.ResendVerificationCodeUseCase;
 import com.miguel.jobnest.application.abstractions.usecases.usercode.SendPasswordResetCodeUseCase;
 import com.miguel.jobnest.application.abstractions.usecases.usercode.ValidatePasswordResetCodeUseCase;
-import com.miguel.jobnest.application.usecases.usercode.SendPasswordResetCodeUseCaseImpl;
-import com.miguel.jobnest.application.usecases.usercode.ValidatePasswordResetCodeUseCaseImpl;
-import com.miguel.jobnest.application.usecases.usercode.ResendVerificationCodeUseCaseImpl;
+import com.miguel.jobnest.application.usecases.usercode.DefaultSendPasswordResetCodeUseCase;
+import com.miguel.jobnest.application.usecases.usercode.DefaultValidatePasswordResetCodeUseCase;
+import com.miguel.jobnest.application.usecases.usercode.DefaultResendVerificationCodeUseCase;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -22,7 +22,7 @@ public class UserCodeUseCasesConfiguration {
             MessageProducer messageProducer,
             CodeProvider codeProvider
     ) {
-        return new ResendVerificationCodeUseCaseImpl(
+        return new DefaultResendVerificationCodeUseCase(
                 userCodeRepository,
                 userRepository,
                 messageProducer,
@@ -37,7 +37,7 @@ public class UserCodeUseCasesConfiguration {
             CodeProvider codeProvider,
             MessageProducer messageProducer
     ) {
-        return new SendPasswordResetCodeUseCaseImpl(
+        return new DefaultSendPasswordResetCodeUseCase(
                 userRepository,
                 userCodeRepository,
                 codeProvider,
@@ -47,6 +47,6 @@ public class UserCodeUseCasesConfiguration {
 
     @Bean
     public ValidatePasswordResetCodeUseCase validatePasswordResetCodeUseCase(UserCodeRepository userCodeRepository) {
-        return new ValidatePasswordResetCodeUseCaseImpl(userCodeRepository);
+        return new DefaultValidatePasswordResetCodeUseCase(userCodeRepository);
     }
 }

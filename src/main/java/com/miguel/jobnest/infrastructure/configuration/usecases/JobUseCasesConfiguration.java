@@ -2,7 +2,9 @@ package com.miguel.jobnest.infrastructure.configuration.usecases;
 
 import com.miguel.jobnest.application.abstractions.repositories.JobRepository;
 import com.miguel.jobnest.application.abstractions.usecases.job.CreateJobUseCase;
-import com.miguel.jobnest.application.usecases.job.CreateJobUseCaseImpl;
+import com.miguel.jobnest.application.abstractions.usecases.job.ListJobsByUserIdUseCase;
+import com.miguel.jobnest.application.usecases.job.DefaultCreateJobUseCase;
+import com.miguel.jobnest.application.usecases.job.DefaultListJobsByUserIdUseCase;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -10,6 +12,11 @@ import org.springframework.context.annotation.Configuration;
 public class JobUseCasesConfiguration {
     @Bean
     public CreateJobUseCase createJobUseCase(JobRepository jobRepository) {
-        return new CreateJobUseCaseImpl(jobRepository);
+        return new DefaultCreateJobUseCase(jobRepository);
+    }
+
+    @Bean
+    public ListJobsByUserIdUseCase listJobsByUserIdUseCase(JobRepository jobRepository) {
+        return new DefaultListJobsByUserIdUseCase(jobRepository);
     }
 }

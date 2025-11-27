@@ -13,13 +13,13 @@ import com.miguel.jobnest.domain.exceptions.DomainException;
 import com.miguel.jobnest.domain.exceptions.NotFoundException;
 import com.miguel.jobnest.domain.utils.TimeUtils;
 
-public class ResetUserPasswordUseCaseImpl implements ResetUserPasswordUseCase {
+public class DefaultResetUserPasswordUseCase implements ResetUserPasswordUseCase {
     private final UserRepository userRepository;
     private final UserCodeRepository userCodeRepository;
     private final PasswordEncryptionProvider passwordEncryptionProvider;
     private final TransactionExecutor transactionExecutor;
 
-    public ResetUserPasswordUseCaseImpl(
+    public DefaultResetUserPasswordUseCase(
             UserRepository userRepository,
             UserCodeRepository userCodeRepository,
             PasswordEncryptionProvider passwordEncryptionProvider,
