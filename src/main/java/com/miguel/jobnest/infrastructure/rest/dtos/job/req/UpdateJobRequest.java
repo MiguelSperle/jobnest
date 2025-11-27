@@ -1,6 +1,6 @@
 package com.miguel.jobnest.infrastructure.rest.dtos.job.req;
 
-import com.miguel.jobnest.application.usecases.job.inputs.UpdateJobUseCaseInput;
+import com.miguel.jobnest.application.usecases.jobvacancy.inputs.UpdateJobVacancyUseCaseInput;
 import com.miguel.jobnest.domain.enums.Modality;
 import com.miguel.jobnest.domain.enums.SeniorityLevel;
 import com.miguel.jobnest.infrastructure.annotations.EnumCheck;
@@ -20,15 +20,20 @@ public record UpdateJobRequest(
         String seniorityLevel,
 
         @EnumCheck(enumClass = Modality.class, message = "Modality should be either ON_SITE, HYBRID or REMOTE")
-        String modality
+        String modality,
+
+        @NotBlank(message = "Company name should not be neither null nor blank")
+        @Size(max = 80, message = "Company name should not exceed 80 characters")
+        String companyName
 ) {
-    public UpdateJobUseCaseInput toInput(String id) {
-        return UpdateJobUseCaseInput.with(
+    public UpdateJobVacancyUseCaseInput toInput(String id) {
+        return UpdateJobVacancyUseCaseInput.with(
                 id,
                 this.title,
                 this.description,
                 this.seniorityLevel,
-                this.modality
+                this.modality,
+                this.companyName
         );
     }
 }

@@ -34,7 +34,7 @@ public class JwtServiceImpl implements JwtService {
                     .withExpiresAt(this.genExpirationDate(Instant.now()))
                     .sign(algorithm);
         } catch (Exception ex) {
-            log.error("Failed to create JWT token for userId: [{}] with role: [{}]", userId, role, ex);
+            log.error("Failed to create JWT token for userId [{}] with role [{}]", userId, role, ex);
             throw JwtTokenCreationFailedException.with("Failed to create JWT token");
         }
     }

@@ -31,4 +31,17 @@ public class QueueConfiguration {
     public Queue userCodeCreatedDlqQueue() {
         return QueueBuilder.durable("user.code.created.dlq.queue").build();
     }
+
+    @Bean
+    public Queue subscriptionCreatedQueue() {
+        return QueueBuilder.durable("subscription.created.queue")
+                .deadLetterExchange("subscription.created.dlq.exchange")
+                .deadLetterRoutingKey("subscription.created.dlq.routing.key")
+                .build();
+    }
+
+    @Bean
+    public Queue subscriptionCreatedDlqQueue() {
+        return QueueBuilder.durable("subscription.created.dlq.queue").build();
+    }
 }

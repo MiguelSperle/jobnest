@@ -5,11 +5,14 @@ import com.miguel.jobnest.application.abstractions.repositories.UserRepository;
 import com.miguel.jobnest.application.abstractions.services.EmailService;
 import com.miguel.jobnest.domain.entities.User;
 import com.miguel.jobnest.domain.entities.UserCode;
+import com.miguel.jobnest.domain.enums.UserCodeType;
 import com.miguel.jobnest.domain.events.UserCodeCreatedEvent;
 import com.miguel.jobnest.domain.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
+
+import java.util.Objects;
 
 @Component
 @RequiredArgsConstructor
@@ -21,21 +24,18 @@ public class UserCodeCreatedConsumer {
     private static final String USER_CODE_CREATED_QUEUE = "user.code.created.queue";
 
     @RabbitListener(queues = USER_CODE_CREATED_QUEUE)
-    public void onMessage(UserCodeCreatedEvent userCodeCreatedEvent) {
-        final UserCode userCode = this.getUserCodeById(userCodeCreatedEvent.id());
+    public void onMessage(UserCodeCreatedEvent event) {
+        final UserCode userCode = this.getUserCodeById(event.id());
 
-        String text = "";
-        String subject = "";
+        String text;
+        String subject;
 
-        switch (userCode.getUserCodeType()) {
-            case USER_VERIFICATION -> {
-                text = "Hello, your verification code is " + userCode.getCode() + " and it will expire in 15 minutes";
-                subject = "Verification Code";
-            }
-            case PASSWORD_RESET -> {
-                text = "Hello, your password reset code is " + userCode.getCode() + " and it will expire in 15 minutes";
-                subject = "Password Reset Code";
-            }
+        if (Objects.equals(userCode.getUserCodeType(), UserCodeType.USER_VERIFICATION)) {
+            text = "Hello, your verification code is " + userCode.getCode() + " and it will expire in 15 minutes";
+            subject = "Verification Code";
+        } else {
+            text = "Hello, your password reset code is " + userCode.getCode() + " and it will expire in 15 minutes";
+            subject = "Password Reset Code";
         }
 
         final User user = this.getUserById(userCode.getUserId());

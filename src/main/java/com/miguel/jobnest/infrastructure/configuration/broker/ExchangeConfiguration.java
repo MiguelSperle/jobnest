@@ -25,4 +25,10 @@ public class ExchangeConfiguration {
     public DirectExchange userCodeCreatedDlqExchange() {
         return new DirectExchange("user.code.created.dlq.exchange");
     }
+
+    @Bean
+    public DirectExchange subscriptionCreatedExchange() { return new DirectExchange("subscription.created.exchange");}
+
+    @Bean
+    public DirectExchange subscriptionCreatedDlqExchange() { return new DirectExchange("subscription.created.dlq.exchange"); }
 }

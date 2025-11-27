@@ -1,0 +1,12 @@
+package com.miguel.jobnest.application.usecases.jobvacancy.outputs;
+
+import com.miguel.jobnest.domain.entities.JobVacancy;
+import com.miguel.jobnest.domain.pagination.Pagination;
+
+public record ListJobVacanciesByUserIdUseCaseOutput(
+        Pagination<JobVacancy> paginatedJobs
+) {
+    public static ListJobVacanciesByUserIdUseCaseOutput from(Pagination<JobVacancy> paginatedJobs) {
+        return new ListJobVacanciesByUserIdUseCaseOutput(paginatedJobs);
+    }
+}

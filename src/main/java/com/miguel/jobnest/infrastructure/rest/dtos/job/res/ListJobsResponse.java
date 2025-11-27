@@ -1,6 +1,6 @@
 package com.miguel.jobnest.infrastructure.rest.dtos.job.res;
 
-import com.miguel.jobnest.application.usecases.job.outputs.ListJobsUseCaseOutput;
+import com.miguel.jobnest.application.usecases.jobvacancy.outputs.ListJobVacanciesUseCaseOutput;
 import com.miguel.jobnest.domain.enums.Modality;
 import com.miguel.jobnest.domain.enums.SeniorityLevel;
 import com.miguel.jobnest.domain.pagination.Pagination;
@@ -13,15 +13,17 @@ public record ListJobsResponse(
         String description,
         SeniorityLevel seniorityLevel,
         Modality modality,
+        String companyName,
         LocalDateTime createdAt
 ) {
-    public static Pagination<ListJobsResponse> from(ListJobsUseCaseOutput output) {
+    public static Pagination<ListJobsResponse> from(ListJobVacanciesUseCaseOutput output) {
         return output.paginatedJobs().map(paginatedJob -> new ListJobsResponse(
                 paginatedJob.getId(),
                 paginatedJob.getTitle(),
                 paginatedJob.getDescription(),
                 paginatedJob.getSeniorityLevel(),
                 paginatedJob.getModality(),
+                paginatedJob.getCompanyName(),
                 paginatedJob.getCreatedAt()
         ));
     }

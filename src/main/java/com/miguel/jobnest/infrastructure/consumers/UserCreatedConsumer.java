@@ -29,10 +29,10 @@ public class UserCreatedConsumer {
     private final static String ALPHANUMERIC_CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
     @RabbitListener(queues = USER_CREATED_QUEUE)
-    public void onMessage(UserCreatedEvent userCreatedEvent) {
+    public void onMessage(UserCreatedEvent event) {
         final String codeGenerated = this.codeProvider.generateCode(CODE_LENGTH, ALPHANUMERIC_CHARACTERS);
 
-        final UserCode newUserCode = UserCode.newUserCode(userCreatedEvent.id(), codeGenerated, UserCodeType.USER_VERIFICATION);
+        final UserCode newUserCode = UserCode.newUserCode(event.id(), codeGenerated, UserCodeType.USER_VERIFICATION);
 
         this.transactionExecutor.runTransaction(() -> {
             final UserCode savedUserCode = this.saveUserCode(newUserCode);

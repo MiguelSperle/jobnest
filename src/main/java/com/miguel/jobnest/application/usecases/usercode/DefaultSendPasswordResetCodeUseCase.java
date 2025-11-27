@@ -52,9 +52,9 @@ public class DefaultSendPasswordResetCodeUseCase implements SendPasswordResetCod
 
         final UserCode savedUserCode = this.saveUserCode(newUserCode);
 
-        final UserCodeCreatedEvent userCodeCreatedEvent = UserCodeCreatedEvent.from(savedUserCode.getId());
+        final UserCodeCreatedEvent event = UserCodeCreatedEvent.from(savedUserCode.getId());
 
-        this.messageProducer.publish(USER_CODE_CREATED_EXCHANGE, USER_CODE_CREATED_ROUTING_KEY, userCodeCreatedEvent);
+        this.messageProducer.publish(USER_CODE_CREATED_EXCHANGE, USER_CODE_CREATED_ROUTING_KEY, event);
     }
 
     private User getUserByEmail(String email) {

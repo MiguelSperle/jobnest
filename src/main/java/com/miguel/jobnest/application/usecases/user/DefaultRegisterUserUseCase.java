@@ -50,9 +50,9 @@ public class DefaultRegisterUserUseCase implements RegisterUserUseCase {
 
         final User savedUser = this.saveUser(newUser);
 
-        final UserCreatedEvent userCreatedEvent = UserCreatedEvent.from(savedUser.getId());
+        final UserCreatedEvent event = UserCreatedEvent.from(savedUser.getId());
 
-        this.messageProducer.publish(USER_CREATED_EXCHANGE, USER_CREATED_ROUTING_KEY, userCreatedEvent);
+        this.messageProducer.publish(USER_CREATED_EXCHANGE, USER_CREATED_ROUTING_KEY, event);
     }
 
     private boolean verifyUserAlreadyExistsByEmail(String email) {
