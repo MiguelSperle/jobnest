@@ -2,7 +2,7 @@ package com.miguel.jobnest.application.usecases.user;
 
 import com.miguel.jobnest.application.abstractions.repositories.UserRepository;
 import com.miguel.jobnest.application.abstractions.usecases.user.UpdateUserUseCase;
-import com.miguel.jobnest.application.usecases.user.inputs.UpdateUserInformationUseCaseInput;
+import com.miguel.jobnest.application.usecases.user.inputs.UpdateUserUseCaseInput;
 import com.miguel.jobnest.domain.entities.User;
 import com.miguel.jobnest.domain.exceptions.NotFoundException;
 
@@ -14,8 +14,8 @@ public class DefaultUpdateUserUseCase implements UpdateUserUseCase {
     }
 
     @Override
-    public void execute(UpdateUserInformationUseCaseInput input) {
-        final User user = this.getUserById(input.userId());
+    public void execute(UpdateUserUseCaseInput input) {
+        final User user = this.getUserById(input.id());
 
         final User updatedUser = user.withName(input.name()).withEmail(input.email())
                 .withDescription(input.description()).withCity(input.city()).withState(input.state())

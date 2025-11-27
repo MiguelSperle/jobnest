@@ -16,6 +16,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
@@ -81,5 +82,10 @@ public class JobRepositoryImpl implements JobRepository {
         );
 
         return new Pagination<>(paginationMetadata, jobs);
+    }
+
+    @Override
+    public Optional<Job> findById(String id) {
+        return this.jpaJobRepository.findById(id).map(JpaJobEntity::toEntity);
     }
 }

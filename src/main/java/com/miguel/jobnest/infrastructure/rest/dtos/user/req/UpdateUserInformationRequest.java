@@ -1,6 +1,6 @@
 package com.miguel.jobnest.infrastructure.rest.dtos.user.req;
 
-import com.miguel.jobnest.application.usecases.user.inputs.UpdateUserInformationUseCaseInput;
+import com.miguel.jobnest.application.usecases.user.inputs.UpdateUserUseCaseInput;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -30,9 +30,9 @@ public record UpdateUserInformationRequest(
         @Size(max = 50, message = "Country should not exceed 50 characters")
         String country
 ) {
-    public UpdateUserInformationUseCaseInput toInput(String userId) {
-        return UpdateUserInformationUseCaseInput.with(
-                userId,
+    public UpdateUserUseCaseInput toInput(String id) {
+        return UpdateUserUseCaseInput.with(
+                id,
                 this.name,
                 this.email,
                 this.description,

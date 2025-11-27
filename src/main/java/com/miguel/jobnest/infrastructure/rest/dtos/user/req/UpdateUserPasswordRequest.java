@@ -13,9 +13,9 @@ public record UpdateUserPasswordRequest(
         @Size(min = 5, max = 100, message = "Password should contain between 5 and 100 characters")
         String password
 ) {
-    public UpdateUserPasswordUseCaseInput toInput(String userId) {
+    public UpdateUserPasswordUseCaseInput toInput(String id) {
         return UpdateUserPasswordUseCaseInput.with(
-                userId,
+                id,
                 this.currentPassword,
                 this.password
         );

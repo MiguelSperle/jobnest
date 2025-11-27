@@ -22,7 +22,7 @@ public class DefaultUpdateUserPasswordUseCase implements UpdateUserPasswordUseCa
 
     @Override
     public void execute(UpdateUserPasswordUseCaseInput input) {
-        final User user = this.getUserById(input.userId());
+        final User user = this.getUserById(input.id());
 
         if (!this.validatePassword(input.currentPassword(), user.getPassword())) {
             throw DomainException.with("Invalid current password", 422);

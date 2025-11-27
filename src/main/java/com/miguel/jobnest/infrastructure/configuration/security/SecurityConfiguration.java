@@ -37,6 +37,7 @@ public class SecurityConfiguration {
                                 .requestMatchers("/api/v1/users/password-reset/{code}").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/api/v1/jobs").hasRole("RECRUITER")
                                 .requestMatchers(HttpMethod.GET, "/api/v1/jobs/{userId}").hasRole("RECRUITER")
+                                .requestMatchers(HttpMethod.PATCH, "/api/v1/jobs/{id}").hasRole("RECRUITER")
                                 .requestMatchers(HttpMethod.GET, "/api/v1/jobs").hasRole("CANDIDATE")
                                 .anyRequest().authenticated())
                 .exceptionHandling((exceptions) -> exceptions.authenticationEntryPoint(this.authenticationEntryPoint).accessDeniedHandler(this.accessDeniedHandler))

@@ -1,7 +1,7 @@
 package com.miguel.jobnest.application.usecases.user.inputs;
 
-public record UpdateUserInformationUseCaseInput(
-        String userId,
+public record UpdateUserUseCaseInput(
+        String id,
         String name,
         String email,
         String description,
@@ -9,8 +9,8 @@ public record UpdateUserInformationUseCaseInput(
         String state,
         String country
 ) {
-    public static UpdateUserInformationUseCaseInput with(
-            String userId,
+    public static UpdateUserUseCaseInput with(
+            String id,
             String name,
             String email,
             String description,
@@ -18,8 +18,8 @@ public record UpdateUserInformationUseCaseInput(
             String state,
             String country
     ) {
-        return new UpdateUserInformationUseCaseInput(
-                userId,
+        return new UpdateUserUseCaseInput(
+                id,
                 name,
                 email,
                 description,

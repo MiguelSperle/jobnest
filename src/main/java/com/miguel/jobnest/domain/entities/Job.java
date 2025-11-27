@@ -72,6 +72,54 @@ public class Job {
         );
     }
 
+    public Job withTitle(String title) {
+        return new Job(
+                this.id,
+                this.userId,
+                title,
+                this.description,
+                this.seniorityLevel,
+                this.modality,
+                this.createdAt
+        );
+    }
+
+    public Job withDescription(String description) {
+        return new Job(
+                this.id,
+                this.userId,
+                this.title,
+                description,
+                this.seniorityLevel,
+                this.modality,
+                this.createdAt
+        );
+    }
+
+    public Job withSeniorityLevel(SeniorityLevel seniorityLevel) {
+        return new Job(
+                this.id,
+                this.userId,
+                this.title,
+                this.description,
+                seniorityLevel,
+                this.modality,
+                this.createdAt
+        );
+    }
+
+    public Job withModality(Modality modality) {
+        return new Job(
+                this.id,
+                this.userId,
+                this.title,
+                this.description,
+                this.seniorityLevel,
+                modality,
+                this.createdAt
+        );
+    }
+
     public String getId() {
         return this.id;
     }

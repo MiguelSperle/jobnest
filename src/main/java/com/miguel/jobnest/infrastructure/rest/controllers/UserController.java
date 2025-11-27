@@ -55,7 +55,7 @@ public class UserController {
 
     @PatchMapping("/{id}")
     @RateLimiter(name = "rateLimitConfiguration")
-    public ResponseEntity<MessageResponse> updateUserUseCase(
+    public ResponseEntity<MessageResponse> updateUser(
             @PathVariable String id,
             @RequestBody @Valid UpdateUserInformationRequest request
     ) {

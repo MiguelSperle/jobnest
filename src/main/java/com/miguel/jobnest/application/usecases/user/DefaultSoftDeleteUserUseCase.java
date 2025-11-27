@@ -16,7 +16,7 @@ public class DefaultSoftDeleteUserUseCase implements SoftDeleteUserUseCase {
 
     @Override
     public void execute(DeleteUserUseCaseInput input) {
-        final User user = this.getUserById(input.userId());
+        final User user = this.getUserById(input.id());
 
         final User updatedUser = user.withUserStatus(UserStatus.DELETED);
 
