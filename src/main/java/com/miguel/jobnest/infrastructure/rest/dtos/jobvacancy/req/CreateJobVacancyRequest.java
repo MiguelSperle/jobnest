@@ -3,7 +3,7 @@ package com.miguel.jobnest.infrastructure.rest.dtos.jobvacancy.req;
 import com.miguel.jobnest.application.usecases.jobvacancy.inputs.CreateJobVacancyUseCaseInput;
 import com.miguel.jobnest.domain.enums.Modality;
 import com.miguel.jobnest.domain.enums.SeniorityLevel;
-import com.miguel.jobnest.infrastructure.annotations.EnumCheck;
+import com.miguel.jobnest.infrastructure.configurations.annotations.EnumCheck;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 

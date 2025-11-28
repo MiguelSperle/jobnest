@@ -2,7 +2,7 @@ package com.miguel.jobnest.infrastructure.rest.dtos.user.req;
 
 import com.miguel.jobnest.application.usecases.user.inputs.RegisterUserUseCaseInput;
 import com.miguel.jobnest.domain.enums.AuthorizationRole;
-import com.miguel.jobnest.infrastructure.annotations.EnumCheck;
+import com.miguel.jobnest.infrastructure.configurations.annotations.EnumCheck;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
