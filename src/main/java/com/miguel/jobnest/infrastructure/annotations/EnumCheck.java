@@ -1,6 +1,6 @@
 package com.miguel.jobnest.infrastructure.annotations;
 
-import com.miguel.jobnest.infrastructure.annotations.validatiors.EnumValidator;
+import com.miguel.jobnest.infrastructure.annotations.validators.EnumValidator;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 

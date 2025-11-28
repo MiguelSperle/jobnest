@@ -1,6 +1,5 @@
 package com.miguel.jobnest.infrastructure.configuration.broker;
 
-
 import com.miguel.jobnest.infrastructure.configuration.broker.annotations.exchanges.*;
 import com.miguel.jobnest.infrastructure.configuration.broker.annotations.queues.*;
 import org.springframework.amqp.core.*;

@@ -1,17 +1,13 @@
-package com.miguel.jobnest.infrastructure.rest.dtos.job.req;
+package com.miguel.jobnest.infrastructure.rest.dtos.jobvacancy.req;
 
-import com.miguel.jobnest.application.usecases.jobvacancy.inputs.CreateJobVacancyUseCaseInput;
+import com.miguel.jobnest.application.usecases.jobvacancy.inputs.UpdateJobVacancyUseCaseInput;
 import com.miguel.jobnest.domain.enums.Modality;
 import com.miguel.jobnest.domain.enums.SeniorityLevel;
 import com.miguel.jobnest.infrastructure.annotations.EnumCheck;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
-public record CreateJobRequest(
-        @NotBlank(message = "User id should not be neither null nor blank")
-        @Size(min = 36, max = 36, message = "User id should have exactly 36 characters")
-        String userId,
-
+public record UpdateJobVacancyRequest(
         @NotBlank(message = "Title should not be neither null nor blank")
         @Size(max = 255, message = "Title should not exceed 255 characters")
         String title,
@@ -30,9 +26,9 @@ public record CreateJobRequest(
         @Size(max = 80, message = "Company name should not exceed 80 characters")
         String companyName
 ) {
-    public CreateJobVacancyUseCaseInput toInput() {
-        return CreateJobVacancyUseCaseInput.with(
-                this.userId,
+    public UpdateJobVacancyUseCaseInput toInput(String id) {
+        return UpdateJobVacancyUseCaseInput.with(
+                id,
                 this.title,
                 this.description,
                 this.seniorityLevel,

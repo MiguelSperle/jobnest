@@ -48,7 +48,7 @@ public class DefaultCreateSubscriptionUseCase implements CreateSubscriptionUseCa
     }
 
     private boolean verifySubscriptionAlreadyExistsByUserIdAndJobVacancyId(String userId, String jobVacancyId) {
-        return this.subscriptionRepository.existsByUserIdAndJobId(userId, jobVacancyId);
+        return this.subscriptionRepository.existsByUserIdAndJobVacancyId(userId, jobVacancyId);
     }
 
     private Subscription saveSubscription(Subscription subscription) {

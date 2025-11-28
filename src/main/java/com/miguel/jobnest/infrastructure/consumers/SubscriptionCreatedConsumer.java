@@ -1,7 +1,6 @@
 package com.miguel.jobnest.infrastructure.consumers;
 
 import com.miguel.jobnest.application.abstractions.repositories.JobVacancyRepository;
-import com.miguel.jobnest.application.abstractions.repositories.SubscriptionRepository;
 import com.miguel.jobnest.application.abstractions.repositories.UserRepository;
 import com.miguel.jobnest.application.abstractions.services.EmailService;
 import com.miguel.jobnest.domain.entities.JobVacancy;
@@ -15,7 +14,6 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class SubscriptionCreatedConsumer {
-    private final SubscriptionRepository subscriptionRepository;
     private final UserRepository userRepository;
     private final JobVacancyRepository jobVacancyRepository;
     private final EmailService emailService;
@@ -27,7 +25,7 @@ public class SubscriptionCreatedConsumer {
         final User user = this.getUserById(event.userId());
         final JobVacancy jobVacancy = this.getJobVacancyById(event.jobVacancyId());
 
-        final String text = "Hello, Thank your for applying to the job vacancy " + jobVacancy.getTitle() + " at " + jobVacancy.getCompanyName() + ". Please stay attentive to your communication channels, as the company may contact you soon regarding the next steps.";
+        final String text = "Hello, You applied for the job vacancy " + jobVacancy.getTitle() + " at " + jobVacancy.getCompanyName() + ". Please stay attentive to your communication channels, as the company may contact you soon regarding the next steps.";
         final String subject = "Job Vacancy Applied";
 
         this.emailService.sendEmail(user.getEmail(), text, subject);

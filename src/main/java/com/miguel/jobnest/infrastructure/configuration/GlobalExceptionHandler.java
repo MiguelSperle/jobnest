@@ -1,4 +1,4 @@
-package com.miguel.jobnest.infrastructure.configuration.exceptionHandler;
+package com.miguel.jobnest.infrastructure.configuration;
 
 import com.miguel.jobnest.domain.exceptions.DomainException;
 import com.miguel.jobnest.domain.exceptions.NotFoundException;

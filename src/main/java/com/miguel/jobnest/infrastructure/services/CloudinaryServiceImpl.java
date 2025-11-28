@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -20,7 +21,7 @@ public class CloudinaryServiceImpl implements UploadService {
     @Override
     public String uploadFile(byte[] bytesFile, String folderName) {
         try {
-            final HashMap<String, Object> options = new HashMap<>();
+            final Map<String, Object> options = new HashMap<>();
             options.put("folder", folderName);
             options.put("resource_type", "auto");
 

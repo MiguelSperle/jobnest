@@ -6,6 +6,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 public interface JpaSubscriptionRepository extends JpaRepository<JpaSubscriptionEntity, String> {
-    @Query(nativeQuery = true, value = "SELECT EXISTS (SELECT 1 FROM subscriptions s WHERE s.user_id = :userId AND s.job_id = :jobId)")
-    boolean existsByUserIdAndJobId(@Param("userId") String userId, @Param("jobId") String jobId);
+    @Query(nativeQuery = true, value = "SELECT EXISTS (SELECT 1 FROM subscriptions s WHERE s.user_id = :userId AND s.job_vacancy_id = :jobVacancyId)")
+    boolean existsByUserIdAndJobVacancyId(@Param("userId") String userId, @Param("jobVacancyId") String jobVacancyId);
 }

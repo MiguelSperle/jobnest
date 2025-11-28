@@ -16,7 +16,7 @@ public class UserCodeCreatedDlqConsumer {
     private static final String USER_CODE_CREATED_ROUTING_KEY = "user.code.created.routing.key";
 
     @RabbitListener(queues = USER_CODE_CREATED_DLQ_QUEUE)
-    public void onMessage(UserCodeCreatedEvent userCodeCreatedEvent) {
-        this.messageProducer.publish(USER_CODE_CREATED_EXCHANGE, USER_CODE_CREATED_ROUTING_KEY, userCodeCreatedEvent);
+    public void onMessage(UserCodeCreatedEvent event) {
+        this.messageProducer.publish(USER_CODE_CREATED_EXCHANGE, USER_CODE_CREATED_ROUTING_KEY, event);
     }
 }

@@ -11,10 +11,10 @@ import com.miguel.jobnest.application.usecases.jobvacancy.outputs.ListJobVacanci
 import com.miguel.jobnest.domain.pagination.Pagination;
 import com.miguel.jobnest.domain.pagination.SearchQuery;
 import com.miguel.jobnest.infrastructure.rest.dtos.common.res.MessageResponse;
-import com.miguel.jobnest.infrastructure.rest.dtos.job.req.CreateJobRequest;
-import com.miguel.jobnest.infrastructure.rest.dtos.job.req.UpdateJobRequest;
-import com.miguel.jobnest.infrastructure.rest.dtos.job.res.ListJobsByUserIdResponse;
-import com.miguel.jobnest.infrastructure.rest.dtos.job.res.ListJobsResponse;
+import com.miguel.jobnest.infrastructure.rest.dtos.jobvacancy.req.CreateJobVacancyRequest;
+import com.miguel.jobnest.infrastructure.rest.dtos.jobvacancy.req.UpdateJobVacancyRequest;
+import com.miguel.jobnest.infrastructure.rest.dtos.jobvacancy.res.ListJobVacanciesByUserIdResponse;
+import com.miguel.jobnest.infrastructure.rest.dtos.jobvacancy.res.ListJobVacanciesResponse;
 import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -33,7 +33,7 @@ public class JobVacancyController {
 
     @PostMapping
     @RateLimiter(name = "rateLimitConfiguration")
-    public ResponseEntity<MessageResponse> createJob(@RequestBody @Valid CreateJobRequest request) {
+    public ResponseEntity<MessageResponse> createJob(@RequestBody @Valid CreateJobVacancyRequest request) {
         this.createJobVacancyUseCase.execute(request.toInput());
 
         return ResponseEntity.status(HttpStatus.CREATED).body(MessageResponse.from("Job created successfully"));
@@ -41,7 +41,7 @@ public class JobVacancyController {
 
     @GetMapping("/{userId}")
     @RateLimiter(name = "rateLimitConfiguration")
-    public ResponseEntity<Pagination<ListJobsByUserIdResponse>> listJobsByUserId(
+    public ResponseEntity<Pagination<ListJobVacanciesByUserIdResponse>> listJobsByUserId(
             @PathVariable String userId,
             @RequestParam(name = "page", required = false, defaultValue = "0") int page,
             @RequestParam(name = "perPage", required = false, defaultValue = "10") int perPage,
@@ -53,14 +53,14 @@ public class JobVacancyController {
                 ListJobVacanciesByUserIdUseCaseInput.with(userId, SearchQuery.newSearchQuery(page, perPage, search, sort, direction))
         );
 
-        return ResponseEntity.ok().body(ListJobsByUserIdResponse.from(output));
+        return ResponseEntity.ok().body(ListJobVacanciesByUserIdResponse.from(output));
     }
 
     @PatchMapping("/{id}")
     @RateLimiter(name = "rateLimitConfiguration")
     public ResponseEntity<MessageResponse> updateJob(
             @PathVariable String id,
-            @RequestBody @Valid UpdateJobRequest request
+            @RequestBody @Valid UpdateJobVacancyRequest request
     ) {
         this.updateJobVacancyUseCase.execute(request.toInput(id));
 
@@ -69,7 +69,7 @@ public class JobVacancyController {
 
     @GetMapping
     @RateLimiter(name = "rateLimitConfiguration")
-    public ResponseEntity<Pagination<ListJobsResponse>> listJobs(
+    public ResponseEntity<Pagination<ListJobVacanciesResponse>> listJobs(
             @RequestParam(name = "page", required = false, defaultValue = "0") int page,
             @RequestParam(name = "perPage", required = false, defaultValue = "10") int perPage,
             @RequestParam(name = "search", required = false, defaultValue = "") String search,
@@ -80,6 +80,6 @@ public class JobVacancyController {
                 SearchQuery.newSearchQuery(page, perPage, search, sort, direction)
         ));
 
-        return ResponseEntity.ok().body(ListJobsResponse.from(output));
+        return ResponseEntity.ok().body(ListJobVacanciesResponse.from(output));
     }
 }

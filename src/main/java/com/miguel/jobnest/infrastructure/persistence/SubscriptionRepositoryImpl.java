@@ -15,8 +15,8 @@ public class SubscriptionRepositoryImpl implements SubscriptionRepository {
     private final JpaSubscriptionRepository jpaSubscriptionRepository;
 
     @Override
-    public boolean existsByUserIdAndJobId(String userId, String jobId) {
-        return this.jpaSubscriptionRepository.existsByUserIdAndJobId(userId, jobId);
+    public boolean existsByUserIdAndJobVacancyId(String userId, String jobVacancyId) {
+        return this.jpaSubscriptionRepository.existsByUserIdAndJobVacancyId(userId, jobVacancyId);
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.miguel.jobnest.infrastructure.annotations.validatiors;
+package com.miguel.jobnest.infrastructure.annotations.validators;
 
 import com.miguel.jobnest.infrastructure.annotations.EnumCheck;
 import jakarta.validation.ConstraintValidator;

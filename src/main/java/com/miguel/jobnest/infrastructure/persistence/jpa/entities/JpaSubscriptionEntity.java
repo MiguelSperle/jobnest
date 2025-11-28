@@ -22,8 +22,8 @@ public class JpaSubscriptionEntity {
     @Column(name = "user_id", nullable = false, length = 36)
     private String userId;
 
-    @Column(name = "job_id", nullable = false, length = 36)
-    private String jobId;
+    @Column(name = "job_vacancy_id", nullable = false, length = 36)
+    private String jobVacancyId;
 
     @Column(name = "resume_url", nullable = false)
     private String resumeUrl;
@@ -35,7 +35,7 @@ public class JpaSubscriptionEntity {
         return new JpaSubscriptionEntity(
                 subscription.getId(),
                 subscription.getUserId(),
-                subscription.getJobId(),
+                subscription.getJobVacancyId(),
                 subscription.getResumeUrl(),
                 subscription.getCreatedAt()
         );
@@ -45,7 +45,7 @@ public class JpaSubscriptionEntity {
         return Subscription.with(
                 this.id,
                 this.userId,
-                this.jobId,
+                this.jobVacancyId,
                 this.resumeUrl,
                 this.createdAt
         );
