@@ -37,7 +37,7 @@ public class JobVacancy {
         this.createdAt = createdAt;
     }
 
-    public static JobVacancy newJob(
+    public static JobVacancy newJobVacancy(
             String userId,
             String title,
             String description,

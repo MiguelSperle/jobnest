@@ -19,7 +19,7 @@ public class DefaultCreateJobVacancyUseCase implements CreateJobVacancyUseCase {
         final SeniorityLevel convertedSeniorityLevel = SeniorityLevel.valueOf(input.seniorityLevel());
         final Modality convertedModality = Modality.valueOf(input.modality());
 
-        final JobVacancy newJobVacancy = JobVacancy.newJob(
+        final JobVacancy newJobVacancy = JobVacancy.newJobVacancy(
                 input.userId(),
                 input.title(),
                 input.description(),
