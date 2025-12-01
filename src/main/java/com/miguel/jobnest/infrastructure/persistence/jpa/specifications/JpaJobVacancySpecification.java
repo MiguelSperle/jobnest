@@ -16,4 +16,9 @@ public class JpaJobVacancySpecification {
         return (root, query, criterialBuilder) ->
                 criterialBuilder.equal(root.get("userId"), userId);
     }
+
+    public static Specification<JpaJobVacancyEntity> filterByIsDeleted(boolean isDeleted) {
+        return (root, query, criterialBuilder) ->
+                criterialBuilder.equal(root.get("isDeleted"), isDeleted);
+    }
 }

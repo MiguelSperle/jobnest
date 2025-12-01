@@ -15,6 +15,7 @@ public class JobVacancy {
     private final SeniorityLevel seniorityLevel;
     private final Modality modality;
     private final String companyName;
+    private final Boolean isDeleted;
     private final LocalDateTime createdAt;
 
     private JobVacancy(
@@ -25,6 +26,7 @@ public class JobVacancy {
             SeniorityLevel seniorityLevel,
             Modality modality,
             String companyName,
+            Boolean isDeleted,
             LocalDateTime createdAt
     ) {
         this.id = id;
@@ -34,6 +36,7 @@ public class JobVacancy {
         this.seniorityLevel = seniorityLevel;
         this.modality = modality;
         this.companyName = companyName;
+        this.isDeleted = isDeleted;
         this.createdAt = createdAt;
     }
 
@@ -53,6 +56,7 @@ public class JobVacancy {
                 seniorityLevel,
                 modality,
                 companyName,
+                false,
                 TimeUtils.now()
         );
     }
@@ -65,6 +69,7 @@ public class JobVacancy {
             SeniorityLevel seniorityLevel,
             Modality modality,
             String companyName,
+            Boolean isDeleted,
             LocalDateTime createdAt
     ) {
         return new JobVacancy(
@@ -75,6 +80,7 @@ public class JobVacancy {
                 seniorityLevel,
                 modality,
                 companyName,
+                isDeleted,
                 createdAt
         );
     }
@@ -88,6 +94,7 @@ public class JobVacancy {
                 this.seniorityLevel,
                 this.modality,
                 this.companyName,
+                this.isDeleted,
                 this.createdAt
         );
     }
@@ -101,6 +108,7 @@ public class JobVacancy {
                 this.seniorityLevel,
                 this.modality,
                 this.companyName,
+                this.isDeleted,
                 this.createdAt
         );
     }
@@ -114,6 +122,7 @@ public class JobVacancy {
                 seniorityLevel,
                 this.modality,
                 this.companyName,
+                this.isDeleted,
                 this.createdAt
         );
     }
@@ -127,6 +136,7 @@ public class JobVacancy {
                 this.seniorityLevel,
                 modality,
                 this.companyName,
+                this.isDeleted,
                 this.createdAt
         );
     }
@@ -140,6 +150,21 @@ public class JobVacancy {
                 this.seniorityLevel,
                 this.modality,
                 companyName,
+                this.isDeleted,
+                this.createdAt
+        );
+    }
+
+    public JobVacancy withIsDeleted(Boolean isDeleted) {
+        return new JobVacancy(
+                this.id,
+                this.userId,
+                this.title,
+                this.description,
+                this.seniorityLevel,
+                this.modality,
+                this.companyName,
+                isDeleted,
                 this.createdAt
         );
     }
@@ -172,6 +197,10 @@ public class JobVacancy {
         return this.companyName;
     }
 
+    public Boolean getIsDeleted() {
+        return this.isDeleted;
+    }
+
     public LocalDateTime getCreatedAt() {
         return this.createdAt;
     }
@@ -186,6 +215,7 @@ public class JobVacancy {
                 ", seniorityLevel=" + this.seniorityLevel +
                 ", modality=" + this.modality +
                 ", companyName='" + this.companyName + '\'' +
+                ", isDeleted='" + this.isDeleted + '\'' +
                 ", createdAt=" + this.createdAt +
                 '}';
     }

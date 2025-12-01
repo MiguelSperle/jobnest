@@ -10,6 +10,7 @@ public class Subscription {
     private final String userId;
     private final String jobVacancyId;
     private final String resumeUrl;
+    private final Boolean isCanceled;
     private final LocalDateTime createdAt;
 
     private Subscription(
@@ -17,12 +18,14 @@ public class Subscription {
             String userId,
             String jobVacancyId,
             String resumeUrl,
+            Boolean isCanceled,
             LocalDateTime createdAt
     ) {
         this.id = id;
         this.userId = userId;
         this.jobVacancyId = jobVacancyId;
         this.resumeUrl = resumeUrl;
+        this.isCanceled = isCanceled;
         this.createdAt = createdAt;
     }
 
@@ -36,6 +39,7 @@ public class Subscription {
                 userId,
                 jobVacancyId,
                 resumeUrl,
+                false,
                 TimeUtils.now()
         );
     }
@@ -45,6 +49,7 @@ public class Subscription {
             String userId,
             String jobVacancyId,
             String resumeUrl,
+            Boolean isCanceled,
             LocalDateTime createdAt
     ) {
         return new Subscription(
@@ -52,7 +57,19 @@ public class Subscription {
                 userId,
                 jobVacancyId,
                 resumeUrl,
+                isCanceled,
                 createdAt
+        );
+    }
+
+    public Subscription withIsCanceled(Boolean isCanceled) {
+        return new Subscription(
+                this.id,
+                this.userId,
+                this.jobVacancyId,
+                this.resumeUrl,
+                isCanceled,
+                this.createdAt
         );
     }
 
@@ -72,6 +89,10 @@ public class Subscription {
         return this.resumeUrl;
     }
 
+    public Boolean getIsCanceled() {
+        return this.isCanceled;
+    }
+
     public LocalDateTime getCreatedAt() {
         return this.createdAt;
     }
@@ -83,6 +104,7 @@ public class Subscription {
                 ", userId='" + this.userId + '\'' +
                 ", jobVacancyId='" + this.jobVacancyId + '\'' +
                 ", resumeUrl='" + this.resumeUrl + '\'' +
+                ", isCanceled='" + this.isCanceled + '\'' +
                 ", createdAt=" + this.createdAt +
                 '}';
     }

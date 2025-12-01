@@ -9,6 +9,7 @@ public record ListJobVacanciesByUserIdResponse(
         String id,
         String title,
         String companyName,
+        Boolean isDeleted,
         LocalDateTime createdAt
 ) {
     public static Pagination<ListJobVacanciesByUserIdResponse> from(ListJobVacanciesByUserIdUseCaseOutput output) {
@@ -16,6 +17,7 @@ public record ListJobVacanciesByUserIdResponse(
                 paginatedJobVacancy.getId(),
                 paginatedJobVacancy.getTitle(),
                 paginatedJobVacancy.getCompanyName(),
+                paginatedJobVacancy.getIsDeleted(),
                 paginatedJobVacancy.getCreatedAt()
         ));
     }

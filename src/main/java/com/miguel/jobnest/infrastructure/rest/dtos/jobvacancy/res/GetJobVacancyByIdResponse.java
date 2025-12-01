@@ -13,6 +13,7 @@ public record GetJobVacancyByIdResponse(
         SeniorityLevel seniorityLevel,
         Modality modality,
         String companyName,
+        Boolean isDeleted,
         LocalDateTime createdAt
 ) {
     public static GetJobVacancyByIdResponse from(GetJobVacancyByIdUseCaseOutput output) {
@@ -23,6 +24,7 @@ public record GetJobVacancyByIdResponse(
                 output.jobVacancy().getSeniorityLevel(),
                 output.jobVacancy().getModality(),
                 output.jobVacancy().getCompanyName(),
+                output.jobVacancy().getIsDeleted(),
                 output.jobVacancy().getCreatedAt()
         );
     }

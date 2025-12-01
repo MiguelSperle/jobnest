@@ -28,6 +28,9 @@ public class JpaSubscriptionEntity {
     @Column(name = "resume_url", nullable = false)
     private String resumeUrl;
 
+    @Column(nullable = false, name = "is_canceled")
+    private Boolean isCanceled;
+
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
@@ -37,6 +40,7 @@ public class JpaSubscriptionEntity {
                 subscription.getUserId(),
                 subscription.getJobVacancyId(),
                 subscription.getResumeUrl(),
+                subscription.getIsCanceled(),
                 subscription.getCreatedAt()
         );
     }
@@ -47,6 +51,7 @@ public class JpaSubscriptionEntity {
                 this.userId,
                 this.jobVacancyId,
                 this.resumeUrl,
+                this.isCanceled,
                 this.createdAt
         );
     }

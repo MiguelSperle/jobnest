@@ -1,10 +1,8 @@
 package com.miguel.jobnest.infrastructure.rest.controllers.recruiter;
 
-import com.miguel.jobnest.application.abstractions.usecases.jobvacancy.CreateJobVacancyUseCase;
-import com.miguel.jobnest.application.abstractions.usecases.jobvacancy.ListJobVacanciesByUserIdUseCase;
-import com.miguel.jobnest.application.abstractions.usecases.jobvacancy.ListJobVacanciesUseCase;
-import com.miguel.jobnest.application.abstractions.usecases.jobvacancy.UpdateJobVacancyUseCase;
+import com.miguel.jobnest.application.abstractions.usecases.jobvacancy.*;
 import com.miguel.jobnest.application.usecases.jobvacancy.inputs.ListJobVacanciesByUserIdUseCaseInput;
+import com.miguel.jobnest.application.usecases.jobvacancy.inputs.SoftDeleteJobVacancyUseCaseInput;
 import com.miguel.jobnest.application.usecases.jobvacancy.outputs.ListJobVacanciesByUserIdUseCaseOutput;
 import com.miguel.jobnest.domain.pagination.Pagination;
 import com.miguel.jobnest.domain.pagination.SearchQuery;
@@ -26,6 +24,7 @@ public class JobVacancyRecruiterController {
     private final CreateJobVacancyUseCase createJobVacancyUseCase;
     private final ListJobVacanciesByUserIdUseCase listJobVacanciesByUserIdUseCase;
     private final UpdateJobVacancyUseCase updateJobVacancyUseCase;
+    private final SoftDeleteJobVacancyUseCase softDeleteJobVacancyUseCase;
 
     @PostMapping
     @RateLimiter(name = "rateLimitConfiguration")
@@ -61,5 +60,13 @@ public class JobVacancyRecruiterController {
         this.updateJobVacancyUseCase.execute(request.toInput(id));
 
         return ResponseEntity.ok().body(MessageResponse.from("Job vacancy updated successfully"));
+    }
+
+    @DeleteMapping("/{id}")
+    @RateLimiter(name = "rateLimitConfiguration")
+    public ResponseEntity<MessageResponse> deleteJobVacancy(@PathVariable String id) {
+        this.softDeleteJobVacancyUseCase.execute(SoftDeleteJobVacancyUseCaseInput.with(id));
+
+        return ResponseEntity.ok().body(MessageResponse.from("Job vacancy deleted successfully"));
     }
 }

@@ -62,4 +62,9 @@ public class SubscriptionRepositoryImpl implements SubscriptionRepository {
 
         return new Pagination<>(paginationMetadata, subscriptions);
     }
+
+    @Override
+    public List<Subscription> findAllByJobVacancyId(String jobVacancyId) {
+        return this.jpaSubscriptionRepository.findAllByJobVacancyId(jobVacancyId).stream().map(JpaSubscriptionEntity::toEntity).toList();
+    }
 }

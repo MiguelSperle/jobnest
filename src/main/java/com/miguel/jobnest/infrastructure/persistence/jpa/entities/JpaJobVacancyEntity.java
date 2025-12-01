@@ -38,6 +38,9 @@ public class JpaJobVacancyEntity {
     @Column(nullable = false, length = 80)
     private String companyName;
 
+    @Column(nullable = false, name = "is_deleted")
+    private Boolean isDeleted;
+
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
@@ -50,6 +53,7 @@ public class JpaJobVacancyEntity {
                 jobVacancy.getSeniorityLevel(),
                 jobVacancy.getModality(),
                 jobVacancy.getCompanyName(),
+                jobVacancy.getIsDeleted(),
                 jobVacancy.getCreatedAt()
         );
     }
@@ -63,6 +67,7 @@ public class JpaJobVacancyEntity {
                 this.seniorityLevel,
                 this.modality,
                 this.companyName,
+                this.isDeleted,
                 this.createdAt
         );
     }

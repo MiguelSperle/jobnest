@@ -66,6 +66,8 @@ public class JobVacancyRepositoryImpl implements JobVacancyRepository {
 
         Specification<JpaJobVacancyEntity> specification = Specification.unrestricted();
 
+        specification = specification.and(JpaJobVacancySpecification.filterByIsDeleted(false));
+
         if (!searchQuery.terms().isBlank()) {
             specification = specification.and(JpaJobVacancySpecification.filterByTerms(searchQuery.terms()));
         }
