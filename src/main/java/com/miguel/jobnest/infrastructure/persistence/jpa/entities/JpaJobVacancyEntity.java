@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "jobs")
+@Table(name = "job_vacancies")
 @AllArgsConstructor
 @NoArgsConstructor
 public class JpaJobVacancyEntity {

@@ -17,14 +17,14 @@ public record ListJobVacanciesResponse(
         LocalDateTime createdAt
 ) {
     public static Pagination<ListJobVacanciesResponse> from(ListJobVacanciesUseCaseOutput output) {
-        return output.paginatedJobs().map(paginatedJob -> new ListJobVacanciesResponse(
-                paginatedJob.getId(),
-                paginatedJob.getTitle(),
-                paginatedJob.getDescription(),
-                paginatedJob.getSeniorityLevel(),
-                paginatedJob.getModality(),
-                paginatedJob.getCompanyName(),
-                paginatedJob.getCreatedAt()
+        return output.paginatedJobVacancies().map(paginatedJobVacancy -> new ListJobVacanciesResponse(
+                paginatedJobVacancy.getId(),
+                paginatedJobVacancy.getTitle(),
+                paginatedJobVacancy.getDescription(),
+                paginatedJobVacancy.getSeniorityLevel(),
+                paginatedJobVacancy.getModality(),
+                paginatedJobVacancy.getCompanyName(),
+                paginatedJobVacancy.getCreatedAt()
         ));
     }
 }

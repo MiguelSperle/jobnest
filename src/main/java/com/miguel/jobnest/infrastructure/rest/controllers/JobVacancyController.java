@@ -33,15 +33,15 @@ public class JobVacancyController {
 
     @PostMapping
     @RateLimiter(name = "rateLimitConfiguration")
-    public ResponseEntity<MessageResponse> createJob(@RequestBody @Valid CreateJobVacancyRequest request) {
+    public ResponseEntity<MessageResponse> createJobVacancy(@RequestBody @Valid CreateJobVacancyRequest request) {
         this.createJobVacancyUseCase.execute(request.toInput());
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(MessageResponse.from("Job created successfully"));
+        return ResponseEntity.status(HttpStatus.CREATED).body(MessageResponse.from("Job vacancy created successfully"));
     }
 
     @GetMapping("/{userId}")
     @RateLimiter(name = "rateLimitConfiguration")
-    public ResponseEntity<Pagination<ListJobVacanciesByUserIdResponse>> listJobsByUserId(
+    public ResponseEntity<Pagination<ListJobVacanciesByUserIdResponse>> listJobVacanciesByUserId(
             @PathVariable String userId,
             @RequestParam(name = "page", required = false, defaultValue = "0") int page,
             @RequestParam(name = "perPage", required = false, defaultValue = "10") int perPage,
@@ -58,18 +58,18 @@ public class JobVacancyController {
 
     @PatchMapping("/{id}")
     @RateLimiter(name = "rateLimitConfiguration")
-    public ResponseEntity<MessageResponse> updateJob(
+    public ResponseEntity<MessageResponse> updateJobVacancy(
             @PathVariable String id,
             @RequestBody @Valid UpdateJobVacancyRequest request
     ) {
         this.updateJobVacancyUseCase.execute(request.toInput(id));
 
-        return ResponseEntity.ok().body(MessageResponse.from("Job updated successfully"));
+        return ResponseEntity.ok().body(MessageResponse.from("Job vacancy updated successfully"));
     }
 
     @GetMapping
     @RateLimiter(name = "rateLimitConfiguration")
-    public ResponseEntity<Pagination<ListJobVacanciesResponse>> listJobs(
+    public ResponseEntity<Pagination<ListJobVacanciesResponse>> listJobVacancies(
             @RequestParam(name = "page", required = false, defaultValue = "0") int page,
             @RequestParam(name = "perPage", required = false, defaultValue = "10") int perPage,
             @RequestParam(name = "search", required = false, defaultValue = "") String search,

@@ -17,12 +17,12 @@ public class DefaultListJobVacanciesUseCase implements ListJobVacanciesUseCase {
 
     @Override
     public ListJobVacanciesUseCaseOutput execute(ListJobVacanciesUseCaseInput input) {
-        final Pagination<JobVacancy> paginatedJobs = this.getAllPaginatedJobs(input.searchQuery());
+        final Pagination<JobVacancy> paginatedJobVacancies = this.getAllPaginatedJobVacancies(input.searchQuery());
 
-        return ListJobVacanciesUseCaseOutput.from(paginatedJobs);
+        return ListJobVacanciesUseCaseOutput.from(paginatedJobVacancies);
     }
 
-    private Pagination<JobVacancy> getAllPaginatedJobs(SearchQuery searchQuery) {
+    private Pagination<JobVacancy> getAllPaginatedJobVacancies(SearchQuery searchQuery) {
         return this.jobVacancyRepository.findAllPaginated(searchQuery);
     }
 }

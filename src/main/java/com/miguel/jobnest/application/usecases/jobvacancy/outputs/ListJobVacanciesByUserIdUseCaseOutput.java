@@ -4,9 +4,9 @@ import com.miguel.jobnest.domain.entities.JobVacancy;
 import com.miguel.jobnest.domain.pagination.Pagination;
 
 public record ListJobVacanciesByUserIdUseCaseOutput(
-        Pagination<JobVacancy> paginatedJobs
+        Pagination<JobVacancy> paginatedJobVacancies
 ) {
-    public static ListJobVacanciesByUserIdUseCaseOutput from(Pagination<JobVacancy> paginatedJobs) {
-        return new ListJobVacanciesByUserIdUseCaseOutput(paginatedJobs);
+    public static ListJobVacanciesByUserIdUseCaseOutput from(Pagination<JobVacancy> paginatedJobVacancies) {
+        return new ListJobVacanciesByUserIdUseCaseOutput(paginatedJobVacancies);
     }
 }
