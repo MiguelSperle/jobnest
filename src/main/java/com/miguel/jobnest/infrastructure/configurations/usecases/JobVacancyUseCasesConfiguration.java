@@ -1,14 +1,8 @@
 package com.miguel.jobnest.infrastructure.configurations.usecases;
 
 import com.miguel.jobnest.application.abstractions.repositories.JobVacancyRepository;
-import com.miguel.jobnest.application.abstractions.usecases.jobvacancy.CreateJobVacancyUseCase;
-import com.miguel.jobnest.application.abstractions.usecases.jobvacancy.ListJobVacanciesByUserIdUseCase;
-import com.miguel.jobnest.application.abstractions.usecases.jobvacancy.ListJobVacanciesUseCase;
-import com.miguel.jobnest.application.abstractions.usecases.jobvacancy.UpdateJobVacancyUseCase;
-import com.miguel.jobnest.application.usecases.jobvacancy.DefaultCreateJobVacancyUseCase;
-import com.miguel.jobnest.application.usecases.jobvacancy.DefaultListJobVacanciesByUserIdUseCase;
-import com.miguel.jobnest.application.usecases.jobvacancy.DefaultListJobVacanciesUseCase;
-import com.miguel.jobnest.application.usecases.jobvacancy.DefaultUpdateJobVacancyUseCase;
+import com.miguel.jobnest.application.abstractions.usecases.jobvacancy.*;
+import com.miguel.jobnest.application.usecases.jobvacancy.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -32,5 +26,10 @@ public class JobVacancyUseCasesConfiguration {
     @Bean
     public ListJobVacanciesUseCase listJobVacanciesUseCase(JobVacancyRepository jobVacancyRepository) {
         return new DefaultListJobVacanciesUseCase(jobVacancyRepository);
+    }
+
+    @Bean
+    public GetJobVacancyByIdUseCase getJobVacancyByIdUseCase(JobVacancyRepository jobVacancyRepository) {
+        return new DefaultGetJobVacancyByIdUseCase(jobVacancyRepository);
     }
 }

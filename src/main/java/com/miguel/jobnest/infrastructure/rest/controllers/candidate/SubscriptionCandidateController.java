@@ -1,4 +1,4 @@
-package com.miguel.jobnest.infrastructure.rest.controllers;
+package com.miguel.jobnest.infrastructure.rest.controllers.candidate;
 
 import com.miguel.jobnest.application.abstractions.usecases.subscription.CreateSubscriptionUseCase;
 import com.miguel.jobnest.application.abstractions.usecases.subscription.ListSubscriptionsByUserIdUseCase;
@@ -19,9 +19,9 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 
 @RestController
-@RequestMapping("/api/v1/subscriptions")
+@RequestMapping("/api/v1/candidate/subscriptions")
 @RequiredArgsConstructor
-public class SubscriptionController {
+public class SubscriptionCandidateController {
     private final CreateSubscriptionUseCase createSubscriptionUseCase;
     private final ListSubscriptionsByUserIdUseCase listSubscriptionsByUserIdUseCase;
 

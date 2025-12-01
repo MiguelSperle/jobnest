@@ -10,9 +10,6 @@ import java.time.LocalDateTime;
 public record ListJobVacanciesResponse(
         String id,
         String title,
-        String description,
-        SeniorityLevel seniorityLevel,
-        Modality modality,
         String companyName,
         LocalDateTime createdAt
 ) {
@@ -20,9 +17,6 @@ public record ListJobVacanciesResponse(
         return output.paginatedJobVacancies().map(paginatedJobVacancy -> new ListJobVacanciesResponse(
                 paginatedJobVacancy.getId(),
                 paginatedJobVacancy.getTitle(),
-                paginatedJobVacancy.getDescription(),
-                paginatedJobVacancy.getSeniorityLevel(),
-                paginatedJobVacancy.getModality(),
                 paginatedJobVacancy.getCompanyName(),
                 paginatedJobVacancy.getCreatedAt()
         ));
