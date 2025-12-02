@@ -5,8 +5,10 @@ import com.miguel.jobnest.application.abstractions.repositories.SubscriptionRepo
 import com.miguel.jobnest.application.abstractions.services.UploadService;
 import com.miguel.jobnest.application.abstractions.usecases.subscription.CreateSubscriptionUseCase;
 import com.miguel.jobnest.application.abstractions.usecases.subscription.ListSubscriptionsByUserIdUseCase;
+import com.miguel.jobnest.application.abstractions.usecases.subscription.UpdateSubscriptionUseCase;
 import com.miguel.jobnest.application.usecases.subscription.DefaultCreateSubscriptionUseCase;
 import com.miguel.jobnest.application.usecases.subscription.DefaultListSubscriptionsByUserIdUseCase;
+import com.miguel.jobnest.application.usecases.subscription.DefaultUpdateSubscriptionUseCase;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -28,5 +30,10 @@ public class SubscriptionUseCasesConfiguration {
     @Bean
     public ListSubscriptionsByUserIdUseCase listSubscriptionsByUserIdUseCase(SubscriptionRepository subscriptionRepository) {
         return new DefaultListSubscriptionsByUserIdUseCase(subscriptionRepository);
+    }
+
+    @Bean
+    public UpdateSubscriptionUseCase updateSubscriptionUseCase(SubscriptionRepository subscriptionRepository) {
+        return new DefaultUpdateSubscriptionUseCase(subscriptionRepository);
     }
 }

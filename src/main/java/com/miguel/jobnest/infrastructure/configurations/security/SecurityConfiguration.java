@@ -42,6 +42,7 @@ public class SecurityConfiguration {
                                 .requestMatchers(HttpMethod.GET, "/api/v1/candidate/job-vacancies").hasRole("CANDIDATE")
                                 .requestMatchers(HttpMethod.POST, "/api/v1/candidate/subscriptions").hasRole("CANDIDATE")
                                 .requestMatchers(HttpMethod.GET, "/api/v1/candidate/subscriptions/{userId}").hasRole("CANDIDATE")
+                                .requestMatchers(HttpMethod.PATCH, "/api/v1/candidate/subscriptions/{id}").hasRole("CANDIDATE")
                                 .anyRequest().authenticated())
                 .exceptionHandling((exceptions) -> exceptions.authenticationEntryPoint(this.authenticationEntryPoint).accessDeniedHandler(this.accessDeniedHandler))
                 .addFilterBefore(this.securityFilter, UsernamePasswordAuthenticationFilter.class)

@@ -2,7 +2,9 @@ package com.miguel.jobnest.infrastructure.rest.controllers.candidate;
 
 import com.miguel.jobnest.application.abstractions.usecases.subscription.CreateSubscriptionUseCase;
 import com.miguel.jobnest.application.abstractions.usecases.subscription.ListSubscriptionsByUserIdUseCase;
+import com.miguel.jobnest.application.abstractions.usecases.subscription.UpdateSubscriptionUseCase;
 import com.miguel.jobnest.application.usecases.subscription.inputs.ListSubscriptionsByUserIdUseCaseInput;
+import com.miguel.jobnest.application.usecases.subscription.inputs.UpdateSubscriptionUseCaseInput;
 import com.miguel.jobnest.application.usecases.subscription.outputs.ListSubscriptionsByUserIdUseCaseOutput;
 import com.miguel.jobnest.domain.pagination.Pagination;
 import com.miguel.jobnest.domain.pagination.SearchQuery;
@@ -24,6 +26,7 @@ import java.io.IOException;
 public class SubscriptionCandidateController {
     private final CreateSubscriptionUseCase createSubscriptionUseCase;
     private final ListSubscriptionsByUserIdUseCase listSubscriptionsByUserIdUseCase;
+    private final UpdateSubscriptionUseCase updateSubscriptionUseCase;
 
     @PostMapping
     @RateLimiter(name = "rateLimitConfiguration")
@@ -49,5 +52,13 @@ public class SubscriptionCandidateController {
         );
 
         return ResponseEntity.ok().body(ListSubscriptionsByUserIdResponse.from(output));
+    }
+
+    @PatchMapping("/{id}")
+    @RateLimiter(name = "rateLimitConfiguration")
+    public ResponseEntity<MessageResponse> updateSubscription(@PathVariable String id) {
+        this.updateSubscriptionUseCase.execute(UpdateSubscriptionUseCaseInput.with(id));
+
+        return ResponseEntity.ok().body(MessageResponse.from("Subscription updated successfully"));
     }
 }
