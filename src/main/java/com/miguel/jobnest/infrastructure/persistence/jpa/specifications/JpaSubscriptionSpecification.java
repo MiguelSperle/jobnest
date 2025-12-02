@@ -8,4 +8,14 @@ public class JpaSubscriptionSpecification {
         return (root, query, criterialBuilder) ->
                 criterialBuilder.equal(root.get("userId"), userId);
     }
+
+    public static Specification<JpaSubscriptionEntity> filterByJobVacancyId(String jobVacancyId) {
+        return ((root, query, criteriaBuilder) ->
+                criteriaBuilder.equal(root.get("jobVacancyId"), jobVacancyId));
+    }
+
+    public static Specification<JpaSubscriptionEntity> filterByIsCanceled(boolean isCanceled) {
+        return (root, query, criterialBuilder) ->
+                criterialBuilder.equal(root.get("isCanceled"), isCanceled);
+    }
 }

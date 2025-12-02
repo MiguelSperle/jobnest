@@ -13,4 +13,5 @@ public interface SubscriptionRepository {
     Optional<Subscription> findById(String id);
     Pagination<Subscription> findAllPaginatedByUserId(String userId, SearchQuery searchQuery);
     List<Subscription> findAllByJobVacancyId(String jobVacancyId);
+    Pagination<Subscription> findAllPaginatedByJobVacancyId(String jobVacancyId, SearchQuery searchQuery);
 }

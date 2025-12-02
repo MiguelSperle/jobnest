@@ -4,9 +4,11 @@ import com.miguel.jobnest.application.abstractions.producer.MessageProducer;
 import com.miguel.jobnest.application.abstractions.repositories.SubscriptionRepository;
 import com.miguel.jobnest.application.abstractions.services.UploadService;
 import com.miguel.jobnest.application.abstractions.usecases.subscription.CreateSubscriptionUseCase;
+import com.miguel.jobnest.application.abstractions.usecases.subscription.ListSubscriptionsByJobVacancyIdUseCase;
 import com.miguel.jobnest.application.abstractions.usecases.subscription.ListSubscriptionsByUserIdUseCase;
 import com.miguel.jobnest.application.abstractions.usecases.subscription.UpdateSubscriptionUseCase;
 import com.miguel.jobnest.application.usecases.subscription.DefaultCreateSubscriptionUseCase;
+import com.miguel.jobnest.application.usecases.subscription.DefaultListSubscriptionsByJobVacancyIdUseCase;
 import com.miguel.jobnest.application.usecases.subscription.DefaultListSubscriptionsByUserIdUseCase;
 import com.miguel.jobnest.application.usecases.subscription.DefaultUpdateSubscriptionUseCase;
 import org.springframework.context.annotation.Bean;
@@ -35,5 +37,10 @@ public class SubscriptionUseCasesConfiguration {
     @Bean
     public UpdateSubscriptionUseCase updateSubscriptionUseCase(SubscriptionRepository subscriptionRepository) {
         return new DefaultUpdateSubscriptionUseCase(subscriptionRepository);
+    }
+
+    @Bean
+    public ListSubscriptionsByJobVacancyIdUseCase listSubscriptionsByJobVacancyIdUseCase(SubscriptionRepository subscriptionRepository) {
+        return new DefaultListSubscriptionsByJobVacancyIdUseCase(subscriptionRepository);
     }
 }

@@ -67,4 +67,30 @@ public class SubscriptionRepositoryImpl implements SubscriptionRepository {
     public List<Subscription> findAllByJobVacancyId(String jobVacancyId) {
         return this.jpaSubscriptionRepository.findAllByJobVacancyId(jobVacancyId).stream().map(JpaSubscriptionEntity::toEntity).toList();
     }
+
+    @Override
+    public Pagination<Subscription> findAllPaginatedByJobVacancyId(String jobVacancyId, SearchQuery searchQuery) {
+        final Sort sort = searchQuery.direction().equalsIgnoreCase("asc")
+                ? Sort.by(searchQuery.sort()).ascending() : Sort.by(searchQuery.sort()).descending();
+
+        final PageRequest pageable = PageRequest.of(searchQuery.page(), searchQuery.perPage(), sort);
+
+        Specification<JpaSubscriptionEntity> specification = Specification.unrestricted();
+
+        specification = specification.and(JpaSubscriptionSpecification.filterByJobVacancyId(jobVacancyId));
+        specification = specification.and(JpaSubscriptionSpecification.filterByIsCanceled(false));
+
+        final Page<JpaSubscriptionEntity> pageResult = this.jpaSubscriptionRepository.findAll(specification, pageable);
+
+        final List<Subscription> subscriptions = pageResult.getContent().stream().map(JpaSubscriptionEntity::toEntity).toList();
+
+        final PaginationMetadata paginationMetadata = new PaginationMetadata(
+                pageResult.getNumber(),
+                pageResult.getSize(),
+                pageResult.getTotalPages(),
+                pageResult.getTotalElements()
+        );
+
+        return new Pagination<>(paginationMetadata, subscriptions);
+    }
 }

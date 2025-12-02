@@ -1,0 +1,8 @@
+package com.miguel.jobnest.application.abstractions.usecases.subscription;
+
+import com.miguel.jobnest.application.abstractions.usecases.UseCase;
+import com.miguel.jobnest.application.usecases.subscription.inputs.ListSubscriptionsByJobVacancyIdUseCaseInput;
+import com.miguel.jobnest.application.usecases.subscription.outputs.ListSubscriptionsByJobVacancyIdUseCaseOutput;
+
+public interface ListSubscriptionsByJobVacancyIdUseCase extends UseCase<ListSubscriptionsByJobVacancyIdUseCaseInput, ListSubscriptionsByJobVacancyIdUseCaseOutput> {
+}
