@@ -30,8 +30,8 @@ public class SubscriptionCandidateController {
 
     @PostMapping
     @RateLimiter(name = "rateLimitConfiguration")
-    public ResponseEntity<MessageResponse> createSubscription(@RequestPart CreateSubscriptionRequest request, @RequestPart MultipartFile file) throws IOException {
-        this.createSubscriptionUseCase.execute(request.toInput(file.getBytes()));
+    public ResponseEntity<MessageResponse> createSubscription(@RequestPart CreateSubscriptionRequest request, @RequestPart MultipartFile resumeFile) throws IOException {
+        this.createSubscriptionUseCase.execute(request.toInput(resumeFile.getBytes()));
 
         return ResponseEntity.status(HttpStatus.CREATED).body(MessageResponse.from("Subscription created successfully"));
     }

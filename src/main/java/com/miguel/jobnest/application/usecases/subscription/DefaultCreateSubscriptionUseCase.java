@@ -33,9 +33,9 @@ public class DefaultCreateSubscriptionUseCase implements CreateSubscriptionUseCa
             throw DomainException.with("You are already subscribed in this job vacancy", 409);
         }
 
-        final String fileUrl = this.uploadService.uploadFile(input.bytesFile(), "resume-file");
+        final String resumeUrl = this.uploadService.uploadFile(input.bytesFile(), "resume-file");
 
-        final Subscription newSubscription = Subscription.newSubscription(input.userId(), input.jobVacancyId(), fileUrl);
+        final Subscription newSubscription = Subscription.newSubscription(input.userId(), input.jobVacancyId(), resumeUrl);
 
         final Subscription savedSubscription = this.saveSubscription(newSubscription);
 
