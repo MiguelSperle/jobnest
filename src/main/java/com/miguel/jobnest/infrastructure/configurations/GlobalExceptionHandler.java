@@ -13,6 +13,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.multipart.support.MissingServletRequestPartException;
 
 import java.util.Collections;
 import java.util.List;
@@ -62,6 +63,13 @@ public class GlobalExceptionHandler {
         log.info("Handling request not permitted exception due to rate limit exceed", ex);
         return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).body(ApiError.from(
                 Collections.singletonList("Too many requests occurred at the same time"), HttpStatus.TOO_MANY_REQUESTS.getReasonPhrase()
+        ));
+    }
+
+    @ExceptionHandler(MissingServletRequestPartException.class)
+    public ResponseEntity<ApiError> handleMissingServletRequestPartException(MissingServletRequestPartException ex) {
+        return ResponseEntity.badRequest().body(ApiError.from(
+                Collections.singletonList(ex.getMessage()), HttpStatus.BAD_REQUEST.getReasonPhrase()
         ));
     }
 }

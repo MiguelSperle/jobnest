@@ -59,6 +59,6 @@ public class SubscriptionCandidateController {
     public ResponseEntity<MessageResponse> updateSubscription(@PathVariable String id) {
         this.updateSubscriptionUseCase.execute(UpdateSubscriptionUseCaseInput.with(id));
 
-        return ResponseEntity.ok().body(MessageResponse.from("Subscription updated successfully"));
+        return ResponseEntity.ok().body(MessageResponse.from("Subscription canceled successfully"));
     }
 }
