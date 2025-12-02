@@ -17,6 +17,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api/v1/recruiter/job-vacancies")
 @RequiredArgsConstructor
@@ -42,10 +44,11 @@ public class JobVacancyRecruiterController {
             @RequestParam(name = "perPage", required = false, defaultValue = "10") int perPage,
             @RequestParam(name = "search", required = false, defaultValue = "") String search,
             @RequestParam(name = "sort", required = false, defaultValue = "createdAt") String sort,
-            @RequestParam(name = "direction", required = false, defaultValue = "desc") String direction
+            @RequestParam(name = "direction", required = false, defaultValue = "desc") String direction,
+            @RequestParam Map<String, String> filters
     ) {
         final ListJobVacanciesByUserIdUseCaseOutput output = this.listJobVacanciesByUserIdUseCase.execute(
-                ListJobVacanciesByUserIdUseCaseInput.with(userId, SearchQuery.newSearchQuery(page, perPage, search, sort, direction))
+                ListJobVacanciesByUserIdUseCaseInput.with(userId, SearchQuery.newSearchQuery(page, perPage, search, sort, direction, filters))
         );
 
         return ResponseEntity.ok().body(ListJobVacanciesByUserIdResponse.from(output));

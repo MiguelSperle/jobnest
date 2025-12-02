@@ -43,6 +43,12 @@ public class JobVacancyRepositoryImpl implements JobVacancyRepository {
             specification = specification.and(JpaJobVacancySpecification.filterByTerms(searchQuery.terms()));
         }
 
+        final String isDeleted = searchQuery.filters().get("isDeleted");
+
+        if (isDeleted != null && !isDeleted.isBlank()) {
+            specification = specification.and(JpaJobVacancySpecification.filterByIsDeleted(Boolean.parseBoolean(isDeleted)));
+        }
+
         final Page<JpaJobVacancyEntity> pageResult = this.jpaJobVacancyRepository.findAll(specification, pageable);
 
         final List<JobVacancy> jobVacancies = pageResult.getContent().stream().map(JpaJobVacancyEntity::toEntity).toList();

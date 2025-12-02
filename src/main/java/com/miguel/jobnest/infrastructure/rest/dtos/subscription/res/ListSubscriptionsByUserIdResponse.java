@@ -9,6 +9,7 @@ public record ListSubscriptionsByUserIdResponse(
         String id,
         String jobVacancyId,
         String resumeUrl,
+        Boolean isCanceled,
         LocalDateTime createdAt
 ) {
     public static Pagination<ListSubscriptionsByUserIdResponse> from(ListSubscriptionsByUserIdUseCaseOutput output) {
@@ -16,6 +17,7 @@ public record ListSubscriptionsByUserIdResponse(
                 paginatedSubscription.getId(),
                 paginatedSubscription.getJobVacancyId(),
                 paginatedSubscription.getResumeUrl(),
+                paginatedSubscription.getIsCanceled(),
                 paginatedSubscription.getCreatedAt()
         ));
     }
