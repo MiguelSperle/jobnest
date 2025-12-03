@@ -12,8 +12,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 
-import java.util.Objects;
-
 @Component
 @RequiredArgsConstructor
 public class UserCodeCreatedConsumer {
@@ -30,7 +28,7 @@ public class UserCodeCreatedConsumer {
         String text;
         String subject;
 
-        if (Objects.equals(userCode.getUserCodeType(), UserCodeType.USER_VERIFICATION)) {
+        if (userCode.getUserCodeType() == UserCodeType.USER_VERIFICATION) {
             text = "Hello, your verification code is " + userCode.getCode() + " and it will expire in 15 minutes";
             subject = "Verification Code";
         } else {

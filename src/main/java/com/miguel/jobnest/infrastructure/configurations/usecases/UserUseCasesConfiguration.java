@@ -6,7 +6,7 @@ import com.miguel.jobnest.application.abstractions.repositories.UserCodeReposito
 import com.miguel.jobnest.application.abstractions.repositories.UserRepository;
 import com.miguel.jobnest.application.abstractions.services.JwtService;
 import com.miguel.jobnest.application.abstractions.services.SecurityService;
-import com.miguel.jobnest.application.abstractions.transaction.TransactionExecutor;
+import com.miguel.jobnest.application.abstractions.wrapper.TransactionExecutor;
 import com.miguel.jobnest.application.abstractions.usecases.user.*;
 import com.miguel.jobnest.application.usecases.user.*;
 import org.springframework.context.annotation.Bean;

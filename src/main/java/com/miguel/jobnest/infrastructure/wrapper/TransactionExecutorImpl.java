@@ -1,6 +1,6 @@
-package com.miguel.jobnest.infrastructure.transaction;
+package com.miguel.jobnest.infrastructure.wrapper;
 
-import com.miguel.jobnest.application.abstractions.transaction.TransactionExecutor;
+import com.miguel.jobnest.application.abstractions.wrapper.TransactionExecutor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.PlatformTransactionManager;

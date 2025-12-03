@@ -2,7 +2,7 @@ package com.miguel.jobnest.application.usecases.user;
 
 import com.miguel.jobnest.application.abstractions.repositories.UserCodeRepository;
 import com.miguel.jobnest.application.abstractions.repositories.UserRepository;
-import com.miguel.jobnest.application.abstractions.transaction.TransactionExecutor;
+import com.miguel.jobnest.application.abstractions.wrapper.TransactionExecutor;
 import com.miguel.jobnest.application.abstractions.usecases.user.UpdateUserToVerifiedUseCase;
 import com.miguel.jobnest.application.usecases.user.inputs.UpdateUserToVerifiedUseCaseInput;
 import com.miguel.jobnest.domain.entities.User;

@@ -1,4 +1,4 @@
-package com.miguel.jobnest.application.abstractions.transaction;
+package com.miguel.jobnest.application.abstractions.wrapper;
 
 public interface TransactionExecutor {
     void runTransaction(Runnable runnable);

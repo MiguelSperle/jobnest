@@ -20,7 +20,7 @@ public class DefaultSendPasswordResetCodeUseCase implements SendPasswordResetCod
     private final CodeProvider codeProvider;
     private final MessageProducer messageProducer;
 
-    private final static int CODE_LENGTH = 6;
+    private final static int CODE_LENGTH = 8;
     private final static String ALPHANUMERIC_CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
     private static final String USER_CODE_CREATED_EXCHANGE = "user.code.created.exchange";

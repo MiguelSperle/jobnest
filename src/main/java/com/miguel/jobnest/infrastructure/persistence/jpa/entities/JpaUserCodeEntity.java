@@ -22,7 +22,7 @@ public class JpaUserCodeEntity {
     @Column(name = "user_id", nullable = false, length = 36)
     private String userId;
 
-    @Column(nullable = false, unique = true, length = 6)
+    @Column(nullable = false, unique = true, length = 8)
     private String code;
 
     @Column(name = "code_type", nullable = false, length = 20)

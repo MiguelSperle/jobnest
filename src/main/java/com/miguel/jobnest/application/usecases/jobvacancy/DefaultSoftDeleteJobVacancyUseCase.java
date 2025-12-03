@@ -2,7 +2,7 @@ package com.miguel.jobnest.application.usecases.jobvacancy;
 
 import com.miguel.jobnest.application.abstractions.repositories.JobVacancyRepository;
 import com.miguel.jobnest.application.abstractions.repositories.SubscriptionRepository;
-import com.miguel.jobnest.application.abstractions.transaction.TransactionExecutor;
+import com.miguel.jobnest.application.abstractions.wrapper.TransactionExecutor;
 import com.miguel.jobnest.application.abstractions.usecases.jobvacancy.SoftDeleteJobVacancyUseCase;
 import com.miguel.jobnest.application.usecases.jobvacancy.inputs.SoftDeleteJobVacancyUseCaseInput;
 import com.miguel.jobnest.domain.entities.JobVacancy;
