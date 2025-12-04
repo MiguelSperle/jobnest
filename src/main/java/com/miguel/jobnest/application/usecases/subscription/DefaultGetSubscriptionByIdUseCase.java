@@ -16,7 +16,7 @@ public class DefaultGetSubscriptionByIdUseCase implements GetSubscriptionByIdUse
 
     @Override
     public GetSubscriptionByIdUseCaseOutput execute(GetSubscriptionByIdUseCaseInput input) {
-        final Subscription subscription = this.getSubscriptionById(input.id());
+        final Subscription subscription = this.getSubscriptionById(input.subscriptionId());
 
         return GetSubscriptionByIdUseCaseOutput.from(subscription);
     }

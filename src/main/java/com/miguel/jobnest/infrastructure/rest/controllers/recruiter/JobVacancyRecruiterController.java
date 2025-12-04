@@ -36,7 +36,7 @@ public class JobVacancyRecruiterController {
         return ResponseEntity.status(HttpStatus.CREATED).body(MessageResponse.from("Job vacancy created successfully"));
     }
 
-    @GetMapping("/{userId}")
+    @GetMapping
     @RateLimiter(name = "rateLimitConfiguration")
     public ResponseEntity<Pagination<ListJobVacanciesByUserIdResponse>> listJobVacanciesByUserId(
             @PathVariable String userId,
@@ -48,27 +48,27 @@ public class JobVacancyRecruiterController {
             @RequestParam Map<String, String> filters
     ) {
         final ListJobVacanciesByUserIdUseCaseOutput output = this.listJobVacanciesByUserIdUseCase.execute(
-                ListJobVacanciesByUserIdUseCaseInput.with(userId, SearchQuery.newSearchQuery(page, perPage, search, sort, direction, filters))
+                ListJobVacanciesByUserIdUseCaseInput.with(SearchQuery.newSearchQuery(page, perPage, search, sort, direction, filters))
         );
 
         return ResponseEntity.ok().body(ListJobVacanciesByUserIdResponse.from(output));
     }
 
-    @PatchMapping("/{id}")
+    @PatchMapping("/{jobVacancyId}")
     @RateLimiter(name = "rateLimitConfiguration")
     public ResponseEntity<MessageResponse> updateJobVacancy(
-            @PathVariable String id,
+            @PathVariable String jobVacancyId,
             @RequestBody @Valid UpdateJobVacancyRequest request
     ) {
-        this.updateJobVacancyUseCase.execute(request.toInput(id));
+        this.updateJobVacancyUseCase.execute(request.toInput(jobVacancyId));
 
         return ResponseEntity.ok().body(MessageResponse.from("Job vacancy updated successfully"));
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{jobVacancyId}")
     @RateLimiter(name = "rateLimitConfiguration")
-    public ResponseEntity<MessageResponse> deleteJobVacancy(@PathVariable String id) {
-        this.softDeleteJobVacancyUseCase.execute(SoftDeleteJobVacancyUseCaseInput.with(id));
+    public ResponseEntity<MessageResponse> deleteJobVacancy(@PathVariable String jobVacancyId) {
+        this.softDeleteJobVacancyUseCase.execute(SoftDeleteJobVacancyUseCaseInput.with(jobVacancyId));
 
         return ResponseEntity.ok().body(MessageResponse.from("Job vacancy deleted successfully"));
     }

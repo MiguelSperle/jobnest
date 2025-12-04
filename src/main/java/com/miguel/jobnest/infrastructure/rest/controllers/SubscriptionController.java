@@ -17,9 +17,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class SubscriptionController {
     private final GetSubscriptionByIdUseCase getSubscriptionByIdUseCase;
 
-    @GetMapping("/{id}")
-    public ResponseEntity<GetSubscriptionByIdResponse> getSubscriptionById(@PathVariable String id) {
-        final GetSubscriptionByIdUseCaseOutput output = this.getSubscriptionByIdUseCase.execute(GetSubscriptionByIdUseCaseInput.with(id));
+    @GetMapping("/{subscriptionId}")
+    public ResponseEntity<GetSubscriptionByIdResponse> getSubscriptionById(@PathVariable String subscriptionId) {
+        final GetSubscriptionByIdUseCaseOutput output = this.getSubscriptionByIdUseCase.execute(GetSubscriptionByIdUseCaseInput.with(subscriptionId));
 
         return ResponseEntity.ok().body(GetSubscriptionByIdResponse.from(output));
     }

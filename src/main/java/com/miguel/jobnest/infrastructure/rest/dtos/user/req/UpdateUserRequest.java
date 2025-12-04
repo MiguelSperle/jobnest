@@ -5,7 +5,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
-public record UpdateUserInformationRequest(
+public record UpdateUserRequest(
         @NotBlank(message = "Name should not be neither null nor blank")
         @Size(max = 100, message = "Name should not exceed 100 characters")
         String name,
@@ -30,9 +30,8 @@ public record UpdateUserInformationRequest(
         @Size(max = 50, message = "Country should not exceed 50 characters")
         String country
 ) {
-    public UpdateUserUseCaseInput toInput(String id) {
+    public UpdateUserUseCaseInput toInput() {
         return UpdateUserUseCaseInput.with(
-                id,
                 this.name,
                 this.email,
                 this.description,

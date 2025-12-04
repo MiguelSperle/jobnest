@@ -1,9 +1,9 @@
 package com.miguel.jobnest.application.usecases.jobvacancy.inputs;
 
 public record SoftDeleteJobVacancyUseCaseInput(
-        String id
+        String jobVacancyId
 ) {
-    public static SoftDeleteJobVacancyUseCaseInput with(String id) {
-        return new SoftDeleteJobVacancyUseCaseInput(id);
+    public static SoftDeleteJobVacancyUseCaseInput with(String jobVacancyId) {
+        return new SoftDeleteJobVacancyUseCaseInput(jobVacancyId);
     }
 }

@@ -1,7 +1,6 @@
 package com.miguel.jobnest.application.abstractions.usecases.user;
 
-import com.miguel.jobnest.application.abstractions.usecases.UnitUseCase;
-import com.miguel.jobnest.application.usecases.user.inputs.DeleteUserUseCaseInput;
+import com.miguel.jobnest.application.abstractions.usecases.UseCaseWithNothing;
 
-public interface SoftDeleteUserUseCase extends UnitUseCase<DeleteUserUseCaseInput> {
+public interface SoftDeleteUserUseCase extends UseCaseWithNothing {
 }

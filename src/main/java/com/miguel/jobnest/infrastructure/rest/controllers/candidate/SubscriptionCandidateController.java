@@ -2,9 +2,9 @@ package com.miguel.jobnest.infrastructure.rest.controllers.candidate;
 
 import com.miguel.jobnest.application.abstractions.usecases.subscription.CreateSubscriptionUseCase;
 import com.miguel.jobnest.application.abstractions.usecases.subscription.ListSubscriptionsByUserIdUseCase;
-import com.miguel.jobnest.application.abstractions.usecases.subscription.UpdateSubscriptionUseCase;
+import com.miguel.jobnest.application.abstractions.usecases.subscription.CancelSubscriptionUseCase;
 import com.miguel.jobnest.application.usecases.subscription.inputs.ListSubscriptionsByUserIdUseCaseInput;
-import com.miguel.jobnest.application.usecases.subscription.inputs.UpdateSubscriptionUseCaseInput;
+import com.miguel.jobnest.application.usecases.subscription.inputs.CancelSubscriptionUseCaseInput;
 import com.miguel.jobnest.application.usecases.subscription.outputs.ListSubscriptionsByUserIdUseCaseOutput;
 import com.miguel.jobnest.domain.pagination.Pagination;
 import com.miguel.jobnest.domain.pagination.SearchQuery;
@@ -26,7 +26,7 @@ import java.io.IOException;
 public class SubscriptionCandidateController {
     private final CreateSubscriptionUseCase createSubscriptionUseCase;
     private final ListSubscriptionsByUserIdUseCase listSubscriptionsByUserIdUseCase;
-    private final UpdateSubscriptionUseCase updateSubscriptionUseCase;
+    private final CancelSubscriptionUseCase cancelSubscriptionUseCase;
 
     @PostMapping
     @RateLimiter(name = "rateLimitConfiguration")
@@ -36,29 +36,26 @@ public class SubscriptionCandidateController {
         return ResponseEntity.status(HttpStatus.CREATED).body(MessageResponse.from("Subscription created successfully"));
     }
 
-    @GetMapping("/{userId}")
+    @GetMapping
     @RateLimiter(name = "rateLimitConfiguration")
     public ResponseEntity<Pagination<ListSubscriptionsByUserIdResponse>> listSubscriptionsByUserId(
-            @PathVariable String userId,
             @RequestParam(name = "page", required = false, defaultValue = "0") int page,
             @RequestParam(name = "perPage", required = false, defaultValue = "10") int perPage,
             @RequestParam(name = "sort", required = false, defaultValue = "createdAt") String sort,
             @RequestParam(name = "direction", required = false, defaultValue = "desc") String direction
     ) {
         final ListSubscriptionsByUserIdUseCaseOutput output = this.listSubscriptionsByUserIdUseCase.execute(
-                ListSubscriptionsByUserIdUseCaseInput.with(userId, SearchQuery.newSearchQuery(
-                        page, perPage, sort, direction
-                ))
+                ListSubscriptionsByUserIdUseCaseInput.with(SearchQuery.newSearchQuery(page, perPage, sort, direction))
         );
 
         return ResponseEntity.ok().body(ListSubscriptionsByUserIdResponse.from(output));
     }
 
-    @PatchMapping("/{id}")
+    @PatchMapping("/{subscriptionId}")
     @RateLimiter(name = "rateLimitConfiguration")
-    public ResponseEntity<MessageResponse> updateSubscription(@PathVariable String id) {
-        this.updateSubscriptionUseCase.execute(UpdateSubscriptionUseCaseInput.with(id));
+    public ResponseEntity<MessageResponse> cancelSubscription(@PathVariable String subscriptionId) {
+        this.cancelSubscriptionUseCase.execute(CancelSubscriptionUseCaseInput.with(subscriptionId));
 
-        return ResponseEntity.ok().body(MessageResponse.from("Subscription updated successfully"));
+        return ResponseEntity.ok().body(MessageResponse.from("Subscription canceled successfully"));
     }
 }

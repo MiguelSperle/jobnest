@@ -28,7 +28,7 @@ public class DefaultSoftDeleteJobVacancyUseCase implements SoftDeleteJobVacancyU
 
     @Override
     public void execute(SoftDeleteJobVacancyUseCaseInput input) {
-        final JobVacancy jobVacancy = this.getJobVacancyById(input.id());
+        final JobVacancy jobVacancy = this.getJobVacancyById(input.jobVacancyId());
 
         final JobVacancy updatedJobVacancy = jobVacancy.withIsDeleted(true);
 

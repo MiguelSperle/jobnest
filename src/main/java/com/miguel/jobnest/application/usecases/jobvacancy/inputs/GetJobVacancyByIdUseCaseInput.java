@@ -1,9 +1,9 @@
 package com.miguel.jobnest.application.usecases.jobvacancy.inputs;
 
 public record GetJobVacancyByIdUseCaseInput(
-        String id
+        String jobVacancyId
 ) {
-    public static GetJobVacancyByIdUseCaseInput with(String id) {
-        return new GetJobVacancyByIdUseCaseInput(id);
+    public static GetJobVacancyByIdUseCaseInput with(String jobVacancyId) {
+        return new GetJobVacancyByIdUseCaseInput(jobVacancyId);
     }
 }

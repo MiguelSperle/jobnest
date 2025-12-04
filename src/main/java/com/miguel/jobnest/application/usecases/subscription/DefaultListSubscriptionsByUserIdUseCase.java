@@ -1,6 +1,7 @@
 package com.miguel.jobnest.application.usecases.subscription;
 
 import com.miguel.jobnest.application.abstractions.repositories.SubscriptionRepository;
+import com.miguel.jobnest.application.abstractions.services.SecurityService;
 import com.miguel.jobnest.application.abstractions.usecases.subscription.ListSubscriptionsByUserIdUseCase;
 import com.miguel.jobnest.application.usecases.subscription.inputs.ListSubscriptionsByUserIdUseCaseInput;
 import com.miguel.jobnest.application.usecases.subscription.outputs.ListSubscriptionsByUserIdUseCaseOutput;
@@ -10,14 +11,21 @@ import com.miguel.jobnest.domain.pagination.SearchQuery;
 
 public class DefaultListSubscriptionsByUserIdUseCase implements ListSubscriptionsByUserIdUseCase {
     private final SubscriptionRepository subscriptionRepository;
+    private final SecurityService securityService;
 
-    public DefaultListSubscriptionsByUserIdUseCase(SubscriptionRepository subscriptionRepository) {
+    public DefaultListSubscriptionsByUserIdUseCase(
+            SubscriptionRepository subscriptionRepository,
+            SecurityService securityService
+    ) {
         this.subscriptionRepository = subscriptionRepository;
+        this.securityService = securityService;
     }
 
     @Override
     public ListSubscriptionsByUserIdUseCaseOutput execute(ListSubscriptionsByUserIdUseCaseInput input) {
-        final Pagination<Subscription> paginatedSubscriptions = this.getAllPaginatedSubscriptionsByUserId(input.userId(), input.searchQuery());
+        final String authenticatedUserId = this.securityService.getPrincipal();
+
+        final Pagination<Subscription> paginatedSubscriptions = this.getAllPaginatedSubscriptionsByUserId(authenticatedUserId, input.searchQuery());
 
         return ListSubscriptionsByUserIdUseCaseOutput.from(paginatedSubscriptions);
     }

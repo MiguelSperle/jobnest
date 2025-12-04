@@ -2,6 +2,7 @@ package com.miguel.jobnest.application.usecases.user;
 
 import com.miguel.jobnest.application.abstractions.providers.PasswordEncryptionProvider;
 import com.miguel.jobnest.application.abstractions.repositories.UserRepository;
+import com.miguel.jobnest.application.abstractions.services.SecurityService;
 import com.miguel.jobnest.application.abstractions.usecases.user.UpdateUserPasswordUseCase;
 import com.miguel.jobnest.application.usecases.user.inputs.UpdateUserPasswordUseCaseInput;
 import com.miguel.jobnest.domain.entities.User;
@@ -11,18 +12,23 @@ import com.miguel.jobnest.domain.exceptions.NotFoundException;
 public class DefaultUpdateUserPasswordUseCase implements UpdateUserPasswordUseCase {
     private final UserRepository userRepository;
     private final PasswordEncryptionProvider passwordEncryptionProvider;
+    private final SecurityService securityService;
 
     public DefaultUpdateUserPasswordUseCase(
             UserRepository userRepository,
-            PasswordEncryptionProvider passwordEncryptionProvider
+            PasswordEncryptionProvider passwordEncryptionProvider,
+            SecurityService securityService
     ) {
         this.userRepository = userRepository;
         this.passwordEncryptionProvider = passwordEncryptionProvider;
+        this.securityService = securityService;
     }
 
     @Override
     public void execute(UpdateUserPasswordUseCaseInput input) {
-        final User user = this.getUserById(input.id());
+        final String authenticatedUserId = this.securityService.getPrincipal();
+
+        final User user = this.getUserById(authenticatedUserId);
 
         if (!this.validatePassword(input.currentPassword(), user.getPassword())) {
             throw DomainException.with("Invalid current password", 422);

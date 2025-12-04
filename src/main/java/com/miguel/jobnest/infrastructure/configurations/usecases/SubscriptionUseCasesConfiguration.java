@@ -2,6 +2,7 @@ package com.miguel.jobnest.infrastructure.configurations.usecases;
 
 import com.miguel.jobnest.application.abstractions.producer.MessageProducer;
 import com.miguel.jobnest.application.abstractions.repositories.SubscriptionRepository;
+import com.miguel.jobnest.application.abstractions.services.SecurityService;
 import com.miguel.jobnest.application.abstractions.services.UploadService;
 import com.miguel.jobnest.application.abstractions.usecases.subscription.*;
 import com.miguel.jobnest.application.usecases.subscription.*;
@@ -14,23 +15,31 @@ public class SubscriptionUseCasesConfiguration {
     public CreateSubscriptionUseCase createSubscriptionUseCase(
             SubscriptionRepository subscriptionRepository,
             UploadService uploadService,
+            SecurityService securityService,
             MessageProducer messageProducer
     ) {
         return new DefaultCreateSubscriptionUseCase(
                 subscriptionRepository,
                 uploadService,
+                securityService,
                 messageProducer
         );
     }
 
     @Bean
-    public ListSubscriptionsByUserIdUseCase listSubscriptionsByUserIdUseCase(SubscriptionRepository subscriptionRepository) {
-        return new DefaultListSubscriptionsByUserIdUseCase(subscriptionRepository);
+    public ListSubscriptionsByUserIdUseCase listSubscriptionsByUserIdUseCase(
+            SubscriptionRepository subscriptionRepository,
+            SecurityService securityService
+    ) {
+        return new DefaultListSubscriptionsByUserIdUseCase(
+                subscriptionRepository,
+                securityService
+        );
     }
 
     @Bean
-    public UpdateSubscriptionUseCase updateSubscriptionUseCase(SubscriptionRepository subscriptionRepository) {
-        return new DefaultUpdateSubscriptionUseCase(subscriptionRepository);
+    public CancelSubscriptionUseCase cancelSubscriptionUseCase(SubscriptionRepository subscriptionRepository) {
+        return new DefaultCancelSubscriptionUseCase(subscriptionRepository);
     }
 
     @Bean

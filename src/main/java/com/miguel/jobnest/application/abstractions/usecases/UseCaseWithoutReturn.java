@@ -1,5 +1,5 @@
 package com.miguel.jobnest.application.abstractions.usecases;
 
-public interface UnitUseCase<IN> {
+public interface UseCaseWithoutReturn<IN> {
     void execute(IN input);
 }

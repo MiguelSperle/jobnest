@@ -8,10 +8,6 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
 public record CreateJobVacancyRequest(
-        @NotBlank(message = "User id should not be neither null nor blank")
-        @Size(min = 36, max = 36, message = "User id should have exactly 36 characters")
-        String userId,
-
         @NotBlank(message = "Title should not be neither null nor blank")
         @Size(max = 255, message = "Title should not exceed 255 characters")
         String title,
@@ -32,7 +28,6 @@ public record CreateJobVacancyRequest(
 ) {
     public CreateJobVacancyUseCaseInput toInput() {
         return CreateJobVacancyUseCaseInput.with(
-                this.userId,
                 this.title,
                 this.description,
                 this.seniorityLevel,

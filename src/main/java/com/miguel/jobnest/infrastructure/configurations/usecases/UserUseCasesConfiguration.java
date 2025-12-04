@@ -80,23 +80,37 @@ public class UserUseCasesConfiguration {
     }
 
     @Bean
-    public UpdateUserUseCase updateUserUseCase(UserRepository userRepository) {
-        return new DefaultUpdateUserUseCase(userRepository);
+    public UpdateUserUseCase updateUserUseCase(
+            UserRepository userRepository,
+            SecurityService securityService
+    ) {
+        return new DefaultUpdateUserUseCase(
+                userRepository,
+                securityService
+        );
     }
 
     @Bean
     public UpdateUserPasswordUseCase updateUserPasswordUseCase(
             UserRepository userRepository,
-            PasswordEncryptionProvider passwordEncryptionProvider
+            PasswordEncryptionProvider passwordEncryptionProvider,
+            SecurityService securityService
     ) {
         return new DefaultUpdateUserPasswordUseCase(
                 userRepository,
-                passwordEncryptionProvider
+                passwordEncryptionProvider,
+                securityService
         );
     }
 
     @Bean
-    public SoftDeleteUserUseCase deleteUserUseCase(UserRepository userRepository) {
-        return new DefaultSoftDeleteUserUseCase(userRepository);
+    public SoftDeleteUserUseCase deleteUserUseCase(
+            UserRepository userRepository,
+            SecurityService securityService
+    ) {
+        return new DefaultSoftDeleteUserUseCase(
+                userRepository,
+                securityService
+        );
     }
 }

@@ -26,8 +26,8 @@ public class SubscriptionRecruiterController {
             @RequestParam(name = "sort", required = false, defaultValue = "createdAt") String sort,
             @RequestParam(name = "direction", required = false, defaultValue = "desc") String direction
     ) {
-        final ListSubscriptionsByJobVacancyIdUseCaseOutput output = this.listSubscriptionsByJobVacancyIdUseCase.execute(ListSubscriptionsByJobVacancyIdUseCaseInput.with(
-                jobVacancyId, SearchQuery.newSearchQuery(page, perPage, sort, direction)
+        final ListSubscriptionsByJobVacancyIdUseCaseOutput output = this.listSubscriptionsByJobVacancyIdUseCase.execute(
+                ListSubscriptionsByJobVacancyIdUseCaseInput.with(jobVacancyId, SearchQuery.newSearchQuery(page, perPage, sort, direction)
         ));
 
         return ResponseEntity.ok().body(ListSubscriptionsByJobVacancyIdResponse.from(output));

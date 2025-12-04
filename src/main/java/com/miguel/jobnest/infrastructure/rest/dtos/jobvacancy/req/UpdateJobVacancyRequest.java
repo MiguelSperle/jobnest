@@ -26,9 +26,9 @@ public record UpdateJobVacancyRequest(
         @Size(max = 80, message = "Company name should not exceed 80 characters")
         String companyName
 ) {
-    public UpdateJobVacancyUseCaseInput toInput(String id) {
+    public UpdateJobVacancyUseCaseInput toInput(String jobVacancyId) {
         return UpdateJobVacancyUseCaseInput.with(
-                id,
+                jobVacancyId,
                 this.title,
                 this.description,
                 this.seniorityLevel,

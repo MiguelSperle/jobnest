@@ -16,7 +16,7 @@ public class DefaultGetJobVacancyByIdUseCase implements GetJobVacancyByIdUseCase
 
     @Override
     public GetJobVacancyByIdUseCaseOutput execute(GetJobVacancyByIdUseCaseInput input) {
-        final JobVacancy jobVacancy = this.getJobVacancyById(input.id());
+        final JobVacancy jobVacancy = this.getJobVacancyById(input.jobVacancyId());
 
         return GetJobVacancyByIdUseCaseOutput.from(jobVacancy);
     }

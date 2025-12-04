@@ -15,10 +15,10 @@ import org.springframework.web.bind.annotation.*;
 public class JobVacancyController {
     private final GetJobVacancyByIdUseCase getJobVacancyByIdUseCase;
 
-    @GetMapping("/{id}")
+    @GetMapping("/{jobVacancyId}")
     @RateLimiter(name = "rateLimitConfiguration")
-    public ResponseEntity<GetJobVacancyByIdResponse> getJobVacancyById(@PathVariable String id) {
-        final GetJobVacancyByIdUseCaseOutput output = this.getJobVacancyByIdUseCase.execute(GetJobVacancyByIdUseCaseInput.with(id));
+    public ResponseEntity<GetJobVacancyByIdResponse> getJobVacancyById(@PathVariable String jobVacancyId) {
+        final GetJobVacancyByIdUseCaseOutput output = this.getJobVacancyByIdUseCase.execute(GetJobVacancyByIdUseCaseInput.with(jobVacancyId));
 
         return ResponseEntity.ok().body(GetJobVacancyByIdResponse.from(output));
     }
