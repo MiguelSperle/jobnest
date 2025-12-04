@@ -33,18 +33,28 @@ public class DefaultCreateSubscriptionUseCase implements CreateSubscriptionUseCa
             throw DomainException.with("You are already subscribed in this job vacancy", 409);
         }
 
-        final String resumeUrl = this.uploadService.uploadFile(input.bytesFile(), "resume-file");
+        String resumeUrl = null;
 
-        final Subscription newSubscription = Subscription.newSubscription(input.userId(), input.jobVacancyId(), resumeUrl);
+        try {
+            resumeUrl = this.uploadService.uploadFile(input.bytesFile(), "resume-file", "image");
 
-        final Subscription savedSubscription = this.saveSubscription(newSubscription);
+            final Subscription newSubscription = Subscription.newSubscription(input.userId(), input.jobVacancyId(), resumeUrl);
 
-        final SubscriptionCreatedEvent event = SubscriptionCreatedEvent.from(
-                savedSubscription.getUserId(),
-                savedSubscription.getJobVacancyId()
-        );
+            final Subscription savedSubscription = this.saveSubscription(newSubscription);
 
-        this.messageProducer.publish(SUBSCRIPTION_CREATED_EXCHANGE, SUBSCRIPTION_CREATED_ROUTING_KEY, event);
+            final SubscriptionCreatedEvent event = SubscriptionCreatedEvent.from(
+                    savedSubscription.getUserId(),
+                    savedSubscription.getJobVacancyId()
+            );
+
+            this.messageProducer.publish(SUBSCRIPTION_CREATED_EXCHANGE, SUBSCRIPTION_CREATED_ROUTING_KEY, event);
+        } catch (Exception ex) {
+            if (resumeUrl != null) {
+                final String publicId = this.uploadService.extractPublicId(resumeUrl, "resume-file");
+                this.uploadService.destroyFile(publicId, "image");
+            }
+            throw ex;
+        }
     }
 
     private boolean verifySubscriptionAlreadyExistsByUserIdAndJobVacancyId(String userId, String jobVacancyId) {

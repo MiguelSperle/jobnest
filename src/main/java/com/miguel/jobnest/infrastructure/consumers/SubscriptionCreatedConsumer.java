@@ -25,8 +25,8 @@ public class SubscriptionCreatedConsumer {
         final User user = this.getUserById(event.userId());
         final JobVacancy jobVacancy = this.getJobVacancyById(event.jobVacancyId());
 
-        final String text = "Hello, You applied for the job vacancy " + jobVacancy.getTitle() + " at " + jobVacancy.getCompanyName() + ". Please stay attentive to your communication channels, as the company may contact you soon regarding the next steps.";
-        final String subject = "Job Vacancy Applied";
+        final String text = "Hello, You subscribed for the job vacancy " + jobVacancy.getTitle() + " at " + jobVacancy.getCompanyName() + ". Please stay attentive to your communication channels, as the company may contact you soon regarding the next steps.";
+        final String subject = "Subscribed in Job Vacancy";
 
         this.emailService.sendEmail(user.getEmail(), text, subject);
     }
