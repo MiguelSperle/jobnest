@@ -1,6 +1,6 @@
 package com.miguel.jobnest.infrastructure.rest.dtos.user.req;
 
-import com.miguel.jobnest.application.usecases.user.inputs.RegisterUserUseCaseInput;
+import com.miguel.jobnest.application.usecases.user.inputs.CreateUserUseCaseInput;
 import com.miguel.jobnest.domain.enums.AuthorizationRole;
 import com.miguel.jobnest.infrastructure.configurations.annotations.EnumCheck;
 import jakarta.validation.constraints.Email;
@@ -8,7 +8,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
-public record RegisterUserRequest(
+public record CreateUserRequest(
         @NotBlank(message = "Name should not be neither null nor blank")
         @Size(max = 100, message = "Name should not exceed 100 characters")
         String name,
@@ -37,8 +37,8 @@ public record RegisterUserRequest(
         @Size(max = 50, message = "Country should not exceed 50 characters")
         String country
 ) {
-    public RegisterUserUseCaseInput toInput() {
-        return RegisterUserUseCaseInput.with(
+    public CreateUserUseCaseInput toInput() {
+        return CreateUserUseCaseInput.with(
                 this.name,
                 this.email,
                 this.password,

@@ -9,22 +9,6 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class BindingConfiguration {
     @Bean
-    public Binding userCreatedBinding(
-            @UserCreatedQueue Queue queue,
-            @UserCreatedExchange DirectExchange directExchange
-    ) {
-        return BindingBuilder.bind(queue).to(directExchange).with("user.created.routing.key");
-    }
-
-    @Bean
-    public Binding userCreatedDlqBinding(
-            @UserCreatedDlqQueue Queue queue,
-            @UserCreatedDlqExchange DirectExchange directExchange
-    ) {
-        return BindingBuilder.bind(queue).to(directExchange).with("user.created.dlq.routing.key");
-    }
-
-    @Bean
     public Binding userCodeCreatedBinding(
             @UserCodeCreatedQueue Queue queue,
             @UserCodeCreatedExchange DirectExchange directExchange

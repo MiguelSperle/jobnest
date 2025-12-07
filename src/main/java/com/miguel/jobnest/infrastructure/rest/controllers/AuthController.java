@@ -1,10 +1,10 @@
 package com.miguel.jobnest.infrastructure.rest.controllers;
 
 import com.miguel.jobnest.application.abstractions.usecases.user.AuthenticateUserUseCase;
-import com.miguel.jobnest.application.abstractions.usecases.user.RegisterUserUseCase;
+import com.miguel.jobnest.application.abstractions.usecases.user.CreateUserUseCase;
 import com.miguel.jobnest.application.usecases.user.outputs.AuthenticateUserUseCaseOutput;
 import com.miguel.jobnest.infrastructure.rest.dtos.user.req.AuthenticateUserRequest;
-import com.miguel.jobnest.infrastructure.rest.dtos.user.req.RegisterUserRequest;
+import com.miguel.jobnest.infrastructure.rest.dtos.user.req.CreateUserRequest;
 import com.miguel.jobnest.infrastructure.rest.dtos.common.res.MessageResponse;
 import com.miguel.jobnest.infrastructure.rest.dtos.user.res.AuthenticateUserResponse;
 import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
@@ -21,15 +21,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
 public class AuthController {
-    private final RegisterUserUseCase registerUserUseCase;
+    private final CreateUserUseCase createUserUseCase;
     private final AuthenticateUserUseCase authenticateUserUseCase;
 
-    @PostMapping("/register")
+    @PostMapping("/create")
     @RateLimiter(name = "rateLimitConfiguration")
-    public ResponseEntity<MessageResponse> registerUser(@RequestBody @Valid RegisterUserRequest request) {
-        this.registerUserUseCase.execute(request.toInput());
+    public ResponseEntity<MessageResponse> createUser(@RequestBody @Valid CreateUserRequest request) {
+        this.createUserUseCase.execute(request.toInput());
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(MessageResponse.from("User registered successfully"));
+        return ResponseEntity.status(HttpStatus.CREATED).body(MessageResponse.from("User created successfully"));
     }
 
     @PostMapping("/login")
