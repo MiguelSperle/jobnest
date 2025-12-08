@@ -1,4 +1,4 @@
-package com.miguel.jobnest.usecases;
+package com.miguel.jobnest.usecases.usercode;
 
 import com.miguel.jobnest.application.abstractions.producer.MessageProducer;
 import com.miguel.jobnest.application.abstractions.providers.CodeProvider;
@@ -48,6 +48,8 @@ public class ResendVerificationCodeUseCaseTest {
         final UserCode userCode = UserCodeBuilderTest.build(UserCodeType.USER_VERIFICATION, TimeUtils.now());
         final User user = UserBuilderTest.build(UserStatus.UNVERIFIED, AuthorizationRole.CANDIDATE);
 
+        final ResendVerificationCodeUseCaseInput input = ResendVerificationCodeUseCaseInput.with(user.getEmail());
+
         Mockito.when(this.userRepository.findByEmail(Mockito.any())).thenReturn(Optional.of(user));
 
         Mockito.when(this.userCodeRepository.findByUserIdAndCodeType(Mockito.any(), Mockito.any())).thenReturn(Optional.empty());
@@ -57,8 +59,6 @@ public class ResendVerificationCodeUseCaseTest {
         Mockito.when(this.userCodeRepository.save(Mockito.any())).thenReturn(userCode);
 
         Mockito.doNothing().when(this.messageProducer).publish(Mockito.any(), Mockito.any(), Mockito.any());
-
-        final ResendVerificationCodeUseCaseInput input = ResendVerificationCodeUseCaseInput.with(user.getEmail());
 
         this.useCase.execute(input);
 
@@ -74,6 +74,8 @@ public class ResendVerificationCodeUseCaseTest {
         final UserCode userCode = UserCodeBuilderTest.build(UserCodeType.USER_VERIFICATION, TimeUtils.now());
         final User user = UserBuilderTest.build(UserStatus.UNVERIFIED, AuthorizationRole.CANDIDATE);
 
+        final ResendVerificationCodeUseCaseInput input = ResendVerificationCodeUseCaseInput.with(user.getEmail());
+
         Mockito.when(this.userRepository.findByEmail(Mockito.any())).thenReturn(Optional.of(user));
 
         Mockito.when(this.userCodeRepository.findByUserIdAndCodeType(Mockito.any(), Mockito.any())).thenReturn(Optional.of(userCode));
@@ -85,8 +87,6 @@ public class ResendVerificationCodeUseCaseTest {
         Mockito.when(this.userCodeRepository.save(Mockito.any())).thenReturn(userCode);
 
         Mockito.doNothing().when(this.messageProducer).publish(Mockito.any(), Mockito.any(), Mockito.any());
-
-        final ResendVerificationCodeUseCaseInput input = ResendVerificationCodeUseCaseInput.with(user.getEmail());
 
         this.useCase.execute(input);
 
@@ -102,9 +102,9 @@ public class ResendVerificationCodeUseCaseTest {
     void shouldThrowNotFoundException_whenUserDoesNotExist() {
         final String email = "jonesTucky@gmail.com";
 
-        Mockito.when(this.userRepository.findByEmail(Mockito.any())).thenReturn(Optional.empty());
-
         final ResendVerificationCodeUseCaseInput input = ResendVerificationCodeUseCaseInput.with(email);
+
+        Mockito.when(this.userRepository.findByEmail(Mockito.any())).thenReturn(Optional.empty());
 
         final NotFoundException ex = Assertions.assertThrows(NotFoundException.class, () ->
                 this.useCase.execute(input)
@@ -122,9 +122,9 @@ public class ResendVerificationCodeUseCaseTest {
     void shouldThrowDomainException_whenUserIsAlreadyVerified() {
         final User user = UserBuilderTest.build(UserStatus.VERIFIED, AuthorizationRole.CANDIDATE);
 
-        Mockito.when(this.userRepository.findByEmail(Mockito.any())).thenReturn(Optional.of(user));
-
         final ResendVerificationCodeUseCaseInput input = ResendVerificationCodeUseCaseInput.with(user.getEmail());
+
+        Mockito.when(this.userRepository.findByEmail(Mockito.any())).thenReturn(Optional.of(user));
 
         final DomainException ex = Assertions.assertThrows(DomainException.class, () ->
                 this.useCase.execute(input)
@@ -144,9 +144,9 @@ public class ResendVerificationCodeUseCaseTest {
     void shouldThrowDomainException_whenUserIsDeleted() {
         final User user = UserBuilderTest.build(UserStatus.DELETED, AuthorizationRole.CANDIDATE);
 
-        Mockito.when(this.userRepository.findByEmail(Mockito.any())).thenReturn(Optional.of(user));
-
         final ResendVerificationCodeUseCaseInput input = ResendVerificationCodeUseCaseInput.with(user.getEmail());
+
+        Mockito.when(this.userRepository.findByEmail(Mockito.any())).thenReturn(Optional.of(user));
 
         final DomainException ex = Assertions.assertThrows(DomainException.class, () ->
                 this.useCase.execute(input)

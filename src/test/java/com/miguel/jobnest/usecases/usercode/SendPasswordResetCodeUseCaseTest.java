@@ -1,4 +1,4 @@
-package com.miguel.jobnest.usecases;
+package com.miguel.jobnest.usecases.usercode;
 
 import com.miguel.jobnest.application.abstractions.producer.MessageProducer;
 import com.miguel.jobnest.application.abstractions.providers.CodeProvider;
@@ -47,6 +47,8 @@ public class SendPasswordResetCodeUseCaseTest {
         final User user = UserBuilderTest.build(UserStatus.UNVERIFIED, AuthorizationRole.CANDIDATE);
         final UserCode userCode = UserCodeBuilderTest.build(UserCodeType.PASSWORD_RESET, TimeUtils.now().plusMinutes(15));
 
+        final SendPasswordResetCodeUseCaseInput input = SendPasswordResetCodeUseCaseInput.with(user.getEmail());
+
         Mockito.when(this.userRepository.findByEmail(Mockito.any())).thenReturn(Optional.of(user));
 
         Mockito.when(this.userCodeRepository.findByUserIdAndCodeType(Mockito.any(), Mockito.any())).thenReturn(Optional.empty());
@@ -56,8 +58,6 @@ public class SendPasswordResetCodeUseCaseTest {
         Mockito.when(this.userCodeRepository.save(Mockito.any())).thenReturn(userCode);
 
         Mockito.doNothing().when(this.messageProducer).publish(Mockito.any(), Mockito.any(), Mockito.any());
-
-        final SendPasswordResetCodeUseCaseInput input = SendPasswordResetCodeUseCaseInput.with(user.getEmail());
 
         this.useCase.execute(input);
 
@@ -73,6 +73,8 @@ public class SendPasswordResetCodeUseCaseTest {
         final User user = UserBuilderTest.build(UserStatus.UNVERIFIED, AuthorizationRole.CANDIDATE);
         final UserCode userCode = UserCodeBuilderTest.build(UserCodeType.PASSWORD_RESET, TimeUtils.now().plusMinutes(15));
 
+        final SendPasswordResetCodeUseCaseInput input = SendPasswordResetCodeUseCaseInput.with(user.getEmail());
+
         Mockito.when(this.userRepository.findByEmail(Mockito.any())).thenReturn(Optional.of(user));
 
         Mockito.when(this.userCodeRepository.findByUserIdAndCodeType(Mockito.any(), Mockito.any())).thenReturn(Optional.of(userCode));
@@ -84,8 +86,6 @@ public class SendPasswordResetCodeUseCaseTest {
         Mockito.when(this.userCodeRepository.save(Mockito.any())).thenReturn(userCode);
 
         Mockito.doNothing().when(this.messageProducer).publish(Mockito.any(), Mockito.any(), Mockito.any());
-
-        final SendPasswordResetCodeUseCaseInput input = SendPasswordResetCodeUseCaseInput.with(user.getEmail());
 
         this.useCase.execute(input);
 
@@ -101,9 +101,9 @@ public class SendPasswordResetCodeUseCaseTest {
     void shouldThrowNotFoundException_whenUserDoesNotExist() {
         final String email = "jonesTucky@gmail.com";
 
-        Mockito.when(this.userRepository.findByEmail(Mockito.any())).thenReturn(Optional.empty());
-
         final SendPasswordResetCodeUseCaseInput input = SendPasswordResetCodeUseCaseInput.with(email);
+
+        Mockito.when(this.userRepository.findByEmail(Mockito.any())).thenReturn(Optional.empty());
 
         final NotFoundException ex = Assertions.assertThrows(NotFoundException.class, () ->
                 this.useCase.execute(input)
