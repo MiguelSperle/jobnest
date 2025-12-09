@@ -102,9 +102,11 @@ public class UpdateUserPasswordUseCaseTest {
         );
 
         final String expectedErrorMessage = "Invalid current password";
+        final int expectedStatusCode = 422;
 
         Assertions.assertInstanceOf(DomainException.class, ex);
         Assertions.assertEquals(expectedErrorMessage, ex.getMessage());
+        Assertions.assertEquals(expectedStatusCode, ex.getStatusCode());
 
         Mockito.verify(this.userRepository, Mockito.times(1)).findById(Mockito.any());
         Mockito.verify(this.passwordEncryptionProvider, Mockito.times(1)).matches(Mockito.any(), Mockito.any());
