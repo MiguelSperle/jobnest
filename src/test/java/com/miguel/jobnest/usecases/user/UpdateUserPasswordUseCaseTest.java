@@ -19,6 +19,9 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import static org.mockito.AdditionalAnswers.returnsFirstArg;
+
+import java.util.Objects;
 import java.util.Optional;
 
 @ExtendWith(MockitoExtension.class)
@@ -38,7 +41,6 @@ public class UpdateUserPasswordUseCaseTest {
     @Test
     void shouldUpdateUserPassword() {
         final User user = UserBuilderTest.build(UserStatus.VERIFIED, AuthorizationRole.CANDIDATE);
-        final String encodedPassword = "encoded password";
 
         final UpdateUserPasswordUseCaseInput input = UpdateUserPasswordUseCaseInput.with(
                 user.getPassword(),
@@ -48,11 +50,8 @@ public class UpdateUserPasswordUseCaseTest {
         Mockito.when(this.securityService.getPrincipal()).thenReturn(user.getId());
         Mockito.when(this.userRepository.findById(Mockito.any())).thenReturn(Optional.of(user));
         Mockito.when(this.passwordEncryptionProvider.matches(Mockito.any(), Mockito.any())).thenReturn(true);
-        Mockito.when(this.passwordEncryptionProvider.encode(Mockito.any())).thenReturn(encodedPassword);
-
-        final User updatedUser = user.withPassword(encodedPassword);
-
-        Mockito.when(this.userRepository.save(Mockito.any())).thenReturn(updatedUser);
+        Mockito.when(this.passwordEncryptionProvider.encode(Mockito.any())).thenReturn(input.password());
+        Mockito.when(this.userRepository.save(Mockito.any())).thenAnswer(returnsFirstArg());
 
         this.useCase.execute(input);
 
@@ -60,16 +59,16 @@ public class UpdateUserPasswordUseCaseTest {
         Mockito.verify(this.userRepository, Mockito.times(1)).findById(Mockito.any());
         Mockito.verify(this.passwordEncryptionProvider, Mockito.times(1)).matches(Mockito.any(), Mockito.any());
         Mockito.verify(this.passwordEncryptionProvider, Mockito.times(1)).encode(Mockito.any());
+        Mockito.verify(this.userRepository, Mockito.times(1)).save(Mockito.argThat(userSaved ->
+                Objects.equals(userSaved.getPassword(), input.password())
+        ));
     }
 
     @Test
     void shouldThrowNotFoundException_whenUserDoesNotExist() {
-        final String currentPassword = "1234BC";
-        final String password = "123456A";
-
         final UpdateUserPasswordUseCaseInput input = UpdateUserPasswordUseCaseInput.with(
-                currentPassword,
-                password
+                "1234BC",
+                "123456A"
         );
 
         Mockito.when(this.userRepository.findById(Mockito.any())).thenReturn(Optional.empty());

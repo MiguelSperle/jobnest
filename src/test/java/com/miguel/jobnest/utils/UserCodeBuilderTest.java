@@ -8,10 +8,10 @@ import com.miguel.jobnest.domain.utils.TimeUtils;
 import java.time.LocalDateTime;
 
 public class UserCodeBuilderTest {
-    public static UserCode build(UserCodeType userCodeType, LocalDateTime expiresIn) {
+    public static UserCode build(UserCodeType userCodeType, LocalDateTime expiresIn, String userId) {
         return UserCode.with(
                 IdentifierUtils.generateUUID(),
-                IdentifierUtils.generateUUID(),
+                userId,
                 "1AB23CT2",
                 userCodeType,
                 expiresIn,

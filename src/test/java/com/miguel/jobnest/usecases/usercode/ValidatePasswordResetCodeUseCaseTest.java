@@ -3,11 +3,15 @@ package com.miguel.jobnest.usecases.usercode;
 import com.miguel.jobnest.application.abstractions.repositories.UserCodeRepository;
 import com.miguel.jobnest.application.usecases.usercode.DefaultValidatePasswordResetCodeUseCase;
 import com.miguel.jobnest.application.usecases.usercode.inputs.ValidatePasswordResetCodeUseCaseInput;
+import com.miguel.jobnest.domain.entities.User;
 import com.miguel.jobnest.domain.entities.UserCode;
+import com.miguel.jobnest.domain.enums.AuthorizationRole;
 import com.miguel.jobnest.domain.enums.UserCodeType;
+import com.miguel.jobnest.domain.enums.UserStatus;
 import com.miguel.jobnest.domain.exceptions.DomainException;
 import com.miguel.jobnest.domain.exceptions.NotFoundException;
 import com.miguel.jobnest.domain.utils.TimeUtils;
+import com.miguel.jobnest.utils.UserBuilderTest;
 import com.miguel.jobnest.utils.UserCodeBuilderTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -29,7 +33,8 @@ public class ValidatePasswordResetCodeUseCaseTest {
 
     @Test
     void shouldValidatePasswordResetCode() {
-        final UserCode userCode = UserCodeBuilderTest.build(UserCodeType.PASSWORD_RESET, TimeUtils.now().plusMinutes(15));
+        final User user = UserBuilderTest.build(UserStatus.UNVERIFIED, AuthorizationRole.CANDIDATE);
+        final UserCode userCode = UserCodeBuilderTest.build(UserCodeType.PASSWORD_RESET, TimeUtils.now().plusMinutes(15), user.getId());
 
         final ValidatePasswordResetCodeUseCaseInput input = ValidatePasswordResetCodeUseCaseInput.with(userCode.getCode());
 
@@ -62,7 +67,8 @@ public class ValidatePasswordResetCodeUseCaseTest {
 
     @Test
     void shouldThrowDomainException_whenTheCodeIsExpired() {
-        final UserCode userCode = UserCodeBuilderTest.build(UserCodeType.PASSWORD_RESET, TimeUtils.now().minusDays(1));
+        final User user = UserBuilderTest.build(UserStatus.UNVERIFIED, AuthorizationRole.CANDIDATE);
+        final UserCode userCode = UserCodeBuilderTest.build(UserCodeType.PASSWORD_RESET, TimeUtils.now().minusDays(1), user.getId());
 
         final ValidatePasswordResetCodeUseCaseInput input = ValidatePasswordResetCodeUseCaseInput.with(userCode.getCode());
 

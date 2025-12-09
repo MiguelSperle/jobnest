@@ -23,7 +23,10 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Objects;
 import java.util.Optional;
+
+import static org.mockito.AdditionalAnswers.returnsFirstArg;
 
 @ExtendWith(MockitoExtension.class)
 public class UpdateUserToVerifiedUseCaseTest {
@@ -41,15 +44,13 @@ public class UpdateUserToVerifiedUseCaseTest {
 
     @Test
     void shouldUpdateUserToVerified() {
-        final UserCode userCode = UserCodeBuilderTest.build(UserCodeType.USER_VERIFICATION, TimeUtils.now().plusMinutes(15));
         final User user = UserBuilderTest.build(UserStatus.UNVERIFIED, AuthorizationRole.CANDIDATE);
+        final UserCode userCode = UserCodeBuilderTest.build(UserCodeType.USER_VERIFICATION, TimeUtils.now().plusMinutes(15), user.getId());
 
         final UpdateUserToVerifiedUseCaseInput input = UpdateUserToVerifiedUseCaseInput.with(userCode.getCode());
 
         Mockito.when(this.userCodeRepository.findByCodeAndCodeType(Mockito.any(), Mockito.any())).thenReturn(Optional.of(userCode));
         Mockito.when(this.userRepository.findById(Mockito.any())).thenReturn(Optional.of(user));
-
-        final User updatedUser = user.withUserStatus(UserStatus.VERIFIED);
 
         Mockito.doAnswer(invocationOnMock -> {
             Runnable runnable = invocationOnMock.getArgument(0);
@@ -57,7 +58,7 @@ public class UpdateUserToVerifiedUseCaseTest {
             return runnable;
         }).when(this.transactionExecutor).runTransaction(Mockito.any());
 
-        Mockito.when(this.userRepository.save(Mockito.any())).thenReturn(updatedUser);
+        Mockito.when(this.userRepository.save(Mockito.any())).thenAnswer(returnsFirstArg());
         Mockito.doNothing().when(this.userCodeRepository).deleteById(Mockito.any());
 
         this.useCase.execute(input);
@@ -65,13 +66,17 @@ public class UpdateUserToVerifiedUseCaseTest {
         Mockito.verify(this.userCodeRepository, Mockito.times(1)).findByCodeAndCodeType(Mockito.any(), Mockito.any());
         Mockito.verify(this.userRepository, Mockito.times(1)).findById(Mockito.any());
         Mockito.verify(this.transactionExecutor, Mockito.times(1)).runTransaction(Mockito.any());
-        Mockito.verify(this.userRepository, Mockito.times(1)).save(Mockito.any());
+        Mockito.verify(this.userRepository, Mockito.times(1)).save(Mockito.argThat(userSaved ->
+                Objects.equals(userSaved.getUserStatus(), UserStatus.VERIFIED)
+        ));
         Mockito.verify(this.userCodeRepository, Mockito.times(1)).deleteById(Mockito.any());
     }
 
     @Test
     void shouldThrowNotFoundException_whenTheCodeDoesNotExist() {
-        final UpdateUserToVerifiedUseCaseInput input = UpdateUserToVerifiedUseCaseInput.with("ABC123C3");
+        final UpdateUserToVerifiedUseCaseInput input = UpdateUserToVerifiedUseCaseInput.with(
+                "ABC123C3"
+        );
 
         Mockito.when(this.userCodeRepository.findByCodeAndCodeType(Mockito.any(), Mockito.any())).thenReturn(Optional.empty());
 
@@ -89,7 +94,8 @@ public class UpdateUserToVerifiedUseCaseTest {
 
     @Test
     void shouldThrowDomainException_whenTheCodeIsExpired() {
-        final UserCode userCode = UserCodeBuilderTest.build(UserCodeType.USER_VERIFICATION, TimeUtils.now().minusDays(1));
+        final User user = UserBuilderTest.build(UserStatus.UNVERIFIED, AuthorizationRole.CANDIDATE);
+        final UserCode userCode = UserCodeBuilderTest.build(UserCodeType.USER_VERIFICATION, TimeUtils.now().minusDays(1), user.getId());
 
         final UpdateUserToVerifiedUseCaseInput input = UpdateUserToVerifiedUseCaseInput.with(userCode.getCode());
 
@@ -111,7 +117,8 @@ public class UpdateUserToVerifiedUseCaseTest {
 
     @Test
     void shouldThrowNotFoundException_whenUserDoesNotExist() {
-        final UserCode userCode = UserCodeBuilderTest.build(UserCodeType.USER_VERIFICATION, TimeUtils.now().plusMinutes(15));
+        final User user = UserBuilderTest.build(UserStatus.UNVERIFIED, AuthorizationRole.CANDIDATE);
+        final UserCode userCode = UserCodeBuilderTest.build(UserCodeType.USER_VERIFICATION, TimeUtils.now().plusMinutes(15), user.getId());
 
         final UpdateUserToVerifiedUseCaseInput input = UpdateUserToVerifiedUseCaseInput.with(userCode.getCode());
 
