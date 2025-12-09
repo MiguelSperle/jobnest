@@ -41,7 +41,6 @@ public class GetAuthenticatedUserUseCaseTest {
 
         Assertions.assertNotNull(output);
         Assertions.assertNotNull(output.user());
-
         Assertions.assertEquals(user.getId(), output.user().getId());
         Assertions.assertEquals(user.getName(), output.user().getName());
         Assertions.assertEquals(user.getEmail(), output.user().getEmail());
