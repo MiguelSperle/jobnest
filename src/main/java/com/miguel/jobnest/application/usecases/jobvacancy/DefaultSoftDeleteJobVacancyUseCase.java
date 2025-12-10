@@ -30,13 +30,12 @@ public class DefaultSoftDeleteJobVacancyUseCase implements SoftDeleteJobVacancyU
     public void execute(SoftDeleteJobVacancyUseCaseInput input) {
         final JobVacancy jobVacancy = this.getJobVacancyById(input.jobVacancyId());
 
+        final List<Subscription> subscriptions = this.getAllByJobVacancyId(jobVacancy.getId());
+
         final JobVacancy updatedJobVacancy = jobVacancy.withIsDeleted(true);
 
         this.transactionExecutor.runTransaction(() -> {
-            final JobVacancy savedJobVacancy = this.saveJobVacancy(updatedJobVacancy);
-
-            final List<Subscription> subscriptions = this.getAllByJobVacancyId(savedJobVacancy.getId());
-
+            this.saveJobVacancy(updatedJobVacancy);
             subscriptions.stream().map(subscription -> subscription.withIsCanceled(true)).forEach(this::saveSubscription);
         });
     }
@@ -45,8 +44,8 @@ public class DefaultSoftDeleteJobVacancyUseCase implements SoftDeleteJobVacancyU
         return this.jobVacancyRepository.findById(id).orElseThrow(() -> NotFoundException.with("Job vacancy not found"));
     }
 
-    private JobVacancy saveJobVacancy(JobVacancy jobVacancy) {
-        return this.jobVacancyRepository.save(jobVacancy);
+    private void saveJobVacancy(JobVacancy jobVacancy) {
+        this.jobVacancyRepository.save(jobVacancy);
     }
 
     private List<Subscription> getAllByJobVacancyId(String jobVacancyId) {

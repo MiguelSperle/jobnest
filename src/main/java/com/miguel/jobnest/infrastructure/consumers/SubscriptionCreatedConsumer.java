@@ -22,20 +22,21 @@ public class SubscriptionCreatedConsumer {
 
     @RabbitListener(queues = SUBSCRIPTION_CREATED_QUEUE)
     public void onMessage(SubscriptionCreatedEvent event) {
-        final User user = this.getUserById(event.userId());
         final JobVacancy jobVacancy = this.getJobVacancyById(event.jobVacancyId());
 
         final String text = "Hello, You subscribed for the job vacancy " + jobVacancy.getTitle() + " at " + jobVacancy.getCompanyName() + ". Please stay attentive to your communication channels, as the company may contact you soon regarding the next steps.";
         final String subject = "Subscribed in Job Vacancy";
 
-        this.emailService.sendEmail(user.getEmail(), text, subject);
-    }
+        final User user = this.getUserById(event.userId());
 
-    private User getUserById(String id) {
-        return this.userRepository.findById(id).orElseThrow(() -> NotFoundException.with("User not found"));
+        this.emailService.sendEmail(user.getEmail(), text, subject);
     }
 
     private JobVacancy getJobVacancyById(String id) {
         return this.jobVacancyRepository.findById(id).orElseThrow(() -> NotFoundException.with("Job vacancy not found"));
+    }
+
+    private User getUserById(String id) {
+        return this.userRepository.findById(id).orElseThrow(() -> NotFoundException.with("User not found"));
     }
 }
