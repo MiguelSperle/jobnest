@@ -63,7 +63,11 @@ public class DefaultResendVerificationCodeUseCase implements ResendVerificationC
 
         final UserCode savedUserCode = this.saveUserCode(newUserCode);
 
-        final UserCodeCreatedEvent event = UserCodeCreatedEvent.from(savedUserCode.getId());
+        final UserCodeCreatedEvent event = UserCodeCreatedEvent.from(
+                savedUserCode.getCode(),
+                savedUserCode.getUserCodeType(),
+                savedUserCode.getUserId()
+        );
 
         this.messageProducer.publish(USER_CODE_CREATED_EXCHANGE, USER_CODE_CREATED_ROUTING_KEY, event);
     }

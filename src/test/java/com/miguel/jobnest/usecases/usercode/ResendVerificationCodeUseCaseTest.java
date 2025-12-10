@@ -49,13 +49,13 @@ public class ResendVerificationCodeUseCaseTest {
     @Test
     void shouldResendVerificationCode() {
         final User user = UserBuilderTest.build(UserStatus.UNVERIFIED, AuthorizationRole.CANDIDATE);
-        final UserCode userCode = UserCodeBuilderTest.build(UserCodeType.USER_VERIFICATION, TimeUtils.now().plusMinutes(15), user.getId());
+        final String code = "123AB24J";
 
         final ResendVerificationCodeUseCaseInput input = ResendVerificationCodeUseCaseInput.with(user.getEmail());
 
         Mockito.when(this.userRepository.findByEmail(Mockito.any())).thenReturn(Optional.of(user));
         Mockito.when(this.userCodeRepository.findByUserIdAndCodeType(Mockito.any(), Mockito.any())).thenReturn(Optional.empty());
-        Mockito.when(this.codeProvider.generateCode(Mockito.anyInt(), Mockito.any())).thenReturn(userCode.getCode());
+        Mockito.when(this.codeProvider.generateCode(Mockito.anyInt(), Mockito.any())).thenReturn(code);
         Mockito.when(this.userCodeRepository.save(Mockito.any())).thenAnswer(returnsFirstArg());
         Mockito.doNothing().when(this.messageProducer).publish(Mockito.any(), Mockito.any(), Mockito.any());
 
@@ -66,9 +66,9 @@ public class ResendVerificationCodeUseCaseTest {
         Mockito.verify(this.codeProvider, Mockito.times(1)).generateCode(Mockito.anyInt(), Mockito.any());
         Mockito.verify(this.userCodeRepository, Mockito.times(1)).save(Mockito.argThat(userCodeSaved ->
                 Objects.nonNull(userCodeSaved.getId()) &&
-                        Objects.equals(userCodeSaved.getUserId(), userCode.getUserId()) &&
-                        Objects.equals(userCodeSaved.getCode(), userCode.getCode()) &&
-                        Objects.equals(userCodeSaved.getUserCodeType(), userCode.getUserCodeType()) &&
+                        Objects.equals(userCodeSaved.getUserId(), user.getId()) &&
+                        Objects.equals(userCodeSaved.getCode(), code) &&
+                        Objects.equals(userCodeSaved.getUserCodeType(), UserCodeType.USER_VERIFICATION) &&
                         userCodeSaved.getExpiresIn().isAfter(TimeUtils.now()) &&
                         Objects.nonNull(userCodeSaved.getCreatedAt())
         ));
@@ -79,13 +79,14 @@ public class ResendVerificationCodeUseCaseTest {
     void shouldReplaceVerificationCodeAndSend_whenUserAlreadyHasOne() {
         final User user = UserBuilderTest.build(UserStatus.UNVERIFIED, AuthorizationRole.CANDIDATE);
         final UserCode userCode = UserCodeBuilderTest.build(UserCodeType.USER_VERIFICATION, TimeUtils.now().plusMinutes(15), user.getId());
+        final String code = "123AB24J";
 
         final ResendVerificationCodeUseCaseInput input = ResendVerificationCodeUseCaseInput.with(user.getEmail());
 
         Mockito.when(this.userRepository.findByEmail(Mockito.any())).thenReturn(Optional.of(user));
         Mockito.when(this.userCodeRepository.findByUserIdAndCodeType(Mockito.any(), Mockito.any())).thenReturn(Optional.of(userCode));
         Mockito.doNothing().when(this.userCodeRepository).deleteById(Mockito.any());
-        Mockito.when(this.codeProvider.generateCode(Mockito.anyInt(), Mockito.any())).thenReturn(userCode.getCode());
+        Mockito.when(this.codeProvider.generateCode(Mockito.anyInt(), Mockito.any())).thenReturn(code);
         Mockito.when(this.userCodeRepository.save(Mockito.any())).thenAnswer(returnsFirstArg());
         Mockito.doNothing().when(this.messageProducer).publish(Mockito.any(), Mockito.any(), Mockito.any());
 
@@ -97,9 +98,9 @@ public class ResendVerificationCodeUseCaseTest {
         Mockito.verify(this.codeProvider, Mockito.times(1)).generateCode(Mockito.anyInt(), Mockito.any());
         Mockito.verify(this.userCodeRepository, Mockito.times(1)).save(Mockito.argThat(userCodeSaved ->
                 Objects.nonNull(userCodeSaved.getId()) &&
-                        Objects.equals(userCodeSaved.getUserId(), userCode.getUserId()) &&
-                        Objects.equals(userCodeSaved.getCode(), userCode.getCode()) &&
-                        Objects.equals(userCodeSaved.getUserCodeType(), userCode.getUserCodeType()) &&
+                        Objects.equals(userCodeSaved.getUserId(), user.getId()) &&
+                        Objects.equals(userCodeSaved.getCode(), code) &&
+                        Objects.equals(userCodeSaved.getUserCodeType(), UserCodeType.USER_VERIFICATION) &&
                         userCodeSaved.getExpiresIn().isAfter(TimeUtils.now()) &&
                         Objects.nonNull(userCodeSaved.getCreatedAt())
         ));
@@ -108,7 +109,7 @@ public class ResendVerificationCodeUseCaseTest {
 
     @Test
     void shouldThrowNotFoundException_whenUserDoesNotExist() {
-        final String email = "jonesTucky@gmail.com";
+        final String email = "jonestucky@gmail.com";
 
         final ResendVerificationCodeUseCaseInput input = ResendVerificationCodeUseCaseInput.with(email);
 

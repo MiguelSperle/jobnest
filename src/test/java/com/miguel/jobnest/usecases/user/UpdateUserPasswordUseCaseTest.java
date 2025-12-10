@@ -41,10 +41,11 @@ public class UpdateUserPasswordUseCaseTest {
     @Test
     void shouldUpdateUserPassword() {
         final User user = UserBuilderTest.build(UserStatus.VERIFIED, AuthorizationRole.CANDIDATE);
+        final String password = "123456A";
 
         final UpdateUserPasswordUseCaseInput input = UpdateUserPasswordUseCaseInput.with(
                 user.getPassword(),
-                "123456A"
+                password
         );
 
         Mockito.when(this.securityService.getPrincipal()).thenReturn(user.getId());
@@ -66,9 +67,12 @@ public class UpdateUserPasswordUseCaseTest {
 
     @Test
     void shouldThrowNotFoundException_whenUserDoesNotExist() {
+        final String currentPassword = "1234BC";
+        final String password = "123456A";
+
         final UpdateUserPasswordUseCaseInput input = UpdateUserPasswordUseCaseInput.with(
-                "1234BC",
-                "123456A"
+                currentPassword,
+                password
         );
 
         Mockito.when(this.userRepository.findById(Mockito.any())).thenReturn(Optional.empty());
@@ -88,10 +92,12 @@ public class UpdateUserPasswordUseCaseTest {
     @Test
     void shouldThrowDomainException_whenCurrentPasswordIsInvalid() {
         final User user = UserBuilderTest.build(UserStatus.VERIFIED, AuthorizationRole.CANDIDATE);
+        final String currentPassword = "1234BC";
+        final String password = "123456A";
 
         final UpdateUserPasswordUseCaseInput input = UpdateUserPasswordUseCaseInput.with(
-                "1234BC",
-                "123456A"
+                currentPassword,
+                password
         );
 
         Mockito.when(this.userRepository.findById(Mockito.any())).thenReturn(Optional.of(user));

@@ -51,10 +51,11 @@ public class ResetUserPasswordUseCaseTest {
     void shouldResetUserPassword() {
         final User user = UserBuilderTest.build(UserStatus.VERIFIED, AuthorizationRole.CANDIDATE);
         final UserCode userCode = UserCodeBuilderTest.build(UserCodeType.PASSWORD_RESET, TimeUtils.now().plusMinutes(15), user.getId());
+        final String password = "123456A";
 
         final ResetUserPasswordUseCaseInput input = ResetUserPasswordUseCaseInput.with(
                 userCode.getCode(),
-                "123456A"
+                password
         );
 
         Mockito.when(this.userCodeRepository.findByCodeAndCodeType(Mockito.any(), Mockito.any())).thenReturn(Optional.of(userCode));
@@ -84,9 +85,12 @@ public class ResetUserPasswordUseCaseTest {
 
     @Test
     void shouldThrowNotFoundException_whenTheCodeDoesNotExist() {
+        final String code = "1234BC";
+        final String password = "123456A";
+
         final ResetUserPasswordUseCaseInput input = ResetUserPasswordUseCaseInput.with(
-                "1234BC",
-                "123456A"
+                code,
+                password
         );
 
         Mockito.when(this.userCodeRepository.findByCodeAndCodeType(Mockito.any(), Mockito.any())).thenReturn(Optional.empty());
@@ -107,10 +111,11 @@ public class ResetUserPasswordUseCaseTest {
     void shouldThrowDomainException_whenTheCodeIsExpired() {
         final User user = UserBuilderTest.build(UserStatus.VERIFIED, AuthorizationRole.CANDIDATE);
         final UserCode userCode = UserCodeBuilderTest.build(UserCodeType.PASSWORD_RESET, TimeUtils.now().minusDays(1), user.getId());
+        final String password = "123456A";
 
         final ResetUserPasswordUseCaseInput input = ResetUserPasswordUseCaseInput.with(
                 userCode.getCode(),
-                "123456A"
+                password
         );
 
         Mockito.when(this.userCodeRepository.findByCodeAndCodeType(Mockito.any(), Mockito.any())).thenReturn(Optional.of(userCode));
@@ -134,10 +139,12 @@ public class ResetUserPasswordUseCaseTest {
     @Test
     void shouldThrowNotFoundException_whenUserDoesNotExist() {
         final UserCode userCode = UserCodeBuilderTest.build(UserCodeType.PASSWORD_RESET, TimeUtils.now().plusMinutes(15), IdentifierUtils.generateUUID());
+        final String code = "1234BC";
+        final String password = "123456A";
 
         final ResetUserPasswordUseCaseInput input = ResetUserPasswordUseCaseInput.with(
-                "1234BC",
-                "123456A"
+                code,
+                password
         );
 
         Mockito.when(this.userCodeRepository.findByCodeAndCodeType(Mockito.any(), Mockito.any())).thenReturn(Optional.of(userCode));

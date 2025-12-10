@@ -80,7 +80,7 @@ public class DefaultCreateUserUseCase implements CreateUserUseCase {
                     savedUserCode.getUserId()
             );
 
-            this.transactionExecutor.registerAfterCommit(() -> this.messageProducer.publish(
+            this.transactionExecutor.makeAfterCommit(() -> this.messageProducer.publish(
                     USER_CODE_CREATED_EXCHANGE, USER_CODE_CREATED_ROUTING_KEY, event
             ));
         });

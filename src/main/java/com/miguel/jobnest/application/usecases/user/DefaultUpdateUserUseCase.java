@@ -25,7 +25,7 @@ public class DefaultUpdateUserUseCase implements UpdateUserUseCase {
 
         final User user = this.getUserById(authenticatedUserId);
 
-        final User updatedUser = user.withName(input.name()).withEmail(input.email())
+        final User updatedUser = user.withName(input.name()).withEmail(input.email().toLowerCase())
                 .withDescription(input.description()).withCity(input.city()).withState(input.state())
                 .withCountry(input.country());
 

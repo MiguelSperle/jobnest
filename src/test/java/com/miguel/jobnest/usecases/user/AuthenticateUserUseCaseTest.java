@@ -62,9 +62,12 @@ public class AuthenticateUserUseCaseTest {
 
     @Test
     void shouldThrowDomainException_whenUserDoesNotExist() {
+        final String email = "alexhand1898@gmail.com";
+        final String password = "1234BC";
+
         final AuthenticateUserUseCaseInput input = AuthenticateUserUseCaseInput.with(
-                "alexHand1898@gmail.com",
-                "1234BC"
+                email,
+                password
         );
 
         Mockito.when(this.userRepository.findByEmail(Mockito.any())).thenReturn(Optional.empty());
@@ -86,10 +89,11 @@ public class AuthenticateUserUseCaseTest {
     @Test
     void shouldThrowDomainException_whenPasswordIsInvalid() {
         final User user = UserBuilderTest.build(UserStatus.VERIFIED, AuthorizationRole.CANDIDATE);
+        final String password = "1234BC";
 
         final AuthenticateUserUseCaseInput input = AuthenticateUserUseCaseInput.with(
                 user.getEmail(),
-                "1234BC"
+                password
         );
 
         Mockito.when(this.userRepository.findByEmail(Mockito.any())).thenReturn(Optional.of(user));

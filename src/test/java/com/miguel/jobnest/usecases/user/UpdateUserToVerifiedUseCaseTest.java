@@ -74,9 +74,9 @@ public class UpdateUserToVerifiedUseCaseTest {
 
     @Test
     void shouldThrowNotFoundException_whenTheCodeDoesNotExist() {
-        final UpdateUserToVerifiedUseCaseInput input = UpdateUserToVerifiedUseCaseInput.with(
-                "ABC123C3"
-        );
+        final String code = "ABC123C3";
+
+        final UpdateUserToVerifiedUseCaseInput input = UpdateUserToVerifiedUseCaseInput.with(code);
 
         Mockito.when(this.userCodeRepository.findByCodeAndCodeType(Mockito.any(), Mockito.any())).thenReturn(Optional.empty());
 

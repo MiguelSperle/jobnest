@@ -26,7 +26,7 @@ public class TransactionExecutorImpl implements TransactionExecutor {
     }
 
     @Override
-    public void registerAfterCommit(Runnable runnable) {
+    public void makeAfterCommit(Runnable runnable) {
         TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
             @Override
             public void afterCommit() {

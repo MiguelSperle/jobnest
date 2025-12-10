@@ -11,7 +11,7 @@ public class UserBuilderTest {
         return User.with(
                 IdentifierUtils.generateUUID(),
                 "john",
-                "johnDoe1947@gmail.com",
+                "johndoe1947@gmail.com",
                 "This is my description about me",
                 "12345@JH",
                 userStatus,

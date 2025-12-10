@@ -36,14 +36,20 @@ public class UpdateUserUseCaseTest {
     @Test
     void shouldUpdateUser() {
         final User user = UserBuilderTest.build(UserStatus.VERIFIED, AuthorizationRole.CANDIDATE);
+        final String name = "Alex";
+        final String email = "alexhand1898@gmail.com";
+        final String description = "This is my description about me";
+        final String city = "New York City";
+        final String state = "New York";
+        final String country = "United States";
 
         final UpdateUserUseCaseInput input = UpdateUserUseCaseInput.with(
-                "Alex",
-                "alexHand1898@gmail.com",
-                "This is my description about me",
-                "New York City",
-                "New York",
-                "United States"
+                name,
+                email,
+                description,
+                city,
+                state,
+                country
         );
 
         Mockito.when(this.securityService.getPrincipal()).thenReturn(user.getId());
@@ -66,13 +72,21 @@ public class UpdateUserUseCaseTest {
 
     @Test
     void shouldThrowNotFoundException_whenUserDoesNotExist() {
+        final String name = "Alex";
+        final String email = "alexhand1898@gmail.com";
+        final String description = "This is my description about me";
+        final String city = "New York City";
+        final String state = "New York";
+        final String country = "United States";
+
+
         final UpdateUserUseCaseInput input = UpdateUserUseCaseInput.with(
-                "Alex",
-                "alexHand1898@gmail.com",
-                "This is my description about me",
-                "New York City",
-                "New York",
-                "United States"
+                name,
+                email,
+                description,
+                city,
+                state,
+                country
         );
 
         Mockito.when(this.userRepository.findById(Mockito.any())).thenReturn(Optional.empty());
