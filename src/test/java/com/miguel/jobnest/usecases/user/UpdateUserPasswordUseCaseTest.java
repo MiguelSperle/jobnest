@@ -77,13 +77,12 @@ public class UpdateUserPasswordUseCaseTest {
 
         Mockito.when(this.userRepository.findById(Mockito.any())).thenReturn(Optional.empty());
 
-        final NotFoundException ex = Assertions.assertThrows(NotFoundException.class, () ->
+        final var ex = Assertions.assertThrows(NotFoundException.class, () ->
                 this.useCase.execute(input)
         );
 
         final String expectedErrorMessage = "User not found";
 
-        Assertions.assertInstanceOf(NotFoundException.class, ex);
         Assertions.assertEquals(expectedErrorMessage, ex.getMessage());
 
         Mockito.verify(this.userRepository, Mockito.times(1)).findById(Mockito.any());
@@ -103,14 +102,13 @@ public class UpdateUserPasswordUseCaseTest {
         Mockito.when(this.userRepository.findById(Mockito.any())).thenReturn(Optional.of(user));
         Mockito.when(this.passwordEncryptionProvider.matches(Mockito.any(), Mockito.any())).thenReturn(false);
 
-        final DomainException ex = Assertions.assertThrows(DomainException.class, () ->
+        final var ex = Assertions.assertThrows(DomainException.class, () ->
                 this.useCase.execute(input)
         );
 
         final String expectedErrorMessage = "Invalid current password";
         final int expectedStatusCode = 422;
 
-        Assertions.assertInstanceOf(DomainException.class, ex);
         Assertions.assertEquals(expectedErrorMessage, ex.getMessage());
         Assertions.assertEquals(expectedStatusCode, ex.getStatusCode());
 

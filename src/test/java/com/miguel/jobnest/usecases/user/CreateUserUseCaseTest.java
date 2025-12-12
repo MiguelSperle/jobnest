@@ -139,14 +139,13 @@ public class CreateUserUseCaseTest {
 
         Mockito.when(this.userRepository.existsByEmail(Mockito.any())).thenReturn(true);
 
-        final DomainException ex = Assertions.assertThrows(DomainException.class, () ->
+        final var ex = Assertions.assertThrows(DomainException.class, () ->
                 this.useCase.execute(input)
         );
 
         final String expectedErrorMessage = "This email is already being used";
         final int expectedStatusCode = 409;
 
-        Assertions.assertInstanceOf(DomainException.class, ex);
         Assertions.assertEquals(expectedErrorMessage, ex.getMessage());
         Assertions.assertEquals(expectedStatusCode, ex.getStatusCode());
 

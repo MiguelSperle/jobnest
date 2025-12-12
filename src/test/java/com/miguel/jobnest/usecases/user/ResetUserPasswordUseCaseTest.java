@@ -95,13 +95,12 @@ public class ResetUserPasswordUseCaseTest {
 
         Mockito.when(this.userCodeRepository.findByCodeAndCodeType(Mockito.any(), Mockito.any())).thenReturn(Optional.empty());
 
-        final NotFoundException ex = Assertions.assertThrows(NotFoundException.class, () ->
+        final var ex = Assertions.assertThrows(NotFoundException.class, () ->
                 this.useCase.execute(input)
         );
 
         final String expectedErrorMessage = "User code not found";
 
-        Assertions.assertInstanceOf(NotFoundException.class, ex);
         Assertions.assertEquals(expectedErrorMessage, ex.getMessage());
 
         Mockito.verify(this.userCodeRepository, Mockito.times(1)).findByCodeAndCodeType(Mockito.any(), Mockito.any());
@@ -121,14 +120,13 @@ public class ResetUserPasswordUseCaseTest {
         Mockito.when(this.userCodeRepository.findByCodeAndCodeType(Mockito.any(), Mockito.any())).thenReturn(Optional.of(userCode));
         Mockito.doNothing().when(this.userCodeRepository).deleteById(Mockito.any());
 
-        final DomainException ex = Assertions.assertThrows(DomainException.class, () ->
+        final var ex = Assertions.assertThrows(DomainException.class, () ->
                 this.useCase.execute(input)
         );
 
         final String expectedErrorMessage = "User code has expired";
         final int expectedStatusCode = 410;
 
-        Assertions.assertInstanceOf(DomainException.class, ex);
         Assertions.assertEquals(expectedErrorMessage, ex.getMessage());
         Assertions.assertEquals(expectedStatusCode, ex.getStatusCode());
 
@@ -150,13 +148,12 @@ public class ResetUserPasswordUseCaseTest {
         Mockito.when(this.userCodeRepository.findByCodeAndCodeType(Mockito.any(), Mockito.any())).thenReturn(Optional.of(userCode));
         Mockito.when(this.userRepository.findById(Mockito.any())).thenReturn(Optional.empty());
 
-        final NotFoundException ex = Assertions.assertThrows(NotFoundException.class, () ->
+        final var ex = Assertions.assertThrows(NotFoundException.class, () ->
                 this.useCase.execute(input)
         );
 
         final String expectedErrorMessage = "User not found";
 
-        Assertions.assertInstanceOf(NotFoundException.class, ex);
         Assertions.assertEquals(expectedErrorMessage, ex.getMessage());
 
         Mockito.verify(this.userCodeRepository, Mockito.times(1)).findByCodeAndCodeType(Mockito.any(), Mockito.any());

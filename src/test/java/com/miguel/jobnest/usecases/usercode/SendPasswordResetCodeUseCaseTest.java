@@ -114,13 +114,12 @@ public class SendPasswordResetCodeUseCaseTest {
 
         Mockito.when(this.userRepository.findByEmail(Mockito.any())).thenReturn(Optional.empty());
 
-        final NotFoundException ex = Assertions.assertThrows(NotFoundException.class, () ->
+        final var ex = Assertions.assertThrows(NotFoundException.class, () ->
                 this.useCase.execute(input)
         );
 
         final String expectedErrorMessage = "User not found";
 
-        Assertions.assertInstanceOf(NotFoundException.class, ex);
         Assertions.assertEquals(expectedErrorMessage, ex.getMessage());
 
         Mockito.verify(this.userRepository, Mockito.times(1)).findByEmail(Mockito.any());

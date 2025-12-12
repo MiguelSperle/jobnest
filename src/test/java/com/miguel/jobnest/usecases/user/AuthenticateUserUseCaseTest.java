@@ -99,14 +99,13 @@ public class AuthenticateUserUseCaseTest {
         Mockito.when(this.userRepository.findByEmail(Mockito.any())).thenReturn(Optional.of(user));
         Mockito.when(this.passwordEncryptionProvider.matches(Mockito.any(), Mockito.any())).thenReturn(false);
 
-        final DomainException ex = Assertions.assertThrows(DomainException.class, () ->
+        final var ex = Assertions.assertThrows(DomainException.class, () ->
                 this.useCase.execute(input)
         );
 
         final String expectedErrorMessage = "Wrong credentials";
         final int expectedStatusCode = 401;
 
-        Assertions.assertInstanceOf(DomainException.class, ex);
         Assertions.assertEquals(expectedErrorMessage, ex.getMessage());
         Assertions.assertEquals(expectedStatusCode, ex.getStatusCode());
 

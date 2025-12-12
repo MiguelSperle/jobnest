@@ -115,13 +115,12 @@ public class ResendVerificationCodeUseCaseTest {
 
         Mockito.when(this.userRepository.findByEmail(Mockito.any())).thenReturn(Optional.empty());
 
-        final NotFoundException ex = Assertions.assertThrows(NotFoundException.class, () ->
+        final var ex = Assertions.assertThrows(NotFoundException.class, () ->
                 this.useCase.execute(input)
         );
 
         final String expectedErrorMessage = "User not found";
 
-        Assertions.assertInstanceOf(NotFoundException.class, ex);
         Assertions.assertEquals(expectedErrorMessage, ex.getMessage());
 
         Mockito.verify(this.userRepository, Mockito.times(1)).findByEmail(Mockito.any());
@@ -135,14 +134,13 @@ public class ResendVerificationCodeUseCaseTest {
 
         Mockito.when(this.userRepository.findByEmail(Mockito.any())).thenReturn(Optional.of(user));
 
-        final DomainException ex = Assertions.assertThrows(DomainException.class, () ->
+        final var ex = Assertions.assertThrows(DomainException.class, () ->
                 this.useCase.execute(input)
         );
 
         final String expectedErrorMessage = "User has already been verified";
         final int expectedStatusCode = 409;
 
-        Assertions.assertInstanceOf(DomainException.class, ex);
         Assertions.assertEquals(expectedErrorMessage, ex.getMessage());
         Assertions.assertEquals(expectedStatusCode, ex.getStatusCode());
 
@@ -157,14 +155,13 @@ public class ResendVerificationCodeUseCaseTest {
 
         Mockito.when(this.userRepository.findByEmail(Mockito.any())).thenReturn(Optional.of(user));
 
-        final DomainException ex = Assertions.assertThrows(DomainException.class, () ->
+        final var ex = Assertions.assertThrows(DomainException.class, () ->
                 this.useCase.execute(input)
         );
 
         final String expectedErrorMessage = "User has already been deleted";
         final int expectedStatusCode = 409;
 
-        Assertions.assertInstanceOf(DomainException.class, ex);
         Assertions.assertEquals(expectedErrorMessage, ex.getMessage());
         Assertions.assertEquals(expectedStatusCode, ex.getStatusCode());
 

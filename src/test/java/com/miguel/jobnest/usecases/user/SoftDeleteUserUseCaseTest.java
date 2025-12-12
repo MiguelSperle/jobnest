@@ -53,13 +53,12 @@ public class SoftDeleteUserUseCaseTest {
     void shouldThrowNotFoundException_whenUserDoesNotExist() {
         Mockito.when(this.userRepository.findById(Mockito.any())).thenReturn(Optional.empty());
 
-        final NotFoundException ex = Assertions.assertThrows(NotFoundException.class, () ->
+        final var ex = Assertions.assertThrows(NotFoundException.class, () ->
                 this.useCase.execute()
         );
 
         final String expectedErrorMessage = "User not found";
 
-        Assertions.assertInstanceOf(NotFoundException.class, ex);
         Assertions.assertEquals(expectedErrorMessage, ex.getMessage());
 
         Mockito.verify(this.userRepository, Mockito.times(1)).findById(Mockito.any());
