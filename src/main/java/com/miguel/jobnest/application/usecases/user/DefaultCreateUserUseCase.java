@@ -57,7 +57,7 @@ public class DefaultCreateUserUseCase implements CreateUserUseCase {
 
         final User newUser = User.newUser(
                 input.name(),
-                input.email().toLowerCase(),
+                input.email().trim().toLowerCase(),
                 encodedPassword,
                 convertedAuthorizationRole,
                 input.city(),

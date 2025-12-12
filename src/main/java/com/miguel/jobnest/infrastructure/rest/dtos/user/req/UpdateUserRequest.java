@@ -11,7 +11,7 @@ public record UpdateUserRequest(
         String name,
 
         @NotBlank(message = "Email should not be neither null nor blank")
-        @Size(max = 255, message = "Email should not exceed 255 characters")
+        @Size(max = 155, message = "Email should not exceed 155 characters")
         @Email(message = "Email should be valid")
         String email,
 
