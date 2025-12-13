@@ -11,8 +11,8 @@ import com.miguel.jobnest.domain.entities.User;
 import com.miguel.jobnest.domain.enums.AuthorizationRole;
 import com.miguel.jobnest.domain.enums.UserStatus;
 import com.miguel.jobnest.domain.exceptions.DomainException;
-import com.miguel.jobnest.utils.JobVacancyBuilderTest;
-import com.miguel.jobnest.utils.UserBuilderTest;
+import com.miguel.jobnest.utils.JobVacancyTestBuilder;
+import com.miguel.jobnest.utils.UserTestBuilder;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -44,9 +44,9 @@ public class CreateSubscriptionUseCaseTest {
 
     @Test
     void shouldCreateSubscription() {
-        final User userCandidate = UserBuilderTest.build(UserStatus.VERIFIED, AuthorizationRole.CANDIDATE);
-        final User userRecruiter = UserBuilderTest.build(UserStatus.VERIFIED, AuthorizationRole.RECRUITER);
-        final JobVacancy jobVacancy = JobVacancyBuilderTest.build(userRecruiter.getId());
+        final User userCandidate = UserTestBuilder.aUser().userStatus(UserStatus.VERIFIED).authorizationRole(AuthorizationRole.CANDIDATE).build();
+        final User userRecruiter = UserTestBuilder.aUser().userStatus(UserStatus.VERIFIED).authorizationRole(AuthorizationRole.RECRUITER).build();
+        final JobVacancy jobVacancy = JobVacancyTestBuilder.aJobVacancy().userId(userRecruiter.getId()).build();
         final String resumeUrl = "resume-url";
 
         final CreateSubscriptionUseCaseInput input = CreateSubscriptionUseCaseInput.with(
@@ -78,9 +78,9 @@ public class CreateSubscriptionUseCaseTest {
 
     @Test
     void shouldThrowDomainException_whenSubscriptionAlreadyExists() {
-        final User userCandidate = UserBuilderTest.build(UserStatus.VERIFIED, AuthorizationRole.CANDIDATE);
-        final User userRecruiter = UserBuilderTest.build(UserStatus.VERIFIED, AuthorizationRole.RECRUITER);
-        final JobVacancy jobVacancy = JobVacancyBuilderTest.build(userRecruiter.getId());
+        final User userCandidate = UserTestBuilder.aUser().userStatus(UserStatus.VERIFIED).authorizationRole(AuthorizationRole.CANDIDATE).build();
+        final User userRecruiter = UserTestBuilder.aUser().userStatus(UserStatus.VERIFIED).authorizationRole(AuthorizationRole.RECRUITER).build();
+        final JobVacancy jobVacancy = JobVacancyTestBuilder.aJobVacancy().userId(userRecruiter.getId()).build();
 
         final CreateSubscriptionUseCaseInput input = CreateSubscriptionUseCaseInput.with(
                 new byte[0],
@@ -106,9 +106,9 @@ public class CreateSubscriptionUseCaseTest {
 
     @Test
     void shouldRollbackFileUpload_whenSavingSubscriptionFails() {
-        final User userCandidate = UserBuilderTest.build(UserStatus.VERIFIED, AuthorizationRole.CANDIDATE);
-        final User userRecruiter = UserBuilderTest.build(UserStatus.VERIFIED, AuthorizationRole.RECRUITER);
-        final JobVacancy jobVacancy = JobVacancyBuilderTest.build(userRecruiter.getId());
+        final User userCandidate = UserTestBuilder.aUser().userStatus(UserStatus.VERIFIED).authorizationRole(AuthorizationRole.CANDIDATE).build();
+        final User userRecruiter = UserTestBuilder.aUser().userStatus(UserStatus.VERIFIED).authorizationRole(AuthorizationRole.RECRUITER).build();
+        final JobVacancy jobVacancy = JobVacancyTestBuilder.aJobVacancy().userId(userRecruiter.getId()).build();
         final String resumeUrl = "resume-url";
         final String publicId = "public-id";
 

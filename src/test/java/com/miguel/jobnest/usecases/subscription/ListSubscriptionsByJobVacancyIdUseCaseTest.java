@@ -12,9 +12,9 @@ import com.miguel.jobnest.domain.enums.UserStatus;
 import com.miguel.jobnest.domain.pagination.Pagination;
 import com.miguel.jobnest.domain.pagination.PaginationMetadata;
 import com.miguel.jobnest.domain.pagination.SearchQuery;
-import com.miguel.jobnest.utils.JobVacancyBuilderTest;
-import com.miguel.jobnest.utils.SubscriptionBuilderTest;
-import com.miguel.jobnest.utils.UserBuilderTest;
+import com.miguel.jobnest.utils.JobVacancyTestBuilder;
+import com.miguel.jobnest.utils.SubscriptionTestBuilder;
+import com.miguel.jobnest.utils.UserTestBuilder;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -35,10 +35,10 @@ public class ListSubscriptionsByJobVacancyIdUseCaseTest {
 
     @Test
     void shouldListSubscriptionsByJobVacancyId() {
-        final User userCandidate = UserBuilderTest.build(UserStatus.VERIFIED, AuthorizationRole.CANDIDATE);
-        final User userRecruiter = UserBuilderTest.build(UserStatus.VERIFIED, AuthorizationRole.RECRUITER);
-        final JobVacancy jobVacancy = JobVacancyBuilderTest.build(userRecruiter.getId());
-        final Subscription subscription = SubscriptionBuilderTest.build(userCandidate.getId(), jobVacancy.getId());
+        final User userCandidate = UserTestBuilder.aUser().userStatus(UserStatus.VERIFIED).authorizationRole(AuthorizationRole.CANDIDATE).build();
+        final User userRecruiter = UserTestBuilder.aUser().userStatus(UserStatus.VERIFIED).authorizationRole(AuthorizationRole.RECRUITER).build();
+        final JobVacancy jobVacancy = JobVacancyTestBuilder.aJobVacancy().userId(userRecruiter.getId()).build();
+        final Subscription subscription = SubscriptionTestBuilder.aSubscription().userId(userCandidate.getId()).jobVacancyId(jobVacancy.getId()).build();
         final List<Subscription> subscriptions = List.of(subscription);
 
         final SearchQuery searchQuery = SearchQuery.newSearchQuery(0, 10, "createdAt", "desc");

@@ -10,7 +10,7 @@ import com.miguel.jobnest.domain.entities.User;
 import com.miguel.jobnest.domain.enums.AuthorizationRole;
 import com.miguel.jobnest.domain.enums.UserStatus;
 import com.miguel.jobnest.domain.exceptions.DomainException;
-import com.miguel.jobnest.utils.UserBuilderTest;
+import com.miguel.jobnest.utils.UserTestBuilder;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -37,7 +37,7 @@ public class AuthenticateUserUseCaseTest {
 
     @Test
     void shouldAuthenticateUser() {
-        final User user = UserBuilderTest.build(UserStatus.VERIFIED, AuthorizationRole.CANDIDATE);
+        final User user = UserTestBuilder.aUser().userStatus(UserStatus.VERIFIED).authorizationRole(AuthorizationRole.CANDIDATE).build();
         final String jwt = "json-web-token";
 
         final AuthenticateUserUseCaseInput input = AuthenticateUserUseCaseInput.with(
@@ -88,7 +88,7 @@ public class AuthenticateUserUseCaseTest {
 
     @Test
     void shouldThrowDomainException_whenPasswordIsInvalid() {
-        final User user = UserBuilderTest.build(UserStatus.VERIFIED, AuthorizationRole.CANDIDATE);
+        final User user = UserTestBuilder.aUser().userStatus(UserStatus.VERIFIED).authorizationRole(AuthorizationRole.CANDIDATE).build();
         final String password = "1234BC";
 
         final AuthenticateUserUseCaseInput input = AuthenticateUserUseCaseInput.with(
@@ -115,7 +115,7 @@ public class AuthenticateUserUseCaseTest {
 
     @Test
     void shouldThrowDomainException_whenUserIsNotVerified() {
-        final User user = UserBuilderTest.build(UserStatus.UNVERIFIED, AuthorizationRole.CANDIDATE);
+        final User user = UserTestBuilder.aUser().userStatus(UserStatus.UNVERIFIED).authorizationRole(AuthorizationRole.CANDIDATE).build();
 
         final AuthenticateUserUseCaseInput input = AuthenticateUserUseCaseInput.with(
                 user.getEmail(),
@@ -142,7 +142,7 @@ public class AuthenticateUserUseCaseTest {
 
     @Test
     void shouldThrowDomainException_whenUserIsDeleted() {
-        final User user = UserBuilderTest.build(UserStatus.DELETED, AuthorizationRole.CANDIDATE);
+        final User user = UserTestBuilder.aUser().userStatus(UserStatus.DELETED).authorizationRole(AuthorizationRole.CANDIDATE).build();
 
         final AuthenticateUserUseCaseInput input = AuthenticateUserUseCaseInput.with(
                 user.getEmail(),

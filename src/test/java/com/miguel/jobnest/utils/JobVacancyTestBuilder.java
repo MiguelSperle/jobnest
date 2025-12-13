@@ -6,11 +6,29 @@ import com.miguel.jobnest.domain.enums.SeniorityLevel;
 import com.miguel.jobnest.domain.utils.IdentifierUtils;
 import com.miguel.jobnest.domain.utils.TimeUtils;
 
-public class JobVacancyBuilderTest {
-    public static JobVacancy build(String userId) {
+import java.util.Objects;
+
+public class JobVacancyTestBuilder {
+    private String userId;
+
+    private JobVacancyTestBuilder() {
+    }
+
+    public static JobVacancyTestBuilder aJobVacancy() {
+        return new JobVacancyTestBuilder();
+    }
+
+    public JobVacancyTestBuilder userId(String userId) {
+        this.userId = userId;
+        return this;
+    }
+
+    public JobVacancy build() {
+        Objects.requireNonNull(this.userId, "UserId must not be null");
+
         return JobVacancy.with(
                 IdentifierUtils.generateUUID(),
-                userId,
+                this.userId,
                 "Java Developer",
                 "This is the job vacancy description",
                 SeniorityLevel.JUNIOR,

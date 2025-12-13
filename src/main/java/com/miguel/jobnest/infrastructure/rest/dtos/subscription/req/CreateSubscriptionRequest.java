@@ -5,8 +5,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
 public record CreateSubscriptionRequest(
-        @NotBlank(message = "Job vacancy id should not be neither null nor blank")
-        @Size(min = 36, max = 36, message = "Job vacancy id should have exactly 36 characters")
+        @NotBlank(message = "JobVacancyId should not be neither null nor blank")
+        @Size(min = 36, max = 36, message = "JobVacancyId should have exactly 36 characters")
         String jobVacancyId
 ) {
     public CreateSubscriptionUseCaseInput toInput(byte[] bytesFile) {

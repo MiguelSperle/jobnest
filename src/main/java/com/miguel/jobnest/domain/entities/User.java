@@ -8,7 +8,7 @@ import com.miguel.jobnest.domain.utils.TimeUtils;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
-public class User implements Serializable {
+public class User {
     private final String id;
     private final String name;
     private final String email;
