@@ -1,4 +1,4 @@
-package com.miguel.jobnest.usecases.user;
+package com.miguel.jobnest.application.usecases.user;
 
 import com.miguel.jobnest.application.abstractions.providers.PasswordEncryptionProvider;
 import com.miguel.jobnest.application.abstractions.repositories.UserRepository;

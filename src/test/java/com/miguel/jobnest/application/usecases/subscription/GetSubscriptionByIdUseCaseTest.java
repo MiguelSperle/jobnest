@@ -1,4 +1,4 @@
-package com.miguel.jobnest.usecases.subscription;
+package com.miguel.jobnest.application.usecases.subscription;
 
 import com.miguel.jobnest.application.abstractions.repositories.SubscriptionRepository;
 import com.miguel.jobnest.application.usecases.subscription.DefaultGetSubscriptionByIdUseCase;

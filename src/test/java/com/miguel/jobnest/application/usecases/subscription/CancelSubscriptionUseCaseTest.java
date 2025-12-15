@@ -1,10 +1,8 @@
-package com.miguel.jobnest.usecases.jobvacancy;
+package com.miguel.jobnest.application.usecases.subscription;
 
-import com.miguel.jobnest.application.abstractions.repositories.JobVacancyRepository;
 import com.miguel.jobnest.application.abstractions.repositories.SubscriptionRepository;
-import com.miguel.jobnest.application.abstractions.wrapper.TransactionExecutor;
-import com.miguel.jobnest.application.usecases.jobvacancy.DefaultSoftDeleteJobVacancyUseCase;
-import com.miguel.jobnest.application.usecases.jobvacancy.inputs.SoftDeleteJobVacancyUseCaseInput;
+import com.miguel.jobnest.application.usecases.subscription.DefaultCancelSubscriptionUseCase;
+import com.miguel.jobnest.application.usecases.subscription.inputs.CancelSubscriptionUseCaseInput;
 import com.miguel.jobnest.domain.entities.JobVacancy;
 import com.miguel.jobnest.domain.entities.Subscription;
 import com.miguel.jobnest.domain.entities.User;
@@ -23,76 +21,55 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
 import static org.mockito.AdditionalAnswers.returnsFirstArg;
 
 @ExtendWith(MockitoExtension.class)
-public class SoftDeleteJobVacancyUseCaseTest {
+public class CancelSubscriptionUseCaseTest {
     @InjectMocks
-    private DefaultSoftDeleteJobVacancyUseCase useCase;
-
-    @Mock
-    private JobVacancyRepository jobVacancyRepository;
+    private DefaultCancelSubscriptionUseCase useCase;
 
     @Mock
     private SubscriptionRepository subscriptionRepository;
 
-    @Mock
-    private TransactionExecutor transactionExecutor;
-
     @Test
-    void shouldDeleteJobVacancy() {
+    void shouldCancelSubscription() {
         final User userRecruiter = UserTestBuilder.aUser().userStatus(UserStatus.VERIFIED).authorizationRole(AuthorizationRole.RECRUITER).build();
         final User userCandidate = UserTestBuilder.aUser().userStatus(UserStatus.VERIFIED).authorizationRole(AuthorizationRole.CANDIDATE).build();
         final JobVacancy jobVacancy = JobVacancyTestBuilder.aJobVacancy().userId(userRecruiter.getId()).build();
         final Subscription subscription = SubscriptionTestBuilder.aSubscription().userId(userCandidate.getId()).jobVacancyId(jobVacancy.getId()).build();
 
-        final SoftDeleteJobVacancyUseCaseInput input = SoftDeleteJobVacancyUseCaseInput.with(
-                jobVacancy.getId()
-        );
+        final CancelSubscriptionUseCaseInput input = CancelSubscriptionUseCaseInput.with(subscription.getId());
 
-        Mockito.when(this.jobVacancyRepository.findById(Mockito.any())).thenReturn(Optional.of(jobVacancy));
-        Mockito.when(this.subscriptionRepository.findAllByJobVacancyId(Mockito.any())).thenReturn(List.of(subscription));
-        Mockito.doAnswer(invocationOnMock -> {
-            Runnable runnable = invocationOnMock.getArgument(0);
-            runnable.run();
-            return runnable;
-        }).when(this.transactionExecutor).runTransaction(Mockito.any());
-        Mockito.when(this.jobVacancyRepository.save(Mockito.any())).thenAnswer(returnsFirstArg());
+        Mockito.when(this.subscriptionRepository.findById(Mockito.any())).thenReturn(Optional.of(subscription));
         Mockito.when(this.subscriptionRepository.save(Mockito.any())).thenAnswer(returnsFirstArg());
 
         this.useCase.execute(input);
 
-        Mockito.verify(this.jobVacancyRepository, Mockito.times(1)).findById(Mockito.any());
-        Mockito.verify(this.subscriptionRepository, Mockito.times(1)).findAllByJobVacancyId(Mockito.any());
-        Mockito.verify(this.transactionExecutor, Mockito.times(1)).runTransaction(Mockito.any());
-        Mockito.verify(this.jobVacancyRepository, Mockito.times(1)).save(Mockito.argThat(jobVacancySaved ->
-                Objects.equals(jobVacancySaved.getIsDeleted(), true)
-        ));
+        Mockito.verify(this.subscriptionRepository, Mockito.times(1)).findById(Mockito.any());
         Mockito.verify(this.subscriptionRepository, Mockito.times(1)).save(Mockito.argThat(subscriptionSaved ->
                 Objects.equals(subscriptionSaved.getIsCanceled(), true)
         ));
     }
 
     @Test
-    void shouldThrowNotFoundException_whenJobVacancyDoesNotExist() {
-        final SoftDeleteJobVacancyUseCaseInput input = SoftDeleteJobVacancyUseCaseInput.with(
+    void shouldThrowNotFoundException_whenSubscriptionDoesNotExist() {
+        final CancelSubscriptionUseCaseInput input = CancelSubscriptionUseCaseInput.with(
                 IdentifierUtils.generateUUID()
         );
 
-        Mockito.when(this.jobVacancyRepository.findById(Mockito.any())).thenReturn(Optional.empty());
+        Mockito.when(this.subscriptionRepository.findById(Mockito.any())).thenReturn(Optional.empty());
 
         final var ex = Assertions.assertThrows(NotFoundException.class, () ->
                 this.useCase.execute(input)
         );
 
-        final String expectedErrorMessage = "Job vacancy not found";
+        final String expectedErrorMessage = "Subscription not found";
 
         Assertions.assertEquals(expectedErrorMessage, ex.getMessage());
 
-        Mockito.verify(this.jobVacancyRepository, Mockito.times(1)).findById(Mockito.any());
+        Mockito.verify(this.subscriptionRepository, Mockito.times(1)).findById(Mockito.any());
     }
 }

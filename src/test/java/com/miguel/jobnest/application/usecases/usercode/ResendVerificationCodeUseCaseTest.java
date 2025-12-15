@@ -1,16 +1,17 @@
-package com.miguel.jobnest.usecases.usercode;
+package com.miguel.jobnest.application.usecases.usercode;
 
 import com.miguel.jobnest.application.abstractions.producer.MessageProducer;
 import com.miguel.jobnest.application.abstractions.providers.CodeProvider;
 import com.miguel.jobnest.application.abstractions.repositories.UserCodeRepository;
 import com.miguel.jobnest.application.abstractions.repositories.UserRepository;
-import com.miguel.jobnest.application.usecases.usercode.DefaultSendPasswordResetCodeUseCase;
-import com.miguel.jobnest.application.usecases.usercode.inputs.SendPasswordResetCodeUseCaseInput;
+import com.miguel.jobnest.application.usecases.usercode.DefaultResendVerificationCodeUseCase;
+import com.miguel.jobnest.application.usecases.usercode.inputs.ResendVerificationCodeUseCaseInput;
 import com.miguel.jobnest.domain.entities.User;
 import com.miguel.jobnest.domain.entities.UserCode;
 import com.miguel.jobnest.domain.enums.AuthorizationRole;
 import com.miguel.jobnest.domain.enums.UserCodeType;
 import com.miguel.jobnest.domain.enums.UserStatus;
+import com.miguel.jobnest.domain.exceptions.DomainException;
 import com.miguel.jobnest.domain.exceptions.NotFoundException;
 import com.miguel.jobnest.domain.utils.TimeUtils;
 import com.miguel.jobnest.utils.UserTestBuilder;
@@ -29,28 +30,28 @@ import java.util.Optional;
 import static org.mockito.AdditionalAnswers.returnsFirstArg;
 
 @ExtendWith(MockitoExtension.class)
-public class SendPasswordResetCodeUseCaseTest {
+public class ResendVerificationCodeUseCaseTest {
     @InjectMocks
-    private DefaultSendPasswordResetCodeUseCase useCase;
-
-    @Mock
-    private UserRepository userRepository;
+    private DefaultResendVerificationCodeUseCase useCase;
 
     @Mock
     private UserCodeRepository userCodeRepository;
 
     @Mock
-    private CodeProvider codeProvider;
+    private UserRepository userRepository;
 
     @Mock
     private MessageProducer messageProducer;
 
+    @Mock
+    private CodeProvider codeProvider;
+
     @Test
-    void shouldSendPasswordResetCode() {
+    void shouldResendVerificationCode() {
         final User user = UserTestBuilder.aUser().userStatus(UserStatus.UNVERIFIED).authorizationRole(AuthorizationRole.CANDIDATE).build();
         final String code = "123AB24J";
 
-        final SendPasswordResetCodeUseCaseInput input = SendPasswordResetCodeUseCaseInput.with(user.getEmail());
+        final ResendVerificationCodeUseCaseInput input = ResendVerificationCodeUseCaseInput.with(user.getEmail());
 
         Mockito.when(this.userRepository.findByEmail(Mockito.any())).thenReturn(Optional.of(user));
         Mockito.when(this.userCodeRepository.findByUserIdAndCodeType(Mockito.any(), Mockito.any())).thenReturn(Optional.empty());
@@ -67,7 +68,7 @@ public class SendPasswordResetCodeUseCaseTest {
                 Objects.nonNull(userCodeSaved.getId()) &&
                         Objects.equals(userCodeSaved.getUserId(), user.getId()) &&
                         Objects.equals(userCodeSaved.getCode(), code) &&
-                        Objects.equals(userCodeSaved.getUserCodeType(), UserCodeType.PASSWORD_RESET) &&
+                        Objects.equals(userCodeSaved.getUserCodeType(), UserCodeType.USER_VERIFICATION) &&
                         userCodeSaved.getExpiresIn().isAfter(TimeUtils.now()) &&
                         Objects.nonNull(userCodeSaved.getCreatedAt())
         ));
@@ -75,12 +76,12 @@ public class SendPasswordResetCodeUseCaseTest {
     }
 
     @Test
-    void shouldReplacePasswordResetCodeAndSend_whenUserAlreadyHasOne() {
+    void shouldReplaceVerificationCodeAndSend_whenUserAlreadyHasOne() {
         final User user = UserTestBuilder.aUser().userStatus(UserStatus.UNVERIFIED).authorizationRole(AuthorizationRole.CANDIDATE).build();
-        final UserCode userCode = UserCodeTestBuilder.aUserCode().userId(user.getId()).userCodeType(UserCodeType.PASSWORD_RESET).expiresIn(TimeUtils.now().plusMinutes(15)).build();
+        final UserCode userCode = UserCodeTestBuilder.aUserCode().userId(user.getId()).userCodeType(UserCodeType.USER_VERIFICATION).expiresIn(TimeUtils.now().plusMinutes(15)).build();
         final String code = "123AB24J";
 
-        final SendPasswordResetCodeUseCaseInput input = SendPasswordResetCodeUseCaseInput.with(user.getEmail());
+        final ResendVerificationCodeUseCaseInput input = ResendVerificationCodeUseCaseInput.with(user.getEmail());
 
         Mockito.when(this.userRepository.findByEmail(Mockito.any())).thenReturn(Optional.of(user));
         Mockito.when(this.userCodeRepository.findByUserIdAndCodeType(Mockito.any(), Mockito.any())).thenReturn(Optional.of(userCode));
@@ -99,7 +100,7 @@ public class SendPasswordResetCodeUseCaseTest {
                 Objects.nonNull(userCodeSaved.getId()) &&
                         Objects.equals(userCodeSaved.getUserId(), user.getId()) &&
                         Objects.equals(userCodeSaved.getCode(), code) &&
-                        Objects.equals(userCodeSaved.getUserCodeType(), UserCodeType.PASSWORD_RESET) &&
+                        Objects.equals(userCodeSaved.getUserCodeType(), UserCodeType.USER_VERIFICATION) &&
                         userCodeSaved.getExpiresIn().isAfter(TimeUtils.now()) &&
                         Objects.nonNull(userCodeSaved.getCreatedAt())
         ));
@@ -110,7 +111,7 @@ public class SendPasswordResetCodeUseCaseTest {
     void shouldThrowNotFoundException_whenUserDoesNotExist() {
         final String email = "jonestucky@gmail.com";
 
-        final SendPasswordResetCodeUseCaseInput input = SendPasswordResetCodeUseCaseInput.with(email);
+        final ResendVerificationCodeUseCaseInput input = ResendVerificationCodeUseCaseInput.with(email);
 
         Mockito.when(this.userRepository.findByEmail(Mockito.any())).thenReturn(Optional.empty());
 
@@ -121,6 +122,48 @@ public class SendPasswordResetCodeUseCaseTest {
         final String expectedErrorMessage = "User not found";
 
         Assertions.assertEquals(expectedErrorMessage, ex.getMessage());
+
+        Mockito.verify(this.userRepository, Mockito.times(1)).findByEmail(Mockito.any());
+    }
+
+    @Test
+    void shouldThrowDomainException_whenUserIsAlreadyVerified() {
+        final User user = UserTestBuilder.aUser().userStatus(UserStatus.VERIFIED).authorizationRole(AuthorizationRole.CANDIDATE).build();
+
+        final ResendVerificationCodeUseCaseInput input = ResendVerificationCodeUseCaseInput.with(user.getEmail());
+
+        Mockito.when(this.userRepository.findByEmail(Mockito.any())).thenReturn(Optional.of(user));
+
+        final var ex = Assertions.assertThrows(DomainException.class, () ->
+                this.useCase.execute(input)
+        );
+
+        final String expectedErrorMessage = "User has already been verified";
+        final int expectedStatusCode = 409;
+
+        Assertions.assertEquals(expectedErrorMessage, ex.getMessage());
+        Assertions.assertEquals(expectedStatusCode, ex.getStatusCode());
+
+        Mockito.verify(this.userRepository, Mockito.times(1)).findByEmail(Mockito.any());
+    }
+
+    @Test
+    void shouldThrowDomainException_whenUserIsDeleted() {
+        final User user = UserTestBuilder.aUser().userStatus(UserStatus.DELETED).authorizationRole(AuthorizationRole.CANDIDATE).build();
+
+        final ResendVerificationCodeUseCaseInput input = ResendVerificationCodeUseCaseInput.with(user.getEmail());
+
+        Mockito.when(this.userRepository.findByEmail(Mockito.any())).thenReturn(Optional.of(user));
+
+        final var ex = Assertions.assertThrows(DomainException.class, () ->
+                this.useCase.execute(input)
+        );
+
+        final String expectedErrorMessage = "User has already been deleted";
+        final int expectedStatusCode = 409;
+
+        Assertions.assertEquals(expectedErrorMessage, ex.getMessage());
+        Assertions.assertEquals(expectedStatusCode, ex.getStatusCode());
 
         Mockito.verify(this.userRepository, Mockito.times(1)).findByEmail(Mockito.any());
     }

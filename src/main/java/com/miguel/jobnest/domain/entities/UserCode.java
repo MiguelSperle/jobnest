@@ -91,7 +91,7 @@ public class UserCode {
     public String toString() {
         return "UserCode{" +
                 "id='" + this.id + '\'' +
-                ", userId=" + this.userId +
+                ", userId='" + this.userId + '\'' +
                 ", code='" + this.code + '\'' +
                 ", userCodeType=" + this.userCodeType +
                 ", expiresIn=" + this.expiresIn +

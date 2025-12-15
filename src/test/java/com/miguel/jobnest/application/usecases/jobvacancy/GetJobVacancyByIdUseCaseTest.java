@@ -1,4 +1,4 @@
-package com.miguel.jobnest.usecases.jobvacancy;
+package com.miguel.jobnest.application.usecases.jobvacancy;
 
 import com.miguel.jobnest.application.abstractions.repositories.JobVacancyRepository;
 import com.miguel.jobnest.application.usecases.jobvacancy.DefaultGetJobVacancyByIdUseCase;
