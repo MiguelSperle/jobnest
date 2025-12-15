@@ -5,7 +5,6 @@ import com.miguel.jobnest.domain.enums.UserStatus;
 import com.miguel.jobnest.domain.utils.IdentifierUtils;
 import com.miguel.jobnest.domain.utils.TimeUtils;
 
-import java.io.Serializable;
 import java.time.LocalDateTime;
 
 public class User {

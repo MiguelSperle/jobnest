@@ -14,18 +14,19 @@ public class UserCodeTest {
     void shouldReturnUserCode_whenCallNewUserCode() {
         final String userId = IdentifierUtils.generateUUID();
         final String code = "1A2C3V4A";
+        final UserCodeType userCodeType = UserCodeType.USER_VERIFICATION;
 
         final UserCode newUserCode = UserCode.newUserCode(
                 userId,
                 code,
-                UserCodeType.USER_VERIFICATION
+                userCodeType
         );
 
         Assertions.assertNotNull(newUserCode);
         Assertions.assertNotNull(newUserCode.getId());
         Assertions.assertEquals(userId, newUserCode.getUserId());
         Assertions.assertEquals(code, newUserCode.getCode());
-        Assertions.assertEquals(UserCodeType.USER_VERIFICATION, newUserCode.getUserCodeType());
+        Assertions.assertEquals(userCodeType, newUserCode.getUserCodeType());
         Assertions.assertNotNull(newUserCode.getExpiresIn());
         Assertions.assertNotNull(newUserCode.getCreatedAt());
     }
@@ -35,6 +36,7 @@ public class UserCodeTest {
         final String id = IdentifierUtils.generateUUID();
         final String userId = IdentifierUtils.generateUUID();
         final String code = "1A2C3V4A";
+        final UserCodeType userCodeType = UserCodeType.USER_VERIFICATION;
         final LocalDateTime expiresIn = TimeUtils.now().plusMinutes(15);
         final LocalDateTime createdAt = TimeUtils.now();
 
@@ -42,7 +44,7 @@ public class UserCodeTest {
                 id,
                 userId,
                 code,
-                UserCodeType.USER_VERIFICATION,
+                userCodeType,
                 expiresIn,
                 createdAt
         );
@@ -51,7 +53,7 @@ public class UserCodeTest {
         Assertions.assertEquals(id, userCode.getId());
         Assertions.assertEquals(userId, userCode.getUserId());
         Assertions.assertEquals(code, userCode.getCode());
-        Assertions.assertEquals(UserCodeType.USER_VERIFICATION, userCode.getUserCodeType());
+        Assertions.assertEquals(userCodeType, userCode.getUserCodeType());
         Assertions.assertEquals(expiresIn, userCode.getExpiresIn());
         Assertions.assertEquals(createdAt, userCode.getCreatedAt());
     }
@@ -61,6 +63,7 @@ public class UserCodeTest {
         final String id = IdentifierUtils.generateUUID();
         final String userId = IdentifierUtils.generateUUID();
         final String code = "1A2C3V4A";
+        final UserCodeType userCodeType = UserCodeType.USER_VERIFICATION;
         final LocalDateTime expiresIn = TimeUtils.now().plusMinutes(15);
         final LocalDateTime createdAt = TimeUtils.now();
 
@@ -68,7 +71,7 @@ public class UserCodeTest {
                 id,
                 userId,
                 code,
-                UserCodeType.USER_VERIFICATION,
+                userCodeType,
                 expiresIn,
                 createdAt
         );
@@ -77,7 +80,7 @@ public class UserCodeTest {
                 "id='" + id + '\'' +
                 ", userId='" + userId + '\'' +
                 ", code='" + code + '\'' +
-                ", userCodeType=" + UserCodeType.USER_VERIFICATION +
+                ", userCodeType=" + userCodeType +
                 ", expiresIn=" + expiresIn +
                 ", createdAt=" + createdAt +
                 '}';
