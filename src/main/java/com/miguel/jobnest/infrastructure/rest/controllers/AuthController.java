@@ -5,7 +5,7 @@ import com.miguel.jobnest.application.abstractions.usecases.user.CreateUserUseCa
 import com.miguel.jobnest.application.usecases.user.outputs.AuthenticateUserUseCaseOutput;
 import com.miguel.jobnest.infrastructure.rest.dtos.user.req.AuthenticateUserRequest;
 import com.miguel.jobnest.infrastructure.rest.dtos.user.req.CreateUserRequest;
-import com.miguel.jobnest.infrastructure.rest.dtos.common.res.MessageResponse;
+import com.miguel.jobnest.infrastructure.rest.dtos.MessageResponse;
 import com.miguel.jobnest.infrastructure.rest.dtos.user.res.AuthenticateUserResponse;
 import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import jakarta.validation.Valid;

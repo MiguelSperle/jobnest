@@ -3,7 +3,7 @@ package com.miguel.jobnest.infrastructure.rest.controllers;
 import com.miguel.jobnest.application.abstractions.usecases.user.*;
 import com.miguel.jobnest.application.usecases.user.inputs.UpdateUserToVerifiedUseCaseInput;
 import com.miguel.jobnest.application.usecases.user.outputs.GetAuthenticatedUserUseCaseOutput;
-import com.miguel.jobnest.infrastructure.rest.dtos.common.res.MessageResponse;
+import com.miguel.jobnest.infrastructure.rest.dtos.MessageResponse;
 import com.miguel.jobnest.infrastructure.rest.dtos.user.req.ResetUserPasswordRequest;
 import com.miguel.jobnest.infrastructure.rest.dtos.user.req.UpdateUserRequest;
 import com.miguel.jobnest.infrastructure.rest.dtos.user.req.UpdateUserPasswordRequest;
