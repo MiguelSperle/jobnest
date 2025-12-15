@@ -63,8 +63,9 @@ public class ListSubscriptionsByJobVacancyIdUseCaseTest {
         Assertions.assertNotNull(output);
         Assertions.assertNotNull(output.paginatedSubscriptions());
         Assertions.assertEquals(paginatedSubscriptions, output.paginatedSubscriptions());
+        Assertions.assertEquals(paginatedSubscriptions.paginationMetadata(), output.paginatedSubscriptions().paginationMetadata());
+        Assertions.assertEquals(paginatedSubscriptions.items(), output.paginatedSubscriptions().items());
         Assertions.assertEquals(1, output.paginatedSubscriptions().items().size());
-        Assertions.assertEquals(paginationMetadata, output.paginatedSubscriptions().paginationMetadata());
 
         Mockito.verify(this.subscriptionRepository, Mockito.times(1)).findAllPaginatedByJobVacancyId(Mockito.any(), Mockito.any());
     }
