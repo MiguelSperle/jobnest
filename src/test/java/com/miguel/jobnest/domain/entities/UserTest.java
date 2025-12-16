@@ -119,6 +119,7 @@ public class UserTest {
 
         final User updatedUser = user.withName(newName);
 
+        Assertions.assertNotNull(updatedUser);
         Assertions.assertEquals(newName, updatedUser.getName());
     }
 
@@ -154,6 +155,7 @@ public class UserTest {
 
         final User updatedUser = user.withEmail(newEmail);
 
+        Assertions.assertNotNull(updatedUser);
         Assertions.assertEquals(newEmail, updatedUser.getEmail());
     }
 
@@ -189,6 +191,7 @@ public class UserTest {
 
         final User updatedUser = user.withDescription(newDescription);
 
+        Assertions.assertNotNull(updatedUser);
         Assertions.assertEquals(newDescription, updatedUser.getDescription());
     }
 
@@ -224,6 +227,7 @@ public class UserTest {
 
         final User updatedUser = user.withCity(newCity);
 
+        Assertions.assertNotNull(updatedUser);
         Assertions.assertEquals(newCity, updatedUser.getCity());
     }
 
@@ -259,6 +263,7 @@ public class UserTest {
 
         final User updatedUser = user.withState(newState);
 
+        Assertions.assertNotNull(updatedUser);
         Assertions.assertEquals(newState, updatedUser.getState());
     }
 
@@ -294,6 +299,7 @@ public class UserTest {
 
         final User updatedUser = user.withCountry(newCountry);
 
+        Assertions.assertNotNull(updatedUser);
         Assertions.assertEquals(newCountry, updatedUser.getCountry());
     }
 
@@ -329,6 +335,7 @@ public class UserTest {
 
         final User updatedUser = user.withUserStatus(newUserStatus);
 
+        Assertions.assertNotNull(updatedUser);
         Assertions.assertEquals(newUserStatus, updatedUser.getUserStatus());
     }
 
@@ -364,6 +371,7 @@ public class UserTest {
 
         final User updatedUser = user.withPassword(newPassword);
 
+        Assertions.assertNotNull(updatedUser);
         Assertions.assertEquals(newPassword, updatedUser.getPassword());
     }
 
@@ -409,6 +417,7 @@ public class UserTest {
                 ", createdAt=" + createdAt +
                 '}';
 
+        Assertions.assertNotNull(user);
         Assertions.assertEquals(expectedToString, user.toString());
     }
 }

@@ -77,6 +77,7 @@ public class SubscriptionTest {
 
         final Subscription updatedSubscription = subscription.withIsCanceled(true);
 
+        Assertions.assertNotNull(updatedSubscription);
         Assertions.assertEquals(true, updatedSubscription.getIsCanceled());
     }
 
@@ -107,6 +108,7 @@ public class SubscriptionTest {
                 ", createdAt=" + createdAt +
                 '}';
 
+        Assertions.assertNotNull(subscription);
         Assertions.assertEquals(expectedToString, subscription.toString());
     }
 }

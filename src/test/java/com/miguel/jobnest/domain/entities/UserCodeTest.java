@@ -85,6 +85,7 @@ public class UserCodeTest {
                 ", createdAt=" + createdAt +
                 '}';
 
+        Assertions.assertNotNull(userCode);
         Assertions.assertEquals(expectedToString, userCode.toString());
     }
 }
