@@ -1,0 +1,22 @@
+package com.miguel.jobnest.domain.events;
+
+import com.miguel.jobnest.domain.enums.UserCodeType;
+import com.miguel.jobnest.domain.utils.IdentifierUtils;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+public class UserCodeCreatedEventTest {
+    @Test
+    void shouldReturnUserCodeCreatedEvent_whenCallFrom() {
+        final String code = "1NC2R2T4";
+        final UserCodeType userCodeType = UserCodeType.USER_VERIFICATION;
+        final String userId = IdentifierUtils.generateUUID();
+
+        final UserCodeCreatedEvent event = UserCodeCreatedEvent.from(code, userCodeType, userId);
+
+        Assertions.assertNotNull(event);
+        Assertions.assertEquals(code, event.code());
+        Assertions.assertEquals(userCodeType, event.userCodeType());
+        Assertions.assertEquals(userId, event.userId());
+    }
+}
