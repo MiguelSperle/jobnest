@@ -1,7 +1,6 @@
 package com.miguel.jobnest.application.usecases.subscription;
 
 import com.miguel.jobnest.application.abstractions.repositories.SubscriptionRepository;
-import com.miguel.jobnest.application.usecases.subscription.DefaultGetSubscriptionByIdUseCase;
 import com.miguel.jobnest.application.usecases.subscription.inputs.GetSubscriptionByIdUseCaseInput;
 import com.miguel.jobnest.application.usecases.subscription.outputs.GetSubscriptionByIdUseCaseOutput;
 import com.miguel.jobnest.domain.entities.JobVacancy;

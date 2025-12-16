@@ -6,7 +6,6 @@ import com.miguel.jobnest.application.abstractions.providers.PasswordEncryptionP
 import com.miguel.jobnest.application.abstractions.repositories.UserCodeRepository;
 import com.miguel.jobnest.application.abstractions.repositories.UserRepository;
 import com.miguel.jobnest.application.abstractions.wrapper.TransactionExecutor;
-import com.miguel.jobnest.application.usecases.user.DefaultCreateUserUseCase;
 import com.miguel.jobnest.application.usecases.user.inputs.CreateUserUseCaseInput;
 import com.miguel.jobnest.domain.enums.AuthorizationRole;
 import com.miguel.jobnest.domain.enums.UserCodeType;

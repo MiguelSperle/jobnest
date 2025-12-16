@@ -1,7 +1,6 @@
 package com.miguel.jobnest.application.usecases.jobvacancy;
 
 import com.miguel.jobnest.application.abstractions.repositories.JobVacancyRepository;
-import com.miguel.jobnest.application.usecases.jobvacancy.DefaultGetJobVacancyByIdUseCase;
 import com.miguel.jobnest.application.usecases.jobvacancy.inputs.GetJobVacancyByIdUseCaseInput;
 import com.miguel.jobnest.application.usecases.jobvacancy.outputs.GetJobVacancyByIdUseCaseOutput;
 import com.miguel.jobnest.domain.entities.JobVacancy;

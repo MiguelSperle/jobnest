@@ -44,8 +44,12 @@ public class ListSubscriptionsByUserIdUseCaseTest {
         final JobVacancy jobVacancy = JobVacancyTestBuilder.aJobVacancy().userId(userRecruiter.getId()).build();
         final Subscription subscription = SubscriptionTestBuilder.aSubscription().userId(userCandidate.getId()).jobVacancyId(jobVacancy.getId()).build();
         final List<Subscription> subscriptions = List.of(subscription);
+        final int page = 0;
+        final int perPage = 10;
+        final String sort = "createdAt";
+        final String direction = "desc";
 
-        final SearchQuery searchQuery = SearchQuery.newSearchQuery(0, 10, "createdAt", "desc");
+        final SearchQuery searchQuery = SearchQuery.newSearchQuery(page, perPage, sort, direction);
 
         final PaginationMetadata paginationMetadata = new PaginationMetadata(
                 searchQuery.page(), searchQuery.perPage(), 1, subscriptions.size()
@@ -69,7 +73,6 @@ public class ListSubscriptionsByUserIdUseCaseTest {
         Assertions.assertEquals(paginatedSubscriptions, output.paginatedSubscriptions());
         Assertions.assertEquals(paginatedSubscriptions.paginationMetadata(), output.paginatedSubscriptions().paginationMetadata());
         Assertions.assertEquals(paginatedSubscriptions.items(), output.paginatedSubscriptions().items());
-        Assertions.assertEquals(1, output.paginatedSubscriptions().items().size());
 
         Mockito.verify(this.securityService, Mockito.times(1)).getPrincipal();
         Mockito.verify(this.subscriptionRepository, Mockito.times(1)).findAllPaginatedByUserId(Mockito.any(), Mockito.any());

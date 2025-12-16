@@ -40,8 +40,12 @@ public class ListJobVacanciesByUserIdUseCaseTest {
         final User user = UserTestBuilder.aUser().userStatus(UserStatus.VERIFIED).authorizationRole(AuthorizationRole.RECRUITER).build();
         final JobVacancy jobVacancy = JobVacancyTestBuilder.aJobVacancy().userId(user.getId()).build();
         final List<JobVacancy> jobVacancies = List.of(jobVacancy);
+        final int page = 0;
+        final int perPage = 10;
+        final String sort = "createdAt";
+        final String direction = "desc";
 
-        final SearchQuery searchQuery = SearchQuery.newSearchQuery(0, 10, "createdAt", "desc");
+        final SearchQuery searchQuery = SearchQuery.newSearchQuery(page, perPage, sort, direction);
 
         final PaginationMetadata paginationMetadata = new PaginationMetadata(
                 searchQuery.page(), searchQuery.perPage(), 1, jobVacancies.size()
@@ -65,7 +69,6 @@ public class ListJobVacanciesByUserIdUseCaseTest {
         Assertions.assertEquals(paginatedJobVacancies, output.paginatedJobVacancies());
         Assertions.assertEquals(paginatedJobVacancies.paginationMetadata(), output.paginatedJobVacancies().paginationMetadata());
         Assertions.assertEquals(paginatedJobVacancies.items(), output.paginatedJobVacancies().items());
-        Assertions.assertEquals(1, output.paginatedJobVacancies().items().size());
 
         Mockito.verify(this.securityService, Mockito.times(1)).getPrincipal();
         Mockito.verify(this.jobVacancyRepository, Mockito.times(1)).findAllPaginatedByUserId(Mockito.any(), Mockito.any());

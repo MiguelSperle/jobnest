@@ -1,7 +1,6 @@
 package com.miguel.jobnest.application.usecases.subscription;
 
 import com.miguel.jobnest.application.abstractions.repositories.SubscriptionRepository;
-import com.miguel.jobnest.application.usecases.subscription.DefaultListSubscriptionsByJobVacancyIdUseCase;
 import com.miguel.jobnest.application.usecases.subscription.inputs.ListSubscriptionsByJobVacancyIdUseCaseInput;
 import com.miguel.jobnest.application.usecases.subscription.outputs.ListSubscriptionsByJobVacancyIdUseCaseOutput;
 import com.miguel.jobnest.domain.entities.JobVacancy;
@@ -40,8 +39,12 @@ public class ListSubscriptionsByJobVacancyIdUseCaseTest {
         final JobVacancy jobVacancy = JobVacancyTestBuilder.aJobVacancy().userId(userRecruiter.getId()).build();
         final Subscription subscription = SubscriptionTestBuilder.aSubscription().userId(userCandidate.getId()).jobVacancyId(jobVacancy.getId()).build();
         final List<Subscription> subscriptions = List.of(subscription);
+        final int page = 0;
+        final int perPage = 10;
+        final String sort = "createdAt";
+        final String direction = "desc";
 
-        final SearchQuery searchQuery = SearchQuery.newSearchQuery(0, 10, "createdAt", "desc");
+        final SearchQuery searchQuery = SearchQuery.newSearchQuery(page, perPage, sort, direction);
 
         final PaginationMetadata paginationMetadata = new PaginationMetadata(
                 searchQuery.page(), searchQuery.perPage(), 1, subscriptions.size()
@@ -65,7 +68,6 @@ public class ListSubscriptionsByJobVacancyIdUseCaseTest {
         Assertions.assertEquals(paginatedSubscriptions, output.paginatedSubscriptions());
         Assertions.assertEquals(paginatedSubscriptions.paginationMetadata(), output.paginatedSubscriptions().paginationMetadata());
         Assertions.assertEquals(paginatedSubscriptions.items(), output.paginatedSubscriptions().items());
-        Assertions.assertEquals(1, output.paginatedSubscriptions().items().size());
 
         Mockito.verify(this.subscriptionRepository, Mockito.times(1)).findAllPaginatedByJobVacancyId(Mockito.any(), Mockito.any());
     }

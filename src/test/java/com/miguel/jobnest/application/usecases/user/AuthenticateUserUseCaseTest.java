@@ -3,7 +3,6 @@ package com.miguel.jobnest.application.usecases.user;
 import com.miguel.jobnest.application.abstractions.providers.PasswordEncryptionProvider;
 import com.miguel.jobnest.application.abstractions.repositories.UserRepository;
 import com.miguel.jobnest.application.abstractions.services.JwtService;
-import com.miguel.jobnest.application.usecases.user.DefaultAuthenticateUserUseCase;
 import com.miguel.jobnest.application.usecases.user.inputs.AuthenticateUserUseCaseInput;
 import com.miguel.jobnest.application.usecases.user.outputs.AuthenticateUserUseCaseOutput;
 import com.miguel.jobnest.domain.entities.User;

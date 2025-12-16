@@ -1,7 +1,6 @@
 package com.miguel.jobnest.application.usecases.subscription;
 
 import com.miguel.jobnest.application.abstractions.repositories.SubscriptionRepository;
-import com.miguel.jobnest.application.usecases.subscription.DefaultCancelSubscriptionUseCase;
 import com.miguel.jobnest.application.usecases.subscription.inputs.CancelSubscriptionUseCaseInput;
 import com.miguel.jobnest.domain.entities.JobVacancy;
 import com.miguel.jobnest.domain.entities.Subscription;
