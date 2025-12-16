@@ -43,11 +43,12 @@ public class ListSubscriptionsByJobVacancyIdUseCaseTest {
         final int perPage = 10;
         final String sort = "createdAt";
         final String direction = "desc";
+        final int totalPages = 1;
 
         final SearchQuery searchQuery = SearchQuery.newSearchQuery(page, perPage, sort, direction);
 
         final PaginationMetadata paginationMetadata = new PaginationMetadata(
-                searchQuery.page(), searchQuery.perPage(), 1, subscriptions.size()
+                searchQuery.page(), searchQuery.perPage(), totalPages, subscriptions.size()
         );
 
         final ListSubscriptionsByJobVacancyIdUseCaseInput input = ListSubscriptionsByJobVacancyIdUseCaseInput.with(

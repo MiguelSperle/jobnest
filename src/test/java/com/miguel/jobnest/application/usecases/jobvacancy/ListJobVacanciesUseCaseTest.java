@@ -39,11 +39,12 @@ public class ListJobVacanciesUseCaseTest {
         final int perPage = 10;
         final String sort = "createdAt";
         final String direction = "desc";
+        final int totalPages = 1;
 
         final SearchQuery searchQuery = SearchQuery.newSearchQuery(page, perPage, sort, direction);
 
         final PaginationMetadata paginationMetadata = new PaginationMetadata(
-                searchQuery.page(), searchQuery.perPage(), 1, jobVacancies.size()
+                searchQuery.page(), searchQuery.perPage(), totalPages, jobVacancies.size()
         );
 
         final ListJobVacanciesUseCaseInput input = ListJobVacanciesUseCaseInput.with(
