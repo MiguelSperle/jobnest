@@ -9,6 +9,7 @@ public class IdentifierUtilsTest {
         final String id = IdentifierUtils.generateNewId();
 
         Assertions.assertNotNull(id);
+        Assertions.assertFalse(id.isEmpty());
         Assertions.assertTrue(id.matches("[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}"));
     }
 }
