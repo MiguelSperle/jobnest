@@ -56,7 +56,7 @@ public class User {
             String country
     ) {
         return new User(
-                IdentifierUtils.generateUUID(),
+                IdentifierUtils.generateNewId(),
                 name,
                 email,
                 null,

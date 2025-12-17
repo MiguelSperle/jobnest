@@ -35,7 +35,7 @@ public class Subscription {
             String resumeUrl
     ) {
         return new Subscription(
-                IdentifierUtils.generateUUID(),
+                IdentifierUtils.generateNewId(),
                 userId,
                 jobVacancyId,
                 resumeUrl,

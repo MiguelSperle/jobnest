@@ -72,7 +72,7 @@ public class UpdateJobVacancyUseCaseTest {
         final String companyName = "Company Name";
 
         final UpdateJobVacancyUseCaseInput input = UpdateJobVacancyUseCaseInput.with(
-                IdentifierUtils.generateUUID(),
+                IdentifierUtils.generateNewId(),
                 title,
                 description,
                 SeniorityLevel.JUNIOR.name(),

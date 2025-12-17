@@ -10,7 +10,7 @@ public class UserCodeCreatedEventTest {
     void shouldReturnUserCodeCreatedEvent_whenCallFrom() {
         final String code = "1NC2R2T4";
         final UserCodeType userCodeType = UserCodeType.USER_VERIFICATION;
-        final String userId = IdentifierUtils.generateUUID();
+        final String userId = IdentifierUtils.generateNewId();
 
         final UserCodeCreatedEvent event = UserCodeCreatedEvent.from(code, userCodeType, userId);
 

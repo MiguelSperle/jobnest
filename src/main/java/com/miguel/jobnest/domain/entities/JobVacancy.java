@@ -49,7 +49,7 @@ public class JobVacancy {
             String companyName
     ) {
         return new JobVacancy(
-                IdentifierUtils.generateUUID(),
+                IdentifierUtils.generateNewId(),
                 userId,
                 title,
                 description,

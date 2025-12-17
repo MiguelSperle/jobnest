@@ -12,7 +12,7 @@ public class UserCodeTest {
 
     @Test
     void shouldReturnUserCode_whenCallNewUserCode() {
-        final String userId = IdentifierUtils.generateUUID();
+        final String userId = IdentifierUtils.generateNewId();
         final String code = "1A2C3V4A";
         final UserCodeType userCodeType = UserCodeType.USER_VERIFICATION;
 
@@ -33,8 +33,8 @@ public class UserCodeTest {
 
     @Test
     void shouldReturnUserCode_whenCallWith() {
-        final String id = IdentifierUtils.generateUUID();
-        final String userId = IdentifierUtils.generateUUID();
+        final String id = IdentifierUtils.generateNewId();
+        final String userId = IdentifierUtils.generateNewId();
         final String code = "1A2C3V4A";
         final UserCodeType userCodeType = UserCodeType.USER_VERIFICATION;
         final LocalDateTime expiresIn = TimeUtils.now().plusMinutes(15);
@@ -60,8 +60,8 @@ public class UserCodeTest {
 
     @Test
     void shouldReturnFormattedUserCode_whenCallToString() {
-        final String id = IdentifierUtils.generateUUID();
-        final String userId = IdentifierUtils.generateUUID();
+        final String id = IdentifierUtils.generateNewId();
+        final String userId = IdentifierUtils.generateNewId();
         final String code = "1A2C3V4A";
         final UserCodeType userCodeType = UserCodeType.USER_VERIFICATION;
         final LocalDateTime expiresIn = TimeUtils.now().plusMinutes(15);

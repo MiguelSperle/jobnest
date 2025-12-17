@@ -34,7 +34,7 @@ public class UserTestBuilder {
         Objects.requireNonNull(this.authorizationRole, "AuthorizationRole must not be null");
 
         return User.with(
-                IdentifierUtils.generateUUID(),
+                IdentifierUtils.generateNewId(),
                 "john",
                 "johndoe1947@gmail.com",
                 "This is my description about me",

@@ -11,8 +11,8 @@ public class SubscriptionTest {
 
     @Test
     void shouldReturnSubscription_whenCallNewSubscription() {
-        final String userId = IdentifierUtils.generateUUID();
-        final String jobVacancyId = IdentifierUtils.generateUUID();
+        final String userId = IdentifierUtils.generateNewId();
+        final String jobVacancyId = IdentifierUtils.generateNewId();
         final String resumeUrl = "resume-url";
 
         final Subscription newSubscription = Subscription.newSubscription(
@@ -32,9 +32,9 @@ public class SubscriptionTest {
 
     @Test
     void shouldReturnSubscription_whenCallWith() {
-        final String id = IdentifierUtils.generateUUID();
-        final String userId = IdentifierUtils.generateUUID();
-        final String jobVacancyId = IdentifierUtils.generateUUID();
+        final String id = IdentifierUtils.generateNewId();
+        final String userId = IdentifierUtils.generateNewId();
+        final String jobVacancyId = IdentifierUtils.generateNewId();
         final String resumeUrl = "resume-url";
         final boolean isCanceled = false;
         final LocalDateTime createdAt = TimeUtils.now();
@@ -59,9 +59,9 @@ public class SubscriptionTest {
 
     @Test
     void shouldReturnUpdatedSubscription_whenCallWithIsCanceled() {
-        final String id = IdentifierUtils.generateUUID();
-        final String userId = IdentifierUtils.generateUUID();
-        final String jobVacancyId = IdentifierUtils.generateUUID();
+        final String id = IdentifierUtils.generateNewId();
+        final String userId = IdentifierUtils.generateNewId();
+        final String jobVacancyId = IdentifierUtils.generateNewId();
         final String resumeUrl = "resume-url";
         final boolean isCanceled = false;
         final LocalDateTime createdAt = TimeUtils.now();
@@ -83,9 +83,9 @@ public class SubscriptionTest {
 
     @Test
     void shouldReturnFormattedSubscription_whenCallToString() {
-        final String id = IdentifierUtils.generateUUID();
-        final String userId = IdentifierUtils.generateUUID();
-        final String jobVacancyId = IdentifierUtils.generateUUID();
+        final String id = IdentifierUtils.generateNewId();
+        final String userId = IdentifierUtils.generateNewId();
+        final String jobVacancyId = IdentifierUtils.generateNewId();
         final String resumeUrl = "resume-url";
         final boolean isCanceled = false;
         final LocalDateTime createdAt = TimeUtils.now();

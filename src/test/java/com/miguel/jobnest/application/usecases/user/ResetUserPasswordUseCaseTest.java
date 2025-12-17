@@ -135,7 +135,7 @@ public class ResetUserPasswordUseCaseTest {
 
     @Test
     void shouldThrowNotFoundException_whenUserDoesNotExist() {
-        final UserCode userCode = UserCodeTestBuilder.aUserCode().userId(IdentifierUtils.generateUUID()).userCodeType(UserCodeType.PASSWORD_RESET).expiresIn(TimeUtils.now().plusMinutes(15)).build();
+        final UserCode userCode = UserCodeTestBuilder.aUserCode().userId(IdentifierUtils.generateNewId()).userCodeType(UserCodeType.PASSWORD_RESET).expiresIn(TimeUtils.now().plusMinutes(15)).build();
         final String code = "1234BC";
         final String password = "123456A";
 

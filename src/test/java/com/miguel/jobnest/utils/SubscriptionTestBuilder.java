@@ -32,7 +32,7 @@ public class SubscriptionTestBuilder {
         Objects.requireNonNull(this.jobVacancyId, "JobVacancyId must not be null");
 
         return Subscription.with(
-                IdentifierUtils.generateUUID(),
+                IdentifierUtils.generateNewId(),
                 this.userId,
                 this.jobVacancyId,
                 "resume-url",

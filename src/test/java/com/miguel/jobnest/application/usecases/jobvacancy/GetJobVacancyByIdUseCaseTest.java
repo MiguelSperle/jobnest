@@ -60,7 +60,7 @@ public class GetJobVacancyByIdUseCaseTest {
     @Test
     void shouldThrowNotFoundException_whenJobVacancyDoesNotExist() {
         final GetJobVacancyByIdUseCaseInput input = GetJobVacancyByIdUseCaseInput.with(
-                IdentifierUtils.generateUUID()
+                IdentifierUtils.generateNewId()
         );
 
         Mockito.when(this.jobVacancyRepository.findById(Mockito.any())).thenReturn(Optional.empty());

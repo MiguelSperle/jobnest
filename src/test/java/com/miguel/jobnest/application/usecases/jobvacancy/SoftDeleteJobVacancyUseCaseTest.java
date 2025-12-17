@@ -79,7 +79,7 @@ public class SoftDeleteJobVacancyUseCaseTest {
     @Test
     void shouldThrowNotFoundException_whenJobVacancyDoesNotExist() {
         final SoftDeleteJobVacancyUseCaseInput input = SoftDeleteJobVacancyUseCaseInput.with(
-                IdentifierUtils.generateUUID()
+                IdentifierUtils.generateNewId()
         );
 
         Mockito.when(this.jobVacancyRepository.findById(Mockito.any())).thenReturn(Optional.empty());

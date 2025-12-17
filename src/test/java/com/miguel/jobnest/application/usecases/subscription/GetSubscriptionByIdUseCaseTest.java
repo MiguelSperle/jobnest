@@ -61,7 +61,7 @@ public class GetSubscriptionByIdUseCaseTest {
     @Test
     void shouldThrowNotFoundException_whenSubscriptionDoesNotExist() {
         final GetSubscriptionByIdUseCaseInput input = GetSubscriptionByIdUseCaseInput.with(
-                IdentifierUtils.generateUUID()
+                IdentifierUtils.generateNewId()
         );
 
         Mockito.when(this.subscriptionRepository.findById(Mockito.any())).thenReturn(Optional.empty());

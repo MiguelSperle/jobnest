@@ -47,7 +47,7 @@ public class UserTest {
 
     @Test
     void shouldReturnUser_whenCallWith() {
-        final String id = IdentifierUtils.generateUUID();
+        final String id = IdentifierUtils.generateNewId();
         final String name = "Leonardo Jardim";
         final String email = "leo1898@gmail.com";
         final String description = "My description";
@@ -89,7 +89,7 @@ public class UserTest {
 
     @Test
     void shouldReturnUpdatedUser_whenCallWithName() {
-        final String id = IdentifierUtils.generateUUID();
+        final String id = IdentifierUtils.generateNewId();
         final String name = "Leonardo Jardim";
         final String email = "leo1898@gmail.com";
         final String description = "My description";
@@ -125,7 +125,7 @@ public class UserTest {
 
     @Test
     void shouldReturnUpdatedUser_whenCallWithEmail() {
-        final String id = IdentifierUtils.generateUUID();
+        final String id = IdentifierUtils.generateNewId();
         final String name = "Leonardo Jardim";
         final String email = "leo1898@gmail.com";
         final String description = "My description";
@@ -161,7 +161,7 @@ public class UserTest {
 
     @Test
     void shouldReturnUpdatedUser_whenCallWithDescription() {
-        final String id = IdentifierUtils.generateUUID();
+        final String id = IdentifierUtils.generateNewId();
         final String name = "Leonardo Jardim";
         final String email = "leo1898@gmail.com";
         final String description = "My description";
@@ -197,7 +197,7 @@ public class UserTest {
 
     @Test
     void shouldReturnUpdatedUser_whenCallWithCity() {
-        final String id = IdentifierUtils.generateUUID();
+        final String id = IdentifierUtils.generateNewId();
         final String name = "Leonardo Jardim";
         final String email = "leo1898@gmail.com";
         final String description = "My description";
@@ -233,7 +233,7 @@ public class UserTest {
 
     @Test
     void shouldReturnUpdatedUser_whenCallWithState() {
-        final String id = IdentifierUtils.generateUUID();
+        final String id = IdentifierUtils.generateNewId();
         final String name = "Leonardo Jardim";
         final String email = "leo1898@gmail.com";
         final String description = "My description";
@@ -269,7 +269,7 @@ public class UserTest {
 
     @Test
     void shouldReturnUpdatedUser_whenCallWithCountry() {
-        final String id = IdentifierUtils.generateUUID();
+        final String id = IdentifierUtils.generateNewId();
         final String name = "Leonardo Jardim";
         final String email = "leo1898@gmail.com";
         final String description = "My description";
@@ -305,7 +305,7 @@ public class UserTest {
 
     @Test
     void shouldReturnUpdatedUser_whenCallWithUserStatus() {
-        final String id = IdentifierUtils.generateUUID();
+        final String id = IdentifierUtils.generateNewId();
         final String name = "Leonardo Jardim";
         final String email = "leo1898@gmail.com";
         final String description = "My description";
@@ -341,7 +341,7 @@ public class UserTest {
 
     @Test
     void shouldReturnUpdatedUser_whenCallWithPassword() {
-        final String id = IdentifierUtils.generateUUID();
+        final String id = IdentifierUtils.generateNewId();
         final String name = "Leonardo Jardim";
         final String email = "leo1898@gmail.com";
         final String description = "My description";
@@ -377,7 +377,7 @@ public class UserTest {
 
     @Test
     void shouldReturnFormattedUser_whenCallToString() {
-        final String id = IdentifierUtils.generateUUID();
+        final String id = IdentifierUtils.generateNewId();
         final String name = "Leonardo Jardim";
         final String email = "leo1898@gmail.com";
         final String description = "My description";

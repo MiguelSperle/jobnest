@@ -41,7 +41,7 @@ public class UserCodeTestBuilder {
         Objects.requireNonNull(this.expiresIn, "ExpiresIn must not be null");
 
         return UserCode.with(
-                IdentifierUtils.generateUUID(),
+                IdentifierUtils.generateNewId(),
                 this.userId,
                 "1AB23CT2",
                 this.userCodeType,

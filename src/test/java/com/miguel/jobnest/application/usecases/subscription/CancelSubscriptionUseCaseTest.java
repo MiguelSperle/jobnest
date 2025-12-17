@@ -56,7 +56,7 @@ public class CancelSubscriptionUseCaseTest {
     @Test
     void shouldThrowNotFoundException_whenSubscriptionDoesNotExist() {
         final CancelSubscriptionUseCaseInput input = CancelSubscriptionUseCaseInput.with(
-                IdentifierUtils.generateUUID()
+                IdentifierUtils.generateNewId()
         );
 
         Mockito.when(this.subscriptionRepository.findById(Mockito.any())).thenReturn(Optional.empty());

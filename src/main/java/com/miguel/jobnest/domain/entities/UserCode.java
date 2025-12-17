@@ -36,7 +36,7 @@ public class UserCode {
             UserCodeType userCodeType
     ) {
         return new UserCode(
-                IdentifierUtils.generateUUID(),
+                IdentifierUtils.generateNewId(),
                 userId,
                 code,
                 userCodeType,

@@ -13,7 +13,7 @@ public class JobVacancyTest {
 
     @Test
     void shouldReturnJobVacancy_whenCallNewJobVacancy() {
-        final String userId = IdentifierUtils.generateUUID();
+        final String userId = IdentifierUtils.generateNewId();
         final String title = "Java Developer";
         final String description = "This is job vacancy description";
         final SeniorityLevel seniorityLevel = SeniorityLevel.JUNIOR;
@@ -43,8 +43,8 @@ public class JobVacancyTest {
 
     @Test
     void shouldReturnJobVacancy_whenCallWith() {
-        final String id = IdentifierUtils.generateUUID();
-        final String userId = IdentifierUtils.generateUUID();
+        final String id = IdentifierUtils.generateNewId();
+        final String userId = IdentifierUtils.generateNewId();
         final String title = "Java Developer";
         final String description = "This is job vacancy description";
         final SeniorityLevel seniorityLevel = SeniorityLevel.JUNIOR;
@@ -79,8 +79,8 @@ public class JobVacancyTest {
 
     @Test
     void shouldReturnUpdatedJobVacancy_whenCallWithTitle() {
-        final String id = IdentifierUtils.generateUUID();
-        final String userId = IdentifierUtils.generateUUID();
+        final String id = IdentifierUtils.generateNewId();
+        final String userId = IdentifierUtils.generateNewId();
         final String title = "Java Developer";
         final String description = "This is job vacancy description";
         final SeniorityLevel seniorityLevel = SeniorityLevel.JUNIOR;
@@ -111,8 +111,8 @@ public class JobVacancyTest {
 
     @Test
     void shouldReturnUpdatedJobVacancy_whenCallWithDescription() {
-        final String id = IdentifierUtils.generateUUID();
-        final String userId = IdentifierUtils.generateUUID();
+        final String id = IdentifierUtils.generateNewId();
+        final String userId = IdentifierUtils.generateNewId();
         final String title = "Java Developer";
         final String description = "This is the job vacancy description";
         final SeniorityLevel seniorityLevel = SeniorityLevel.JUNIOR;
@@ -143,8 +143,8 @@ public class JobVacancyTest {
 
     @Test
     void shouldReturnUpdatedJobVacancy_whenCallWithSeniorityLevel() {
-        final String id = IdentifierUtils.generateUUID();
-        final String userId = IdentifierUtils.generateUUID();
+        final String id = IdentifierUtils.generateNewId();
+        final String userId = IdentifierUtils.generateNewId();
         final String title = "Java Developer";
         final String description = "This is the job vacancy description";
         final SeniorityLevel seniorityLevel = SeniorityLevel.JUNIOR;
@@ -175,8 +175,8 @@ public class JobVacancyTest {
 
     @Test
     void shouldReturnUpdatedJobVacancy_whenCallWithModality() {
-        final String id = IdentifierUtils.generateUUID();
-        final String userId = IdentifierUtils.generateUUID();
+        final String id = IdentifierUtils.generateNewId();
+        final String userId = IdentifierUtils.generateNewId();
         final String title = "Java Developer";
         final String description = "This is the job vacancy description";
         final SeniorityLevel seniorityLevel = SeniorityLevel.JUNIOR;
@@ -207,8 +207,8 @@ public class JobVacancyTest {
 
     @Test
     void shouldReturnUpdatedJobVacancy_whenCallWithCompanyName() {
-        final String id = IdentifierUtils.generateUUID();
-        final String userId = IdentifierUtils.generateUUID();
+        final String id = IdentifierUtils.generateNewId();
+        final String userId = IdentifierUtils.generateNewId();
         final String title = "Java Developer";
         final String description = "This is the job vacancy description";
         final SeniorityLevel seniorityLevel = SeniorityLevel.JUNIOR;
@@ -239,8 +239,8 @@ public class JobVacancyTest {
 
     @Test
     void shouldReturnUpdatedJobVacancy_whenCallWithIsDeleted() {
-        final String id = IdentifierUtils.generateUUID();
-        final String userId = IdentifierUtils.generateUUID();
+        final String id = IdentifierUtils.generateNewId();
+        final String userId = IdentifierUtils.generateNewId();
         final String title = "Java Developer";
         final String description = "This is the job vacancy description";
         final SeniorityLevel seniorityLevel = SeniorityLevel.JUNIOR;
@@ -269,8 +269,8 @@ public class JobVacancyTest {
 
     @Test
     void shouldReturnFormattedJobVacancy_whenCallToString() {
-        final String id = IdentifierUtils.generateUUID();
-        final String userId = IdentifierUtils.generateUUID();
+        final String id = IdentifierUtils.generateNewId();
+        final String userId = IdentifierUtils.generateNewId();
         final String title = "Java Developer";
         final String description = "This is the job vacancy description";
         final SeniorityLevel seniorityLevel = SeniorityLevel.JUNIOR;
