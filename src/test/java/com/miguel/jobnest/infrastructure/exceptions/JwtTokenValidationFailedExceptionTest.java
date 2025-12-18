@@ -8,7 +8,7 @@ public class JwtTokenValidationFailedExceptionTest {
     void shouldReturnJwtTokenValidationFailedException_whenCallWith() {
         final String message = "Error message";
 
-        final JwtTokenValidationFailedException ex = JwtTokenValidationFailedException.with(message);
+        final var ex = JwtTokenValidationFailedException.with(message);
 
         Assertions.assertNotNull(ex);
         Assertions.assertEquals(message, ex.getMessage());

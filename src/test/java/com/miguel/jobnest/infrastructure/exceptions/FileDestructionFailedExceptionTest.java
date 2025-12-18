@@ -8,7 +8,7 @@ public class FileDestructionFailedExceptionTest {
     void shouldReturnFileDestructionFailedException_whenCallWith() {
         final String message = "Error message";
 
-        final FileDestructionFailedException ex = FileDestructionFailedException.with(message);
+        final var ex = FileDestructionFailedException.with(message);
 
         Assertions.assertNotNull(ex);
         Assertions.assertEquals(message, ex.getMessage());

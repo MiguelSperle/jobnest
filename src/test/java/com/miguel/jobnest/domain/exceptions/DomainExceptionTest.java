@@ -9,7 +9,7 @@ public class DomainExceptionTest {
         final String message = "Error message";
         final int statusCode = 400;
 
-        final DomainException ex = DomainException.with(message, statusCode);
+        final var ex = DomainException.with(message, statusCode);
 
         Assertions.assertNotNull(ex);
         Assertions.assertEquals(message, ex.getMessage());

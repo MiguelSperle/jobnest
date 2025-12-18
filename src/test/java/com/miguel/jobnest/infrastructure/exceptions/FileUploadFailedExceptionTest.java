@@ -8,7 +8,7 @@ public class FileUploadFailedExceptionTest {
     void shouldReturnFileUploadFailedException_whenCallWith() {
         final String message = "Error message";
 
-        final FileUploadFailedException ex = FileUploadFailedException.with(message);
+        final var ex = FileUploadFailedException.with(message);
 
         Assertions.assertNotNull(ex);
         Assertions.assertEquals(message, ex.getMessage());

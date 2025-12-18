@@ -9,7 +9,7 @@ public class EmailSendFailedExceptionTest {
         final String message = "Error message";
         final Throwable cause = new RuntimeException();
 
-        final EmailSendFailedException ex = EmailSendFailedException.with(message, cause);
+        final var ex = EmailSendFailedException.with(message, cause);
 
         Assertions.assertNotNull(ex);
         Assertions.assertEquals(message, ex.getMessage());
