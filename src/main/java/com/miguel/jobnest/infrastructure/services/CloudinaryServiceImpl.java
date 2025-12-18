@@ -2,8 +2,8 @@ package com.miguel.jobnest.infrastructure.services;
 
 import com.cloudinary.Cloudinary;
 import com.miguel.jobnest.application.abstractions.services.UploadService;
-import com.miguel.jobnest.infrastructure.services.exceptions.FileDestructionFailedException;
-import com.miguel.jobnest.infrastructure.services.exceptions.FileUploadFailedException;
+import com.miguel.jobnest.infrastructure.exceptions.FileDestructionFailedException;
+import com.miguel.jobnest.infrastructure.exceptions.FileUploadFailedException;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

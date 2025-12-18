@@ -1,4 +1,4 @@
-package com.miguel.jobnest.infrastructure.services.exceptions;
+package com.miguel.jobnest.infrastructure.exceptions;
 
 public class JwtTokenCreationFailedException extends RuntimeException {
     public JwtTokenCreationFailedException(String message) {

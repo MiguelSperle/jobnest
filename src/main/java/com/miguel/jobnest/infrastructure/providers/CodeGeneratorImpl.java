@@ -1,12 +1,12 @@
 package com.miguel.jobnest.infrastructure.providers;
 
-import com.miguel.jobnest.application.abstractions.providers.CodeProvider;
+import com.miguel.jobnest.application.abstractions.providers.CodeGenerator;
 import org.springframework.stereotype.Component;
 
 import java.security.SecureRandom;
 
 @Component
-public class CodeProviderImpl implements CodeProvider {
+public class CodeGeneratorImpl implements CodeGenerator {
     private final SecureRandom secureRandom = new SecureRandom();
 
     @Override

@@ -1,7 +1,7 @@
 package com.miguel.jobnest.application.usecases.usercode;
 
 import com.miguel.jobnest.application.abstractions.producer.MessageProducer;
-import com.miguel.jobnest.application.abstractions.providers.CodeProvider;
+import com.miguel.jobnest.application.abstractions.providers.CodeGenerator;
 import com.miguel.jobnest.application.abstractions.repositories.UserCodeRepository;
 import com.miguel.jobnest.application.abstractions.repositories.UserRepository;
 import com.miguel.jobnest.application.usecases.usercode.inputs.SendPasswordResetCodeUseCaseInput;
@@ -12,8 +12,8 @@ import com.miguel.jobnest.domain.enums.UserCodeType;
 import com.miguel.jobnest.domain.enums.UserStatus;
 import com.miguel.jobnest.domain.exceptions.NotFoundException;
 import com.miguel.jobnest.domain.utils.TimeUtils;
-import com.miguel.jobnest.utils.UserTestBuilder;
-import com.miguel.jobnest.utils.UserCodeTestBuilder;
+import com.miguel.jobnest.application.utils.UserTestBuilder;
+import com.miguel.jobnest.application.utils.UserCodeTestBuilder;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -39,7 +39,7 @@ public class SendPasswordResetCodeUseCaseTest {
     private UserCodeRepository userCodeRepository;
 
     @Mock
-    private CodeProvider codeProvider;
+    private CodeGenerator codeGenerator;
 
     @Mock
     private MessageProducer messageProducer;
@@ -53,7 +53,7 @@ public class SendPasswordResetCodeUseCaseTest {
 
         Mockito.when(this.userRepository.findByEmail(Mockito.any())).thenReturn(Optional.of(user));
         Mockito.when(this.userCodeRepository.findByUserIdAndCodeType(Mockito.any(), Mockito.any())).thenReturn(Optional.empty());
-        Mockito.when(this.codeProvider.generateCode(Mockito.anyInt(), Mockito.any())).thenReturn(code);
+        Mockito.when(this.codeGenerator.generateCode(Mockito.anyInt(), Mockito.any())).thenReturn(code);
         Mockito.when(this.userCodeRepository.save(Mockito.any())).thenAnswer(returnsFirstArg());
         Mockito.doNothing().when(this.messageProducer).publish(Mockito.any(), Mockito.any(), Mockito.any());
 
@@ -61,7 +61,7 @@ public class SendPasswordResetCodeUseCaseTest {
 
         Mockito.verify(this.userRepository, Mockito.times(1)).findByEmail(Mockito.any());
         Mockito.verify(this.userCodeRepository, Mockito.times(1)).findByUserIdAndCodeType(Mockito.any(), Mockito.any());
-        Mockito.verify(this.codeProvider, Mockito.times(1)).generateCode(Mockito.anyInt(), Mockito.any());
+        Mockito.verify(this.codeGenerator, Mockito.times(1)).generateCode(Mockito.anyInt(), Mockito.any());
         Mockito.verify(this.userCodeRepository, Mockito.times(1)).save(Mockito.argThat(userCodeSaved ->
                 Objects.nonNull(userCodeSaved.getId()) &&
                         Objects.equals(userCodeSaved.getUserId(), user.getId()) &&
@@ -84,7 +84,7 @@ public class SendPasswordResetCodeUseCaseTest {
         Mockito.when(this.userRepository.findByEmail(Mockito.any())).thenReturn(Optional.of(user));
         Mockito.when(this.userCodeRepository.findByUserIdAndCodeType(Mockito.any(), Mockito.any())).thenReturn(Optional.of(userCode));
         Mockito.doNothing().when(this.userCodeRepository).deleteById(Mockito.any());
-        Mockito.when(this.codeProvider.generateCode(Mockito.anyInt(), Mockito.any())).thenReturn(code);
+        Mockito.when(this.codeGenerator.generateCode(Mockito.anyInt(), Mockito.any())).thenReturn(code);
         Mockito.when(this.userCodeRepository.save(Mockito.any())).thenAnswer(returnsFirstArg());
         Mockito.doNothing().when(this.messageProducer).publish(Mockito.any(), Mockito.any(), Mockito.any());
 
@@ -93,7 +93,7 @@ public class SendPasswordResetCodeUseCaseTest {
         Mockito.verify(this.userRepository, Mockito.times(1)).findByEmail(Mockito.any());
         Mockito.verify(this.userCodeRepository, Mockito.times(1)).findByUserIdAndCodeType(Mockito.any(), Mockito.any());
         Mockito.verify(this.userCodeRepository, Mockito.times(1)).deleteById(Mockito.any());
-        Mockito.verify(this.codeProvider, Mockito.times(1)).generateCode(Mockito.anyInt(), Mockito.any());
+        Mockito.verify(this.codeGenerator, Mockito.times(1)).generateCode(Mockito.anyInt(), Mockito.any());
         Mockito.verify(this.userCodeRepository, Mockito.times(1)).save(Mockito.argThat(userCodeSaved ->
                 Objects.nonNull(userCodeSaved.getId()) &&
                         Objects.equals(userCodeSaved.getUserId(), user.getId()) &&

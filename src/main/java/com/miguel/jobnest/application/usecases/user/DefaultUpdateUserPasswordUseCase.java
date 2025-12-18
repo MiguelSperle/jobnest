@@ -1,6 +1,6 @@
 package com.miguel.jobnest.application.usecases.user;
 
-import com.miguel.jobnest.application.abstractions.providers.PasswordEncryptionProvider;
+import com.miguel.jobnest.application.abstractions.providers.PasswordEncryption;
 import com.miguel.jobnest.application.abstractions.repositories.UserRepository;
 import com.miguel.jobnest.application.abstractions.services.SecurityService;
 import com.miguel.jobnest.application.abstractions.usecases.user.UpdateUserPasswordUseCase;
@@ -11,16 +11,16 @@ import com.miguel.jobnest.domain.exceptions.NotFoundException;
 
 public class DefaultUpdateUserPasswordUseCase implements UpdateUserPasswordUseCase {
     private final UserRepository userRepository;
-    private final PasswordEncryptionProvider passwordEncryptionProvider;
+    private final PasswordEncryption passwordEncryption;
     private final SecurityService securityService;
 
     public DefaultUpdateUserPasswordUseCase(
             UserRepository userRepository,
-            PasswordEncryptionProvider passwordEncryptionProvider,
+            PasswordEncryption passwordEncryption,
             SecurityService securityService
     ) {
         this.userRepository = userRepository;
-        this.passwordEncryptionProvider = passwordEncryptionProvider;
+        this.passwordEncryption = passwordEncryption;
         this.securityService = securityService;
     }
 
@@ -34,7 +34,7 @@ public class DefaultUpdateUserPasswordUseCase implements UpdateUserPasswordUseCa
             throw DomainException.with("Invalid current password", 422);
         }
 
-        final String encodedPassword = this.passwordEncryptionProvider.encode(input.password());
+        final String encodedPassword = this.passwordEncryption.encode(input.password());
 
         final User updatedUser = user.withPassword(encodedPassword);
 
@@ -46,7 +46,7 @@ public class DefaultUpdateUserPasswordUseCase implements UpdateUserPasswordUseCa
     }
 
     private boolean validatePassword(String password, String encodedPassword) {
-        return this.passwordEncryptionProvider.matches(password, encodedPassword);
+        return this.passwordEncryption.matches(password, encodedPassword);
     }
 
     private void saveUser(User user) {

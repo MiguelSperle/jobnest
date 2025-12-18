@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 public class DomainExceptionTest {
     @Test
     void shouldReturnDomainException_whenCallWith() {
-        final String message = "Common error";
+        final String message = "Error message";
         final int statusCode = 400;
 
         final DomainException ex = DomainException.with(message, statusCode);

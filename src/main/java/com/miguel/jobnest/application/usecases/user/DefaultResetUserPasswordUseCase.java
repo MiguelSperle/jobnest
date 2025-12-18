@@ -1,6 +1,6 @@
 package com.miguel.jobnest.application.usecases.user;
 
-import com.miguel.jobnest.application.abstractions.providers.PasswordEncryptionProvider;
+import com.miguel.jobnest.application.abstractions.providers.PasswordEncryption;
 import com.miguel.jobnest.application.abstractions.repositories.UserCodeRepository;
 import com.miguel.jobnest.application.abstractions.repositories.UserRepository;
 import com.miguel.jobnest.application.abstractions.wrapper.TransactionExecutor;
@@ -16,18 +16,18 @@ import com.miguel.jobnest.domain.utils.TimeUtils;
 public class DefaultResetUserPasswordUseCase implements ResetUserPasswordUseCase {
     private final UserRepository userRepository;
     private final UserCodeRepository userCodeRepository;
-    private final PasswordEncryptionProvider passwordEncryptionProvider;
+    private final PasswordEncryption passwordEncryption;
     private final TransactionExecutor transactionExecutor;
 
     public DefaultResetUserPasswordUseCase(
             UserRepository userRepository,
             UserCodeRepository userCodeRepository,
-            PasswordEncryptionProvider passwordEncryptionProvider,
+            PasswordEncryption passwordEncryption,
             TransactionExecutor transactionExecutor
     ) {
         this.userRepository = userRepository;
         this.userCodeRepository = userCodeRepository;
-        this.passwordEncryptionProvider = passwordEncryptionProvider;
+        this.passwordEncryption = passwordEncryption;
         this.transactionExecutor = transactionExecutor;
     }
 
@@ -42,7 +42,7 @@ public class DefaultResetUserPasswordUseCase implements ResetUserPasswordUseCase
 
         final User user = this.getUserById(userCode.getUserId());
 
-        final String encodedPassword = this.passwordEncryptionProvider.encode(input.password());
+        final String encodedPassword = this.passwordEncryption.encode(input.password());
 
         final User updatedUser = user.withPassword(encodedPassword);
 

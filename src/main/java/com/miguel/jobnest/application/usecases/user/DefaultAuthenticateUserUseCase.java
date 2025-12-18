@@ -1,6 +1,6 @@
 package com.miguel.jobnest.application.usecases.user;
 
-import com.miguel.jobnest.application.abstractions.providers.PasswordEncryptionProvider;
+import com.miguel.jobnest.application.abstractions.providers.PasswordEncryption;
 import com.miguel.jobnest.application.abstractions.repositories.UserRepository;
 import com.miguel.jobnest.application.abstractions.services.JwtService;
 import com.miguel.jobnest.application.abstractions.usecases.user.AuthenticateUserUseCase;
@@ -12,16 +12,16 @@ import com.miguel.jobnest.domain.exceptions.DomainException;
 
 public class DefaultAuthenticateUserUseCase implements AuthenticateUserUseCase {
     private final UserRepository userRepository;
-    private final PasswordEncryptionProvider passwordEncryptionProvider;
+    private final PasswordEncryption passwordEncryption;
     private final JwtService jwtService;
 
     public DefaultAuthenticateUserUseCase(
             UserRepository userRepository,
-            PasswordEncryptionProvider passwordEncryptionProvider,
+            PasswordEncryption passwordEncryption,
             JwtService jwtService
     ) {
         this.userRepository = userRepository;
-        this.passwordEncryptionProvider = passwordEncryptionProvider;
+        this.passwordEncryption = passwordEncryption;
         this.jwtService = jwtService;
     }
 
@@ -51,6 +51,6 @@ public class DefaultAuthenticateUserUseCase implements AuthenticateUserUseCase {
     }
 
     private boolean validatePassword(String password, String encodedPassword) {
-        return this.passwordEncryptionProvider.matches(password, encodedPassword);
+        return this.passwordEncryption.matches(password, encodedPassword);
     }
 }

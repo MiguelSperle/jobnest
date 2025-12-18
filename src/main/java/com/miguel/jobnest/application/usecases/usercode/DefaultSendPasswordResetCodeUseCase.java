@@ -1,7 +1,7 @@
 package com.miguel.jobnest.application.usecases.usercode;
 
 import com.miguel.jobnest.application.abstractions.producer.MessageProducer;
-import com.miguel.jobnest.application.abstractions.providers.CodeProvider;
+import com.miguel.jobnest.application.abstractions.providers.CodeGenerator;
 import com.miguel.jobnest.application.abstractions.repositories.UserCodeRepository;
 import com.miguel.jobnest.application.abstractions.repositories.UserRepository;
 import com.miguel.jobnest.application.abstractions.usecases.usercode.SendPasswordResetCodeUseCase;
@@ -17,7 +17,7 @@ import java.util.Optional;
 public class DefaultSendPasswordResetCodeUseCase implements SendPasswordResetCodeUseCase {
     private final UserRepository userRepository;
     private final UserCodeRepository userCodeRepository;
-    private final CodeProvider codeProvider;
+    private final CodeGenerator codeGenerator;
     private final MessageProducer messageProducer;
 
     private final static int CODE_LENGTH = 8;
@@ -29,12 +29,12 @@ public class DefaultSendPasswordResetCodeUseCase implements SendPasswordResetCod
     public DefaultSendPasswordResetCodeUseCase(
             UserRepository userRepository,
             UserCodeRepository userCodeRepository,
-            CodeProvider codeProvider,
+            CodeGenerator codeGenerator,
             MessageProducer messageProducer
     ) {
         this.userRepository = userRepository;
         this.userCodeRepository = userCodeRepository;
-        this.codeProvider = codeProvider;
+        this.codeGenerator = codeGenerator;
         this.messageProducer = messageProducer;
     }
 
@@ -46,7 +46,7 @@ public class DefaultSendPasswordResetCodeUseCase implements SendPasswordResetCod
                 this.deleteUserCodeById(userCode.getId())
         );
 
-        final String codeGenerated = this.codeProvider.generateCode(CODE_LENGTH, ALPHANUMERIC_CHARACTERS);
+        final String codeGenerated = this.codeGenerator.generateCode(CODE_LENGTH, ALPHANUMERIC_CHARACTERS);
 
         final UserCode newUserCode = UserCode.newUserCode(user.getId(), codeGenerated, UserCodeType.PASSWORD_RESET);
 

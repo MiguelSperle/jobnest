@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 public class NotFoundExceptionTest {
     @Test
     void shouldReturnNotFoundException_whenCallWith() {
-        final String message = "Not found";
+        final String message = "Error message";
 
         final var ex = NotFoundException.with(message);
 

@@ -1,6 +1,6 @@
 package com.miguel.jobnest.application.usecases.user;
 
-import com.miguel.jobnest.application.abstractions.providers.PasswordEncryptionProvider;
+import com.miguel.jobnest.application.abstractions.providers.PasswordEncryption;
 import com.miguel.jobnest.application.abstractions.repositories.UserRepository;
 import com.miguel.jobnest.application.abstractions.services.JwtService;
 import com.miguel.jobnest.application.usecases.user.inputs.AuthenticateUserUseCaseInput;
@@ -9,7 +9,7 @@ import com.miguel.jobnest.domain.entities.User;
 import com.miguel.jobnest.domain.enums.AuthorizationRole;
 import com.miguel.jobnest.domain.enums.UserStatus;
 import com.miguel.jobnest.domain.exceptions.DomainException;
-import com.miguel.jobnest.utils.UserTestBuilder;
+import com.miguel.jobnest.application.utils.UserTestBuilder;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -29,7 +29,7 @@ public class AuthenticateUserUseCaseTest {
     private UserRepository userRepository;
 
     @Mock
-    private PasswordEncryptionProvider passwordEncryptionProvider;
+    private PasswordEncryption passwordEncryption;
 
     @Mock
     private JwtService jwtService;
@@ -45,7 +45,7 @@ public class AuthenticateUserUseCaseTest {
         );
 
         Mockito.when(this.userRepository.findByEmail(Mockito.any())).thenReturn(Optional.of(user));
-        Mockito.when(this.passwordEncryptionProvider.matches(Mockito.any(), Mockito.any())).thenReturn(true);
+        Mockito.when(this.passwordEncryption.matches(Mockito.any(), Mockito.any())).thenReturn(true);
         Mockito.when(this.jwtService.generateJwt(Mockito.any(), Mockito.any())).thenReturn(jwt);
 
         final AuthenticateUserUseCaseOutput output = this.useCase.execute(input);
@@ -55,7 +55,7 @@ public class AuthenticateUserUseCaseTest {
         Assertions.assertEquals(jwt, output.accessToken());
 
         Mockito.verify(this.userRepository, Mockito.times(1)).findByEmail(Mockito.any());
-        Mockito.verify(this.passwordEncryptionProvider, Mockito.times(1)).matches(Mockito.any(), Mockito.any());
+        Mockito.verify(this.passwordEncryption, Mockito.times(1)).matches(Mockito.any(), Mockito.any());
         Mockito.verify(this.jwtService, Mockito.times(1)).generateJwt(Mockito.any(), Mockito.any());
     }
 
@@ -96,7 +96,7 @@ public class AuthenticateUserUseCaseTest {
         );
 
         Mockito.when(this.userRepository.findByEmail(Mockito.any())).thenReturn(Optional.of(user));
-        Mockito.when(this.passwordEncryptionProvider.matches(Mockito.any(), Mockito.any())).thenReturn(false);
+        Mockito.when(this.passwordEncryption.matches(Mockito.any(), Mockito.any())).thenReturn(false);
 
         final var ex = Assertions.assertThrows(DomainException.class, () ->
                 this.useCase.execute(input)
@@ -109,7 +109,7 @@ public class AuthenticateUserUseCaseTest {
         Assertions.assertEquals(expectedStatusCode, ex.getStatusCode());
 
         Mockito.verify(this.userRepository, Mockito.times(1)).findByEmail(Mockito.any());
-        Mockito.verify(this.passwordEncryptionProvider, Mockito.times(1)).matches(Mockito.any(), Mockito.any());
+        Mockito.verify(this.passwordEncryption, Mockito.times(1)).matches(Mockito.any(), Mockito.any());
     }
 
     @Test
@@ -122,7 +122,7 @@ public class AuthenticateUserUseCaseTest {
         );
 
         Mockito.when(this.userRepository.findByEmail(Mockito.any())).thenReturn(Optional.of(user));
-        Mockito.when(this.passwordEncryptionProvider.matches(Mockito.any(), Mockito.any())).thenReturn(true);
+        Mockito.when(this.passwordEncryption.matches(Mockito.any(), Mockito.any())).thenReturn(true);
 
         final DomainException ex = Assertions.assertThrows(DomainException.class, () ->
                 this.useCase.execute(input)
@@ -136,7 +136,7 @@ public class AuthenticateUserUseCaseTest {
         Assertions.assertEquals(expectedStatusCode, ex.getStatusCode());
 
         Mockito.verify(this.userRepository, Mockito.times(1)).findByEmail(Mockito.any());
-        Mockito.verify(this.passwordEncryptionProvider, Mockito.times(1)).matches(Mockito.any(), Mockito.any());
+        Mockito.verify(this.passwordEncryption, Mockito.times(1)).matches(Mockito.any(), Mockito.any());
     }
 
     @Test
@@ -149,7 +149,7 @@ public class AuthenticateUserUseCaseTest {
         );
 
         Mockito.when(this.userRepository.findByEmail(Mockito.any())).thenReturn(Optional.of(user));
-        Mockito.when(this.passwordEncryptionProvider.matches(Mockito.any(), Mockito.any())).thenReturn(true);
+        Mockito.when(this.passwordEncryption.matches(Mockito.any(), Mockito.any())).thenReturn(true);
 
         final DomainException ex = Assertions.assertThrows(DomainException.class, () ->
                 this.useCase.execute(input)
@@ -163,6 +163,6 @@ public class AuthenticateUserUseCaseTest {
         Assertions.assertEquals(expectedStatusCode, ex.getStatusCode());
 
         Mockito.verify(this.userRepository, Mockito.times(1)).findByEmail(Mockito.any());
-        Mockito.verify(this.passwordEncryptionProvider, Mockito.times(1)).matches(Mockito.any(), Mockito.any());
+        Mockito.verify(this.passwordEncryption, Mockito.times(1)).matches(Mockito.any(), Mockito.any());
     }
 }

@@ -1,4 +1,4 @@
-package com.miguel.jobnest.utils;
+package com.miguel.jobnest.application.utils;
 
 import com.miguel.jobnest.domain.entities.User;
 import com.miguel.jobnest.domain.enums.AuthorizationRole;

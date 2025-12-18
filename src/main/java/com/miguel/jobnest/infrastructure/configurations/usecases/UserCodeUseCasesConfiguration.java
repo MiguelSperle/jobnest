@@ -1,7 +1,7 @@
 package com.miguel.jobnest.infrastructure.configurations.usecases;
 
 import com.miguel.jobnest.application.abstractions.producer.MessageProducer;
-import com.miguel.jobnest.application.abstractions.providers.CodeProvider;
+import com.miguel.jobnest.application.abstractions.providers.CodeGenerator;
 import com.miguel.jobnest.application.abstractions.repositories.UserCodeRepository;
 import com.miguel.jobnest.application.abstractions.repositories.UserRepository;
 import com.miguel.jobnest.application.abstractions.usecases.usercode.ResendVerificationCodeUseCase;
@@ -20,13 +20,13 @@ public class UserCodeUseCasesConfiguration {
             UserCodeRepository userCodeRepository,
             UserRepository userRepository,
             MessageProducer messageProducer,
-            CodeProvider codeProvider
+            CodeGenerator codeGenerator
     ) {
         return new DefaultResendVerificationCodeUseCase(
                 userCodeRepository,
                 userRepository,
                 messageProducer,
-                codeProvider
+                codeGenerator
         );
     }
 
@@ -34,13 +34,13 @@ public class UserCodeUseCasesConfiguration {
     public SendPasswordResetCodeUseCase sendPasswordResetCodeUseCase(
             UserRepository userRepository,
             UserCodeRepository userCodeRepository,
-            CodeProvider codeProvider,
+            CodeGenerator codeGenerator,
             MessageProducer messageProducer
     ) {
         return new DefaultSendPasswordResetCodeUseCase(
                 userRepository,
                 userCodeRepository,
-                codeProvider,
+                codeGenerator,
                 messageProducer
         );
     }

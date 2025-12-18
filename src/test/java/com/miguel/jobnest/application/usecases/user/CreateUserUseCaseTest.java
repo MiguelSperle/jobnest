@@ -1,8 +1,8 @@
 package com.miguel.jobnest.application.usecases.user;
 
 import com.miguel.jobnest.application.abstractions.producer.MessageProducer;
-import com.miguel.jobnest.application.abstractions.providers.CodeProvider;
-import com.miguel.jobnest.application.abstractions.providers.PasswordEncryptionProvider;
+import com.miguel.jobnest.application.abstractions.providers.CodeGenerator;
+import com.miguel.jobnest.application.abstractions.providers.PasswordEncryption;
 import com.miguel.jobnest.application.abstractions.repositories.UserCodeRepository;
 import com.miguel.jobnest.application.abstractions.repositories.UserRepository;
 import com.miguel.jobnest.application.abstractions.wrapper.TransactionExecutor;
@@ -35,10 +35,10 @@ public class CreateUserUseCaseTest {
     private UserCodeRepository userCodeRepository;
 
     @Mock
-    private PasswordEncryptionProvider passwordEncryptionProvider;
+    private PasswordEncryption passwordEncryption;
 
     @Mock
-    private CodeProvider codeProvider;
+    private CodeGenerator codeGenerator;
 
     @Mock
     private TransactionExecutor transactionExecutor;
@@ -69,14 +69,14 @@ public class CreateUserUseCaseTest {
         );
 
         Mockito.when(this.userRepository.existsByEmail(Mockito.any())).thenReturn(false);
-        Mockito.when(this.passwordEncryptionProvider.encode(Mockito.any())).thenReturn(input.password());
+        Mockito.when(this.passwordEncryption.encode(Mockito.any())).thenReturn(input.password());
         Mockito.doAnswer(invocationOnMock -> {
             Runnable runnable = invocationOnMock.getArgument(0);
             runnable.run();
             return runnable;
         }).when(this.transactionExecutor).runTransaction(Mockito.any());
         Mockito.when(this.userRepository.save(Mockito.any())).thenAnswer(returnsFirstArg());
-        Mockito.when(this.codeProvider.generateCode(Mockito.anyInt(), Mockito.any())).thenReturn(code);
+        Mockito.when(this.codeGenerator.generateCode(Mockito.anyInt(), Mockito.any())).thenReturn(code);
         Mockito.when(this.userCodeRepository.save(Mockito.any())).thenAnswer(returnsFirstArg());
         Mockito.doAnswer(invocationOnMock -> {
             final Runnable runnable = invocationOnMock.getArgument(0);
@@ -88,7 +88,7 @@ public class CreateUserUseCaseTest {
         this.useCase.execute(input);
 
         Mockito.verify(this.userRepository, Mockito.times(1)).existsByEmail(Mockito.any());
-        Mockito.verify(this.passwordEncryptionProvider, Mockito.times(1)).encode(Mockito.any());
+        Mockito.verify(this.passwordEncryption, Mockito.times(1)).encode(Mockito.any());
         Mockito.verify(this.transactionExecutor, Mockito.times(1)).runTransaction(Mockito.any());
         Mockito.verify(this.userRepository, Mockito.times(1)).save(Mockito.argThat(userSaved ->
                 Objects.nonNull(userSaved.getId()) &&
@@ -103,7 +103,7 @@ public class CreateUserUseCaseTest {
                         Objects.equals(userSaved.getCountry(), input.country()) &&
                         Objects.nonNull(userSaved.getCreatedAt())
         ));
-        Mockito.verify(this.codeProvider, Mockito.times(1)).generateCode(Mockito.anyInt(), Mockito.any());
+        Mockito.verify(this.codeGenerator, Mockito.times(1)).generateCode(Mockito.anyInt(), Mockito.any());
         Mockito.verify(this.userCodeRepository, Mockito.times(1)).save(Mockito.argThat(userCodeSaved ->
                 Objects.nonNull(userCodeSaved.getId()) &&
                         Objects.nonNull(userCodeSaved.getUserId()) &&

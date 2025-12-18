@@ -1,8 +1,8 @@
 package com.miguel.jobnest.infrastructure.configurations.usecases;
 
 import com.miguel.jobnest.application.abstractions.producer.MessageProducer;
-import com.miguel.jobnest.application.abstractions.providers.CodeProvider;
-import com.miguel.jobnest.application.abstractions.providers.PasswordEncryptionProvider;
+import com.miguel.jobnest.application.abstractions.providers.CodeGenerator;
+import com.miguel.jobnest.application.abstractions.providers.PasswordEncryption;
 import com.miguel.jobnest.application.abstractions.repositories.UserCodeRepository;
 import com.miguel.jobnest.application.abstractions.repositories.UserRepository;
 import com.miguel.jobnest.application.abstractions.services.JwtService;
@@ -19,16 +19,16 @@ public class UserUseCasesConfiguration {
     public CreateUserUseCase registerUserUseCase(
             UserRepository userRepository,
             UserCodeRepository userCodeRepository,
-            PasswordEncryptionProvider passwordEncryptionProvider,
-            CodeProvider codeProvider,
+            PasswordEncryption passwordEncryption,
+            CodeGenerator codeGenerator,
             TransactionExecutor transactionExecutor,
             MessageProducer messageProducer
     ) {
         return new DefaultCreateUserUseCase(
                 userRepository,
                 userCodeRepository,
-                passwordEncryptionProvider,
-                codeProvider,
+                passwordEncryption,
+                codeGenerator,
                 transactionExecutor,
                 messageProducer
         );
@@ -51,13 +51,13 @@ public class UserUseCasesConfiguration {
     public ResetUserPasswordUseCase resetUserPasswordUseCase(
             UserRepository userRepository,
             UserCodeRepository userCodeRepository,
-            PasswordEncryptionProvider passwordEncryptionProvider,
+            PasswordEncryption passwordEncryption,
             TransactionExecutor transactionExecutor
     ) {
         return new DefaultResetUserPasswordUseCase(
                 userRepository,
                 userCodeRepository,
-                passwordEncryptionProvider,
+                passwordEncryption,
                 transactionExecutor
         );
     }
@@ -65,12 +65,12 @@ public class UserUseCasesConfiguration {
     @Bean
     public AuthenticateUserUseCase authenticateUserUseCase(
             UserRepository userRepository,
-            PasswordEncryptionProvider passwordEncryptionProvider,
+            PasswordEncryption passwordEncryption,
             JwtService jwtService
     ) {
         return new DefaultAuthenticateUserUseCase(
                 userRepository,
-                passwordEncryptionProvider,
+                passwordEncryption,
                 jwtService
         );
     }
@@ -100,12 +100,12 @@ public class UserUseCasesConfiguration {
     @Bean
     public UpdateUserPasswordUseCase updateUserPasswordUseCase(
             UserRepository userRepository,
-            PasswordEncryptionProvider passwordEncryptionProvider,
+            PasswordEncryption passwordEncryption,
             SecurityService securityService
     ) {
         return new DefaultUpdateUserPasswordUseCase(
                 userRepository,
-                passwordEncryptionProvider,
+                passwordEncryption,
                 securityService
         );
     }

@@ -2,7 +2,7 @@ package com.miguel.jobnest.infrastructure.configurations;
 
 import com.miguel.jobnest.domain.exceptions.DomainException;
 import com.miguel.jobnest.domain.exceptions.NotFoundException;
-import com.miguel.jobnest.infrastructure.services.exceptions.JwtTokenValidationFailedException;
+import com.miguel.jobnest.infrastructure.exceptions.JwtTokenValidationFailedException;
 import com.miguel.jobnest.infrastructure.utils.ApiError;
 import io.github.resilience4j.ratelimiter.RequestNotPermitted;
 import org.slf4j.Logger;

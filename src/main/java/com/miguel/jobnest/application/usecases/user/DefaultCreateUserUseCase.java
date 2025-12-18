@@ -1,8 +1,8 @@
 package com.miguel.jobnest.application.usecases.user;
 
 import com.miguel.jobnest.application.abstractions.producer.MessageProducer;
-import com.miguel.jobnest.application.abstractions.providers.CodeProvider;
-import com.miguel.jobnest.application.abstractions.providers.PasswordEncryptionProvider;
+import com.miguel.jobnest.application.abstractions.providers.CodeGenerator;
+import com.miguel.jobnest.application.abstractions.providers.PasswordEncryption;
 import com.miguel.jobnest.application.abstractions.repositories.UserCodeRepository;
 import com.miguel.jobnest.application.abstractions.repositories.UserRepository;
 import com.miguel.jobnest.application.abstractions.usecases.user.CreateUserUseCase;
@@ -18,8 +18,8 @@ import com.miguel.jobnest.domain.exceptions.DomainException;
 public class DefaultCreateUserUseCase implements CreateUserUseCase {
     private final UserRepository userRepository;
     private final UserCodeRepository userCodeRepository;
-    private final PasswordEncryptionProvider passwordEncryptionProvider;
-    private final CodeProvider codeProvider;
+    private final PasswordEncryption passwordEncryption;
+    private final CodeGenerator codeGenerator;
     private final TransactionExecutor transactionExecutor;
     private final MessageProducer messageProducer;
 
@@ -32,15 +32,15 @@ public class DefaultCreateUserUseCase implements CreateUserUseCase {
     public DefaultCreateUserUseCase(
             UserRepository userRepository,
             UserCodeRepository userCodeRepository,
-            PasswordEncryptionProvider passwordEncryptionProvider,
-            CodeProvider codeProvider,
+            PasswordEncryption passwordEncryption,
+            CodeGenerator codeGenerator,
             TransactionExecutor transactionExecutor,
             MessageProducer messageProducer
     ) {
         this.userRepository = userRepository;
         this.userCodeRepository = userCodeRepository;
-        this.passwordEncryptionProvider = passwordEncryptionProvider;
-        this.codeProvider = codeProvider;
+        this.passwordEncryption = passwordEncryption;
+        this.codeGenerator = codeGenerator;
         this.transactionExecutor = transactionExecutor;
         this.messageProducer = messageProducer;
     }
@@ -51,7 +51,7 @@ public class DefaultCreateUserUseCase implements CreateUserUseCase {
             throw DomainException.with("This email is already being used", 409);
         }
 
-        final String encodedPassword = this.passwordEncryptionProvider.encode(input.password());
+        final String encodedPassword = this.passwordEncryption.encode(input.password());
 
         final AuthorizationRole convertedAuthorizationRole = AuthorizationRole.valueOf(input.authorizationRole());
 
@@ -68,7 +68,7 @@ public class DefaultCreateUserUseCase implements CreateUserUseCase {
         this.transactionExecutor.runTransaction(() -> {
             final User savedUser = this.saveUser(newUser);
 
-            final String codeGenerated = this.codeProvider.generateCode(CODE_LENGTH, ALPHANUMERIC_CHARACTERS);
+            final String codeGenerated = this.codeGenerator.generateCode(CODE_LENGTH, ALPHANUMERIC_CHARACTERS);
 
             final UserCode newUserCode = UserCode.newUserCode(savedUser.getId(), codeGenerated, UserCodeType.USER_VERIFICATION);
 

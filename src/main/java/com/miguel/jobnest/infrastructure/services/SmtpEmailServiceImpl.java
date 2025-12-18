@@ -1,7 +1,7 @@
 package com.miguel.jobnest.infrastructure.services;
 
 import com.miguel.jobnest.application.abstractions.services.EmailService;
-import com.miguel.jobnest.infrastructure.services.exceptions.EmailSendFailedException;
+import com.miguel.jobnest.infrastructure.exceptions.EmailSendFailedException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;

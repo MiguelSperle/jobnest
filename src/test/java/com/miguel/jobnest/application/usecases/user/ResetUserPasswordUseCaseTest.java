@@ -1,6 +1,6 @@
 package com.miguel.jobnest.application.usecases.user;
 
-import com.miguel.jobnest.application.abstractions.providers.PasswordEncryptionProvider;
+import com.miguel.jobnest.application.abstractions.providers.PasswordEncryption;
 import com.miguel.jobnest.application.abstractions.repositories.UserCodeRepository;
 import com.miguel.jobnest.application.abstractions.repositories.UserRepository;
 import com.miguel.jobnest.application.abstractions.wrapper.TransactionExecutor;
@@ -14,8 +14,8 @@ import com.miguel.jobnest.domain.exceptions.DomainException;
 import com.miguel.jobnest.domain.exceptions.NotFoundException;
 import com.miguel.jobnest.domain.utils.IdentifierUtils;
 import com.miguel.jobnest.domain.utils.TimeUtils;
-import com.miguel.jobnest.utils.UserTestBuilder;
-import com.miguel.jobnest.utils.UserCodeTestBuilder;
+import com.miguel.jobnest.application.utils.UserTestBuilder;
+import com.miguel.jobnest.application.utils.UserCodeTestBuilder;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -41,7 +41,7 @@ public class ResetUserPasswordUseCaseTest {
     private UserCodeRepository userCodeRepository;
 
     @Mock
-    private PasswordEncryptionProvider passwordEncryptionProvider;
+    private PasswordEncryption passwordEncryption;
 
     @Mock
     private TransactionExecutor transactionExecutor;
@@ -59,7 +59,7 @@ public class ResetUserPasswordUseCaseTest {
 
         Mockito.when(this.userCodeRepository.findByCodeAndCodeType(Mockito.any(), Mockito.any())).thenReturn(Optional.of(userCode));
         Mockito.when(this.userRepository.findById(Mockito.any())).thenReturn(Optional.of(user));
-        Mockito.when(this.passwordEncryptionProvider.encode(Mockito.any())).thenReturn(input.password());
+        Mockito.when(this.passwordEncryption.encode(Mockito.any())).thenReturn(input.password());
 
         Mockito.doAnswer(invocationOnMock -> {
             Runnable runnable = invocationOnMock.getArgument(0);
@@ -74,7 +74,7 @@ public class ResetUserPasswordUseCaseTest {
 
         Mockito.verify(this.userCodeRepository, Mockito.times(1)).findByCodeAndCodeType(Mockito.any(), Mockito.any());
         Mockito.verify(this.userRepository, Mockito.times(1)).findById(Mockito.any());
-        Mockito.verify(this.passwordEncryptionProvider, Mockito.times(1)).encode(Mockito.any());
+        Mockito.verify(this.passwordEncryption, Mockito.times(1)).encode(Mockito.any());
         Mockito.verify(this.transactionExecutor, Mockito.times(1)).runTransaction(Mockito.any());
         Mockito.verify(this.userRepository, Mockito.times(1)).save(Mockito.argThat(userSaved ->
                 Objects.equals(userSaved.getPassword(), input.password())

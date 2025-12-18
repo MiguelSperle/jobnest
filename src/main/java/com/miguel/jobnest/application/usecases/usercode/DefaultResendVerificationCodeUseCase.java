@@ -1,7 +1,7 @@
 package com.miguel.jobnest.application.usecases.usercode;
 
 import com.miguel.jobnest.application.abstractions.producer.MessageProducer;
-import com.miguel.jobnest.application.abstractions.providers.CodeProvider;
+import com.miguel.jobnest.application.abstractions.providers.CodeGenerator;
 import com.miguel.jobnest.application.abstractions.repositories.UserCodeRepository;
 import com.miguel.jobnest.application.abstractions.repositories.UserRepository;
 import com.miguel.jobnest.application.abstractions.usecases.usercode.ResendVerificationCodeUseCase;
@@ -21,7 +21,7 @@ public class DefaultResendVerificationCodeUseCase implements ResendVerificationC
     private final UserCodeRepository userCodeRepository;
     private final UserRepository userRepository;
     private final MessageProducer messageProducer;
-    private final CodeProvider codeProvider;
+    private final CodeGenerator codeGenerator;
 
     private final static int CODE_LENGTH = 8;
     private final static String ALPHANUMERIC_CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -33,12 +33,12 @@ public class DefaultResendVerificationCodeUseCase implements ResendVerificationC
             UserCodeRepository userCodeRepository,
             UserRepository userRepository,
             MessageProducer messageProducer,
-            CodeProvider codeProvider
+            CodeGenerator codeGenerator
     ) {
         this.userCodeRepository = userCodeRepository;
         this.userRepository = userRepository;
         this.messageProducer = messageProducer;
-        this.codeProvider = codeProvider;
+        this.codeGenerator = codeGenerator;
     }
 
     @Override
@@ -57,7 +57,7 @@ public class DefaultResendVerificationCodeUseCase implements ResendVerificationC
                 this.deleteUserCodeById(userCode.getId())
         );
 
-        final String codeGenerated = this.codeProvider.generateCode(CODE_LENGTH, ALPHANUMERIC_CHARACTERS);
+        final String codeGenerated = this.codeGenerator.generateCode(CODE_LENGTH, ALPHANUMERIC_CHARACTERS);
 
         final UserCode newUserCode = UserCode.newUserCode(user.getId(), codeGenerated, UserCodeType.USER_VERIFICATION);
 

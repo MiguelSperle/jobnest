@@ -1,5 +1,5 @@
 package com.miguel.jobnest.application.abstractions.providers;
 
-public interface CodeProvider {
+public interface CodeGenerator {
     String generateCode(int codeLength, String characters);
 }
