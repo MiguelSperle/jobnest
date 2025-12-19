@@ -16,11 +16,6 @@
 <p>
     <b>
         To summarize, JobNest is a back-end application designed to efficiently manage and support job vacancy searches.
-    </b>
-</p>
-
-<p>
-    <b>
         It provides a complete set of functionalities that a system of this kind typically offers, both for those who publish job vacancies and for those who seek to apply for them
     </b>
 </p>
@@ -52,13 +47,13 @@
 git clone https://github.com/MiguelSperle/jobnest.git
 ```
 
-<h3>📂 Access at folder</h3>
+📂 Access at folder
 
 ```
 cd jobnest
 ```
 
-<h3>📡 Install dependencies</h3>
+📡 Install dependencies
 
 ```
 mvn clean install
@@ -130,7 +125,7 @@ resilience4j:
         timeoutDuration: 0
 ```
 
-<h3>🤝 Collaborator</h3>
+<h3>👨🏻‍💻 Developer</h3>
 
 <table>
   <tr>
