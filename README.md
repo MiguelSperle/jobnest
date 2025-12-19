@@ -28,7 +28,7 @@
 
 <p>
     <b>
-        This is just a small note to make more clear about the project.
+        This is just a small text to clarify the purpose of the project.
     </b>
 </p>
 
