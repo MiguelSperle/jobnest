@@ -35,7 +35,7 @@ public class JpaJobVacancyEntity {
     @Enumerated(EnumType.STRING)
     private Modality modality;
 
-    @Column(nullable = false, length = 80)
+    @Column(name = "company_name", nullable = false, length = 80)
     private String companyName;
 
     @Column(nullable = false, name = "is_deleted")

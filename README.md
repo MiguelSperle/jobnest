@@ -33,7 +33,6 @@ This is just a small text to clarify the purpose of the project.
 - [JDK 21](https://www.oracle.com/br/java/technologies/downloads/)
 - [Maven](https://maven.apache.org/download.cgi)
 - [Docker](https://docs.docker.com/)
-- [DBeaver](https://dbeaver.io/)
 
 <h3>🛸 Cloning</h3>
 
