@@ -14,22 +14,16 @@
 </p>
 
 <p>
-    <b>
-        To summarize, JobNest is a back-end application designed to efficiently manage and support job vacancy searches. It provides a complete set of functionalities that a system of this kind typically offers, 
-        both for those who publish job vacancies and for those who seek to apply for them.
-    </b>
+To summarize, JobNest is a back-end application designed to efficiently manage and support job vacancy searches. It provides a complete set of functionalities that a system of this kind typically offers, 
+both for those who publish job vacancies and for those who seek to apply for them.
 </p>
 
 <p>
-    <b>
-        It's important to emphasize that this is a study project, designed to explore and implement complex concepts, such as: Clean Architecture, SOLID principles, Messaging, Database Transactions, Unit Tests and Rate Limiting.
-    </b>
+It's important to emphasize that this is a study project, designed to explore and implement complex concepts, such as: Clean Architecture, SOLID principles, Messaging, Database Transactions, Unit Tests and Rate Limiting.
 </p>
 
 <p>
-    <b>
-        This is just a small text to clarify the purpose of the project.
-    </b>
+This is just a small text to clarify the purpose of the project.
 </p>
 
 <h2>🚀 Getting started</h2>
