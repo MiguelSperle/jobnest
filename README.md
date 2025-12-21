@@ -72,7 +72,11 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
+
+  flyway:
+    schemas: public
+    default-schema: public
 
   api:
     security:
