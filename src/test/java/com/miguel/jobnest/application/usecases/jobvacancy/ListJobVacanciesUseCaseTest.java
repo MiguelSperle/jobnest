@@ -43,7 +43,7 @@ public class ListJobVacanciesUseCaseTest {
 
         final SearchQuery searchQuery = SearchQuery.newSearchQuery(page, perPage, sort, direction);
 
-        final PaginationMetadata paginationMetadata = new PaginationMetadata(
+        final PaginationMetadata metadata = new PaginationMetadata(
                 searchQuery.page(), searchQuery.perPage(), totalPages, jobVacancies.size()
         );
 
@@ -52,7 +52,7 @@ public class ListJobVacanciesUseCaseTest {
         );
 
         final Pagination<JobVacancy> paginatedJobVacancies = new Pagination<>(
-                paginationMetadata, jobVacancies
+                metadata, jobVacancies
         );
 
         Mockito.when(this.jobVacancyRepository.findAllPaginated(Mockito.any())).thenReturn(paginatedJobVacancies);
@@ -61,10 +61,43 @@ public class ListJobVacanciesUseCaseTest {
 
         Assertions.assertNotNull(output);
         Assertions.assertNotNull(output.paginatedJobVacancies());
-        Assertions.assertEquals(paginatedJobVacancies, output.paginatedJobVacancies());
-        Assertions.assertEquals(paginatedJobVacancies.paginationMetadata(), output.paginatedJobVacancies().paginationMetadata());
+        Assertions.assertEquals(paginatedJobVacancies.metadata(), output.paginatedJobVacancies().metadata());
         Assertions.assertEquals(paginatedJobVacancies.items(), output.paginatedJobVacancies().items());
+        Assertions.assertEquals(jobVacancies.size(), output.paginatedJobVacancies().metadata().totalItems());
 
         Mockito.verify(this.jobVacancyRepository, Mockito.times(1)).findAllPaginated(Mockito.any());
+    }
+
+    @Test
+    void shouldListEmptyJobVacancies() {
+        final int page = 0;
+        final int perPage = 10;
+        final String sort = "createdAt";
+        final String direction = "desc";
+        final int totalPages = 1;
+
+        final SearchQuery searchQuery = SearchQuery.newSearchQuery(page, perPage, sort, direction);
+
+        final PaginationMetadata metadata = new PaginationMetadata(
+                searchQuery.page(), searchQuery.perPage(), totalPages, 0
+        );
+
+        final ListJobVacanciesUseCaseInput input = ListJobVacanciesUseCaseInput.with(
+                searchQuery
+        );
+
+        final Pagination<JobVacancy> paginatedJobVacancies = new Pagination<>(
+                metadata, List.of()
+        );
+
+        Mockito.when(this.jobVacancyRepository.findAllPaginated(Mockito.any())).thenReturn(paginatedJobVacancies);
+
+        final ListJobVacanciesUseCaseOutput output = this.useCase.execute(input);
+
+        Assertions.assertNotNull(output);
+        Assertions.assertNotNull(output.paginatedJobVacancies());
+        Assertions.assertEquals(paginatedJobVacancies.metadata(), output.paginatedJobVacancies().metadata());
+        Assertions.assertTrue(output.paginatedJobVacancies().items().isEmpty());
+        Assertions.assertEquals(0, output.paginatedJobVacancies().metadata().totalItems());
     }
 }

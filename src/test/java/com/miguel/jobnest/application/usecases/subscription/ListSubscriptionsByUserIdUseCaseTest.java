@@ -51,7 +51,7 @@ public class ListSubscriptionsByUserIdUseCaseTest {
 
         final SearchQuery searchQuery = SearchQuery.newSearchQuery(page, perPage, sort, direction);
 
-        final PaginationMetadata paginationMetadata = new PaginationMetadata(
+        final PaginationMetadata metadata = new PaginationMetadata(
                 searchQuery.page(), searchQuery.perPage(), totalPages, subscriptions.size()
         );
 
@@ -60,7 +60,7 @@ public class ListSubscriptionsByUserIdUseCaseTest {
         );
 
         final Pagination<Subscription> paginatedSubscriptions = new Pagination<>(
-                paginationMetadata, subscriptions
+                metadata, subscriptions
         );
 
         Mockito.when(this.securityService.getPrincipal()).thenReturn(userCandidate.getId());
@@ -70,11 +70,46 @@ public class ListSubscriptionsByUserIdUseCaseTest {
 
         Assertions.assertNotNull(output);
         Assertions.assertNotNull(output.paginatedSubscriptions());
-        Assertions.assertEquals(paginatedSubscriptions, output.paginatedSubscriptions());
-        Assertions.assertEquals(paginatedSubscriptions.paginationMetadata(), output.paginatedSubscriptions().paginationMetadata());
+        Assertions.assertEquals(paginatedSubscriptions.metadata(), output.paginatedSubscriptions().metadata());
         Assertions.assertEquals(paginatedSubscriptions.items(), output.paginatedSubscriptions().items());
+        Assertions.assertEquals(subscriptions.size(), output.paginatedSubscriptions().metadata().totalItems());
 
         Mockito.verify(this.securityService, Mockito.times(1)).getPrincipal();
         Mockito.verify(this.subscriptionRepository, Mockito.times(1)).findAllPaginatedByUserId(Mockito.any(), Mockito.any());
+    }
+
+    @Test
+    void shouldListEmptySubscriptionsByUserId() {
+        final User userCandidate = UserTestBuilder.aUser().userStatus(UserStatus.VERIFIED).authorizationRole(AuthorizationRole.CANDIDATE).build();
+        final int page = 0;
+        final int perPage = 10;
+        final String sort = "createdAt";
+        final String direction = "desc";
+        final int totalPages = 1;
+
+        final SearchQuery searchQuery = SearchQuery.newSearchQuery(page, perPage, sort, direction);
+
+        final PaginationMetadata metadata = new PaginationMetadata(
+                searchQuery.page(), searchQuery.perPage(), totalPages, 0
+        );
+
+        final ListSubscriptionsByUserIdUseCaseInput input = ListSubscriptionsByUserIdUseCaseInput.with(
+                searchQuery
+        );
+
+        final Pagination<Subscription> paginatedSubscriptions = new Pagination<>(
+                metadata, List.of()
+        );
+
+        Mockito.when(this.securityService.getPrincipal()).thenReturn(userCandidate.getId());
+        Mockito.when(this.subscriptionRepository.findAllPaginatedByUserId(Mockito.any(), Mockito.any())).thenReturn(paginatedSubscriptions);
+
+        final ListSubscriptionsByUserIdUseCaseOutput output = this.useCase.execute(input);
+
+        Assertions.assertNotNull(output);
+        Assertions.assertNotNull(output.paginatedSubscriptions());
+        Assertions.assertEquals(paginatedSubscriptions.metadata(), output.paginatedSubscriptions().metadata());
+        Assertions.assertTrue(output.paginatedSubscriptions().items().isEmpty());
+        Assertions.assertEquals(0, output.paginatedSubscriptions().metadata().totalItems());
     }
 }

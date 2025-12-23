@@ -1,8 +1,6 @@
 package com.miguel.jobnest.infrastructure.rest.dtos.jobvacancy.res;
 
 import com.miguel.jobnest.application.usecases.jobvacancy.outputs.ListJobVacanciesUseCaseOutput;
-import com.miguel.jobnest.domain.enums.Modality;
-import com.miguel.jobnest.domain.enums.SeniorityLevel;
 import com.miguel.jobnest.domain.pagination.Pagination;
 
 import java.time.LocalDateTime;

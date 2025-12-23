@@ -21,7 +21,7 @@ public class PaginationTest {
         final Pagination<String> resultWithMap = paginated.map(i -> i);
 
         Assertions.assertNotNull(resultWithMap);
-        Assertions.assertEquals(paginated.paginationMetadata(), resultWithMap.paginationMetadata());
+        Assertions.assertEquals(paginated.metadata(), resultWithMap.metadata());
         Assertions.assertEquals(paginated.items(), resultWithMap.items());
     }
 }
