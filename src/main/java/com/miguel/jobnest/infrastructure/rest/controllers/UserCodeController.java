@@ -4,6 +4,7 @@ import com.miguel.jobnest.application.abstractions.usecases.usercode.SendPasswor
 import com.miguel.jobnest.application.abstractions.usecases.usercode.ResendVerificationCodeUseCase;
 import com.miguel.jobnest.application.abstractions.usecases.usercode.ValidatePasswordResetCodeUseCase;
 import com.miguel.jobnest.application.usecases.usercode.inputs.ValidatePasswordResetCodeUseCaseInput;
+import com.miguel.jobnest.infrastructure.idempotency.IdempotencyKey;
 import com.miguel.jobnest.infrastructure.rest.dtos.usercode.req.SendPasswordResetCodeRequest;
 import com.miguel.jobnest.infrastructure.rest.dtos.usercode.req.ResendVerificationCodeRequest;
 import com.miguel.jobnest.infrastructure.rest.dtos.MessageResponse;
@@ -23,6 +24,7 @@ public class UserCodeController {
 
     @PostMapping("/verification/resending")
     @RateLimiter(name = "rateLimitConfiguration")
+    @IdempotencyKey
     public ResponseEntity<MessageResponse> resendVerificationCode(@RequestBody @Valid ResendVerificationCodeRequest request) {
         this.resendVerificationCodeUseCase.execute(request.toInput());
 
@@ -31,6 +33,7 @@ public class UserCodeController {
 
     @PostMapping("/password-recovery")
     @RateLimiter(name = "rateLimitConfiguration")
+    @IdempotencyKey
     public ResponseEntity<MessageResponse> sendPasswordResetCode(@RequestBody @Valid SendPasswordResetCodeRequest request) {
         this.sendPasswordResetCodeUseCase.execute(request.toInput());
 

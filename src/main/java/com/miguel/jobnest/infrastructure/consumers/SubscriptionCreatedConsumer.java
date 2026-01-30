@@ -8,11 +8,13 @@ import com.miguel.jobnest.domain.entities.User;
 import com.miguel.jobnest.domain.events.SubscriptionCreatedEvent;
 import com.miguel.jobnest.domain.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class SubscriptionCreatedConsumer {
     private final UserRepository userRepository;
     private final JobVacancyRepository jobVacancyRepository;
@@ -22,14 +24,16 @@ public class SubscriptionCreatedConsumer {
 
     @RabbitListener(queues = SUBSCRIPTION_CREATED_QUEUE)
     public void onMessage(SubscriptionCreatedEvent event) {
-        final JobVacancy jobVacancy = this.getJobVacancyById(event.jobVacancyId());
-
-        final String text = "Hello, You subscribed for the job vacancy " + jobVacancy.getTitle() + " at " + jobVacancy.getCompanyName() + ". Please stay attentive to your communication channels, as the company may contact you soon regarding the next steps.";
-        final String subject = "Subscribed in Job Vacancy";
-
-        final User user = this.getUserById(event.userId());
-
-        this.emailService.sendEmail(user.getEmail(), text, subject);
+//        final JobVacancy jobVacancy = this.getJobVacancyById(event.jobVacancyId());
+//
+//        final String text = "Hello, You subscribed for the job vacancy " + jobVacancy.getTitle() + " at " + jobVacancy.getCompanyName() + ". Please stay attentive to your communication channels, as the company may contact you soon regarding the next steps.";
+//        final String subject = "Subscribed in Job Vacancy";
+//
+//        final User user = this.getUserById(event.userId());
+//
+//        this.emailService.sendEmail(user.getEmail(), text, subject);
+        System.out.println("ENTRANDO");
+        log.info("Message {} with payload {} has been processed successfully", event.getClass().getSimpleName(), event);
     }
 
     private JobVacancy getJobVacancyById(String id) {

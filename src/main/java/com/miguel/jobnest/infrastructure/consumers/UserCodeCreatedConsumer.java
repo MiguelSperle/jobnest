@@ -1,6 +1,5 @@
 package com.miguel.jobnest.infrastructure.consumers;
 
-import com.miguel.jobnest.application.abstractions.repositories.UserCodeRepository;
 import com.miguel.jobnest.application.abstractions.repositories.UserRepository;
 import com.miguel.jobnest.application.abstractions.services.EmailService;
 import com.miguel.jobnest.domain.entities.User;
@@ -8,13 +7,14 @@ import com.miguel.jobnest.domain.enums.UserCodeType;
 import com.miguel.jobnest.domain.events.UserCodeCreatedEvent;
 import com.miguel.jobnest.domain.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class UserCodeCreatedConsumer {
-    private final UserCodeRepository userCodeRepository;
     private final UserRepository userRepository;
     private final EmailService emailService;
 
@@ -36,6 +36,8 @@ public class UserCodeCreatedConsumer {
         final User user = this.getUserById(event.userId());
 
         this.emailService.sendEmail(user.getEmail(), text, subject);
+
+        log.info("Message {} with payload {} has been processed successfully", event.getClass().getSimpleName(), event);
     }
 
     private User getUserById(String id) {

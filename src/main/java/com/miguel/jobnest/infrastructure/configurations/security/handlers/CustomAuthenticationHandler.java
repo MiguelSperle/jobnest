@@ -24,7 +24,7 @@ public class CustomAuthenticationHandler implements AuthenticationEntryPoint {
         );
 
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        response.setStatus(HttpStatus.UNAUTHORIZED.value());
 
         final OutputStream responseStream = response.getOutputStream();
         final ObjectMapper mapper = new ObjectMapper();

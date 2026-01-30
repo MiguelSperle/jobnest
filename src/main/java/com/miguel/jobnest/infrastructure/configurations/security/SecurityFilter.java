@@ -44,7 +44,7 @@ public class SecurityFilter extends OncePerRequestFilter {
 
             filterChain.doFilter(request, response);
         } catch (Exception exception) {
-            handlerExceptionResolver.resolveException(request, response, null, exception);
+            this.handlerExceptionResolver.resolveException(request, response, null, exception);
         }
     }
 

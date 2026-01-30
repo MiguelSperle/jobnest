@@ -24,7 +24,7 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
         );
 
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-        response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+        response.setStatus(HttpStatus.FORBIDDEN.value());
 
         final OutputStream responseStream = response.getOutputStream();
         final ObjectMapper mapper = new ObjectMapper();

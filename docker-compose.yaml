@@ -23,6 +23,14 @@ services:
     networks:
       - jobnest-network
 
+  redis-compose:
+    container_name: redis-container-jobnest
+    image: redis
+    ports:
+      - "6379:6379"
+    networks:
+      - jobnest-network
+
 networks:
   jobnest-network:
     driver: bridge

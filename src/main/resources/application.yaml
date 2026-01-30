@@ -25,12 +25,17 @@ spring:
     password: ${RABBITMQ_PASSWORD}
     listener:
       simple:
+        acknowledge-mode: auto
         retry:
           enabled: true
           max-attempts: 4
           initial-interval: 3000
           multiplier: 2
           max-interval: 12000
+
+  redis:
+    host: localhost
+    port: 6379
 
   mail:
     host: smtp.gmail.com

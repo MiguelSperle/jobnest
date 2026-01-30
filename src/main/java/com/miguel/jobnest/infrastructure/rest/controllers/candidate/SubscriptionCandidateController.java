@@ -8,6 +8,7 @@ import com.miguel.jobnest.application.usecases.subscription.inputs.CancelSubscri
 import com.miguel.jobnest.application.usecases.subscription.outputs.ListSubscriptionsByUserIdUseCaseOutput;
 import com.miguel.jobnest.domain.pagination.Pagination;
 import com.miguel.jobnest.domain.pagination.SearchQuery;
+import com.miguel.jobnest.infrastructure.idempotency.IdempotencyKey;
 import com.miguel.jobnest.infrastructure.rest.dtos.MessageResponse;
 import com.miguel.jobnest.infrastructure.rest.dtos.subscription.req.CreateSubscriptionRequest;
 import com.miguel.jobnest.infrastructure.rest.dtos.subscription.res.ListSubscriptionsByUserIdResponse;
@@ -30,6 +31,7 @@ public class SubscriptionCandidateController {
 
     @PostMapping
     @RateLimiter(name = "rateLimitConfiguration")
+    @IdempotencyKey
     public ResponseEntity<MessageResponse> createSubscription(@RequestPart CreateSubscriptionRequest request, @RequestPart MultipartFile resumeFile) throws IOException {
         this.createSubscriptionUseCase.execute(request.toInput(resumeFile.getBytes()));
 

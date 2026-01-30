@@ -50,7 +50,7 @@ public class CreateSubscriptionUseCaseTest {
 
         final CreateSubscriptionUseCaseInput input = CreateSubscriptionUseCaseInput.with(
                 new byte[0],
-                jobVacancy.getId()
+                jobVacancy.getId().value()
         );
 
         Mockito.when(this.securityService.getPrincipal()).thenReturn(userCandidate.getId());
@@ -83,7 +83,7 @@ public class CreateSubscriptionUseCaseTest {
 
         final CreateSubscriptionUseCaseInput input = CreateSubscriptionUseCaseInput.with(
                 new byte[0],
-                jobVacancy.getId()
+                jobVacancy.getId().value()
         );
 
         Mockito.when(this.securityService.getPrincipal()).thenReturn(userCandidate.getId());
@@ -113,7 +113,7 @@ public class CreateSubscriptionUseCaseTest {
 
         final CreateSubscriptionUseCaseInput input = CreateSubscriptionUseCaseInput.with(
                 new byte[0],
-                jobVacancy.getId()
+                jobVacancy.getId().value()
         );
 
         Mockito.when(this.securityService.getPrincipal()).thenReturn(userCandidate.getId());
