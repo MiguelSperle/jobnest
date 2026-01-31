@@ -101,9 +101,9 @@ public class GlobalExceptionHandler {
         ));
     }
 
-    @ExceptionHandler(IdempotencyKeyRequestInProgressException.class)
-    public ResponseEntity<ApiError> handleIdempotencyRequestInProgressException(IdempotencyKeyRequestInProgressException ex) {
-        log.debug("Handling idempotency request in progress exception: {}", ex.getMessage());
+    @ExceptionHandler(IdempotencyKeyProcessingException.class)
+    public ResponseEntity<ApiError> handleIdempotencyKeyAlreadyExistsException(IdempotencyKeyProcessingException ex) {
+        log.debug("Handling idempotency key already exists exception: {}", ex.getMessage());
         return ResponseEntity.status(HttpStatus.CONFLICT).body(ApiError.from(
                 Collections.singletonList(ex.getMessage()), HttpStatus.CONFLICT.getReasonPhrase()
         ));

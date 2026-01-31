@@ -1,7 +1,7 @@
 package com.miguel.jobnest.infrastructure.idempotency;
 
 import com.miguel.jobnest.application.abstractions.services.RedisService;
-import com.miguel.jobnest.infrastructure.exceptions.IdempotencyKeyRequestInProgressException;
+import com.miguel.jobnest.infrastructure.exceptions.IdempotencyKeyProcessingException;
 import com.miguel.jobnest.infrastructure.exceptions.IdempotencyKeyRequiredException;
 import com.miguel.jobnest.infrastructure.exceptions.IdempotencyKeyUnsupportedMethodException;
 import com.miguel.jobnest.infrastructure.exceptions.InvalidIdempotencyKeyException;
@@ -35,7 +35,7 @@ public class IdempotencyKeyFilter extends OncePerRequestFilter {
     private final RequestMappingHandlerMapping requestMappingHandlerMapping;
     private final HandlerExceptionResolver handlerExceptionResolver;
 
-    private static final String IDEMPOTENCY_KEY_PREFIX_REDIS = "idempotency:";
+    private static final String IDEMPOTENCY_KEY_PREFIX = "idempotency:";
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) {
@@ -60,17 +60,17 @@ public class IdempotencyKeyFilter extends OncePerRequestFilter {
                     throw InvalidIdempotencyKeyException.with("Idempotency key should not be empty");
                 }
 
-                final String idempotencyKeyRedis = IDEMPOTENCY_KEY_PREFIX_REDIS.concat(idempotencyKey);
+                final String key = IDEMPOTENCY_KEY_PREFIX.concat(idempotencyKey);
 
-                final Optional<IdempotencyKeyValue> existingIdempotencyKeyValue = this.redisService.get(idempotencyKeyRedis, IdempotencyKeyValue.class);
+                final Optional<IdempotencyKeyValue> existsIdempotencyKeyValue = this.redisService.get(key, IdempotencyKeyValue.class);
 
-                if (existingIdempotencyKeyValue.isPresent()) {
-                    response.setStatus(existingIdempotencyKeyValue.get().statusCode());
-                    response.getWriter().write(existingIdempotencyKeyValue.get().body());
-                    response.addHeader(IdempotencyKey.IDEMPOTENCY_RESPONSE_HEADER, "true");
+                if (existsIdempotencyKeyValue.isPresent() && existsIdempotencyKeyValue.get().isDone()) {
+                    response.setStatus(existsIdempotencyKeyValue.get().statusCode());
+                    response.getWriter().write(existsIdempotencyKeyValue.get().body());
                     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-                    existingIdempotencyKeyValue.get().headers().forEach(response::setHeader);
-                    log.info("Idempotency key found, returning the previous response {}", existingIdempotencyKeyValue.get());
+                    response.addHeader(IdempotencyKey.IDEMPOTENCY_RESPONSE_HEADER, "true");
+                    existsIdempotencyKeyValue.get().headers().forEach(response::setHeader);
+                    log.info("Idempotency key found, returning the previous response: {}", existsIdempotencyKeyValue.get());
                     return;
                 }
 
@@ -80,10 +80,10 @@ public class IdempotencyKeyFilter extends OncePerRequestFilter {
 
                 log.info("Idempotency key not found, saving before processing the request");
 
-                final boolean isAbsent = this.redisService.setIfAbsent(idempotencyKeyRedis, IdempotencyKeyValue.init(), ttl, timeUnit);
+                final boolean isAbsent = this.redisService.setIfAbsent(key, IdempotencyKeyValue.init(), ttl, timeUnit);
 
                 if (!isAbsent) {
-                    throw IdempotencyKeyRequestInProgressException.with("A request with this idempotency key is already being processed");
+                    throw IdempotencyKeyProcessingException.with("This idempotency key is already being processed in another request");
                 }
 
                 final ContentCachingResponseWrapper contentCachingResponseWrapper = new ContentCachingResponseWrapper(response);
@@ -104,8 +104,8 @@ public class IdempotencyKeyFilter extends OncePerRequestFilter {
                         contentCachingResponseWrapper.getStatus(), body, headers
                 );
 
-                this.redisService.set(idempotencyKeyRedis, idempotencyKeyValue, ttl, timeUnit);
                 log.info("Idempotency key not found, saving the response for future requests, result: {}", idempotencyKeyValue);
+                this.redisService.set(key, idempotencyKeyValue, ttl, timeUnit);
             } else {
                 filterChain.doFilter(request, response);
             }
@@ -114,14 +114,13 @@ public class IdempotencyKeyFilter extends OncePerRequestFilter {
         }
     }
 
-    // Obtain the handler method from the request, if available
     private HandlerMethod getHandlerMethod(HttpServletRequest request) {
         final HandlerExecutionChain handlerChain;
 
         try {
             handlerChain = this.requestMappingHandlerMapping.getHandler(request);
-        } catch (Exception exception) {
-            throw new RuntimeException(exception);
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
         }
 
         if (handlerChain != null && handlerChain.getHandler() instanceof HandlerMethod) {
