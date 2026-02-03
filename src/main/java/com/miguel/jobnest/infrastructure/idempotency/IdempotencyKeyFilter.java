@@ -60,9 +60,9 @@ public class IdempotencyKeyFilter extends OncePerRequestFilter {
                     throw InvalidIdempotencyKeyException.with("Idempotency key should not be empty");
                 }
 
-                final String key = IDEMPOTENCY_KEY_PREFIX.concat(idempotencyKey);
+                final String redisKey = IDEMPOTENCY_KEY_PREFIX.concat(idempotencyKey);
 
-                final Optional<IdempotencyKeyValue> existsIdempotencyKeyValue = this.redisService.get(key, IdempotencyKeyValue.class);
+                final Optional<IdempotencyKeyValue> existsIdempotencyKeyValue = this.redisService.get(redisKey, IdempotencyKeyValue.class);
 
                 if (existsIdempotencyKeyValue.isPresent() && existsIdempotencyKeyValue.get().isDone()) {
                     response.setStatus(existsIdempotencyKeyValue.get().statusCode());
@@ -80,7 +80,7 @@ public class IdempotencyKeyFilter extends OncePerRequestFilter {
 
                 log.info("Idempotency key not found, saving before processing the request");
 
-                final boolean isAbsent = this.redisService.setIfAbsent(key, IdempotencyKeyValue.init(), ttl, timeUnit);
+                final boolean isAbsent = this.redisService.setIfAbsent(redisKey, IdempotencyKeyValue.init(), ttl, timeUnit);
 
                 if (!isAbsent) {
                     throw IdempotencyKeyProcessingException.with("This idempotency key is already being processed in another request");
@@ -105,7 +105,7 @@ public class IdempotencyKeyFilter extends OncePerRequestFilter {
                 );
 
                 log.info("Idempotency key not found, saving the response for future requests, result: {}", idempotencyKeyValue);
-                this.redisService.set(key, idempotencyKeyValue, ttl, timeUnit);
+                this.redisService.set(redisKey, idempotencyKeyValue, ttl, timeUnit);
             } else {
                 filterChain.doFilter(request, response);
             }

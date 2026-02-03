@@ -28,6 +28,11 @@ public class RedisServiceImpl implements RedisService {
     }
 
     @Override
+    public boolean existsByKey(String key) {
+        return this.redisTemplate.hasKey(key);
+    }
+
+    @Override
     public <T> void set(String key, T value, long ttl, TimeUnit timeUnit) {
         this.redisTemplate.opsForValue().set(key, value, ttl, timeUnit);
     }
