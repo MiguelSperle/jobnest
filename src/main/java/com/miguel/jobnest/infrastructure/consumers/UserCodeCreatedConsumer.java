@@ -30,9 +30,9 @@ public class UserCodeCreatedConsumer {
 
     @RabbitListener(queues = USER_CODE_CREATED_QUEUE)
     public void onMessage(UserCodeCreatedEvent event) {
-        final String redisKey = USER_CODE_CREATED_EVENT_KEY_PREFIX.concat(event.eventId());
-        final String eventName = event.getClass().getSimpleName();
         final String eventId = event.eventId();
+        final String redisKey = USER_CODE_CREATED_EVENT_KEY_PREFIX.concat(eventId);
+        final String eventName = event.getClass().getSimpleName();
 
         if (this.redisService.existsByKey(redisKey)) {
             log.info("Event has already been processed | eventName {}, eventId {}, payload {}", eventName, eventId, event);
@@ -54,9 +54,9 @@ public class UserCodeCreatedConsumer {
 
         this.emailService.sendEmail(user.getEmail(), text, subject);
 
-        log.info("Event has been processed successfully | eventName {}, eventId {}, payload {}", eventName, eventId, event);
+        this.redisService.set(redisKey, eventId, ttl, timeUnit);
 
-        this.redisService.set(redisKey, event.eventId(), ttl, timeUnit);
+        log.info("Event has been processed successfully | eventName {}, eventId {}, payload {}", eventName, eventId, event);
     }
 
     private User getUserById(String id) {
