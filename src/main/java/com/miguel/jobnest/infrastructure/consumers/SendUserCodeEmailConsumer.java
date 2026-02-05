@@ -17,21 +17,23 @@ import java.util.concurrent.TimeUnit;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class UserCodeCreatedConsumer {
+public class SendUserCodeEmailConsumer {
     private final UserRepository userRepository;
     private final EmailService emailService;
     private final RedisService redisService;
 
     private static final String USER_CODE_CREATED_QUEUE = "user.code.created.queue";
 
-    private static final String USER_CODE_CREATED_EVENT_KEY_PREFIX = "user-code-created-event:";
+    private static final String EVENT_PREFIX = "event:UserCodeCreatedEvent:";
+    private static final String CONSUMER_SUFFIX = ":consumer:SendUserCodeEmailConsumer";
+
     private static final long ttl = 1;
     private static final TimeUnit timeUnit = TimeUnit.HOURS;
 
     @RabbitListener(queues = USER_CODE_CREATED_QUEUE)
     public void onMessage(UserCodeCreatedEvent event) {
         final String eventId = event.eventId();
-        final String redisKey = USER_CODE_CREATED_EVENT_KEY_PREFIX.concat(eventId);
+        final String redisKey = EVENT_PREFIX.concat(eventId).concat(CONSUMER_SUFFIX);
         final String eventName = event.getClass().getSimpleName();
 
         if (this.redisService.existsByKey(redisKey)) {

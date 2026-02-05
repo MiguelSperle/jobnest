@@ -18,7 +18,7 @@ import java.util.concurrent.TimeUnit;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class SubscriptionCreatedConsumer {
+public class SendSubscriptionCreatedEmailConsumer {
     private final UserRepository userRepository;
     private final JobVacancyRepository jobVacancyRepository;
     private final EmailService emailService;
@@ -26,14 +26,16 @@ public class SubscriptionCreatedConsumer {
 
     private static final String SUBSCRIPTION_CREATED_QUEUE = "subscription.created.queue";
 
-    private static final String SUBSCRIPTION_CREATED_EVENT_KEY_PREFIX = "subscription-created-event:";
+    private static final String EVENT_PREFIX = "event:SubscriptionCreatedEvent:";
+    private static final String CONSUMER_SUFFIX = ":consumer:SendSubscriptionCreatedEmailConsumer";
+
     private static final long ttl = 1;
     private static final TimeUnit timeUnit = TimeUnit.HOURS;
 
     @RabbitListener(queues = SUBSCRIPTION_CREATED_QUEUE)
     public void onMessage(SubscriptionCreatedEvent event) {
         final String eventId = event.eventId();
-        final String redisKey = SUBSCRIPTION_CREATED_EVENT_KEY_PREFIX.concat(eventId);
+        final String redisKey = EVENT_PREFIX.concat(eventId).concat(CONSUMER_SUFFIX);
         final String eventName = event.getClass().getSimpleName();
 
         if (this.redisService.existsByKey(redisKey)) {
