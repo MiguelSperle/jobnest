@@ -40,6 +40,7 @@ public class IdempotencyKeyFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) {
         try {
+            log.info("Processing idempotency key filter");
             final HandlerMethod handlerMethod = this.getHandlerMethod(request);
 
             if (handlerMethod != null && this.isIdempotencyKeyAnnotated(handlerMethod)) {
