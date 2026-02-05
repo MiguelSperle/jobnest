@@ -54,7 +54,7 @@ public class UserCodeCreatedConsumer {
 
         this.emailService.sendEmail(user.getEmail(), text, subject);
 
-        this.redisService.set(redisKey, eventId, ttl, timeUnit);
+        this.redisService.set(redisKey, "processed", ttl, timeUnit);
 
         log.info("Event has been processed successfully | eventName {}, eventId {}, payload {}", eventName, eventId, event);
     }
