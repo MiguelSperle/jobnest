@@ -50,13 +50,13 @@ public class IdempotencyKeyFilter extends OncePerRequestFilter {
                     throw IdempotencyKeyUnsupportedMethodException.with("Idempotency key is only supported for POST and PATCH requests");
                 }
 
-                final String idempotencyKey = request.getHeader(IdempotencyKey.IDEMPOTENCY_KEY_HEADER);
+                final String idempotencyKeyHeader = request.getHeader(IdempotencyKey.IDEMPOTENCY_KEY_HEADER);
 
-                if (!StringUtils.hasText(idempotencyKey)) {
+                if (idempotencyKeyHeader == null || idempotencyKeyHeader.isBlank()) {
                     throw IdempotencyKeyRequiredException.with("Idempotency key is required and the required header is 'X-Idempotency-Key'");
                 }
 
-                final String redisKey = IDEMPOTENCY_KEY_PREFIX.concat(idempotencyKey);
+                final String redisKey = IDEMPOTENCY_KEY_PREFIX.concat(idempotencyKeyHeader);
 
                 final Optional<IdempotencyKeyValue> existsIdempotencyKeyValue = this.redisService.get(redisKey, IdempotencyKeyValue.class);
 
