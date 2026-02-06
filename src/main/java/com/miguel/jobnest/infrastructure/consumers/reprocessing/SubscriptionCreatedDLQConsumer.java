@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class SubscriptionCreatedDlqConsumer {
+public class SubscriptionCreatedDLQConsumer {
     private final MessageProducer messageProducer;
 
     private static final String SUBSCRIPTION_CREATED_DLQ_QUEUE = "subscription.created.dlq.queue";

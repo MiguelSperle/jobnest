@@ -34,7 +34,7 @@ public class IdempotencyKeyFilter extends OncePerRequestFilter {
     private final RequestMappingHandlerMapping requestMappingHandlerMapping;
     private final HandlerExceptionResolver handlerExceptionResolver;
 
-    private static final String IDEMPOTENCY_KEY_PREFIX = "idempotency:";
+    private static final String IDEMPOTENCY_KEY_PREFIX = "idempotency-key:";
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) {
@@ -52,12 +52,8 @@ public class IdempotencyKeyFilter extends OncePerRequestFilter {
 
                 final String idempotencyKey = request.getHeader(IdempotencyKey.IDEMPOTENCY_KEY_HEADER);
 
-                if (idempotencyKey == null) {
-                    throw IdempotencyKeyRequiredException.with("Idempotency key is required and the required header is 'X-Idempotency-Key'");
-                }
-
                 if (!StringUtils.hasText(idempotencyKey)) {
-                    throw IdempotencyKeyRequiredException.with("Idempotency key should not be empty");
+                    throw IdempotencyKeyRequiredException.with("Idempotency key is required and the required header is 'X-Idempotency-Key'");
                 }
 
                 final String redisKey = IDEMPOTENCY_KEY_PREFIX.concat(idempotencyKey);
