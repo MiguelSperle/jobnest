@@ -40,6 +40,7 @@ public class IdempotencyKeyFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) {
         try {
             log.info("Processing idempotency key filter");
+
             final HandlerMethod handlerMethod = this.getHandlerMethod(request);
 
             if (handlerMethod != null && this.isIdempotencyKeyAnnotated(handlerMethod)) {
@@ -52,8 +53,8 @@ public class IdempotencyKeyFilter extends OncePerRequestFilter {
 
                 final String idempotencyKeyHeader = request.getHeader(IdempotencyKey.IDEMPOTENCY_KEY_HEADER);
 
-                if (idempotencyKeyHeader == null || idempotencyKeyHeader.isBlank()) {
-                    throw IdempotencyKeyRequiredException.with("Idempotency key is required and the required header is 'X-Idempotency-Key'");
+                if (idempotencyKeyHeader == null || idempotencyKeyHeader.isEmpty()) {
+                    throw IdempotencyKeyRequiredException.with("Idempotency key is required and the required header is 'x-idempotency-key'");
                 }
 
                 final String redisKey = IDEMPOTENCY_KEY_PREFIX.concat(idempotencyKeyHeader);

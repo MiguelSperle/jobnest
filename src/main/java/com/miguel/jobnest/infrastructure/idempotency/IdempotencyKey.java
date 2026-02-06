@@ -9,8 +9,8 @@ import java.util.concurrent.TimeUnit;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.METHOD})
 public @interface IdempotencyKey {
-    String IDEMPOTENCY_KEY_HEADER = "X-Idempotency-Key";
-    String IDEMPOTENCY_RESPONSE_HEADER = "X-Idempotency-Response";
+    String IDEMPOTENCY_KEY_HEADER = "x-idempotency-key";
+    String IDEMPOTENCY_RESPONSE_HEADER = "x-idempotency-response";
 
     long ttl() default 1;
 
