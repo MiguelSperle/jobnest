@@ -4,7 +4,6 @@ import com.miguel.jobnest.application.abstractions.services.RedisService;
 import com.miguel.jobnest.infrastructure.exceptions.IdempotencyKeyProcessingException;
 import com.miguel.jobnest.infrastructure.exceptions.IdempotencyKeyRequiredException;
 import com.miguel.jobnest.infrastructure.exceptions.IdempotencyKeyUnsupportedMethodException;
-import com.miguel.jobnest.infrastructure.exceptions.InvalidIdempotencyKeyException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -58,7 +57,7 @@ public class IdempotencyKeyFilter extends OncePerRequestFilter {
                 }
 
                 if (!StringUtils.hasText(idempotencyKey)) {
-                    throw InvalidIdempotencyKeyException.with("Idempotency key should not be empty");
+                    throw IdempotencyKeyRequiredException.with("Idempotency key should not be empty");
                 }
 
                 final String redisKey = IDEMPOTENCY_KEY_PREFIX.concat(idempotencyKey);
