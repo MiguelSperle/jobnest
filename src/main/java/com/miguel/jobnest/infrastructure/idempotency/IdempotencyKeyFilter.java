@@ -44,7 +44,6 @@ public class IdempotencyKeyFilter extends OncePerRequestFilter {
             final HandlerMethod handlerMethod = this.getHandlerMethod(request);
 
             if (handlerMethod != null && this.isIdempotencyKeyAnnotated(handlerMethod)) {
-
                 final String httpMethod = request.getMethod();
 
                 if (!httpMethod.equals("POST") && !httpMethod.equals("PATCH")) {
