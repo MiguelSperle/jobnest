@@ -23,8 +23,8 @@ public class JpaEventOutboxEntity {
     @Column(name = "event_id", unique = true, nullable = false, length = 36)
     private String eventId;
 
-    @Column(columnDefinition = "BYTEA", nullable = false)
-    private byte[] payload;
+    @Column(columnDefinition = "TEXT", nullable = false)
+    private String payload;
 
     @Column(name = "aggregate_id", nullable = false, length = 36)
     private String aggregateId;
@@ -50,7 +50,7 @@ public class JpaEventOutboxEntity {
 
     public static JpaEventOutboxEntity newEventOutboxEntity(
             String eventId,
-            byte[] payload,
+            String payload,
             String aggregateId,
             String aggregateType,
             String eventType,

@@ -17,7 +17,7 @@ public class EventOutboxRepositoryImpl implements EventOutboxRepository {
     public void save(String exchange, String routingKey, DomainEvent event) {
         this.jpaEventOutboxRepository.save(JpaEventOutboxEntity.newEventOutboxEntity(
                 event.eventId(),
-                Json.writeValueAsBytes(event),
+                Json.writeValueAsString(event),
                 event.aggregateId(),
                 event.aggregateType(),
                 event.eventType(),
