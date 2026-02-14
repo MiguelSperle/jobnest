@@ -25,7 +25,7 @@ public class JobVacancyRepositoryImpl implements JobVacancyRepository {
 
     @Override
     public JobVacancy save(JobVacancy jobVacancy) {
-        return this.jpaJobVacancyRepository.save(JpaJobVacancyEntity.from(jobVacancy)).toEntity();
+        return this.jpaJobVacancyRepository.save(JpaJobVacancyEntity.toEntity(jobVacancy)).toDomain();
     }
 
     @Override
@@ -51,7 +51,7 @@ public class JobVacancyRepositoryImpl implements JobVacancyRepository {
 
         final Page<JpaJobVacancyEntity> pageResult = this.jpaJobVacancyRepository.findAll(specification, pageable);
 
-        final List<JobVacancy> jobVacancies = pageResult.getContent().stream().map(JpaJobVacancyEntity::toEntity).toList();
+        final List<JobVacancy> jobVacancies = pageResult.getContent().stream().map(JpaJobVacancyEntity::toDomain).toList();
 
         final PaginationMetadata paginationMetadata = new PaginationMetadata(
                 pageResult.getNumber(),
@@ -80,7 +80,7 @@ public class JobVacancyRepositoryImpl implements JobVacancyRepository {
 
         final Page<JpaJobVacancyEntity> pageResult = this.jpaJobVacancyRepository.findAll(specification, pageable);
 
-        final List<JobVacancy> jobVacancies = pageResult.getContent().stream().map(JpaJobVacancyEntity::toEntity).toList();
+        final List<JobVacancy> jobVacancies = pageResult.getContent().stream().map(JpaJobVacancyEntity::toDomain).toList();
 
         final PaginationMetadata paginationMetadata = new PaginationMetadata(
                 pageResult.getNumber(),
@@ -94,6 +94,6 @@ public class JobVacancyRepositoryImpl implements JobVacancyRepository {
 
     @Override
     public Optional<JobVacancy> findById(String id) {
-        return this.jpaJobVacancyRepository.findById(id).map(JpaJobVacancyEntity::toEntity);
+        return this.jpaJobVacancyRepository.findById(id).map(JpaJobVacancyEntity::toDomain);
     }
 }

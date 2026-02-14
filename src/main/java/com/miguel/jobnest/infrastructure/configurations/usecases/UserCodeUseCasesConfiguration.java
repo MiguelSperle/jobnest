@@ -1,12 +1,13 @@
 package com.miguel.jobnest.infrastructure.configurations.usecases;
 
-import com.miguel.jobnest.application.abstractions.producer.MessageProducer;
 import com.miguel.jobnest.application.abstractions.providers.CodeGenerator;
+import com.miguel.jobnest.application.abstractions.repositories.EventOutboxRepository;
 import com.miguel.jobnest.application.abstractions.repositories.UserCodeRepository;
 import com.miguel.jobnest.application.abstractions.repositories.UserRepository;
 import com.miguel.jobnest.application.abstractions.usecases.usercode.ResendVerificationCodeUseCase;
 import com.miguel.jobnest.application.abstractions.usecases.usercode.SendPasswordResetCodeUseCase;
 import com.miguel.jobnest.application.abstractions.usecases.usercode.ValidatePasswordResetCodeUseCase;
+import com.miguel.jobnest.application.abstractions.wrapper.TransactionExecutor;
 import com.miguel.jobnest.application.usecases.usercode.DefaultSendPasswordResetCodeUseCase;
 import com.miguel.jobnest.application.usecases.usercode.DefaultValidatePasswordResetCodeUseCase;
 import com.miguel.jobnest.application.usecases.usercode.DefaultResendVerificationCodeUseCase;
@@ -19,14 +20,16 @@ public class UserCodeUseCasesConfiguration {
     public ResendVerificationCodeUseCase resendVerificationCodeUseCase(
             UserCodeRepository userCodeRepository,
             UserRepository userRepository,
-            MessageProducer messageProducer,
-            CodeGenerator codeGenerator
+            CodeGenerator codeGenerator,
+            EventOutboxRepository eventOutboxRepository,
+            TransactionExecutor transactionExecutor
     ) {
         return new DefaultResendVerificationCodeUseCase(
                 userCodeRepository,
                 userRepository,
-                messageProducer,
-                codeGenerator
+                codeGenerator,
+                eventOutboxRepository,
+                transactionExecutor
         );
     }
 
@@ -35,13 +38,15 @@ public class UserCodeUseCasesConfiguration {
             UserRepository userRepository,
             UserCodeRepository userCodeRepository,
             CodeGenerator codeGenerator,
-            MessageProducer messageProducer
+            EventOutboxRepository eventOutboxRepository,
+            TransactionExecutor transactionExecutor
     ) {
         return new DefaultSendPasswordResetCodeUseCase(
                 userRepository,
                 userCodeRepository,
                 codeGenerator,
-                messageProducer
+                eventOutboxRepository,
+                transactionExecutor
         );
     }
 

@@ -30,12 +30,12 @@ public class SubscriptionRepositoryImpl implements SubscriptionRepository {
 
     @Override
     public Subscription save(Subscription subscription) {
-        return this.jpaSubscriptionRepository.save(JpaSubscriptionEntity.from(subscription)).toEntity();
+        return this.jpaSubscriptionRepository.save(JpaSubscriptionEntity.toEntity(subscription)).toDomain();
     }
 
     @Override
     public Optional<Subscription> findById(String id) {
-        return this.jpaSubscriptionRepository.findById(id).map(JpaSubscriptionEntity::toEntity);
+        return this.jpaSubscriptionRepository.findById(id).map(JpaSubscriptionEntity::toDomain);
     }
 
     @Override
@@ -51,7 +51,7 @@ public class SubscriptionRepositoryImpl implements SubscriptionRepository {
 
         final Page<JpaSubscriptionEntity> pageResult = this.jpaSubscriptionRepository.findAll(specification, pageable);
 
-        final List<Subscription> subscriptions = pageResult.getContent().stream().map(JpaSubscriptionEntity::toEntity).toList();
+        final List<Subscription> subscriptions = pageResult.getContent().stream().map(JpaSubscriptionEntity::toDomain).toList();
 
         final PaginationMetadata paginationMetadata = new PaginationMetadata(
                 pageResult.getNumber(),
@@ -65,7 +65,7 @@ public class SubscriptionRepositoryImpl implements SubscriptionRepository {
 
     @Override
     public List<Subscription> findAllByJobVacancyId(String jobVacancyId) {
-        return this.jpaSubscriptionRepository.findAllByJobVacancyId(jobVacancyId).stream().map(JpaSubscriptionEntity::toEntity).toList();
+        return this.jpaSubscriptionRepository.findAllByJobVacancyId(jobVacancyId).stream().map(JpaSubscriptionEntity::toDomain).toList();
     }
 
     @Override
@@ -82,7 +82,7 @@ public class SubscriptionRepositoryImpl implements SubscriptionRepository {
 
         final Page<JpaSubscriptionEntity> pageResult = this.jpaSubscriptionRepository.findAll(specification, pageable);
 
-        final List<Subscription> subscriptions = pageResult.getContent().stream().map(JpaSubscriptionEntity::toEntity).toList();
+        final List<Subscription> subscriptions = pageResult.getContent().stream().map(JpaSubscriptionEntity::toDomain).toList();
 
         final PaginationMetadata paginationMetadata = new PaginationMetadata(
                 pageResult.getNumber(),

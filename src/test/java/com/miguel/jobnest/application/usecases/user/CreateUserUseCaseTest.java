@@ -1,6 +1,6 @@
 package com.miguel.jobnest.application.usecases.user;
 
-import com.miguel.jobnest.application.abstractions.producer.MessageProducer;
+import com.miguel.jobnest.infrastructure.abstractions.producer.MessageProducer;
 import com.miguel.jobnest.application.abstractions.providers.CodeGenerator;
 import com.miguel.jobnest.application.abstractions.providers.PasswordEncryption;
 import com.miguel.jobnest.application.abstractions.repositories.UserCodeRepository;
@@ -78,12 +78,7 @@ public class CreateUserUseCaseTest {
         Mockito.when(this.userRepository.save(Mockito.any())).thenAnswer(returnsFirstArg());
         Mockito.when(this.codeGenerator.generateCode(Mockito.anyInt(), Mockito.any())).thenReturn(code);
         Mockito.when(this.userCodeRepository.save(Mockito.any())).thenAnswer(returnsFirstArg());
-        Mockito.doAnswer(invocationOnMock -> {
-            final Runnable runnable = invocationOnMock.getArgument(0);
-            runnable.run();
-            return runnable;
-        }).when(this.transactionExecutor).makeAfterCommit(Mockito.any());
-        Mockito.doNothing().when(this.messageProducer).publish(Mockito.any(), Mockito.any(), Mockito.any());
+        Mockito.doNothing().when(this.messageProducer).publish(Mockito.any());
 
         this.useCase.execute(input);
 
@@ -112,8 +107,7 @@ public class CreateUserUseCaseTest {
                         Objects.nonNull(userCodeSaved.getExpiresIn()) &&
                         Objects.nonNull(userCodeSaved.getCreatedAt())
         ));
-        Mockito.verify(this.transactionExecutor, Mockito.times(1)).makeAfterCommit(Mockito.any());
-        Mockito.verify(this.messageProducer, Mockito.times(1)).publish(Mockito.any(), Mockito.any(), Mockito.any());
+        Mockito.verify(this.messageProducer, Mockito.times(1)).publish(Mockito.any());
     }
 
     @Test

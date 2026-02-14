@@ -1,10 +1,11 @@
 package com.miguel.jobnest.application.usecases.usercode;
 
-import com.miguel.jobnest.application.abstractions.producer.MessageProducer;
 import com.miguel.jobnest.application.abstractions.providers.CodeGenerator;
+import com.miguel.jobnest.application.abstractions.repositories.EventOutboxRepository;
 import com.miguel.jobnest.application.abstractions.repositories.UserCodeRepository;
 import com.miguel.jobnest.application.abstractions.repositories.UserRepository;
 import com.miguel.jobnest.application.abstractions.usecases.usercode.ResendVerificationCodeUseCase;
+import com.miguel.jobnest.application.abstractions.wrapper.TransactionExecutor;
 import com.miguel.jobnest.application.usecases.usercode.inputs.ResendVerificationCodeUseCaseInput;
 import com.miguel.jobnest.domain.entities.User;
 import com.miguel.jobnest.domain.entities.UserCode;
@@ -20,8 +21,9 @@ import java.util.Optional;
 public class DefaultResendVerificationCodeUseCase implements ResendVerificationCodeUseCase {
     private final UserCodeRepository userCodeRepository;
     private final UserRepository userRepository;
-    private final MessageProducer messageProducer;
     private final CodeGenerator codeGenerator;
+    private final EventOutboxRepository eventOutboxRepository;
+    private final TransactionExecutor transactionExecutor;
 
     private final static int CODE_LENGTH = 8;
     private final static String ALPHANUMERIC_CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -32,13 +34,15 @@ public class DefaultResendVerificationCodeUseCase implements ResendVerificationC
     public DefaultResendVerificationCodeUseCase(
             UserCodeRepository userCodeRepository,
             UserRepository userRepository,
-            MessageProducer messageProducer,
-            CodeGenerator codeGenerator
+            CodeGenerator codeGenerator,
+            EventOutboxRepository eventOutboxRepository,
+            TransactionExecutor transactionExecutor
     ) {
         this.userCodeRepository = userCodeRepository;
         this.userRepository = userRepository;
-        this.messageProducer = messageProducer;
         this.codeGenerator = codeGenerator;
+        this.eventOutboxRepository = eventOutboxRepository;
+        this.transactionExecutor = transactionExecutor;
     }
 
     @Override
@@ -61,15 +65,18 @@ public class DefaultResendVerificationCodeUseCase implements ResendVerificationC
 
         final UserCode newUserCode = UserCode.newUserCode(user.getId(), codeGenerated, UserCodeType.USER_VERIFICATION);
 
-        final UserCode savedUserCode = this.saveUserCode(newUserCode);
+        this.transactionExecutor.runTransaction(() -> {
+            final UserCode savedUserCode = this.saveUserCode(newUserCode);
 
-        final UserCodeCreatedEvent event = UserCodeCreatedEvent.from(
-                savedUserCode.getCode(),
-                savedUserCode.getUserCodeType(),
-                savedUserCode.getUserId()
-        );
-
-        this.messageProducer.publish(USER_CODE_CREATED_EXCHANGE, USER_CODE_CREATED_ROUTING_KEY, event);
+            this.eventOutboxRepository.save(
+                    USER_CODE_CREATED_EXCHANGE, USER_CODE_CREATED_ROUTING_KEY, new UserCodeCreatedEvent(
+                            savedUserCode.getCode(),
+                            savedUserCode.getUserCodeType(),
+                            savedUserCode.getUserId(),
+                            savedUserCode.getId()
+                    )
+            );
+        });
     }
 
     private User getUserByEmail(String email) {

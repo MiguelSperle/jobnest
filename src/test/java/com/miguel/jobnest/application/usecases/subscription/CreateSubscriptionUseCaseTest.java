@@ -1,6 +1,6 @@
 package com.miguel.jobnest.application.usecases.subscription;
 
-import com.miguel.jobnest.application.abstractions.producer.MessageProducer;
+import com.miguel.jobnest.infrastructure.abstractions.producer.MessageProducer;
 import com.miguel.jobnest.application.abstractions.repositories.SubscriptionRepository;
 import com.miguel.jobnest.application.abstractions.services.SecurityService;
 import com.miguel.jobnest.application.abstractions.services.UploadService;
@@ -50,14 +50,14 @@ public class CreateSubscriptionUseCaseTest {
 
         final CreateSubscriptionUseCaseInput input = CreateSubscriptionUseCaseInput.with(
                 new byte[0],
-                jobVacancy.getId().value()
+                jobVacancy.getId()
         );
 
         Mockito.when(this.securityService.getPrincipal()).thenReturn(userCandidate.getId());
         Mockito.when(this.subscriptionRepository.existsByUserIdAndJobVacancyId(Mockito.any(), Mockito.any())).thenReturn(false);
         Mockito.when(this.uploadService.uploadFile(Mockito.any(), Mockito.any(), Mockito.any())).thenReturn(resumeUrl);
         Mockito.when(this.subscriptionRepository.save(Mockito.any())).thenAnswer(returnsFirstArg());
-        Mockito.doNothing().when(this.messageProducer).publish(Mockito.any(), Mockito.any(), Mockito.any());
+        Mockito.doNothing().when(this.messageProducer).publish(Mockito.any());
 
         this.useCase.execute(input);
 
@@ -72,7 +72,7 @@ public class CreateSubscriptionUseCaseTest {
                         Objects.equals(subscriptionSaved.getIsCanceled(), false) &&
                         Objects.nonNull(subscriptionSaved.getCreatedAt())
         ));
-        Mockito.verify(this.messageProducer, Mockito.times(1)).publish(Mockito.any(), Mockito.any(), Mockito.any());
+        Mockito.verify(this.messageProducer, Mockito.times(1)).publish(Mockito.any());
     }
 
     @Test
@@ -83,7 +83,7 @@ public class CreateSubscriptionUseCaseTest {
 
         final CreateSubscriptionUseCaseInput input = CreateSubscriptionUseCaseInput.with(
                 new byte[0],
-                jobVacancy.getId().value()
+                jobVacancy.getId()
         );
 
         Mockito.when(this.securityService.getPrincipal()).thenReturn(userCandidate.getId());
@@ -113,7 +113,7 @@ public class CreateSubscriptionUseCaseTest {
 
         final CreateSubscriptionUseCaseInput input = CreateSubscriptionUseCaseInput.with(
                 new byte[0],
-                jobVacancy.getId().value()
+                jobVacancy.getId()
         );
 
         Mockito.when(this.securityService.getPrincipal()).thenReturn(userCandidate.getId());

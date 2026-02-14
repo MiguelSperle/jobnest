@@ -44,7 +44,7 @@ public class JpaJobVacancyEntity {
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
-    public static JpaJobVacancyEntity from(JobVacancy jobVacancy) {
+    public static JpaJobVacancyEntity toEntity(JobVacancy jobVacancy) {
         return new JpaJobVacancyEntity(
                 jobVacancy.getId(),
                 jobVacancy.getUserId(),
@@ -58,7 +58,7 @@ public class JpaJobVacancyEntity {
         );
     }
 
-    public JobVacancy toEntity() {
+    public JobVacancy toDomain() {
         return JobVacancy.with(
                 this.id,
                 this.userId,

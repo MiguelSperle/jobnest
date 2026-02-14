@@ -1,6 +1,6 @@
 package com.miguel.jobnest.infrastructure.idempotency;
 
-import com.miguel.jobnest.application.abstractions.services.RedisService;
+import com.miguel.jobnest.infrastructure.abstractions.services.RedisService;
 import com.miguel.jobnest.infrastructure.exceptions.IdempotencyKeyProcessingException;
 import com.miguel.jobnest.infrastructure.exceptions.IdempotencyKeyRequiredException;
 import com.miguel.jobnest.infrastructure.exceptions.IdempotencyKeyUnsupportedMethodException;
@@ -8,10 +8,10 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.method.HandlerMethod;
@@ -28,13 +28,14 @@ import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
-@Slf4j
 public class IdempotencyKeyFilter extends OncePerRequestFilter {
     private final RedisService redisService;
     private final RequestMappingHandlerMapping requestMappingHandlerMapping;
     private final HandlerExceptionResolver handlerExceptionResolver;
 
-    private static final String IDEMPOTENCY_KEY_PREFIX = "idempotency-key:";
+    private static final String IDEMPOTENCY_KEY_REDIS_PREFIX = "idempotency-key:";
+
+    private static final Logger log = LoggerFactory.getLogger(IdempotencyKeyFilter.class);
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) {
@@ -56,7 +57,7 @@ public class IdempotencyKeyFilter extends OncePerRequestFilter {
                     throw IdempotencyKeyRequiredException.with("Idempotency key is required and the required header is 'x-idempotency-key'");
                 }
 
-                final String redisKey = IDEMPOTENCY_KEY_PREFIX.concat(idempotencyKeyHeader);
+                final String redisKey = IDEMPOTENCY_KEY_REDIS_PREFIX.concat(idempotencyKeyHeader);
 
                 final Optional<IdempotencyKeyValue> existsIdempotencyKeyValue = this.redisService.get(redisKey, IdempotencyKeyValue.class);
 
@@ -79,7 +80,7 @@ public class IdempotencyKeyFilter extends OncePerRequestFilter {
                 final boolean isAbsent = this.redisService.setIfAbsent(redisKey, IdempotencyKeyValue.init(), ttl, timeUnit);
 
                 if (!isAbsent) {
-                    throw IdempotencyKeyProcessingException.with("This idempotency key is already being processed in another request");
+                    throw IdempotencyKeyProcessingException.with("This idempotency key is already being processed by another request");
                 }
 
                 final ContentCachingResponseWrapper contentCachingResponseWrapper = new ContentCachingResponseWrapper(response);

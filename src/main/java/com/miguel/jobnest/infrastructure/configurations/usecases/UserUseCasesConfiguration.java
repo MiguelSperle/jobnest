@@ -1,8 +1,8 @@
 package com.miguel.jobnest.infrastructure.configurations.usecases;
 
-import com.miguel.jobnest.application.abstractions.producer.MessageProducer;
 import com.miguel.jobnest.application.abstractions.providers.CodeGenerator;
 import com.miguel.jobnest.application.abstractions.providers.PasswordEncryption;
+import com.miguel.jobnest.application.abstractions.repositories.EventOutboxRepository;
 import com.miguel.jobnest.application.abstractions.repositories.UserCodeRepository;
 import com.miguel.jobnest.application.abstractions.repositories.UserRepository;
 import com.miguel.jobnest.application.abstractions.services.JwtService;
@@ -22,7 +22,7 @@ public class UserUseCasesConfiguration {
             PasswordEncryption passwordEncryption,
             CodeGenerator codeGenerator,
             TransactionExecutor transactionExecutor,
-            MessageProducer messageProducer
+            EventOutboxRepository eventOutboxRepository
     ) {
         return new DefaultCreateUserUseCase(
                 userRepository,
@@ -30,7 +30,7 @@ public class UserUseCasesConfiguration {
                 passwordEncryption,
                 codeGenerator,
                 transactionExecutor,
-                messageProducer
+                eventOutboxRepository
         );
     }
 

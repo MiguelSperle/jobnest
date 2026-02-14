@@ -35,7 +35,7 @@ public class JpaUserCodeEntity {
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
-    public static JpaUserCodeEntity from(UserCode userCode) {
+    public static JpaUserCodeEntity toEntity(UserCode userCode) {
         return new JpaUserCodeEntity(
                 userCode.getId(),
                 userCode.getUserId(),
@@ -46,7 +46,7 @@ public class JpaUserCodeEntity {
         );
     }
 
-    public UserCode toEntity() {
+    public UserCode toDomain() {
         return UserCode.with(
                 this.id,
                 this.userId,

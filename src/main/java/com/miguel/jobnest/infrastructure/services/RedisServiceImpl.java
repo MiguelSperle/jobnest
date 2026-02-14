@@ -1,6 +1,6 @@
 package com.miguel.jobnest.infrastructure.services;
 
-import com.miguel.jobnest.application.abstractions.services.RedisService;
+import com.miguel.jobnest.infrastructure.abstractions.services.RedisService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
@@ -25,11 +25,6 @@ public class RedisServiceImpl implements RedisService {
     @Override
     public <T> boolean setIfAbsent(String key, T value, long ttl, TimeUnit timeUnit) {
         return this.redisTemplate.opsForValue().setIfAbsent(key, value, ttl, timeUnit);
-    }
-
-    @Override
-    public boolean existsByKey(String key) {
-        return this.redisTemplate.hasKey(key);
     }
 
     @Override

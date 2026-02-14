@@ -1,10 +1,11 @@
 package com.miguel.jobnest.infrastructure.configurations.usecases;
 
-import com.miguel.jobnest.application.abstractions.producer.MessageProducer;
+import com.miguel.jobnest.application.abstractions.repositories.EventOutboxRepository;
 import com.miguel.jobnest.application.abstractions.repositories.SubscriptionRepository;
 import com.miguel.jobnest.application.abstractions.services.SecurityService;
 import com.miguel.jobnest.application.abstractions.services.UploadService;
 import com.miguel.jobnest.application.abstractions.usecases.subscription.*;
+import com.miguel.jobnest.application.abstractions.wrapper.TransactionExecutor;
 import com.miguel.jobnest.application.usecases.subscription.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,13 +17,15 @@ public class SubscriptionUseCasesConfiguration {
             SubscriptionRepository subscriptionRepository,
             UploadService uploadService,
             SecurityService securityService,
-            MessageProducer messageProducer
+            EventOutboxRepository eventOutboxRepository,
+            TransactionExecutor transactionExecutor
     ) {
         return new DefaultCreateSubscriptionUseCase(
                 subscriptionRepository,
                 uploadService,
                 securityService,
-                messageProducer
+                eventOutboxRepository,
+                transactionExecutor
         );
     }
 

@@ -9,11 +9,13 @@ public class SubscriptionCreatedEventTest {
     void shouldReturnSubscriptionCreatedEvent_whenCallFrom() {
         final String userId = IdentifierUtils.generateNewId();
         final String jobVacancyId = IdentifierUtils.generateNewId();
+        final String aggregateId = IdentifierUtils.generateNewId();
 
-        final SubscriptionCreatedEvent event = SubscriptionCreatedEvent.from(userId, jobVacancyId);
+        final SubscriptionCreatedEvent event = new SubscriptionCreatedEvent(userId, jobVacancyId, aggregateId);
 
         Assertions.assertNotNull(event);
         Assertions.assertEquals(userId, event.userId());
         Assertions.assertEquals(jobVacancyId, event.jobVacancyId());
+        Assertions.assertEquals(aggregateId, event.aggregateId());
     }
 }

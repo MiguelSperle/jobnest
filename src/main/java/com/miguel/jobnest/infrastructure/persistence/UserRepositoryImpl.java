@@ -16,12 +16,12 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public Optional<User> findById(String id) {
-        return this.jpaUserRepository.findById(id).map(JpaUserEntity::toEntity);
+        return this.jpaUserRepository.findById(id).map(JpaUserEntity::toDomain);
     }
 
     @Override
     public User save(User user) {
-        return this.jpaUserRepository.save(JpaUserEntity.from(user)).toEntity();
+        return this.jpaUserRepository.save(JpaUserEntity.toEntity(user)).toDomain();
     }
 
     @Override
@@ -31,6 +31,6 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public Optional<User> findByEmail(String email) {
-        return this.jpaUserRepository.findByEmail(email).map(JpaUserEntity::toEntity);
+        return this.jpaUserRepository.findByEmail(email).map(JpaUserEntity::toDomain);
     }
 }

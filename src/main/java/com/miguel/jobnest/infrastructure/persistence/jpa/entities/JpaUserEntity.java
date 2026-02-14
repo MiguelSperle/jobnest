@@ -50,7 +50,7 @@ public class JpaUserEntity {
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
-    public static JpaUserEntity from(User user) {
+    public static JpaUserEntity toEntity(User user) {
         return new JpaUserEntity(
                 user.getId(),
                 user.getName(),
@@ -66,7 +66,7 @@ public class JpaUserEntity {
         );
     }
 
-    public User toEntity() {
+    public User toDomain() {
         return User.with(
                 this.id,
                 this.name,

@@ -2,6 +2,7 @@ package com.miguel.jobnest.infrastructure.configurations.annotations;
 
 import com.miguel.jobnest.infrastructure.configurations.annotations.validators.EnumValidator;
 import jakarta.validation.Constraint;
+import jakarta.validation.Payload;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -15,4 +16,8 @@ public @interface EnumCheck {
     Class<? extends Enum<?>> enumClass();
 
     String message() default "Invalid value";
+
+    Class<?>[] groups() default {};
+
+    Class<? extends Payload>[] payload() default {};
 }

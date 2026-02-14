@@ -1,8 +1,8 @@
 package com.miguel.jobnest.application.usecases.user;
 
-import com.miguel.jobnest.application.abstractions.producer.MessageProducer;
 import com.miguel.jobnest.application.abstractions.providers.CodeGenerator;
 import com.miguel.jobnest.application.abstractions.providers.PasswordEncryption;
+import com.miguel.jobnest.application.abstractions.repositories.EventOutboxRepository;
 import com.miguel.jobnest.application.abstractions.repositories.UserCodeRepository;
 import com.miguel.jobnest.application.abstractions.repositories.UserRepository;
 import com.miguel.jobnest.application.abstractions.usecases.user.CreateUserUseCase;
@@ -21,7 +21,7 @@ public class DefaultCreateUserUseCase implements CreateUserUseCase {
     private final PasswordEncryption passwordEncryption;
     private final CodeGenerator codeGenerator;
     private final TransactionExecutor transactionExecutor;
-    private final MessageProducer messageProducer;
+    private final EventOutboxRepository eventOutboxRepository;
 
     private final static int CODE_LENGTH = 8;
     private final static String ALPHANUMERIC_CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -35,14 +35,14 @@ public class DefaultCreateUserUseCase implements CreateUserUseCase {
             PasswordEncryption passwordEncryption,
             CodeGenerator codeGenerator,
             TransactionExecutor transactionExecutor,
-            MessageProducer messageProducer
+            EventOutboxRepository eventOutboxRepository
     ) {
         this.userRepository = userRepository;
         this.userCodeRepository = userCodeRepository;
         this.passwordEncryption = passwordEncryption;
         this.codeGenerator = codeGenerator;
         this.transactionExecutor = transactionExecutor;
-        this.messageProducer = messageProducer;
+        this.eventOutboxRepository = eventOutboxRepository;
     }
 
     @Override
@@ -74,15 +74,14 @@ public class DefaultCreateUserUseCase implements CreateUserUseCase {
 
             final UserCode savedUserCode = this.saveUserCode(newUserCode);
 
-            final UserCodeCreatedEvent event = UserCodeCreatedEvent.from(
-                    savedUserCode.getCode(),
-                    savedUserCode.getUserCodeType(),
-                    savedUserCode.getUserId()
+            this.eventOutboxRepository.save(
+                    USER_CODE_CREATED_EXCHANGE, USER_CODE_CREATED_ROUTING_KEY, new UserCodeCreatedEvent(
+                            savedUserCode.getCode(),
+                            savedUserCode.getUserCodeType(),
+                            savedUserCode.getUserId(),
+                            savedUserCode.getId()
+                    )
             );
-
-            this.transactionExecutor.makeAfterCommit(() -> this.messageProducer.publish(
-                    USER_CODE_CREATED_EXCHANGE, USER_CODE_CREATED_ROUTING_KEY, event
-            ));
         });
     }
 

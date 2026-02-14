@@ -1,6 +1,6 @@
 package com.miguel.jobnest.application.usecases.usercode;
 
-import com.miguel.jobnest.application.abstractions.producer.MessageProducer;
+import com.miguel.jobnest.infrastructure.abstractions.producer.MessageProducer;
 import com.miguel.jobnest.application.abstractions.providers.CodeGenerator;
 import com.miguel.jobnest.application.abstractions.repositories.UserCodeRepository;
 import com.miguel.jobnest.application.abstractions.repositories.UserRepository;
@@ -56,7 +56,7 @@ public class ResendVerificationCodeUseCaseTest {
         Mockito.when(this.userCodeRepository.findByUserIdAndCodeType(Mockito.any(), Mockito.any())).thenReturn(Optional.empty());
         Mockito.when(this.codeGenerator.generateCode(Mockito.anyInt(), Mockito.any())).thenReturn(code);
         Mockito.when(this.userCodeRepository.save(Mockito.any())).thenAnswer(returnsFirstArg());
-        Mockito.doNothing().when(this.messageProducer).publish(Mockito.any(), Mockito.any(), Mockito.any());
+        Mockito.doNothing().when(this.messageProducer).publish(Mockito.any());
 
         this.useCase.execute(input);
 
@@ -71,7 +71,7 @@ public class ResendVerificationCodeUseCaseTest {
                         userCodeSaved.getExpiresIn().isAfter(TimeUtils.now()) &&
                         Objects.nonNull(userCodeSaved.getCreatedAt())
         ));
-        Mockito.verify(this.messageProducer, Mockito.times(1)).publish(Mockito.any(), Mockito.any(), Mockito.any());
+        Mockito.verify(this.messageProducer, Mockito.times(1)).publish(Mockito.any());
     }
 
     @Test
@@ -87,7 +87,7 @@ public class ResendVerificationCodeUseCaseTest {
         Mockito.doNothing().when(this.userCodeRepository).deleteById(Mockito.any());
         Mockito.when(this.codeGenerator.generateCode(Mockito.anyInt(), Mockito.any())).thenReturn(code);
         Mockito.when(this.userCodeRepository.save(Mockito.any())).thenAnswer(returnsFirstArg());
-        Mockito.doNothing().when(this.messageProducer).publish(Mockito.any(), Mockito.any(), Mockito.any());
+        Mockito.doNothing().when(this.messageProducer).publish(Mockito.any());
 
         this.useCase.execute(input);
 
@@ -103,7 +103,7 @@ public class ResendVerificationCodeUseCaseTest {
                         userCodeSaved.getExpiresIn().isAfter(TimeUtils.now()) &&
                         Objects.nonNull(userCodeSaved.getCreatedAt())
         ));
-        Mockito.verify(this.messageProducer, Mockito.times(1)).publish(Mockito.any(), Mockito.any(), Mockito.any());
+        Mockito.verify(this.messageProducer, Mockito.times(1)).publish(Mockito.any());
     }
 
     @Test

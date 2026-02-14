@@ -1,10 +1,11 @@
 package com.miguel.jobnest.application.usecases.subscription;
 
-import com.miguel.jobnest.application.abstractions.producer.MessageProducer;
+import com.miguel.jobnest.application.abstractions.repositories.EventOutboxRepository;
 import com.miguel.jobnest.application.abstractions.repositories.SubscriptionRepository;
 import com.miguel.jobnest.application.abstractions.services.SecurityService;
 import com.miguel.jobnest.application.abstractions.services.UploadService;
 import com.miguel.jobnest.application.abstractions.usecases.subscription.CreateSubscriptionUseCase;
+import com.miguel.jobnest.application.abstractions.wrapper.TransactionExecutor;
 import com.miguel.jobnest.application.usecases.subscription.inputs.CreateSubscriptionUseCaseInput;
 import com.miguel.jobnest.domain.entities.Subscription;
 import com.miguel.jobnest.domain.events.SubscriptionCreatedEvent;
@@ -14,7 +15,8 @@ public class DefaultCreateSubscriptionUseCase implements CreateSubscriptionUseCa
     private final SubscriptionRepository subscriptionRepository;
     private final UploadService uploadService;
     private final SecurityService securityService;
-    private final MessageProducer messageProducer;
+    private final EventOutboxRepository eventOutboxRepository;
+    private final TransactionExecutor transactionExecutor;
 
     private static final String SUBSCRIPTION_CREATED_EXCHANGE = "subscription.created.exchange";
     private static final String SUBSCRIPTION_CREATED_ROUTING_KEY = "subscription.created.routing.key";
@@ -23,12 +25,14 @@ public class DefaultCreateSubscriptionUseCase implements CreateSubscriptionUseCa
             SubscriptionRepository subscriptionRepository,
             UploadService uploadService,
             SecurityService securityService,
-            MessageProducer messageProducer
+            EventOutboxRepository eventOutboxRepository,
+            TransactionExecutor transactionExecutor
     ) {
         this.subscriptionRepository = subscriptionRepository;
         this.uploadService = uploadService;
         this.securityService = securityService;
-        this.messageProducer = messageProducer;
+        this.eventOutboxRepository = eventOutboxRepository;
+        this.transactionExecutor = transactionExecutor;
     }
 
     @Override
@@ -46,14 +50,17 @@ public class DefaultCreateSubscriptionUseCase implements CreateSubscriptionUseCa
 
             final Subscription newSubscription = Subscription.newSubscription(authenticatedUserId, input.jobVacancyId(), resumeUrl);
 
-            final Subscription savedSubscription = this.saveSubscription(newSubscription);
+            this.transactionExecutor.runTransaction(() -> {
+                final Subscription savedSubscription = this.saveSubscription(newSubscription);
 
-            final SubscriptionCreatedEvent event = SubscriptionCreatedEvent.from(
-                    savedSubscription.getUserId(),
-                    savedSubscription.getJobVacancyId()
-            );
-
-            this.messageProducer.publish(SUBSCRIPTION_CREATED_EXCHANGE, SUBSCRIPTION_CREATED_ROUTING_KEY, event);
+                this.eventOutboxRepository.save(
+                        SUBSCRIPTION_CREATED_EXCHANGE, SUBSCRIPTION_CREATED_ROUTING_KEY, new SubscriptionCreatedEvent(
+                                savedSubscription.getUserId(),
+                                savedSubscription.getJobVacancyId(),
+                                savedSubscription.getId()
+                        )
+                );
+            });
         } catch (Exception ex) {
             if (resumeUrl != null) {
                 final String publicId = this.uploadService.extractPublicId(resumeUrl, "resume-file");
