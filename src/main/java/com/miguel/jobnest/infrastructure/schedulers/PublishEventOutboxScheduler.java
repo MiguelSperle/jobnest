@@ -21,7 +21,7 @@ public class PublishEventOutboxScheduler {
     private static final Logger log = LoggerFactory.getLogger(PublishEventOutboxScheduler.class);
 
     @Scheduled(fixedRate = 5000)
-    public void publish() {
+    public void publishEvent() {
         log.info("Starting publish events outbox scheduler");
 
         final List<JpaEventOutboxEntity> pendingEventsOutbox = this.eventOutboxRepository.findFirst10ByStatus(EventOutboxStatus.PENDING.name());
