@@ -12,7 +12,7 @@ public @interface Idempotency {
     String IDEMPOTENCY_KEY_HEADER = "x-idempotency-key";
     String IDEMPOTENCY_RESPONSE_HEADER = "x-idempotency-response";
 
-    long ttl() default 1;
+    long timeout() default 1;
 
     TimeUnit timeUnit() default TimeUnit.HOURS;
 }

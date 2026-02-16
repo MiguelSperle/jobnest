@@ -72,12 +72,12 @@ public class IdempotencyFilter extends OncePerRequestFilter {
                 }
 
                 final Idempotency idempotencyValues = this.getIdempotencyKeyValues(handlerMethod);
-                final long ttl = idempotencyValues.ttl();
+                final long timeout = idempotencyValues.timeout();
                 final TimeUnit timeUnit = idempotencyValues.timeUnit();
 
                 log.info("Idempotency key not found, saving before processing the request");
 
-                final boolean isAbsent = this.redisService.setIfAbsent(redisKey, IdempotencyValue.init(), ttl, timeUnit);
+                final boolean isAbsent = this.redisService.setIfAbsent(redisKey, IdempotencyValue.init(), timeout, timeUnit);
 
                 if (!isAbsent) {
                     throw IdempotencyKeyProcessingException.with("This idempotency key is already being processed by another request");
@@ -102,7 +102,7 @@ public class IdempotencyFilter extends OncePerRequestFilter {
                 );
 
                 log.info("Idempotency key not found, saving the response for future requests, result: {}", idempotencyValue);
-                this.redisService.set(redisKey, idempotencyValue, ttl, timeUnit);
+                this.redisService.set(redisKey, idempotencyValue, timeout, timeUnit);
             } else {
                 filterChain.doFilter(request, response);
             }

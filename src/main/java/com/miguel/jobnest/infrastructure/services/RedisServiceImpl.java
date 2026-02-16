@@ -23,12 +23,12 @@ public class RedisServiceImpl implements RedisService {
     }
 
     @Override
-    public <T> boolean setIfAbsent(String key, T value, long ttl, TimeUnit timeUnit) {
-        return this.redisTemplate.opsForValue().setIfAbsent(key, value, ttl, timeUnit);
+    public <T> boolean setIfAbsent(String key, T value, long timeout, TimeUnit timeUnit) {
+        return this.redisTemplate.opsForValue().setIfAbsent(key, value, timeout, timeUnit);
     }
 
     @Override
-    public <T> void set(String key, T value, long ttl, TimeUnit timeUnit) {
-        this.redisTemplate.opsForValue().set(key, value, ttl, timeUnit);
+    public <T> void set(String key, T value, long timeout, TimeUnit timeUnit) {
+        this.redisTemplate.opsForValue().set(key, value, timeout, timeUnit);
     }
 }
