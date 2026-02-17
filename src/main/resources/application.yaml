@@ -28,10 +28,10 @@ spring:
         acknowledge-mode: auto
         retry:
           enabled: true
-          max-attempts: 4
+          max-attempts: 5
           initial-interval: 3000
           multiplier: 2
-          max-interval: 12000
+          max-interval: 24000
 
   redis:
     host: ${REDIS_HOST}

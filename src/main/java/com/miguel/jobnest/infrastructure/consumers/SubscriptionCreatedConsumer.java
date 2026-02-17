@@ -37,7 +37,7 @@ public class SubscriptionCreatedConsumer {
         final String consumerName = SubscriptionCreatedConsumer.class.getSimpleName();
 
         if (this.processedEventRepository.existsByEventIdAndConsumedBy(eventId, consumerName)) {
-            log.info("Event with id: {} has already been processed", eventId);
+            log.info("Event with id: {} has already been processed by the consumer: {}", eventId, consumerName);
             return;
         }
 
@@ -52,7 +52,7 @@ public class SubscriptionCreatedConsumer {
 
         this.processedEventRepository.save(JpaProcessedEventEntity.newProcessedEventEntity(eventId, consumerName));
 
-        log.info("Event with id: {} has been successfully processed", eventId);
+        log.info("Event with id: {} has been successfully processed by the consumer: {}", eventId, consumerName);
     }
 
     private JobVacancy getJobVacancyById(String id) {
