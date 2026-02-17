@@ -29,7 +29,7 @@ public class SmtpEmailServiceImpl implements EmailService {
 
             mimeMessageHelper.setFrom(this.from);
             mimeMessageHelper.setTo(to);
-            mimeMessageHelper.setText(text, true);
+            mimeMessageHelper.setText(text, false);
             mimeMessageHelper.setSubject(subject);
 
             this.javaMailSender.send(mimeMessage);
