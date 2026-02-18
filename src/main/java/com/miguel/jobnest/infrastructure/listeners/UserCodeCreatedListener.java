@@ -1,4 +1,4 @@
-package com.miguel.jobnest.infrastructure.consumers;
+package com.miguel.jobnest.infrastructure.listeners;
 
 import com.miguel.jobnest.application.abstractions.repositories.UserRepository;
 import com.miguel.jobnest.domain.enums.UserCodeType;
@@ -18,24 +18,24 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class UserCodeCreatedConsumer {
+public class UserCodeCreatedListener {
     private final UserRepository userRepository;
     private final JpaProcessedEventRepository processedEventRepository;
     private final EmailService emailService;
 
     private static final String USER_CODE_CREATED_QUEUE = "user.code.created.queue";
 
-    private static final Logger log = LoggerFactory.getLogger(UserCodeCreatedConsumer.class);
+    private static final Logger log = LoggerFactory.getLogger(UserCodeCreatedListener.class);
 
     @RabbitListener(queues = USER_CODE_CREATED_QUEUE)
     public void onMessage(Message message) {
         final UserCodeCreatedEvent event = Json.readValue(message.getBody(), UserCodeCreatedEvent.class);
 
         final String eventId = event.eventId();
-        final String consumerName = UserCodeCreatedConsumer.class.getSimpleName();
+        final String listenerName = UserCodeCreatedListener.class.getSimpleName();
 
-        if (this.processedEventRepository.existsByEventIdAndConsumedBy(eventId, consumerName)) {
-            log.info("Event with id: {} has already been processed by the consumer: {}", eventId, consumerName);
+        if (this.processedEventRepository.existsByEventIdAndListener(eventId, listenerName)) {
+            log.info("Event with id: {} has already been processed by the listener: {}", eventId, listenerName);
             return;
         }
 
@@ -54,9 +54,9 @@ public class UserCodeCreatedConsumer {
 
         this.emailService.sendEmail(user.getEmail(), text, subject);
 
-        this.processedEventRepository.save(JpaProcessedEventEntity.newProcessedEventEntity(eventId, consumerName));
+        this.processedEventRepository.save(JpaProcessedEventEntity.newProcessedEventEntity(eventId, listenerName));
 
-        log.info("Event with id: {} has been successfully processed by the consumer: {}", eventId, consumerName);
+        log.info("Event with id: {} has been successfully processed by the listener: {}", eventId, listenerName);
     }
 
     private User getUserById(String id) {

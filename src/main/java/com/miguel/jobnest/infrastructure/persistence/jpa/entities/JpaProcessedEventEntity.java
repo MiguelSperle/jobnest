@@ -22,17 +22,17 @@ public class JpaProcessedEventEntity {
     @Column(name = "event_id", nullable = false, length = 36)
     private String eventId;
 
-    @Column(name = "consumed_by", nullable = false)
-    private String consumedBy;
+    @Column(nullable = false, length = 100)
+    private String listener;
 
     @Column(name = "processed_at", nullable = false)
     private LocalDateTime processedAt;
 
-    public static JpaProcessedEventEntity newProcessedEventEntity(String eventId, String consumedBy) {
+    public static JpaProcessedEventEntity newProcessedEventEntity(String eventId, String listener) {
         return new JpaProcessedEventEntity(
                 IdentifierUtils.generateNewId(),
                 eventId,
-                consumedBy,
+                listener,
                 TimeUtils.now()
         );
     }

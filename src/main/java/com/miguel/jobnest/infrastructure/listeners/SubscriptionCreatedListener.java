@@ -1,4 +1,4 @@
-package com.miguel.jobnest.infrastructure.consumers;
+package com.miguel.jobnest.infrastructure.listeners;
 
 import com.miguel.jobnest.application.abstractions.repositories.JobVacancyRepository;
 import com.miguel.jobnest.application.abstractions.repositories.UserRepository;
@@ -19,7 +19,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class SubscriptionCreatedConsumer {
+public class SubscriptionCreatedListener {
     private final UserRepository userRepository;
     private final JobVacancyRepository jobVacancyRepository;
     private final JpaProcessedEventRepository processedEventRepository;
@@ -27,17 +27,17 @@ public class SubscriptionCreatedConsumer {
 
     private static final String SUBSCRIPTION_CREATED_QUEUE = "subscription.created.queue";
 
-    private static final Logger log = LoggerFactory.getLogger(SubscriptionCreatedConsumer.class);
+    private static final Logger log = LoggerFactory.getLogger(SubscriptionCreatedListener.class);
 
     @RabbitListener(queues = SUBSCRIPTION_CREATED_QUEUE)
     public void onMessage(Message message) {
         final SubscriptionCreatedEvent event = Json.readValue(message.getBody(), SubscriptionCreatedEvent.class);
 
         final String eventId = event.eventId();
-        final String consumerName = SubscriptionCreatedConsumer.class.getSimpleName();
+        final String listenerName = SubscriptionCreatedListener.class.getSimpleName();
 
-        if (this.processedEventRepository.existsByEventIdAndConsumedBy(eventId, consumerName)) {
-            log.info("Event with id: {} has already been processed by the consumer: {}", eventId, consumerName);
+        if (this.processedEventRepository.existsByEventIdAndListener(eventId, listenerName)) {
+            log.info("Event with id: {} has already been processed by the listener: {}", eventId, listenerName);
             return;
         }
 
@@ -50,9 +50,9 @@ public class SubscriptionCreatedConsumer {
 
         this.emailService.sendEmail(user.getEmail(), text, subject);
 
-        this.processedEventRepository.save(JpaProcessedEventEntity.newProcessedEventEntity(eventId, consumerName));
+        this.processedEventRepository.save(JpaProcessedEventEntity.newProcessedEventEntity(eventId, listenerName));
 
-        log.info("Event with id: {} has been successfully processed by the consumer: {}", eventId, consumerName);
+        log.info("Event with id: {} has been successfully processed by the listener: {}", eventId, listenerName);
     }
 
     private JobVacancy getJobVacancyById(String id) {
