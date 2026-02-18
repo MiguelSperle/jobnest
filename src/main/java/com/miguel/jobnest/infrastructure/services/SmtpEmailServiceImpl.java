@@ -25,7 +25,7 @@ public class SmtpEmailServiceImpl implements EmailService {
     public void sendEmail(String to, String text, String subject) {
         try {
             final MimeMessage mimeMessage = this.javaMailSender.createMimeMessage();
-            final MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
+            final MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, false);
 
             mimeMessageHelper.setFrom(this.from);
             mimeMessageHelper.setTo(to);
