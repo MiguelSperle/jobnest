@@ -13,7 +13,7 @@ public class UserCodeCreatedEventTest {
         final String userId = IdentifierUtils.generateNewId();
         final String aggregateId =  IdentifierUtils.generateNewId();
 
-        final UserCodeCreatedEvent event = new UserCodeCreatedEvent(code, userCodeType, userId, aggregateId);
+        final UserCodeCreatedEvent event = new UserCodeCreatedEvent(aggregateId, code, userCodeType, userId);
 
         Assertions.assertNotNull(event);
         Assertions.assertEquals(code, event.code());

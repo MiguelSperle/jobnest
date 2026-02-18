@@ -11,7 +11,7 @@ public class SubscriptionCreatedEventTest {
         final String jobVacancyId = IdentifierUtils.generateNewId();
         final String aggregateId = IdentifierUtils.generateNewId();
 
-        final SubscriptionCreatedEvent event = new SubscriptionCreatedEvent(userId, jobVacancyId, aggregateId);
+        final SubscriptionCreatedEvent event = new SubscriptionCreatedEvent(aggregateId, userId, jobVacancyId);
 
         Assertions.assertNotNull(event);
         Assertions.assertEquals(userId, event.userId());

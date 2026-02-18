@@ -55,9 +55,9 @@ public class DefaultCreateSubscriptionUseCase implements CreateSubscriptionUseCa
 
                 this.eventOutboxRepository.save(
                         SUBSCRIPTION_CREATED_EXCHANGE, SUBSCRIPTION_CREATED_ROUTING_KEY, new SubscriptionCreatedEvent(
+                                savedSubscription.getId(),
                                 savedSubscription.getUserId(),
-                                savedSubscription.getJobVacancyId(),
-                                savedSubscription.getId()
+                                savedSubscription.getJobVacancyId()
                         )
                 );
             });

@@ -70,10 +70,10 @@ public class DefaultResendVerificationCodeUseCase implements ResendVerificationC
 
             this.eventOutboxRepository.save(
                     USER_CODE_CREATED_EXCHANGE, USER_CODE_CREATED_ROUTING_KEY, new UserCodeCreatedEvent(
+                            savedUserCode.getId(),
                             savedUserCode.getCode(),
                             savedUserCode.getUserCodeType(),
-                            savedUserCode.getUserId(),
-                            savedUserCode.getId()
+                            savedUserCode.getUserId()
                     )
             );
         });
