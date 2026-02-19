@@ -10,18 +10,18 @@ import com.miguel.jobnest.domain.exceptions.NotFoundException;
 public class DefaultGetJobVacancyByIdUseCase implements GetJobVacancyByIdUseCase {
     private final JobVacancyRepository jobVacancyRepository;
 
-    public DefaultGetJobVacancyByIdUseCase(JobVacancyRepository jobVacancyRepository) {
+    public DefaultGetJobVacancyByIdUseCase(final JobVacancyRepository jobVacancyRepository) {
         this.jobVacancyRepository = jobVacancyRepository;
     }
 
     @Override
-    public GetJobVacancyByIdUseCaseOutput execute(GetJobVacancyByIdUseCaseInput input) {
+    public GetJobVacancyByIdUseCaseOutput execute(final GetJobVacancyByIdUseCaseInput input) {
         final JobVacancy jobVacancy = this.getJobVacancyById(input.jobVacancyId());
 
         return GetJobVacancyByIdUseCaseOutput.from(jobVacancy);
     }
 
-    private JobVacancy getJobVacancyById(String id) {
+    private JobVacancy getJobVacancyById(final String id) {
         return this.jobVacancyRepository.findById(id).orElseThrow(() -> NotFoundException.with("Job vacancy not found"));
     }
 }

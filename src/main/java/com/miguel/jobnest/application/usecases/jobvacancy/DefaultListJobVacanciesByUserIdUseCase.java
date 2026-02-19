@@ -14,15 +14,15 @@ public class DefaultListJobVacanciesByUserIdUseCase implements ListJobVacanciesB
     private final SecurityService securityService;
 
     public DefaultListJobVacanciesByUserIdUseCase(
-            JobVacancyRepository jobVacancyRepository,
-            SecurityService securityService
+            final JobVacancyRepository jobVacancyRepository,
+            final SecurityService securityService
     ) {
         this.jobVacancyRepository = jobVacancyRepository;
         this.securityService = securityService;
     }
 
     @Override
-    public ListJobVacanciesByUserIdUseCaseOutput execute(ListJobVacanciesByUserIdUseCaseInput input) {
+    public ListJobVacanciesByUserIdUseCaseOutput execute(final ListJobVacanciesByUserIdUseCaseInput input) {
         final String authenticatedUserId = this.securityService.getPrincipal();
 
         final Pagination<JobVacancy> paginatedJobVacancies = this.getAllPaginatedJobVacanciesByUserId(authenticatedUserId, input.searchQuery());
@@ -30,7 +30,7 @@ public class DefaultListJobVacanciesByUserIdUseCase implements ListJobVacanciesB
         return ListJobVacanciesByUserIdUseCaseOutput.from(paginatedJobVacancies);
     }
 
-    private Pagination<JobVacancy> getAllPaginatedJobVacanciesByUserId(String userId, SearchQuery searchQuery) {
+    private Pagination<JobVacancy> getAllPaginatedJobVacanciesByUserId(final String userId, final SearchQuery searchQuery) {
         return this.jobVacancyRepository.findAllPaginatedByUserId(userId, searchQuery);
     }
 }

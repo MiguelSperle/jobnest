@@ -16,7 +16,7 @@ public class DefaultUpdateJobVacancyUseCase implements UpdateJobVacancyUseCase {
     }
 
     @Override
-    public void execute(UpdateJobVacancyUseCaseInput input) {
+    public void execute(final UpdateJobVacancyUseCaseInput input) {
         final JobVacancy jobVacancy = this.getJobVacancyById(input.jobVacancyId());
 
         final SeniorityLevel convertedSeniorityLevel = SeniorityLevel.valueOf(input.seniorityLevel());
@@ -28,11 +28,11 @@ public class DefaultUpdateJobVacancyUseCase implements UpdateJobVacancyUseCase {
         this.saveJobVacancy(updatedJobVacancy);
     }
 
-    private JobVacancy getJobVacancyById(String id) {
+    private JobVacancy getJobVacancyById(final String id) {
         return this.jobVacancyRepository.findById(id).orElseThrow(() -> NotFoundException.with("Job vacancy not found"));
     }
 
-    private void saveJobVacancy(JobVacancy jobVacancy) {
+    private void saveJobVacancy(final JobVacancy jobVacancy) {
         this.jobVacancyRepository.save(jobVacancy);
     }
 }

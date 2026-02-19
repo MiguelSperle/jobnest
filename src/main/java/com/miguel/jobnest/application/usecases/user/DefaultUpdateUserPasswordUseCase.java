@@ -15,9 +15,9 @@ public class DefaultUpdateUserPasswordUseCase implements UpdateUserPasswordUseCa
     private final SecurityService securityService;
 
     public DefaultUpdateUserPasswordUseCase(
-            UserRepository userRepository,
-            PasswordEncryption passwordEncryption,
-            SecurityService securityService
+            final UserRepository userRepository,
+            final PasswordEncryption passwordEncryption,
+            final SecurityService securityService
     ) {
         this.userRepository = userRepository;
         this.passwordEncryption = passwordEncryption;
@@ -41,15 +41,15 @@ public class DefaultUpdateUserPasswordUseCase implements UpdateUserPasswordUseCa
         this.saveUser(updatedUser);
     }
 
-    private User getUserById(String id) {
+    private User getUserById(final String id) {
         return this.userRepository.findById(id).orElseThrow(() -> NotFoundException.with("User not found"));
     }
 
-    private boolean validatePassword(String password, String encodedPassword) {
+    private boolean validatePassword(final String password, final String encodedPassword) {
         return this.passwordEncryption.matches(password, encodedPassword);
     }
 
-    private void saveUser(User user) {
+    private void saveUser(final User user) {
         this.userRepository.save(user);
     }
 }

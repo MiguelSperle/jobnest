@@ -10,18 +10,18 @@ import com.miguel.jobnest.domain.exceptions.NotFoundException;
 public class DefaultGetSubscriptionByIdUseCase implements GetSubscriptionByIdUseCase {
     private final SubscriptionRepository subscriptionRepository;
 
-    public DefaultGetSubscriptionByIdUseCase(SubscriptionRepository subscriptionRepository) {
+    public DefaultGetSubscriptionByIdUseCase(final SubscriptionRepository subscriptionRepository) {
         this.subscriptionRepository = subscriptionRepository;
     }
 
     @Override
-    public GetSubscriptionByIdUseCaseOutput execute(GetSubscriptionByIdUseCaseInput input) {
+    public GetSubscriptionByIdUseCaseOutput execute(final GetSubscriptionByIdUseCaseInput input) {
         final Subscription subscription = this.getSubscriptionById(input.subscriptionId());
 
         return GetSubscriptionByIdUseCaseOutput.from(subscription);
     }
 
-    private Subscription getSubscriptionById(String id) {
+    private Subscription getSubscriptionById(final String id) {
         return this.subscriptionRepository.findById(id).orElseThrow(() -> NotFoundException.with("Subscription not found"));
     }
 }

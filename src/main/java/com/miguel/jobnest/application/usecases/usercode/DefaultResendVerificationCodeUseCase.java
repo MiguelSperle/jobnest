@@ -32,11 +32,11 @@ public class DefaultResendVerificationCodeUseCase implements ResendVerificationC
     private static final String USER_CODE_CREATED_ROUTING_KEY = "user.code.created.routing.key";
 
     public DefaultResendVerificationCodeUseCase(
-            UserCodeRepository userCodeRepository,
-            UserRepository userRepository,
-            CodeGenerator codeGenerator,
-            EventOutboxRepository eventOutboxRepository,
-            TransactionExecutor transactionExecutor
+            final UserCodeRepository userCodeRepository,
+            final UserRepository userRepository,
+            final CodeGenerator codeGenerator,
+            final EventOutboxRepository eventOutboxRepository,
+            final TransactionExecutor transactionExecutor
     ) {
         this.userCodeRepository = userCodeRepository;
         this.userRepository = userRepository;
@@ -46,7 +46,7 @@ public class DefaultResendVerificationCodeUseCase implements ResendVerificationC
     }
 
     @Override
-    public void execute(ResendVerificationCodeUseCaseInput input) {
+    public void execute(final ResendVerificationCodeUseCaseInput input) {
         final User user = this.getUserByEmail(input.email());
 
         if (Objects.equals(user.getUserStatus(), UserStatus.VERIFIED)) {
@@ -79,19 +79,19 @@ public class DefaultResendVerificationCodeUseCase implements ResendVerificationC
         });
     }
 
-    private User getUserByEmail(String email) {
+    private User getUserByEmail(final String email) {
         return this.userRepository.findByEmail(email).orElseThrow(() -> NotFoundException.with("User not found"));
     }
 
-    private Optional<UserCode> getPreviousUserCodeByUserIdAndCodeType(String id) {
+    private Optional<UserCode> getPreviousUserCodeByUserIdAndCodeType(final String id) {
         return this.userCodeRepository.findByUserIdAndCodeType(id, UserCodeType.USER_VERIFICATION.name());
     }
 
-    private void deleteUserCodeById(String id) {
+    private void deleteUserCodeById(final String id) {
         this.userCodeRepository.deleteById(id);
     }
 
-    private UserCode saveUserCode(UserCode userCode) {
+    private UserCode saveUserCode(final UserCode userCode) {
         return this.userCodeRepository.save(userCode);
     }
 }

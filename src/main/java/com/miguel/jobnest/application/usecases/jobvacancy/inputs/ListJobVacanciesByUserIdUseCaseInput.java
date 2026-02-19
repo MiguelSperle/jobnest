@@ -5,7 +5,7 @@ import com.miguel.jobnest.domain.pagination.SearchQuery;
 public record ListJobVacanciesByUserIdUseCaseInput(
         SearchQuery searchQuery
 ) {
-    public static ListJobVacanciesByUserIdUseCaseInput with(SearchQuery searchQuery) {
+    public static ListJobVacanciesByUserIdUseCaseInput with(final SearchQuery searchQuery) {
         return new ListJobVacanciesByUserIdUseCaseInput(searchQuery);
     }
 }

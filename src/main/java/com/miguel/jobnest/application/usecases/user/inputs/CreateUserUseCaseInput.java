@@ -10,13 +10,13 @@ public record CreateUserUseCaseInput(
         String country
 ) {
     public static CreateUserUseCaseInput with(
-            String name,
-            String email,
-            String password,
-            String authorizationRole,
-            String city,
-            String state,
-            String country
+            final String name,
+            final String email,
+            final String password,
+            final String authorizationRole,
+            final String city,
+            final String state,
+            final String country
     ) {
         return new CreateUserUseCaseInput(
                 name,

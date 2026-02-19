@@ -8,11 +8,11 @@ public record CreateJobVacancyUseCaseInput(
         String companyName
 ) {
     public static CreateJobVacancyUseCaseInput with(
-            String title,
-            String description,
-            String seniorityLevel,
-            String modality,
-            String companyName
+            final String title,
+            final String description,
+            final String seniorityLevel,
+            final String modality,
+            final String companyName
     ) {
         return new CreateJobVacancyUseCaseInput(
                 title,

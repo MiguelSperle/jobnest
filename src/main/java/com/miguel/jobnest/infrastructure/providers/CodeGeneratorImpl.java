@@ -10,7 +10,7 @@ public class CodeGeneratorImpl implements CodeGenerator {
     private final SecureRandom secureRandom = new SecureRandom();
 
     @Override
-    public String generateCode(int codeLength, String characters) {
+    public String generateCode(final int codeLength, final String characters) {
         final StringBuilder code = new StringBuilder(codeLength);
         final int charSetLength = characters.length();
 

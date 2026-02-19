@@ -6,7 +6,7 @@ import com.miguel.jobnest.domain.pagination.Pagination;
 public record ListJobVacanciesByUserIdUseCaseOutput(
         Pagination<JobVacancy> paginatedJobVacancies
 ) {
-    public static ListJobVacanciesByUserIdUseCaseOutput from(Pagination<JobVacancy> paginatedJobVacancies) {
+    public static ListJobVacanciesByUserIdUseCaseOutput from(final Pagination<JobVacancy> paginatedJobVacancies) {
         return new ListJobVacanciesByUserIdUseCaseOutput(paginatedJobVacancies);
     }
 }

@@ -5,7 +5,7 @@ import com.miguel.jobnest.domain.entities.JobVacancy;
 public record GetJobVacancyByIdUseCaseOutput(
         JobVacancy jobVacancy
 ) {
-    public static GetJobVacancyByIdUseCaseOutput from(JobVacancy jobVacancy) {
+    public static GetJobVacancyByIdUseCaseOutput from(final JobVacancy jobVacancy) {
         return new GetJobVacancyByIdUseCaseOutput(jobVacancy);
     }
 }

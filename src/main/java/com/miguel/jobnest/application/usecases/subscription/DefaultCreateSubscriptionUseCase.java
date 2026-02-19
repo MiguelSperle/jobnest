@@ -22,11 +22,11 @@ public class DefaultCreateSubscriptionUseCase implements CreateSubscriptionUseCa
     private static final String SUBSCRIPTION_CREATED_ROUTING_KEY = "subscription.created.routing.key";
 
     public DefaultCreateSubscriptionUseCase(
-            SubscriptionRepository subscriptionRepository,
-            UploadService uploadService,
-            SecurityService securityService,
-            EventOutboxRepository eventOutboxRepository,
-            TransactionExecutor transactionExecutor
+            final SubscriptionRepository subscriptionRepository,
+            final UploadService uploadService,
+            final SecurityService securityService,
+            final EventOutboxRepository eventOutboxRepository,
+            final TransactionExecutor transactionExecutor
     ) {
         this.subscriptionRepository = subscriptionRepository;
         this.uploadService = uploadService;
@@ -36,7 +36,7 @@ public class DefaultCreateSubscriptionUseCase implements CreateSubscriptionUseCa
     }
 
     @Override
-    public void execute(CreateSubscriptionUseCaseInput input) {
+    public void execute(final CreateSubscriptionUseCaseInput input) {
         final String authenticatedUserId = this.securityService.getPrincipal();
 
         if (this.verifySubscriptionAlreadyExistsByUserIdAndJobVacancyId(authenticatedUserId, input.jobVacancyId())) {
@@ -61,7 +61,7 @@ public class DefaultCreateSubscriptionUseCase implements CreateSubscriptionUseCa
                         )
                 );
             });
-        } catch (Exception ex) {
+        } catch (final Exception ex) {
             if (resumeUrl != null) {
                 final String publicId = this.uploadService.extractPublicId(resumeUrl, "resume-file");
                 this.uploadService.destroyFile(publicId, "image");
@@ -70,11 +70,11 @@ public class DefaultCreateSubscriptionUseCase implements CreateSubscriptionUseCa
         }
     }
 
-    private boolean verifySubscriptionAlreadyExistsByUserIdAndJobVacancyId(String userId, String jobVacancyId) {
+    private boolean verifySubscriptionAlreadyExistsByUserIdAndJobVacancyId(final String userId, final String jobVacancyId) {
         return this.subscriptionRepository.existsByUserIdAndJobVacancyId(userId, jobVacancyId);
     }
 
-    private Subscription saveSubscription(Subscription subscription) {
+    private Subscription saveSubscription(final Subscription subscription) {
         return this.subscriptionRepository.save(subscription);
     }
 }

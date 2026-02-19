@@ -12,12 +12,12 @@ import com.miguel.jobnest.domain.utils.TimeUtils;
 public class DefaultValidatePasswordResetCodeUseCase implements ValidatePasswordResetCodeUseCase {
     private final UserCodeRepository userCodeRepository;
 
-    public DefaultValidatePasswordResetCodeUseCase(UserCodeRepository userCodeRepository) {
+    public DefaultValidatePasswordResetCodeUseCase(final UserCodeRepository userCodeRepository) {
         this.userCodeRepository = userCodeRepository;
     }
 
     @Override
-    public void execute(ValidatePasswordResetCodeUseCaseInput input) {
+    public void execute(final ValidatePasswordResetCodeUseCaseInput input) {
         final UserCode userCode = this.getUserCodeByCodeAndCodeType(input.code());
 
         if (TimeUtils.isExpired(userCode.getExpiresIn(), TimeUtils.now())) {
@@ -26,12 +26,12 @@ public class DefaultValidatePasswordResetCodeUseCase implements ValidatePassword
         }
     }
 
-    private UserCode getUserCodeByCodeAndCodeType(String code) {
+    private UserCode getUserCodeByCodeAndCodeType(final String code) {
         return this.userCodeRepository.findByCodeAndCodeType(code, UserCodeType.PASSWORD_RESET.name())
                 .orElseThrow(() -> NotFoundException.with("User code not found"));
     }
 
-    private void deleteUserCodeById(String id) {
+    private void deleteUserCodeById(final String id) {
         this.userCodeRepository.deleteById(id);
     }
 }

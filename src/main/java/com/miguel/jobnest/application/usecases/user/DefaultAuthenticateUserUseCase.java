@@ -16,9 +16,9 @@ public class DefaultAuthenticateUserUseCase implements AuthenticateUserUseCase {
     private final JwtService jwtService;
 
     public DefaultAuthenticateUserUseCase(
-            UserRepository userRepository,
-            PasswordEncryption passwordEncryption,
-            JwtService jwtService
+            final UserRepository userRepository,
+            final PasswordEncryption passwordEncryption,
+            final JwtService jwtService
     ) {
         this.userRepository = userRepository;
         this.passwordEncryption = passwordEncryption;
@@ -26,7 +26,7 @@ public class DefaultAuthenticateUserUseCase implements AuthenticateUserUseCase {
     }
 
     @Override
-    public AuthenticateUserUseCaseOutput execute(AuthenticateUserUseCaseInput input) {
+    public AuthenticateUserUseCaseOutput execute(final AuthenticateUserUseCaseInput input) {
         final User user = this.getUserByEmail(input.email());
 
         if (!this.validatePassword(input.password(), user.getPassword())) {
@@ -46,11 +46,11 @@ public class DefaultAuthenticateUserUseCase implements AuthenticateUserUseCase {
         return AuthenticateUserUseCaseOutput.from(jwtGenerated);
     }
 
-    private User getUserByEmail(String email) {
+    private User getUserByEmail(final String email) {
         return this.userRepository.findByEmail(email).orElseThrow(() -> DomainException.with("Wrong credentials", 401));
     }
 
-    private boolean validatePassword(String password, String encodedPassword) {
+    private boolean validatePassword(final String password, final String encodedPassword) {
         return this.passwordEncryption.matches(password, encodedPassword);
     }
 }

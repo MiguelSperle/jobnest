@@ -20,10 +20,10 @@ public class DefaultResetUserPasswordUseCase implements ResetUserPasswordUseCase
     private final TransactionExecutor transactionExecutor;
 
     public DefaultResetUserPasswordUseCase(
-            UserRepository userRepository,
-            UserCodeRepository userCodeRepository,
-            PasswordEncryption passwordEncryption,
-            TransactionExecutor transactionExecutor
+            final UserRepository userRepository,
+            final UserCodeRepository userCodeRepository,
+            final PasswordEncryption passwordEncryption,
+            final TransactionExecutor transactionExecutor
     ) {
         this.userRepository = userRepository;
         this.userCodeRepository = userCodeRepository;
@@ -32,7 +32,7 @@ public class DefaultResetUserPasswordUseCase implements ResetUserPasswordUseCase
     }
 
     @Override
-    public void execute(ResetUserPasswordUseCaseInput input) {
+    public void execute(final ResetUserPasswordUseCaseInput input) {
         final UserCode userCode = this.getUserCodeByCodeAndCodeType(input.code());
 
         if (TimeUtils.isExpired(userCode.getExpiresIn(), TimeUtils.now())) {
@@ -52,20 +52,20 @@ public class DefaultResetUserPasswordUseCase implements ResetUserPasswordUseCase
         });
     }
 
-    private UserCode getUserCodeByCodeAndCodeType(String code) {
+    private UserCode getUserCodeByCodeAndCodeType(final String code) {
         return this.userCodeRepository.findByCodeAndCodeType(code, UserCodeType.PASSWORD_RESET.name())
                 .orElseThrow(() -> NotFoundException.with("User code not found"));
     }
 
-    private void deleteUserCodeById(String id) {
+    private void deleteUserCodeById(final String id) {
         this.userCodeRepository.deleteById(id);
     }
 
-    private User getUserById(String id) {
+    private User getUserById(final String id) {
         return this.userRepository.findById(id).orElseThrow(() -> NotFoundException.with("User not found"));
     }
 
-    private void saveUser(User user) {
+    private void saveUser(final User user) {
         this.userRepository.save(user);
     }
 }

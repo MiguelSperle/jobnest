@@ -17,9 +17,9 @@ public class DefaultSoftDeleteJobVacancyUseCase implements SoftDeleteJobVacancyU
     private final TransactionExecutor transactionExecutor;
 
     public DefaultSoftDeleteJobVacancyUseCase(
-            JobVacancyRepository jobVacancyRepository,
-            SubscriptionRepository subscriptionRepository,
-            TransactionExecutor transactionExecutor
+            final JobVacancyRepository jobVacancyRepository,
+            final SubscriptionRepository subscriptionRepository,
+            final TransactionExecutor transactionExecutor
     ) {
         this.jobVacancyRepository = jobVacancyRepository;
         this.subscriptionRepository = subscriptionRepository;
@@ -27,7 +27,7 @@ public class DefaultSoftDeleteJobVacancyUseCase implements SoftDeleteJobVacancyU
     }
 
     @Override
-    public void execute(SoftDeleteJobVacancyUseCaseInput input) {
+    public void execute(final SoftDeleteJobVacancyUseCaseInput input) {
         final JobVacancy jobVacancy = this.getJobVacancyById(input.jobVacancyId());
 
         final List<Subscription> subscriptions = this.getAllByJobVacancyId(jobVacancy.getId());
@@ -40,19 +40,19 @@ public class DefaultSoftDeleteJobVacancyUseCase implements SoftDeleteJobVacancyU
         });
     }
 
-    private JobVacancy getJobVacancyById(String id) {
+    private JobVacancy getJobVacancyById(final String id) {
         return this.jobVacancyRepository.findById(id).orElseThrow(() -> NotFoundException.with("Job vacancy not found"));
     }
 
-    private void saveJobVacancy(JobVacancy jobVacancy) {
+    private void saveJobVacancy(final JobVacancy jobVacancy) {
         this.jobVacancyRepository.save(jobVacancy);
     }
 
-    private List<Subscription> getAllByJobVacancyId(String jobVacancyId) {
+    private List<Subscription> getAllByJobVacancyId(final String jobVacancyId) {
         return this.subscriptionRepository.findAllByJobVacancyId(jobVacancyId);
     }
 
-    private void saveSubscription(Subscription subscription) {
+    private void saveSubscription(final Subscription subscription) {
         this.subscriptionRepository.save(subscription);
     }
 }

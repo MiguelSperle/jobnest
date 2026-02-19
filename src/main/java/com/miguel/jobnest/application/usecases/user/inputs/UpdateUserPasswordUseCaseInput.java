@@ -5,8 +5,8 @@ public record UpdateUserPasswordUseCaseInput(
         String password
 ) {
     public static UpdateUserPasswordUseCaseInput with(
-            String currentPassword,
-            String password
+            final String currentPassword,
+            final String password
     ) {
         return new UpdateUserPasswordUseCaseInput(
                 currentPassword,

@@ -13,15 +13,15 @@ public class DefaultCreateJobVacancyUseCase implements CreateJobVacancyUseCase {
     private final SecurityService securityService;
 
     public DefaultCreateJobVacancyUseCase(
-            JobVacancyRepository jobVacancyRepository,
-            SecurityService securityService
+            final JobVacancyRepository jobVacancyRepository,
+            final SecurityService securityService
     ) {
         this.jobVacancyRepository = jobVacancyRepository;
         this.securityService = securityService;
     }
 
     @Override
-    public void execute(CreateJobVacancyUseCaseInput input) {
+    public void execute(final CreateJobVacancyUseCaseInput input) {
         final String authenticatedUserId = this.securityService.getPrincipal();
 
         final SeniorityLevel convertedSeniorityLevel = SeniorityLevel.valueOf(input.seniorityLevel());
@@ -39,7 +39,7 @@ public class DefaultCreateJobVacancyUseCase implements CreateJobVacancyUseCase {
         this.saveJob(newJobVacancy);
     }
 
-    private void saveJob(JobVacancy jobVacancy) {
+    private void saveJob(final JobVacancy jobVacancy) {
         this.jobVacancyRepository.save(jobVacancy);
     }
 }

@@ -30,12 +30,12 @@ public class DefaultCreateUserUseCase implements CreateUserUseCase {
     private static final String USER_CODE_CREATED_ROUTING_KEY = "user.code.created.routing.key";
 
     public DefaultCreateUserUseCase(
-            UserRepository userRepository,
-            UserCodeRepository userCodeRepository,
-            PasswordEncryption passwordEncryption,
-            CodeGenerator codeGenerator,
-            TransactionExecutor transactionExecutor,
-            EventOutboxRepository eventOutboxRepository
+            final UserRepository userRepository,
+            final UserCodeRepository userCodeRepository,
+            final PasswordEncryption passwordEncryption,
+            final CodeGenerator codeGenerator,
+            final TransactionExecutor transactionExecutor,
+            final EventOutboxRepository eventOutboxRepository
     ) {
         this.userRepository = userRepository;
         this.userCodeRepository = userCodeRepository;
@@ -46,7 +46,7 @@ public class DefaultCreateUserUseCase implements CreateUserUseCase {
     }
 
     @Override
-    public void execute(CreateUserUseCaseInput input) {
+    public void execute(final CreateUserUseCaseInput input) {
         if (this.verifyUserAlreadyExistsByEmail(input.email())) {
             throw DomainException.with("This email is already being used", 409);
         }
@@ -85,15 +85,15 @@ public class DefaultCreateUserUseCase implements CreateUserUseCase {
         });
     }
 
-    private boolean verifyUserAlreadyExistsByEmail(String email) {
+    private boolean verifyUserAlreadyExistsByEmail(final String email) {
         return this.userRepository.existsByEmail(email);
     }
 
-    private User saveUser(User user) {
+    private User saveUser(final User user) {
         return this.userRepository.save(user);
     }
 
-    private UserCode saveUserCode(UserCode userCode) {
+    private UserCode saveUserCode(final UserCode userCode) {
         return this.userCodeRepository.save(userCode);
     }
 }

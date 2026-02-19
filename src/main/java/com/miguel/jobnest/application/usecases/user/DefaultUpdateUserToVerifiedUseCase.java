@@ -19,9 +19,9 @@ public class DefaultUpdateUserToVerifiedUseCase implements UpdateUserToVerifiedU
     private final TransactionExecutor transactionExecutor;
 
     public DefaultUpdateUserToVerifiedUseCase(
-            UserCodeRepository userCodeRepository,
-            UserRepository userRepository,
-            TransactionExecutor transactionExecutor
+            final UserCodeRepository userCodeRepository,
+            final UserRepository userRepository,
+            final TransactionExecutor transactionExecutor
     ) {
         this.userCodeRepository = userCodeRepository;
         this.userRepository = userRepository;
@@ -29,7 +29,7 @@ public class DefaultUpdateUserToVerifiedUseCase implements UpdateUserToVerifiedU
     }
 
     @Override
-    public void execute(UpdateUserToVerifiedUseCaseInput input) {
+    public void execute(final UpdateUserToVerifiedUseCaseInput input) {
         final UserCode userCode = this.getUserCodeByCodeAndCodeType(input.code());
 
         if (TimeUtils.isExpired(userCode.getExpiresIn(), TimeUtils.now())) {
@@ -47,20 +47,20 @@ public class DefaultUpdateUserToVerifiedUseCase implements UpdateUserToVerifiedU
         });
     }
 
-    private UserCode getUserCodeByCodeAndCodeType(String code) {
+    private UserCode getUserCodeByCodeAndCodeType(final String code) {
         return this.userCodeRepository.findByCodeAndCodeType(code, UserCodeType.USER_VERIFICATION.name())
                 .orElseThrow(() -> NotFoundException.with("User code not found"));
     }
 
-    private void deleteUserCodeById(String id) {
+    private void deleteUserCodeById(final String id) {
         this.userCodeRepository.deleteById(id);
     }
 
-    private User getUserById(String id) {
+    private User getUserById(final String id) {
         return this.userRepository.findById(id).orElseThrow(() -> NotFoundException.with("User not found"));
     }
 
-    private void saveUser(User user) {
+    private void saveUser(final User user) {
         this.userRepository.save(user);
     }
 }

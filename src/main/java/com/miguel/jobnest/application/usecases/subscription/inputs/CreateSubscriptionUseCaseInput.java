@@ -5,8 +5,8 @@ public record CreateSubscriptionUseCaseInput(
         String jobVacancyId
 ) {
     public static CreateSubscriptionUseCaseInput with(
-            byte[] bytesFile,
-            String jobVacancyId
+            final byte[] bytesFile,
+            final String jobVacancyId
     ) {
         return new CreateSubscriptionUseCaseInput(
                 bytesFile,

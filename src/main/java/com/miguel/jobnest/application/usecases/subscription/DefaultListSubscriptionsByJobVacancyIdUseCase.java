@@ -11,18 +11,18 @@ import com.miguel.jobnest.domain.pagination.SearchQuery;
 public class DefaultListSubscriptionsByJobVacancyIdUseCase implements ListSubscriptionsByJobVacancyIdUseCase {
     private final SubscriptionRepository subscriptionRepository;
 
-    public DefaultListSubscriptionsByJobVacancyIdUseCase(SubscriptionRepository subscriptionRepository) {
+    public DefaultListSubscriptionsByJobVacancyIdUseCase(final SubscriptionRepository subscriptionRepository) {
         this.subscriptionRepository = subscriptionRepository;
     }
 
     @Override
-    public ListSubscriptionsByJobVacancyIdUseCaseOutput execute(ListSubscriptionsByJobVacancyIdUseCaseInput input) {
+    public ListSubscriptionsByJobVacancyIdUseCaseOutput execute(final ListSubscriptionsByJobVacancyIdUseCaseInput input) {
         final Pagination<Subscription> paginatedSubscriptions = this.getAllPaginatedSubscriptionsByJobVacancyId(input.jobVacancyId(), input.searchQuery());
 
         return ListSubscriptionsByJobVacancyIdUseCaseOutput.from(paginatedSubscriptions);
     }
 
-    private Pagination<Subscription> getAllPaginatedSubscriptionsByJobVacancyId(String jobVacancyId, SearchQuery searchQuery) {
+    private Pagination<Subscription> getAllPaginatedSubscriptionsByJobVacancyId(final String jobVacancyId, final SearchQuery searchQuery) {
         return this.subscriptionRepository.findAllPaginatedByJobVacancyId(jobVacancyId, searchQuery);
     }
 }

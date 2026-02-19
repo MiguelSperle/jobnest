@@ -9,12 +9,12 @@ public record UpdateJobVacancyUseCaseInput(
         String companyName
 ) {
     public static UpdateJobVacancyUseCaseInput with(
-            String jobVacancyId,
-            String title,
-            String description,
-            String seniorityLevel,
-            String modality,
-            String companyName
+            final String jobVacancyId,
+            final String title,
+            final String description,
+            final String seniorityLevel,
+            final String modality,
+            final String companyName
     ) {
         return new UpdateJobVacancyUseCaseInput(
                 jobVacancyId,

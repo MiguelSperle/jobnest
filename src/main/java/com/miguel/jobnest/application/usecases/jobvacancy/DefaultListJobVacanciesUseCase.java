@@ -11,18 +11,18 @@ import com.miguel.jobnest.domain.pagination.SearchQuery;
 public class DefaultListJobVacanciesUseCase implements ListJobVacanciesUseCase {
     private final JobVacancyRepository jobVacancyRepository;
 
-    public DefaultListJobVacanciesUseCase(JobVacancyRepository jobVacancyRepository) {
+    public DefaultListJobVacanciesUseCase(final JobVacancyRepository jobVacancyRepository) {
         this.jobVacancyRepository = jobVacancyRepository;
     }
 
     @Override
-    public ListJobVacanciesUseCaseOutput execute(ListJobVacanciesUseCaseInput input) {
+    public ListJobVacanciesUseCaseOutput execute(final ListJobVacanciesUseCaseInput input) {
         final Pagination<JobVacancy> paginatedJobVacancies = this.getAllPaginatedJobVacancies(input.searchQuery());
 
         return ListJobVacanciesUseCaseOutput.from(paginatedJobVacancies);
     }
 
-    private Pagination<JobVacancy> getAllPaginatedJobVacancies(SearchQuery searchQuery) {
+    private Pagination<JobVacancy> getAllPaginatedJobVacancies(final SearchQuery searchQuery) {
         return this.jobVacancyRepository.findAllPaginated(searchQuery);
     }
 }

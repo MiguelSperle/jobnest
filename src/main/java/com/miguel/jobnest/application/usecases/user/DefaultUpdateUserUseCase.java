@@ -12,15 +12,15 @@ public class DefaultUpdateUserUseCase implements UpdateUserUseCase {
     private final SecurityService securityService;
 
     public DefaultUpdateUserUseCase(
-            UserRepository userRepository,
-            SecurityService securityService
+            final UserRepository userRepository,
+            final SecurityService securityService
     ) {
         this.userRepository = userRepository;
         this.securityService = securityService;
     }
 
     @Override
-    public void execute(UpdateUserUseCaseInput input) {
+    public void execute(final UpdateUserUseCaseInput input) {
         final String authenticatedUserId = this.securityService.getPrincipal();
 
         final User user = this.getUserById(authenticatedUserId);
@@ -32,11 +32,11 @@ public class DefaultUpdateUserUseCase implements UpdateUserUseCase {
         this.saveUser(updatedUser);
     }
 
-    private User getUserById(String id) {
+    private User getUserById(final String id) {
         return this.userRepository.findById(id).orElseThrow(() -> NotFoundException.with("User not found"));
     }
 
-    private void saveUser(User user) {
+    private void saveUser(final User user) {
         this.userRepository.save(user);
     }
 }

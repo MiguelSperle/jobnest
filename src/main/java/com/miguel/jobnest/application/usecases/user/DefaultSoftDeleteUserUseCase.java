@@ -12,8 +12,8 @@ public class DefaultSoftDeleteUserUseCase implements SoftDeleteUserUseCase {
     private final SecurityService securityService;
 
     public DefaultSoftDeleteUserUseCase(
-            UserRepository userRepository,
-            SecurityService securityService
+            final UserRepository userRepository,
+            final SecurityService securityService
     ) {
         this.userRepository = userRepository;
         this.securityService = securityService;
@@ -30,11 +30,11 @@ public class DefaultSoftDeleteUserUseCase implements SoftDeleteUserUseCase {
         this.saveUser(updatedUser);
     }
 
-    private User getUserById(String id) {
+    private User getUserById(final String id) {
         return this.userRepository.findById(id).orElseThrow(() -> NotFoundException.with("User not found"));
     }
 
-    private void saveUser(User user) {
+    private void saveUser(final User user) {
         this.userRepository.save(user);
     }
 }

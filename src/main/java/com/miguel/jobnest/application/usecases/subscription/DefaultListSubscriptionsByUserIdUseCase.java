@@ -14,15 +14,15 @@ public class DefaultListSubscriptionsByUserIdUseCase implements ListSubscription
     private final SecurityService securityService;
 
     public DefaultListSubscriptionsByUserIdUseCase(
-            SubscriptionRepository subscriptionRepository,
-            SecurityService securityService
+            final SubscriptionRepository subscriptionRepository,
+            final SecurityService securityService
     ) {
         this.subscriptionRepository = subscriptionRepository;
         this.securityService = securityService;
     }
 
     @Override
-    public ListSubscriptionsByUserIdUseCaseOutput execute(ListSubscriptionsByUserIdUseCaseInput input) {
+    public ListSubscriptionsByUserIdUseCaseOutput execute(final ListSubscriptionsByUserIdUseCaseInput input) {
         final String authenticatedUserId = this.securityService.getPrincipal();
 
         final Pagination<Subscription> paginatedSubscriptions = this.getAllPaginatedSubscriptionsByUserId(authenticatedUserId, input.searchQuery());
@@ -30,7 +30,7 @@ public class DefaultListSubscriptionsByUserIdUseCase implements ListSubscription
         return ListSubscriptionsByUserIdUseCaseOutput.from(paginatedSubscriptions);
     }
 
-    private Pagination<Subscription> getAllPaginatedSubscriptionsByUserId(String userId, SearchQuery searchQuery) {
+    private Pagination<Subscription> getAllPaginatedSubscriptionsByUserId(final String userId, final SearchQuery searchQuery) {
         return this.subscriptionRepository.findAllPaginatedByUserId(userId, searchQuery);
     }
 }

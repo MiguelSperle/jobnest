@@ -29,11 +29,11 @@ public class DefaultSendPasswordResetCodeUseCase implements SendPasswordResetCod
     private static final String USER_CODE_CREATED_ROUTING_KEY = "user.code.created.routing.key";
 
     public DefaultSendPasswordResetCodeUseCase(
-            UserRepository userRepository,
-            UserCodeRepository userCodeRepository,
-            CodeGenerator codeGenerator,
-            EventOutboxRepository eventOutboxRepository,
-            TransactionExecutor transactionExecutor
+            final UserRepository userRepository,
+            final UserCodeRepository userCodeRepository,
+            final CodeGenerator codeGenerator,
+            final EventOutboxRepository eventOutboxRepository,
+            final TransactionExecutor transactionExecutor
     ) {
         this.userRepository = userRepository;
         this.userCodeRepository = userCodeRepository;
@@ -43,7 +43,7 @@ public class DefaultSendPasswordResetCodeUseCase implements SendPasswordResetCod
     }
 
     @Override
-    public void execute(SendPasswordResetCodeUseCaseInput input) {
+    public void execute(final SendPasswordResetCodeUseCaseInput input) {
         final User user = this.getUserByEmail(input.email());
 
         this.getPreviousUserCodeByUserIdAndCodeType(user.getId()).ifPresent(userCode ->
@@ -68,19 +68,19 @@ public class DefaultSendPasswordResetCodeUseCase implements SendPasswordResetCod
         });
     }
 
-    private User getUserByEmail(String email) {
+    private User getUserByEmail(final String email) {
         return this.userRepository.findByEmail(email).orElseThrow(() -> NotFoundException.with("User not found"));
     }
 
-    private Optional<UserCode> getPreviousUserCodeByUserIdAndCodeType(String id) {
+    private Optional<UserCode> getPreviousUserCodeByUserIdAndCodeType(final String id) {
         return this.userCodeRepository.findByUserIdAndCodeType(id, UserCodeType.USER_VERIFICATION.name());
     }
 
-    private void deleteUserCodeById(String id) {
+    private void deleteUserCodeById(final String id) {
         this.userCodeRepository.deleteById(id);
     }
 
-    private UserCode saveUserCode(UserCode userCode) {
+    private UserCode saveUserCode(final UserCode userCode) {
         return this.userCodeRepository.save(userCode);
     }
 }

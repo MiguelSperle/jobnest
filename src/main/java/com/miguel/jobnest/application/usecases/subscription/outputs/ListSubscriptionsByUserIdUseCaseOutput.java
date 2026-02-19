@@ -6,7 +6,7 @@ import com.miguel.jobnest.domain.pagination.Pagination;
 public record ListSubscriptionsByUserIdUseCaseOutput(
         Pagination<Subscription> paginatedSubscriptions
 ) {
-    public static ListSubscriptionsByUserIdUseCaseOutput from(Pagination<Subscription> paginatedSubscriptions) {
+    public static ListSubscriptionsByUserIdUseCaseOutput from(final Pagination<Subscription> paginatedSubscriptions) {
         return new ListSubscriptionsByUserIdUseCaseOutput(paginatedSubscriptions);
     }
 }

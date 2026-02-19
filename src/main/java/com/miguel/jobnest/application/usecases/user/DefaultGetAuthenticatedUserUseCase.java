@@ -12,8 +12,8 @@ public class DefaultGetAuthenticatedUserUseCase implements GetAuthenticatedUserU
     private final SecurityService securityService;
 
     public DefaultGetAuthenticatedUserUseCase(
-            UserRepository userRepository,
-            SecurityService securityService
+            final UserRepository userRepository,
+            final SecurityService securityService
     ) {
         this.userRepository = userRepository;
         this.securityService = securityService;
@@ -28,7 +28,7 @@ public class DefaultGetAuthenticatedUserUseCase implements GetAuthenticatedUserU
         return GetAuthenticatedUserUseCaseOutput.from(user);
     }
 
-    private User getUserById(String id) {
+    private User getUserById(final String id) {
         return this.userRepository.findById(id).orElseThrow(() -> NotFoundException.with("User not found"));
     }
 }
