@@ -3,7 +3,7 @@ package com.miguel.jobnest.infrastructure.rest.controllers;
 import com.miguel.jobnest.application.abstractions.usecases.user.*;
 import com.miguel.jobnest.application.usecases.user.inputs.UpdateUserToVerifiedUseCaseInput;
 import com.miguel.jobnest.application.usecases.user.outputs.GetAuthenticatedUserUseCaseOutput;
-import com.miguel.jobnest.infrastructure.idempotency.Idempotency;
+import com.miguel.jobnest.infrastructure.idempotency.IdempotencyKey;
 import com.miguel.jobnest.infrastructure.rest.dtos.MessageResponse;
 import com.miguel.jobnest.infrastructure.rest.dtos.user.req.ResetUserPasswordRequest;
 import com.miguel.jobnest.infrastructure.rest.dtos.user.req.UpdateUserRequest;
@@ -28,7 +28,7 @@ public class UserController {
 
     @PatchMapping("/verification/{code}")
     @RateLimiter(name = "rateLimitConfiguration")
-    @Idempotency
+    @IdempotencyKey
     public ResponseEntity<MessageResponse> updateUserToVerified(@PathVariable String code) {
         this.updateUserToVerifiedUseCase.execute(UpdateUserToVerifiedUseCaseInput.with(code));
 
@@ -37,7 +37,7 @@ public class UserController {
 
     @PatchMapping("/password-reset/{code}")
     @RateLimiter(name = "rateLimitConfiguration")
-    @Idempotency
+    @IdempotencyKey
     public ResponseEntity<MessageResponse> resetUserPassword(
             @PathVariable String code,
             @RequestBody @Valid ResetUserPasswordRequest request

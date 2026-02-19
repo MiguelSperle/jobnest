@@ -6,7 +6,7 @@ import com.miguel.jobnest.application.usecases.jobvacancy.inputs.SoftDeleteJobVa
 import com.miguel.jobnest.application.usecases.jobvacancy.outputs.ListJobVacanciesByUserIdUseCaseOutput;
 import com.miguel.jobnest.domain.pagination.Pagination;
 import com.miguel.jobnest.domain.pagination.SearchQuery;
-import com.miguel.jobnest.infrastructure.idempotency.Idempotency;
+import com.miguel.jobnest.infrastructure.idempotency.IdempotencyKey;
 import com.miguel.jobnest.infrastructure.rest.dtos.MessageResponse;
 import com.miguel.jobnest.infrastructure.rest.dtos.jobvacancy.req.CreateJobVacancyRequest;
 import com.miguel.jobnest.infrastructure.rest.dtos.jobvacancy.req.UpdateJobVacancyRequest;
@@ -31,7 +31,7 @@ public class JobVacancyRecruiterController {
 
     @PostMapping
     @RateLimiter(name = "rateLimitConfiguration")
-    @Idempotency
+    @IdempotencyKey
     public ResponseEntity<MessageResponse> createJobVacancy(@RequestBody @Valid CreateJobVacancyRequest request) {
         this.createJobVacancyUseCase.execute(request.toInput());
 
