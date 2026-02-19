@@ -16,9 +16,9 @@ public record SubscriptionCreatedEvent(
         LocalDateTime createdAt
 ) implements DomainEvent {
     public SubscriptionCreatedEvent(
-            String aggregateId,
-            String userId,
-            String jobVacancyId
+            final String aggregateId,
+            final String userId,
+            final String jobVacancyId
     ) {
         this(
                 userId,

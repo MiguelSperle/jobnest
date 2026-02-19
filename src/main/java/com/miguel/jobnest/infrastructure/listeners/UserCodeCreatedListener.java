@@ -28,7 +28,7 @@ public class UserCodeCreatedListener {
     private static final Logger log = LoggerFactory.getLogger(UserCodeCreatedListener.class);
 
     @RabbitListener(queues = USER_CODE_CREATED_QUEUE)
-    public void onMessage(Message message) {
+    public void onMessage(final Message message) {
         final UserCodeCreatedEvent event = Json.readValue(message.getBody(), UserCodeCreatedEvent.class);
 
         final String eventId = event.eventId();
@@ -59,7 +59,7 @@ public class UserCodeCreatedListener {
         log.info("Event with id: {} has been successfully processed by the listener: {}", eventId, listenerName);
     }
 
-    private User getUserById(String id) {
+    private User getUserById(final String id) {
         return this.userRepository.findById(id).orElseThrow(() -> NotFoundException.with("User not found"));
     }
 }

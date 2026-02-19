@@ -34,7 +34,7 @@ public class JpaSubscriptionEntity {
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
-    public static JpaSubscriptionEntity toEntity(Subscription subscription) {
+    public static JpaSubscriptionEntity toEntity(final Subscription subscription) {
         return new JpaSubscriptionEntity(
                 subscription.getId(),
                 subscription.getUserId(),

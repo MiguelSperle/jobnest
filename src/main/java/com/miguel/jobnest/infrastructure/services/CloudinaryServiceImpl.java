@@ -20,27 +20,27 @@ public class CloudinaryServiceImpl implements UploadService {
     private static final Logger log = LoggerFactory.getLogger(CloudinaryServiceImpl.class);
 
     @Override
-    public String uploadFile(byte[] bytesFile, String folderName, String resourceType) {
+    public String uploadFile(final byte[] bytesFile, final String folderName, final String resourceType) {
         try {
             final Map<String, Object> options = new HashMap<>();
             options.put("folder", folderName);
             options.put("resource_type", resourceType);
 
             return (String) this.cloudinary.uploader().upload(bytesFile, options).get("secure_url");
-        } catch (Exception ex) {
+        } catch (final Exception ex) {
             log.error("Failed to upload file with bytes size of {} in folder {} with resource type being {}", bytesFile.length, folderName, resourceType, ex);
             throw FileUploadFailedException.with("Failed to upload file");
         }
     }
 
     @Override
-    public void destroyFile(String publicId, String resourceType) {
+    public void destroyFile(final String publicId, final String resourceType) {
         try {
             final Map<String, Object> options = new HashMap<>();
             options.put("resource_type", resourceType);
 
             this.cloudinary.uploader().destroy(publicId, options);
-        } catch (Exception ex) {
+        } catch (final Exception ex) {
             log.error("Failed to destroy file with publicId {} with resource type being {}", publicId, resourceType);
             throw FileDestructionFailedException.with("Failed to destroy file");
         }

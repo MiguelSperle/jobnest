@@ -21,12 +21,12 @@ public record SearchQuery(
     );
 
     public static SearchQuery newSearchQuery(
-            int page,
-            int perPage,
-            String terms,
-            String sort,
-            String direction,
-            Map<String, String> filters
+            final int page,
+            final int perPage,
+            final String terms,
+            final String sort,
+            final String direction,
+            final Map<String, String> filters
     ) {
         return new SearchQuery(
                 page,
@@ -39,11 +39,11 @@ public record SearchQuery(
     }
 
     public static SearchQuery newSearchQuery(
-            int page,
-            int perPage,
-            String terms,
-            String sort,
-            String direction
+            final int page,
+            final int perPage,
+            final String terms,
+            final String sort,
+            final String direction
     ) {
         return new SearchQuery(
                 page,
@@ -56,10 +56,10 @@ public record SearchQuery(
     }
 
     public static SearchQuery newSearchQuery(
-            int page,
-            int perPage,
-            String sort,
-            String direction
+            final int page,
+            final int perPage,
+            final String sort,
+            final String direction
     ) {
         return new SearchQuery(
                 page,
@@ -72,11 +72,11 @@ public record SearchQuery(
     }
 
     public static SearchQuery newSearchQuery(
-            int page,
-            int perPage,
-            String sort,
-            String direction,
-            Map<String, String> filters
+            final int page,
+            final int perPage,
+            final String sort,
+            final String direction,
+            final Map<String, String> filters
     ) {
         return new SearchQuery(
                 page,
@@ -88,7 +88,7 @@ public record SearchQuery(
         );
     }
 
-    private static Map<String, String> cleanFilters(Map<String, String> filters) {
+    private static Map<String, String> cleanFilters(final Map<String, String> filters) {
         return filters.entrySet().stream()
                 .map(entry -> Map.entry(
                         entry.getKey().startsWith("filters.")

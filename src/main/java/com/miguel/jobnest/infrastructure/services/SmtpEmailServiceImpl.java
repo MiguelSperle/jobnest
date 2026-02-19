@@ -22,7 +22,7 @@ public class SmtpEmailServiceImpl implements EmailService {
     private static final Logger log = LoggerFactory.getLogger(SmtpEmailServiceImpl.class);
 
     @Override
-    public void sendEmail(String to, String text, String subject) {
+    public void sendEmail(final String to, final String text, final String subject) {
         try {
             final MimeMessage mimeMessage = this.javaMailSender.createMimeMessage();
             final MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, false);

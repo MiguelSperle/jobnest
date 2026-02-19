@@ -50,13 +50,13 @@ public class JpaEventOutboxEntity {
     private LocalDateTime createdAt;
 
     public static JpaEventOutboxEntity newEventOutboxEntity(
-            String eventId,
-            byte[] payload,
-            String aggregateId,
-            String aggregateType,
-            String eventType,
-            String exchange,
-            String routingKey
+            final String eventId,
+            final byte[] payload,
+            final String aggregateId,
+            final String aggregateType,
+            final String eventType,
+            final String exchange,
+            final String routingKey
     ) {
         return new JpaEventOutboxEntity(
                 IdentifierUtils.generateNewId(),
@@ -72,7 +72,7 @@ public class JpaEventOutboxEntity {
         );
     }
 
-    public JpaEventOutboxEntity withEventOutboxStatus(EventOutboxStatus eventOutboxStatus) {
+    public JpaEventOutboxEntity withEventOutboxStatus(final EventOutboxStatus eventOutboxStatus) {
         return new JpaEventOutboxEntity(
                 this.id,
                 this.eventId,

@@ -15,7 +15,7 @@ public class TransactionExecutorImpl implements TransactionExecutor {
     private final PlatformTransactionManager platformTransactionManager;
 
     @Override
-    public void runTransaction(Runnable runnable) {
+    public void runTransaction(final Runnable runnable) {
         final TransactionTemplate transactionTemplate = new TransactionTemplate(this.platformTransactionManager);
 
         transactionTemplate.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
@@ -26,7 +26,7 @@ public class TransactionExecutorImpl implements TransactionExecutor {
     }
 
     @Override
-    public void makeAfterCommit(Runnable runnable) {
+    public void makeAfterCommit(final Runnable runnable) {
         TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
             @Override
             public void afterCommit() {

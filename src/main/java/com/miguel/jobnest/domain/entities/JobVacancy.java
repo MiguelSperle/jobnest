@@ -19,15 +19,15 @@ public class JobVacancy {
     private final LocalDateTime createdAt;
 
     private JobVacancy(
-            String id,
-            String userId,
-            String title,
-            String description,
-            SeniorityLevel seniorityLevel,
-            Modality modality,
-            String companyName,
-            Boolean isDeleted,
-            LocalDateTime createdAt
+            final String id,
+            final String userId,
+            final String title,
+            final String description,
+            final SeniorityLevel seniorityLevel,
+            final Modality modality,
+            final String companyName,
+            final Boolean isDeleted,
+            final LocalDateTime createdAt
     ) {
         this.id = id;
         this.userId = userId;
@@ -41,12 +41,12 @@ public class JobVacancy {
     }
 
     public static JobVacancy newJobVacancy(
-            String userId,
-            String title,
-            String description,
-            SeniorityLevel seniorityLevel,
-            Modality modality,
-            String companyName
+            final String userId,
+            final String title,
+            final String description,
+            final SeniorityLevel seniorityLevel,
+            final Modality modality,
+            final String companyName
     ) {
         return new JobVacancy(
                 IdentifierUtils.generateNewId(),
@@ -62,15 +62,15 @@ public class JobVacancy {
     }
 
     public static JobVacancy with(
-            String id,
-            String userId,
-            String title,
-            String description,
-            SeniorityLevel seniorityLevel,
-            Modality modality,
-            String companyName,
-            Boolean isDeleted,
-            LocalDateTime createdAt
+            final String id,
+            final String userId,
+            final String title,
+            final String description,
+            final SeniorityLevel seniorityLevel,
+            final Modality modality,
+            final String companyName,
+            final Boolean isDeleted,
+            final LocalDateTime createdAt
     ) {
         return new JobVacancy(
                 id,
@@ -85,7 +85,7 @@ public class JobVacancy {
         );
     }
 
-    public JobVacancy withTitle(String title) {
+    public JobVacancy withTitle(final String title) {
         return new JobVacancy(
                 this.id,
                 this.userId,
@@ -99,7 +99,7 @@ public class JobVacancy {
         );
     }
 
-    public JobVacancy withDescription(String description) {
+    public JobVacancy withDescription(final String description) {
         return new JobVacancy(
                 this.id,
                 this.userId,
@@ -113,7 +113,7 @@ public class JobVacancy {
         );
     }
 
-    public JobVacancy withSeniorityLevel(SeniorityLevel seniorityLevel) {
+    public JobVacancy withSeniorityLevel(final SeniorityLevel seniorityLevel) {
         return new JobVacancy(
                 this.id,
                 this.userId,
@@ -127,7 +127,7 @@ public class JobVacancy {
         );
     }
 
-    public JobVacancy withModality(Modality modality) {
+    public JobVacancy withModality(final Modality modality) {
         return new JobVacancy(
                 this.id,
                 this.userId,
@@ -141,7 +141,7 @@ public class JobVacancy {
         );
     }
 
-    public JobVacancy withCompanyName(String companyName) {
+    public JobVacancy withCompanyName(final String companyName) {
         return new JobVacancy(
                 this.id,
                 this.userId,
@@ -155,7 +155,7 @@ public class JobVacancy {
         );
     }
 
-    public JobVacancy withIsDeleted(Boolean isDeleted) {
+    public JobVacancy withIsDeleted(final Boolean isDeleted) {
         return new JobVacancy(
                 this.id,
                 this.userId,

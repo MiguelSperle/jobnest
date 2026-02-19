@@ -23,7 +23,7 @@ public class JwtServiceImpl implements JwtService {
     private static final Logger log = LoggerFactory.getLogger(JwtServiceImpl.class);
 
     @Override
-    public String generateJwt(String userId, String role) {
+    public String generateJwt(final String userId, final String role) {
         try {
             final Algorithm algorithm = Algorithm.HMAC256(this.secret);
 
@@ -33,27 +33,27 @@ public class JwtServiceImpl implements JwtService {
                     .withClaim("role", role)
                     .withExpiresAt(this.genExpirationDate(Instant.now()))
                     .sign(algorithm);
-        } catch (Exception ex) {
+        } catch (final Exception ex) {
             log.error("Failed to create JWT token for userId {} with role {}", userId, role, ex);
             throw JwtTokenCreationFailedException.with("Failed to create JWT token");
         }
     }
 
     @Override
-    public DecodedJwtToken validateJwt(String jwt) {
+    public DecodedJwtToken validateJwt(final String jwt) {
         try {
             final Algorithm algorithm = Algorithm.HMAC256(this.secret);
 
             final DecodedJWT decodedJWT = JWT.require(algorithm).withIssuer("jobnest").build().verify(jwt);
 
             return new DecodedJwtToken(decodedJWT.getSubject(), decodedJWT.getClaim("role").asString());
-        } catch (Exception ex) {
+        } catch (final Exception ex) {
             log.error("Failed to validate JWT token", ex);
             throw JwtTokenValidationFailedException.with("Invalid JWT token");
         }
     }
 
-    private Instant genExpirationDate(Instant now) {
+    private Instant genExpirationDate(final Instant now) {
         return now.plus(5, ChronoUnit.MINUTES);
     }
 }

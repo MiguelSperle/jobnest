@@ -15,22 +15,22 @@ public class UserRepositoryImpl implements UserRepository {
     private final JpaUserRepository jpaUserRepository;
 
     @Override
-    public Optional<User> findById(String id) {
+    public Optional<User> findById(final String id) {
         return this.jpaUserRepository.findById(id).map(JpaUserEntity::toDomain);
     }
 
     @Override
-    public User save(User user) {
+    public User save(final User user) {
         return this.jpaUserRepository.save(JpaUserEntity.toEntity(user)).toDomain();
     }
 
     @Override
-    public boolean existsByEmail(String email) {
+    public boolean existsByEmail(final String email) {
         return this.jpaUserRepository.existsByEmail(email);
     }
 
     @Override
-    public Optional<User> findByEmail(String email) {
+    public Optional<User> findByEmail(final String email) {
         return this.jpaUserRepository.findByEmail(email).map(JpaUserEntity::toDomain);
     }
 }

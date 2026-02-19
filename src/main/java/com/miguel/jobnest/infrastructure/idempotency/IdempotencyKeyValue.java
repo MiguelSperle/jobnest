@@ -8,7 +8,7 @@ public record IdempotencyKeyValue(int statusCode, String body, Map<String, Strin
         return new IdempotencyKeyValue(0, "", Map.of(), false);
     }
 
-    public static IdempotencyKeyValue done(int statusCode, String body, Map<String, String> headers) {
+    public static IdempotencyKeyValue done(final int statusCode, final String body, final Map<String, String> headers) {
         return new IdempotencyKeyValue(statusCode, body, headers, true);
     }
 }

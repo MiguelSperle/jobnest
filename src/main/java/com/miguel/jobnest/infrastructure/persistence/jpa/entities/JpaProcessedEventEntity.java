@@ -28,7 +28,7 @@ public class JpaProcessedEventEntity {
     @Column(name = "processed_at", nullable = false)
     private LocalDateTime processedAt;
 
-    public static JpaProcessedEventEntity newProcessedEventEntity(String eventId, String listener) {
+    public static JpaProcessedEventEntity newProcessedEventEntity(final String eventId, final String listener) {
         return new JpaProcessedEventEntity(
                 IdentifierUtils.generateNewId(),
                 eventId,

@@ -4,7 +4,7 @@ import com.miguel.jobnest.infrastructure.persistence.jpa.entities.JpaJobVacancyE
 import org.springframework.data.jpa.domain.Specification;
 
 public class JpaJobVacancySpecification {
-    public static Specification<JpaJobVacancyEntity> filterByTerms(String terms) {
+    public static Specification<JpaJobVacancyEntity> filterByTerms(final String terms) {
         return (root, query, criterialBuilder) ->
                 criterialBuilder.or(
                         criterialBuilder.like(criterialBuilder.lower(root.get("title")), "%" + terms.toLowerCase() + "%"),
@@ -12,12 +12,12 @@ public class JpaJobVacancySpecification {
                 );
     }
 
-    public static Specification<JpaJobVacancyEntity> filterByUserId(String userId) {
+    public static Specification<JpaJobVacancyEntity> filterByUserId(final String userId) {
         return (root, query, criterialBuilder) ->
                 criterialBuilder.equal(root.get("userId"), userId);
     }
 
-    public static Specification<JpaJobVacancyEntity> filterByIsDeleted(boolean isDeleted) {
+    public static Specification<JpaJobVacancyEntity> filterByIsDeleted(final boolean isDeleted) {
         return (root, query, criterialBuilder) ->
                 criterialBuilder.equal(root.get("isDeleted"), isDeleted);
     }

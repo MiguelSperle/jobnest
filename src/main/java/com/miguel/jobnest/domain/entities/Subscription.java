@@ -14,12 +14,12 @@ public class Subscription {
     private final LocalDateTime createdAt;
 
     private Subscription(
-            String id,
-            String userId,
-            String jobVacancyId,
-            String resumeUrl,
-            Boolean isCanceled,
-            LocalDateTime createdAt
+            final String id,
+            final String userId,
+            final String jobVacancyId,
+            final String resumeUrl,
+            final Boolean isCanceled,
+            final LocalDateTime createdAt
     ) {
         this.id = id;
         this.userId = userId;
@@ -30,9 +30,9 @@ public class Subscription {
     }
 
     public static Subscription newSubscription(
-            String userId,
-            String jobVacancyId,
-            String resumeUrl
+            final String userId,
+            final String jobVacancyId,
+            final String resumeUrl
     ) {
         return new Subscription(
                 IdentifierUtils.generateNewId(),
@@ -45,12 +45,12 @@ public class Subscription {
     }
 
     public static Subscription with(
-            String id,
-            String userId,
-            String jobVacancyId,
-            String resumeUrl,
-            Boolean isCanceled,
-            LocalDateTime createdAt
+            final String id,
+            final String userId,
+            final String jobVacancyId,
+            final String resumeUrl,
+            final Boolean isCanceled,
+            final LocalDateTime createdAt
     ) {
         return new Subscription(
                 id,
@@ -62,7 +62,7 @@ public class Subscription {
         );
     }
 
-    public Subscription withIsCanceled(Boolean isCanceled) {
+    public Subscription withIsCanceled(final Boolean isCanceled) {
         return new Subscription(
                 this.id,
                 this.userId,

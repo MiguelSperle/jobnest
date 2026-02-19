@@ -14,7 +14,7 @@ public class RedisServiceImpl implements RedisService {
     private final RedisTemplate<String, Object> redisTemplate;
 
     @Override
-    public <T> Optional<T> get(String key, Class<T> type) {
+    public <T> Optional<T> get(final String key, final Class<T> type) {
         final Object result = this.redisTemplate.opsForValue().get(key);
 
         if (!type.isInstance(result)) return Optional.empty();
@@ -23,12 +23,12 @@ public class RedisServiceImpl implements RedisService {
     }
 
     @Override
-    public <T> boolean setIfAbsent(String key, T value, long timeout, TimeUnit timeUnit) {
+    public <T> boolean setIfAbsent(final String key, final T value, final long timeout, final TimeUnit timeUnit) {
         return this.redisTemplate.opsForValue().setIfAbsent(key, value, timeout, timeUnit);
     }
 
     @Override
-    public <T> void set(String key, T value, long timeout, TimeUnit timeUnit) {
+    public <T> void set(final String key, final T value, final long timeout, final TimeUnit timeUnit) {
         this.redisTemplate.opsForValue().set(key, value, timeout, timeUnit);
     }
 }

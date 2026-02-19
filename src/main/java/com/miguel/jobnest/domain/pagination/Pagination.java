@@ -7,7 +7,7 @@ public record Pagination<T>(
         PaginationMetadata metadata,
         List<T> items
 ) {
-    public <R> Pagination<R> map(Function<T, R> mapper) {
+    public <R> Pagination<R> map(final Function<T, R> mapper) {
         final List<R> list = this.items.stream().map(mapper).toList();
 
         return new Pagination<>(

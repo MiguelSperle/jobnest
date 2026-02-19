@@ -15,12 +15,12 @@ public class UserCode {
     private final LocalDateTime createdAt;
 
     private UserCode(
-            String id,
-            String userId,
-            String code,
-            UserCodeType userCodeType,
-            LocalDateTime expiresIn,
-            LocalDateTime createdAt
+            final String id,
+            final String userId,
+            final String code,
+            final UserCodeType userCodeType,
+            final LocalDateTime expiresIn,
+            final LocalDateTime createdAt
     ) {
         this.id = id;
         this.userId = userId;
@@ -31,9 +31,9 @@ public class UserCode {
     }
 
     public static UserCode newUserCode(
-            String userId,
-            String code,
-            UserCodeType userCodeType
+            final String userId,
+            final String code,
+            final UserCodeType userCodeType
     ) {
         return new UserCode(
                 IdentifierUtils.generateNewId(),
@@ -46,12 +46,12 @@ public class UserCode {
     }
 
     public static UserCode with(
-            String id,
-            String userId,
-            String code,
-            UserCodeType userCodeType,
-            LocalDateTime expiresIn,
-            LocalDateTime createdAt
+            final String id,
+            final String userId,
+            final String code,
+            final UserCodeType userCodeType,
+            final LocalDateTime expiresIn,
+            final LocalDateTime createdAt
     ) {
         return new UserCode(
                 id,

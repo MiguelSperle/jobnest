@@ -24,12 +24,12 @@ public class JobVacancyRepositoryImpl implements JobVacancyRepository {
     private final JpaJobVacancyRepository jpaJobVacancyRepository;
 
     @Override
-    public JobVacancy save(JobVacancy jobVacancy) {
+    public JobVacancy save(final JobVacancy jobVacancy) {
         return this.jpaJobVacancyRepository.save(JpaJobVacancyEntity.toEntity(jobVacancy)).toDomain();
     }
 
     @Override
-    public Pagination<JobVacancy> findAllPaginatedByUserId(String userId, SearchQuery searchQuery) {
+    public Pagination<JobVacancy> findAllPaginatedByUserId(final String userId, final SearchQuery searchQuery) {
         final Sort sort = searchQuery.direction().equalsIgnoreCase("asc")
                 ? Sort.by(searchQuery.sort()).ascending() : Sort.by(searchQuery.sort()).descending();
 
@@ -64,7 +64,7 @@ public class JobVacancyRepositoryImpl implements JobVacancyRepository {
     }
 
     @Override
-    public Pagination<JobVacancy> findAllPaginated(SearchQuery searchQuery) {
+    public Pagination<JobVacancy> findAllPaginated(final SearchQuery searchQuery) {
         final Sort sort = searchQuery.direction().equalsIgnoreCase("asc")
                 ? Sort.by(searchQuery.sort()).ascending() : Sort.by(searchQuery.sort()).descending();
 
@@ -93,7 +93,7 @@ public class JobVacancyRepositoryImpl implements JobVacancyRepository {
     }
 
     @Override
-    public Optional<JobVacancy> findById(String id) {
+    public Optional<JobVacancy> findById(final String id) {
         return this.jpaJobVacancyRepository.findById(id).map(JpaJobVacancyEntity::toDomain);
     }
 }

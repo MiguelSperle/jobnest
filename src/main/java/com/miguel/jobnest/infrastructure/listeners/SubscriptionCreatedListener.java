@@ -30,7 +30,7 @@ public class SubscriptionCreatedListener {
     private static final Logger log = LoggerFactory.getLogger(SubscriptionCreatedListener.class);
 
     @RabbitListener(queues = SUBSCRIPTION_CREATED_QUEUE)
-    public void onMessage(Message message) {
+    public void onMessage(final Message message) {
         final SubscriptionCreatedEvent event = Json.readValue(message.getBody(), SubscriptionCreatedEvent.class);
 
         final String eventId = event.eventId();
@@ -55,11 +55,11 @@ public class SubscriptionCreatedListener {
         log.info("Event with id: {} has been successfully processed by the listener: {}", eventId, listenerName);
     }
 
-    private JobVacancy getJobVacancyById(String id) {
+    private JobVacancy getJobVacancyById(final String id) {
         return this.jobVacancyRepository.findById(id).orElseThrow(() -> NotFoundException.with("Job vacancy not found"));
     }
 
-    private User getUserById(String id) {
+    private User getUserById(final String id) {
         return this.userRepository.findById(id).orElseThrow(() -> NotFoundException.with("User not found"));
     }
 }

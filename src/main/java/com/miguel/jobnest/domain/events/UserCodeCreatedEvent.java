@@ -18,10 +18,10 @@ public record UserCodeCreatedEvent(
         LocalDateTime createdAt
 ) implements DomainEvent {
     public UserCodeCreatedEvent(
-            String aggregateId,
-            String code,
-            UserCodeType userCodeType,
-            String userId
+            final String aggregateId,
+            final String code,
+            final UserCodeType userCodeType,
+            final String userId
     ) {
         this(
                 code,

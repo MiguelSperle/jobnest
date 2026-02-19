@@ -7,7 +7,7 @@ public class TimeUtils {
         return LocalDateTime.now();
     }
 
-    public static boolean isExpired(LocalDateTime expirationTime, LocalDateTime now) {
+    public static boolean isExpired(final LocalDateTime expirationTime, final LocalDateTime now) {
         return now.isAfter(expirationTime);
     }
 }

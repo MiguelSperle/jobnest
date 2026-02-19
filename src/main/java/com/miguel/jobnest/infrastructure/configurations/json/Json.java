@@ -66,7 +66,6 @@ public enum Json {
                 .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
     }
 
-
     private static <T> T invoke(final Callable<T> callable) {
         try {
             return callable.call();

@@ -15,27 +15,27 @@ public class UserCodeRepositoryImpl implements UserCodeRepository {
     private final JpaUserCodeRepository jpaUserCodeRepository;
 
     @Override
-    public Optional<UserCode> findById(String id) {
+    public Optional<UserCode> findById(final String id) {
         return this.jpaUserCodeRepository.findById(id).map(JpaUserCodeEntity::toDomain);
     }
 
     @Override
-    public UserCode save(UserCode userCode) {
+    public UserCode save(final UserCode userCode) {
         return this.jpaUserCodeRepository.save(JpaUserCodeEntity.toEntity(userCode)).toDomain();
     }
 
     @Override
-    public void deleteById(String id) {
+    public void deleteById(final String id) {
         this.jpaUserCodeRepository.deleteById(id);
     }
 
     @Override
-    public Optional<UserCode> findByCodeAndCodeType(String code, String codeType) {
+    public Optional<UserCode> findByCodeAndCodeType(final String code, final String codeType) {
         return this.jpaUserCodeRepository.findByCodeAndCodeType(code, codeType).map(JpaUserCodeEntity::toDomain);
     }
 
     @Override
-    public Optional<UserCode> findByUserIdAndCodeType(String userId, String codeType) {
+    public Optional<UserCode> findByUserIdAndCodeType(final String userId, final String codeType) {
         return this.jpaUserCodeRepository.findByUserIdAndCodeType(userId, codeType).map(JpaUserCodeEntity::toDomain);
     }
 }

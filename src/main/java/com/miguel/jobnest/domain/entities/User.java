@@ -21,17 +21,17 @@ public class User {
     private final LocalDateTime createdAt;
 
     private User(
-            String id,
-            String name,
-            String email,
-            String description,
-            String password,
-            UserStatus userStatus,
-            AuthorizationRole authorizationRole,
-            String city,
-            String state,
-            String country,
-            LocalDateTime createdAt
+            final String id,
+            final String name,
+            final String email,
+            final String description,
+            final String password,
+            final UserStatus userStatus,
+            final AuthorizationRole authorizationRole,
+            final String city,
+            final String state,
+            final String country,
+            final LocalDateTime createdAt
     ) {
         this.id = id;
         this.name = name;
@@ -47,13 +47,13 @@ public class User {
     }
 
     public static User newUser(
-            String name,
-            String email,
-            String password,
-            AuthorizationRole authorizationRole,
-            String city,
-            String state,
-            String country
+            final String name,
+            final String email,
+            final String password,
+            final AuthorizationRole authorizationRole,
+            final String city,
+            final String state,
+            final String country
     ) {
         return new User(
                 IdentifierUtils.generateNewId(),
@@ -71,17 +71,17 @@ public class User {
     }
 
     public static User with(
-            String id,
-            String name,
-            String email,
-            String description,
-            String password,
-            UserStatus userStatus,
-            AuthorizationRole authorizationRole,
-            String city,
-            String state,
-            String country,
-            LocalDateTime createdAt
+            final String id,
+            final String name,
+            final String email,
+            final String description,
+            final String password,
+            final UserStatus userStatus,
+            final AuthorizationRole authorizationRole,
+            final String city,
+            final String state,
+            final String country,
+            final LocalDateTime createdAt
     ) {
         return new User(
                 id,
@@ -98,7 +98,7 @@ public class User {
         );
     }
 
-    public User withName(String name) {
+    public User withName(final String name) {
         return new User(
                 this.id,
                 name,
@@ -114,7 +114,7 @@ public class User {
         );
     }
 
-    public User withEmail(String email) {
+    public User withEmail(final String email) {
         return new User(
                 this.id,
                 this.name,
@@ -130,7 +130,7 @@ public class User {
         );
     }
 
-    public User withDescription(String description) {
+    public User withDescription(final String description) {
         return new User(
                 this.id,
                 this.name,
@@ -146,7 +146,7 @@ public class User {
         );
     }
 
-    public User withCity(String city) {
+    public User withCity(final String city) {
         return new User(
                 this.id,
                 this.name,
@@ -162,7 +162,7 @@ public class User {
         );
     }
 
-    public User withState(String state) {
+    public User withState(final String state) {
         return new User(
                 this.id,
                 this.name,
@@ -178,7 +178,7 @@ public class User {
         );
     }
 
-    public User withCountry(String country) {
+    public User withCountry(final String country) {
         return new User(
                 this.id,
                 this.name,
@@ -194,7 +194,7 @@ public class User {
         );
     }
 
-    public User withUserStatus(UserStatus userStatus) {
+    public User withUserStatus(final UserStatus userStatus) {
         return new User(
                 this.id,
                 this.name,
@@ -210,7 +210,7 @@ public class User {
         );
     }
 
-    public User withPassword(String password) {
+    public User withPassword(final String password) {
         return new User(
                 this.id,
                 this.name,

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.miguel.jobnest.infrastructure.utils.ApiError;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.jspecify.annotations.NonNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.AuthenticationException;
@@ -17,7 +18,11 @@ import java.util.Collections;
 @Component
 public class CustomAuthenticationHandler implements AuthenticationEntryPoint {
     @Override
-    public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authenticationException) throws IOException {
+    public void commence(
+            @NonNull final HttpServletRequest request,
+            @NonNull final HttpServletResponse response,
+            @NonNull final AuthenticationException authenticationException
+    ) throws IOException {
         final ApiError apiError = new ApiError(
                 Collections.singletonList("Authentication is required to access this resource"),
                 HttpStatus.UNAUTHORIZED.getReasonPhrase()

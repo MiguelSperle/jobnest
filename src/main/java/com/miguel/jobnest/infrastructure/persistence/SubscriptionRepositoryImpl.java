@@ -24,22 +24,22 @@ public class SubscriptionRepositoryImpl implements SubscriptionRepository {
     private final JpaSubscriptionRepository jpaSubscriptionRepository;
 
     @Override
-    public boolean existsByUserIdAndJobVacancyId(String userId, String jobVacancyId) {
+    public boolean existsByUserIdAndJobVacancyId(final String userId, final String jobVacancyId) {
         return this.jpaSubscriptionRepository.existsByUserIdAndJobVacancyId(userId, jobVacancyId);
     }
 
     @Override
-    public Subscription save(Subscription subscription) {
+    public Subscription save(final Subscription subscription) {
         return this.jpaSubscriptionRepository.save(JpaSubscriptionEntity.toEntity(subscription)).toDomain();
     }
 
     @Override
-    public Optional<Subscription> findById(String id) {
+    public Optional<Subscription> findById(final String id) {
         return this.jpaSubscriptionRepository.findById(id).map(JpaSubscriptionEntity::toDomain);
     }
 
     @Override
-    public Pagination<Subscription> findAllPaginatedByUserId(String userId, SearchQuery searchQuery) {
+    public Pagination<Subscription> findAllPaginatedByUserId(final String userId, final SearchQuery searchQuery) {
         final Sort sort = searchQuery.direction().equalsIgnoreCase("asc")
                 ? Sort.by(searchQuery.sort()).ascending() : Sort.by(searchQuery.sort()).descending();
 
@@ -64,12 +64,12 @@ public class SubscriptionRepositoryImpl implements SubscriptionRepository {
     }
 
     @Override
-    public List<Subscription> findAllByJobVacancyId(String jobVacancyId) {
+    public List<Subscription> findAllByJobVacancyId(final String jobVacancyId) {
         return this.jpaSubscriptionRepository.findAllByJobVacancyId(jobVacancyId).stream().map(JpaSubscriptionEntity::toDomain).toList();
     }
 
     @Override
-    public Pagination<Subscription> findAllPaginatedByJobVacancyId(String jobVacancyId, SearchQuery searchQuery) {
+    public Pagination<Subscription> findAllPaginatedByJobVacancyId(final String jobVacancyId, final SearchQuery searchQuery) {
         final Sort sort = searchQuery.direction().equalsIgnoreCase("asc")
                 ? Sort.by(searchQuery.sort()).ascending() : Sort.by(searchQuery.sort()).descending();
 

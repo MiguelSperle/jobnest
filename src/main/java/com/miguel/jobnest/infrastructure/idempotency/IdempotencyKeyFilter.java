@@ -8,6 +8,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
@@ -38,7 +39,11 @@ public class IdempotencyKeyFilter extends OncePerRequestFilter {
     private static final Logger log = LoggerFactory.getLogger(IdempotencyKeyFilter.class);
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) {
+    protected void doFilterInternal(
+            @NonNull final HttpServletRequest request,
+            @NonNull final HttpServletResponse response,
+            @NonNull final FilterChain filterChain
+    ) {
         try {
             log.info("Processing idempotency key filter");
 
@@ -106,17 +111,17 @@ public class IdempotencyKeyFilter extends OncePerRequestFilter {
             } else {
                 filterChain.doFilter(request, response);
             }
-        } catch (Exception ex) {
+        } catch (final Exception ex) {
             this.handlerExceptionResolver.resolveException(request, response, null, ex);
         }
     }
 
-    private HandlerMethod getHandlerMethod(HttpServletRequest request) {
+    private HandlerMethod getHandlerMethod(final HttpServletRequest request) {
         final HandlerExecutionChain handlerChain;
 
         try {
             handlerChain = this.requestMappingHandlerMapping.getHandler(request);
-        } catch (Exception ex) {
+        } catch (final Exception ex) {
             throw new RuntimeException(ex);
         }
 
@@ -127,7 +132,7 @@ public class IdempotencyKeyFilter extends OncePerRequestFilter {
         return null;
     }
 
-    private boolean isIdempotencyKeyAnnotated(HandlerMethod handlerMethod) {
+    private boolean isIdempotencyKeyAnnotated(final HandlerMethod handlerMethod) {
         final Method method = handlerMethod.getMethod();
         return method.isAnnotationPresent(IdempotencyKey.class) && handlerMethod.getBeanType().isAnnotationPresent(RestController.class);
     }
