@@ -40,13 +40,13 @@ public class JpaEventOutboxEntity {
     @Column(name = "status", nullable = false, length = 10)
     private EventOutboxStatus eventOutboxStatus;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 100)
     private String exchange;
 
     @Column(name = "routing_key", nullable = false, length = 100)
     private String routingKey;
 
-    @Column(name = "created_at", nullable = false, length = 100)
+    @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
     public static JpaEventOutboxEntity newEventOutboxEntity(
