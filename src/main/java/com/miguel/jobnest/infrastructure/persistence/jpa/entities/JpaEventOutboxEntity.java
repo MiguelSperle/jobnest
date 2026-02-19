@@ -33,7 +33,7 @@ public class JpaEventOutboxEntity {
     @Column(name = "aggregate_type", nullable = false, length = 40)
     private String aggregateType;
 
-    @Column(name = "event_type", nullable = false)
+    @Column(name = "event_type", nullable = false, length = 100)
     private String eventType;
 
     @Enumerated(EnumType.STRING)
@@ -43,10 +43,10 @@ public class JpaEventOutboxEntity {
     @Column(nullable = false)
     private String exchange;
 
-    @Column(name = "routing_key", nullable = false)
+    @Column(name = "routing_key", nullable = false, length = 100)
     private String routingKey;
 
-    @Column(name = "created_at", nullable = false)
+    @Column(name = "created_at", nullable = false, length = 100)
     private LocalDateTime createdAt;
 
     public static JpaEventOutboxEntity newEventOutboxEntity(
