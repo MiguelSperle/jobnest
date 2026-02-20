@@ -63,7 +63,7 @@ public class DefaultCreateSubscriptionUseCase implements CreateSubscriptionUseCa
             });
         } catch (final Exception ex) {
             if (resumeUrl != null) {
-                final String publicId = this.uploadService.extractPublicId(resumeUrl, "resume-file");
+                final String publicId = resumeUrl.substring(resumeUrl.indexOf("resume-file/"), resumeUrl.lastIndexOf("."));
                 this.uploadService.destroyFile(publicId, "image");
             }
             throw ex;

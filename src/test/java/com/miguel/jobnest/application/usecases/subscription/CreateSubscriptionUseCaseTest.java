@@ -120,7 +120,6 @@ public class CreateSubscriptionUseCaseTest {
         Mockito.when(this.subscriptionRepository.existsByUserIdAndJobVacancyId(Mockito.any(), Mockito.any())).thenReturn(false);
         Mockito.when(this.uploadService.uploadFile(Mockito.any(), Mockito.any(), Mockito.any())).thenReturn(resumeUrl);
         Mockito.when(this.subscriptionRepository.save(Mockito.any())).thenThrow(new RuntimeException());
-        Mockito.when(this.uploadService.extractPublicId(Mockito.any(), Mockito.any())).thenReturn(publicId);
         Mockito.doNothing().when(this.uploadService).destroyFile(Mockito.any(), Mockito.any());
 
         Assertions.assertThrows(RuntimeException.class, () -> this.useCase.execute(input));
@@ -129,7 +128,6 @@ public class CreateSubscriptionUseCaseTest {
         Mockito.verify(this.subscriptionRepository, Mockito.times(1)).existsByUserIdAndJobVacancyId(Mockito.any(), Mockito.any());
         Mockito.verify(this.uploadService, Mockito.times(1)).uploadFile(Mockito.any(), Mockito.any(), Mockito.any());
         Mockito.verify(this.subscriptionRepository, Mockito.times(1)).save(Mockito.any());
-        Mockito.verify(this.uploadService, Mockito.times(1)).extractPublicId(Mockito.any(), Mockito.any());
         Mockito.verify(this.uploadService, Mockito.times(1)).destroyFile(Mockito.any(), Mockito.any());
     }
 }

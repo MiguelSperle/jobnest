@@ -45,10 +45,4 @@ public class CloudinaryServiceImpl implements UploadService {
             throw FileDestructionFailedException.with("Failed to destroy file");
         }
     }
-
-    @Override
-    public String extractPublicId(String secureUrl, String folderName) {
-        final String noHost = secureUrl.substring(secureUrl.indexOf(folderName + "/"));
-        return noHost.substring(0, noHost.lastIndexOf('.'));
-    }
 }
