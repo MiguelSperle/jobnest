@@ -28,7 +28,7 @@ public record UserCodeCreatedEvent(
                 userCodeType,
                 userId,
                 IdentifierUtils.generateNewId(),
-                UserCodeCreatedEvent.class.getSimpleName(),
+                "UserCodeCreated",
                 aggregateId,
                 UserCode.class.getSimpleName(),
                 TimeUtils.now()

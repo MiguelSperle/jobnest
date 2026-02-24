@@ -24,7 +24,7 @@ public record SubscriptionCreatedEvent(
                 userId,
                 jobVacancyId,
                 IdentifierUtils.generateNewId(),
-                SubscriptionCreatedEvent.class.getName(),
+                "SubscriptionCreated",
                 aggregateId,
                 Subscription.class.getSimpleName(),
                 TimeUtils.now()

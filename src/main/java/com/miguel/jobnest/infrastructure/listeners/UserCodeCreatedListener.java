@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -28,7 +29,7 @@ public class UserCodeCreatedListener {
     private static final Logger log = LoggerFactory.getLogger(UserCodeCreatedListener.class);
 
     @RabbitListener(queues = USER_CODE_CREATED_QUEUE)
-    public void onMessage(final Message message) {
+    public void onMessage(@Payload final Message message) {
         final UserCodeCreatedEvent event = Json.readValue(message.getBody(), UserCodeCreatedEvent.class);
 
         final String eventId = event.eventId();

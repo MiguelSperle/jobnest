@@ -23,7 +23,6 @@ public class JpaEventOutboxEntity {
     @Column(name = "event_id", unique = true, nullable = false, length = 36)
     private String eventId;
 
-    @Lob
     @Column(columnDefinition = "BYTEA", nullable = false)
     private byte[] payload;
 
