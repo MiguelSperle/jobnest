@@ -5,6 +5,7 @@ import com.miguel.jobnest.domain.enums.UserCodeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 import jakarta.persistence.*;
 
@@ -14,6 +15,7 @@ import java.time.LocalDateTime;
 @Table(name = "user_codes")
 @AllArgsConstructor
 @NoArgsConstructor
+@Data
 public class JpaUserCodeEntity {
     @Id
     @Column(nullable = false, length = 36)
