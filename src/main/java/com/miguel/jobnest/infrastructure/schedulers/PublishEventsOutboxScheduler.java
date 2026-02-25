@@ -15,12 +15,12 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
-public class PublishEventOutboxScheduler {
+public class PublishEventsOutboxScheduler {
     private final JpaEventOutboxRepository eventOutboxRepository;
     private final MessageProducer messageProducer;
     private final TransactionExecutor transactionExecutor;
 
-    private static final Logger log = LoggerFactory.getLogger(PublishEventOutboxScheduler.class);
+    private static final Logger log = LoggerFactory.getLogger(PublishEventsOutboxScheduler.class);
 
     @Scheduled(fixedRate = 10000L) // 10 seconds
     public void publishEvent() {
