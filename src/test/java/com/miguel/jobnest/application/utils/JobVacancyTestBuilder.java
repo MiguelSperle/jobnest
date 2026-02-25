@@ -27,7 +27,7 @@ public class JobVacancyTestBuilder {
         Objects.requireNonNull(this.userId, "UserId must not be null");
 
         return JobVacancy.with(
-                new JobVacancyID(IdentifierUtils.generateNewId()),
+                IdentifierUtils.generateNewId(),
                 this.userId,
                 "Java Developer",
                 "This is the job vacancy description",
