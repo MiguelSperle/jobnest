@@ -1,5 +1,6 @@
 package com.miguel.jobnest.infrastructure.schedulers;
 
+import com.miguel.jobnest.application.abstractions.wrapper.TransactionExecutor;
 import com.miguel.jobnest.infrastructure.abstractions.producer.MessageProducer;
 import com.miguel.jobnest.infrastructure.enums.EventOutboxStatus;
 import com.miguel.jobnest.infrastructure.persistence.jpa.entities.JpaEventOutboxEntity;
@@ -9,7 +10,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -18,23 +18,25 @@ import java.util.List;
 public class PublishEventOutboxScheduler {
     private final JpaEventOutboxRepository eventOutboxRepository;
     private final MessageProducer messageProducer;
+    private final TransactionExecutor transactionExecutor;
 
     private static final Logger log = LoggerFactory.getLogger(PublishEventOutboxScheduler.class);
 
     @Scheduled(fixedRate = 5000L) // 5 seconds
-    @Transactional
     public void publishEvent() {
         log.info("Starting publish events outbox scheduler");
 
-        final List<JpaEventOutboxEntity> pendingEventsOutbox = this.eventOutboxRepository.findFirst10ByStatus(EventOutboxStatus.PENDING.name());
+        this.transactionExecutor.runTransaction(() -> {
+            final List<JpaEventOutboxEntity> pendingEventsOutbox = this.eventOutboxRepository.findFirst10ByStatus(EventOutboxStatus.PENDING.name());
 
-        log.info("Found {} unpublished events", pendingEventsOutbox.size());
+            log.info("Found {} unpublished events", pendingEventsOutbox.size());
 
-        for (JpaEventOutboxEntity pendingEventOutbox : pendingEventsOutbox) {
-            this.messageProducer.publish(pendingEventOutbox);
-            this.eventOutboxRepository.save(pendingEventOutbox.withEventOutboxStatus(EventOutboxStatus.PUBLISHED));
-            log.info("Event with id: {} has been successfully published", pendingEventOutbox.getEventId());
-        }
+            for (JpaEventOutboxEntity pendingEventOutbox : pendingEventsOutbox) {
+                this.messageProducer.publish(pendingEventOutbox);
+                this.eventOutboxRepository.save(pendingEventOutbox.withEventOutboxStatus(EventOutboxStatus.PUBLISHED));
+                log.info("Event with id: {} has been successfully published", pendingEventOutbox.getEventId());
+            }
+        });
 
         log.info("Finished publish events outbox scheduler");
     }

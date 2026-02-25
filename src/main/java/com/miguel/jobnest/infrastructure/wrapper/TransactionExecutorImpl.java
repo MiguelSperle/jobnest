@@ -20,7 +20,6 @@ public class TransactionExecutorImpl implements TransactionExecutor {
 
         transactionTemplate.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
         transactionTemplate.setIsolationLevel(TransactionDefinition.ISOLATION_DEFAULT);
-        transactionTemplate.setTimeout(5);
 
         transactionTemplate.executeWithoutResult(transactionStatus -> runnable.run());
     }
