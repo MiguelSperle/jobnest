@@ -5,7 +5,6 @@ import com.miguel.jobnest.domain.enums.AuthorizationRole;
 import com.miguel.jobnest.domain.enums.UserStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
@@ -14,7 +13,6 @@ import java.time.LocalDateTime;
 @Table(name = "users")
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
 public class JpaUserEntity {
     @Id
     @Column(nullable = false, length = 36)

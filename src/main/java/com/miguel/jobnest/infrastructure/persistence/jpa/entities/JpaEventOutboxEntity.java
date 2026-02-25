@@ -5,7 +5,7 @@ import com.miguel.jobnest.domain.utils.TimeUtils;
 import com.miguel.jobnest.infrastructure.enums.EventOutboxStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @Table(name = "events_outbox")
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
+@Getter
 public class JpaEventOutboxEntity {
     @Id
     @Column(nullable = false, length = 36)
