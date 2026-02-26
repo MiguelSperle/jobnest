@@ -19,7 +19,7 @@ both for those who publish job vacancies and for those who seek to apply for the
 </p>
 
 <p>
-It's important to emphasize that this is a study project, designed to explore and implement complex concepts, such as: Clean Architecture, SOLID principles, Messaging, Database Transactions, Unit Tests and Rate Limiting.
+It's important to emphasize that this is a study project, designed to explore and implement complex concepts, such as: Clean Architecture, SOLID principles, Messaging, Database Transactions, Unit Tests, Rate Limiting. and Idempotency.
 </p>
 
 <p>
