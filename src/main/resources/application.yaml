@@ -4,7 +4,7 @@ spring:
   application:
     name: jobnest
   datasource:
-    url: ${DB_URL}
+    url: jdbc:postgresql://${DB_HOST}:5432/${DB_NAME}
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
   jpa:
@@ -27,7 +27,7 @@ spring:
           max-interval: 12000
   redis:
       host: ${REDIS_HOST}
-      port: ${REDIS_PORT}
+      port: 6379
   mail:
     host: smtp.gmail.com
     port: 587
