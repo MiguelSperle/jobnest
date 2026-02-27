@@ -1,25 +1,18 @@
 spring:
+  config:
+    import: optional:file:.env[.properties]
   application:
     name: jobnest
-
   datasource:
     url: ${DB_URL}
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
-
   jpa:
     hibernate:
       ddl-auto: none
-
   flyway:
     schemas: public
     default-schema: public
-
-  api:
-    security:
-      token:
-        secret: ${JWT_SECRET}
-
   rabbitmq:
     username: ${RABBITMQ_USERNAME}
     password: ${RABBITMQ_PASSWORD}
@@ -32,11 +25,9 @@ spring:
           initial-interval: 3000
           multiplier: 2
           max-interval: 12000
-
   redis:
-    host: ${REDIS_HOST}
-    port: ${REDIS_PORT}
-
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
   mail:
     host: smtp.gmail.com
     port: 587
@@ -49,11 +40,14 @@ spring:
           starttls:
             enable: true
             required: true
-
   cloudinary:
     cloud-name: ${CLOUDINARY_CLOUD_NAME}
     api-key: ${CLOUDINARY_API_KEY}
     api-secret: ${CLOUDINARY_API_SECRET}
+
+security:
+  token:
+    secret: ${JWT_SECRET}
 
 resilience4j:
   ratelimiter:

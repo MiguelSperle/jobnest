@@ -17,7 +17,7 @@ import java.time.temporal.ChronoUnit;
 
 @Service
 public class JwtServiceImpl implements JwtService {
-    @Value("${spring.api.security.token.secret}")
+    @Value("${security.token.secret}")
     private String secret;
 
     private static final Logger log = LoggerFactory.getLogger(JwtServiceImpl.class);
