@@ -71,6 +71,32 @@ public class JpaEventOutboxEntity {
         );
     }
 
+    public static JpaEventOutboxEntity with(
+            final String id,
+            final String eventId,
+            final byte[] payload,
+            final String aggregateId,
+            final String aggregateType,
+            final String eventType,
+            final EventOutboxStatus eventOutboxStatus,
+            final String exchange,
+            final String routingKey,
+            final LocalDateTime createdAt
+    ) {
+        return new JpaEventOutboxEntity(
+                id,
+                eventId,
+                payload,
+                aggregateId,
+                aggregateType,
+                eventType,
+                eventOutboxStatus,
+                exchange,
+                routingKey,
+                createdAt
+        );
+    }
+
     public JpaEventOutboxEntity withEventOutboxStatus(final EventOutboxStatus eventOutboxStatus) {
         return new JpaEventOutboxEntity(
                 this.id,

@@ -9,8 +9,8 @@ import com.miguel.jobnest.domain.enums.AuthorizationRole;
 import com.miguel.jobnest.domain.enums.UserStatus;
 import com.miguel.jobnest.domain.exceptions.NotFoundException;
 import com.miguel.jobnest.domain.utils.IdentifierUtils;
-import com.miguel.jobnest.application.utils.JobVacancyTestBuilder;
-import com.miguel.jobnest.application.utils.UserTestBuilder;
+import com.miguel.jobnest.application.builders.JobVacancyTestBuilder;
+import com.miguel.jobnest.application.builders.UserTestBuilder;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,7 +30,7 @@ public class GetJobVacancyByIdUseCaseTest {
     private JobVacancyRepository jobVacancyRepository;
 
     @Test
-    void shouldGetJobVacancyById() {
+    void shouldGetJobVacancyById_whenCallExecute() {
         final User user = UserTestBuilder.aUser().userStatus(UserStatus.VERIFIED).authorizationRole(AuthorizationRole.RECRUITER).build();
         final JobVacancy jobVacancy = JobVacancyTestBuilder.aJobVacancy().userId(user.getId()).build();
 
@@ -58,7 +58,7 @@ public class GetJobVacancyByIdUseCaseTest {
     }
 
     @Test
-    void shouldThrowNotFoundException_whenJobVacancyDoesNotExist() {
+    void shouldThrowNotFoundException_whenCallExecute_becauseJobVacancyDoesNotExist() {
         final GetJobVacancyByIdUseCaseInput input = GetJobVacancyByIdUseCaseInput.with(
                 IdentifierUtils.generateNewId()
         );

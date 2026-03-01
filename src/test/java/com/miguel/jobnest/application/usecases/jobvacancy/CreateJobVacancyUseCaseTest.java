@@ -8,7 +8,7 @@ import com.miguel.jobnest.domain.enums.AuthorizationRole;
 import com.miguel.jobnest.domain.enums.Modality;
 import com.miguel.jobnest.domain.enums.SeniorityLevel;
 import com.miguel.jobnest.domain.enums.UserStatus;
-import com.miguel.jobnest.application.utils.UserTestBuilder;
+import com.miguel.jobnest.application.builders.UserTestBuilder;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -32,7 +32,7 @@ public class CreateJobVacancyUseCaseTest {
     private SecurityService securityService;
 
     @Test
-    void shouldCreateJobVacancy() {
+    void shouldCreateJobVacancy_whenCallExecute() {
         final User user = UserTestBuilder.aUser().userStatus(UserStatus.VERIFIED).authorizationRole(AuthorizationRole.RECRUITER).build();
         final String title = "Java Developer";
         final String description = "This is the job vacancy description";

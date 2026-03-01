@@ -11,9 +11,9 @@ import com.miguel.jobnest.domain.enums.UserStatus;
 import com.miguel.jobnest.domain.pagination.Pagination;
 import com.miguel.jobnest.domain.pagination.PaginationMetadata;
 import com.miguel.jobnest.domain.pagination.SearchQuery;
-import com.miguel.jobnest.application.utils.JobVacancyTestBuilder;
-import com.miguel.jobnest.application.utils.SubscriptionTestBuilder;
-import com.miguel.jobnest.application.utils.UserTestBuilder;
+import com.miguel.jobnest.application.builders.JobVacancyTestBuilder;
+import com.miguel.jobnest.application.builders.SubscriptionTestBuilder;
+import com.miguel.jobnest.application.builders.UserTestBuilder;
 import com.miguel.jobnest.domain.utils.IdentifierUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -34,11 +34,11 @@ public class ListSubscriptionsByJobVacancyIdUseCaseTest {
     private SubscriptionRepository subscriptionRepository;
 
     @Test
-    void shouldListSubscriptionsByJobVacancyId() {
+    void shouldListSubscriptionsByJobVacancyId_whenCallExecute() {
         final User userCandidate = UserTestBuilder.aUser().userStatus(UserStatus.VERIFIED).authorizationRole(AuthorizationRole.CANDIDATE).build();
         final User userRecruiter = UserTestBuilder.aUser().userStatus(UserStatus.VERIFIED).authorizationRole(AuthorizationRole.RECRUITER).build();
         final JobVacancy jobVacancy = JobVacancyTestBuilder.aJobVacancy().userId(userRecruiter.getId()).build();
-        final Subscription subscription = SubscriptionTestBuilder.aSubscription().userId(userCandidate.getId()).jobVacancyId(jobVacancy.getId().value()).build();
+        final Subscription subscription = SubscriptionTestBuilder.aSubscription().userId(userCandidate.getId()).jobVacancyId(jobVacancy.getId()).build();
         final List<Subscription> subscriptions = List.of(subscription);
         final int page = 0;
         final int perPage = 10;
@@ -53,7 +53,7 @@ public class ListSubscriptionsByJobVacancyIdUseCaseTest {
         );
 
         final ListSubscriptionsByJobVacancyIdUseCaseInput input = ListSubscriptionsByJobVacancyIdUseCaseInput.with(
-                jobVacancy.getId().value(),
+                jobVacancy.getId(),
                 searchQuery
         );
 
@@ -75,7 +75,7 @@ public class ListSubscriptionsByJobVacancyIdUseCaseTest {
     }
 
     @Test
-    void shouldListEmptySubscriptionsByJobVacancyId() {
+    void shouldListEmptySubscriptionsByJobVacancyId_whenCallExecute() {
         final int page = 0;
         final int perPage = 10;
         final String sort = "createdAt";

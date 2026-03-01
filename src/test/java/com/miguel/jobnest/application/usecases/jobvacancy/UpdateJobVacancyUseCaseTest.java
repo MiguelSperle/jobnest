@@ -10,8 +10,8 @@ import com.miguel.jobnest.domain.enums.SeniorityLevel;
 import com.miguel.jobnest.domain.enums.UserStatus;
 import com.miguel.jobnest.domain.exceptions.NotFoundException;
 import com.miguel.jobnest.domain.utils.IdentifierUtils;
-import com.miguel.jobnest.application.utils.JobVacancyTestBuilder;
-import com.miguel.jobnest.application.utils.UserTestBuilder;
+import com.miguel.jobnest.application.builders.JobVacancyTestBuilder;
+import com.miguel.jobnest.application.builders.UserTestBuilder;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -34,7 +34,7 @@ public class UpdateJobVacancyUseCaseTest {
     private JobVacancyRepository jobVacancyRepository;
 
     @Test
-    void shouldUpdateJobVacancy() {
+    void shouldUpdateJobVacancy_whenCallExecute() {
         final User userRecruiter = UserTestBuilder.aUser().userStatus(UserStatus.VERIFIED).authorizationRole(AuthorizationRole.RECRUITER).build();
         final JobVacancy jobVacancy = JobVacancyTestBuilder.aJobVacancy().userId(userRecruiter.getId()).build();
         final String title = "Java Developer";
@@ -66,7 +66,7 @@ public class UpdateJobVacancyUseCaseTest {
     }
 
     @Test
-    void shouldThrowNotFoundException_whenJobVacancyDoesNotExist() {
+    void shouldThrowNotFoundException_whenCallExecute_becauseJobVacancyDoesNotExist() {
         final String title = "Java Developer";
         final String description = "This is the job vacancy description";
         final String companyName = "Company Name";

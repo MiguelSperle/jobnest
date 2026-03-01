@@ -7,7 +7,7 @@ import com.miguel.jobnest.domain.entities.User;
 import com.miguel.jobnest.domain.enums.AuthorizationRole;
 import com.miguel.jobnest.domain.enums.UserStatus;
 import com.miguel.jobnest.domain.exceptions.NotFoundException;
-import com.miguel.jobnest.application.utils.UserTestBuilder;
+import com.miguel.jobnest.application.builders.UserTestBuilder;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -33,7 +33,7 @@ public class UpdateUserUseCaseTest {
     private SecurityService securityService;
 
     @Test
-    void shouldUpdateUser() {
+    void shouldUpdateUser_whenCallExecute() {
         final User user = UserTestBuilder.aUser().userStatus(UserStatus.VERIFIED).authorizationRole(AuthorizationRole.CANDIDATE).build();
         final String name = "Alex";
         final String email = "alexhand1898@gmail.com";
@@ -70,7 +70,7 @@ public class UpdateUserUseCaseTest {
     }
 
     @Test
-    void shouldThrowNotFoundException_whenUserDoesNotExist() {
+    void shouldThrowNotFoundException_whenCallExecute_becauseUserDoesNotExist() {
         final String name = "Alex";
         final String email = "alexhand1898@gmail.com";
         final String description = "This is my description about me";

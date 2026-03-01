@@ -1,4 +1,4 @@
-package com.miguel.jobnest.application.utils;
+package com.miguel.jobnest.application.builders;
 
 import com.miguel.jobnest.domain.entities.UserCode;
 import com.miguel.jobnest.domain.enums.UserCodeType;
@@ -50,4 +50,3 @@ public class UserCodeTestBuilder {
         );
     }
 }
-

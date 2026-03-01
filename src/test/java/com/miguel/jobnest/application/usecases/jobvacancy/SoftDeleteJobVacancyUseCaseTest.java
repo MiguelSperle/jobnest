@@ -11,9 +11,9 @@ import com.miguel.jobnest.domain.enums.AuthorizationRole;
 import com.miguel.jobnest.domain.enums.UserStatus;
 import com.miguel.jobnest.domain.exceptions.NotFoundException;
 import com.miguel.jobnest.domain.utils.IdentifierUtils;
-import com.miguel.jobnest.application.utils.JobVacancyTestBuilder;
-import com.miguel.jobnest.application.utils.SubscriptionTestBuilder;
-import com.miguel.jobnest.application.utils.UserTestBuilder;
+import com.miguel.jobnest.application.builders.JobVacancyTestBuilder;
+import com.miguel.jobnest.application.builders.SubscriptionTestBuilder;
+import com.miguel.jobnest.application.builders.UserTestBuilder;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -43,7 +43,7 @@ public class SoftDeleteJobVacancyUseCaseTest {
     private TransactionExecutor transactionExecutor;
 
     @Test
-    void shouldDeleteJobVacancy() {
+    void shouldDeleteJobVacancy_whenCallExecute() {
         final User userRecruiter = UserTestBuilder.aUser().userStatus(UserStatus.VERIFIED).authorizationRole(AuthorizationRole.RECRUITER).build();
         final User userCandidate = UserTestBuilder.aUser().userStatus(UserStatus.VERIFIED).authorizationRole(AuthorizationRole.CANDIDATE).build();
         final JobVacancy jobVacancy = JobVacancyTestBuilder.aJobVacancy().userId(userRecruiter.getId()).build();
@@ -77,7 +77,7 @@ public class SoftDeleteJobVacancyUseCaseTest {
     }
 
     @Test
-    void shouldThrowNotFoundException_whenJobVacancyDoesNotExist() {
+    void shouldThrowNotFoundException_whenCallExecute_becauseJobVacancyDoesNotExist() {
         final SoftDeleteJobVacancyUseCaseInput input = SoftDeleteJobVacancyUseCaseInput.with(
                 IdentifierUtils.generateNewId()
         );

@@ -1,4 +1,4 @@
-package com.miguel.jobnest.application.utils;
+package com.miguel.jobnest.application.builders;
 
 import com.miguel.jobnest.domain.entities.JobVacancy;
 import com.miguel.jobnest.domain.enums.Modality;

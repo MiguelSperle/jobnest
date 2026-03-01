@@ -1,6 +1,6 @@
 package com.miguel.jobnest.application.usecases.user;
 
-import com.miguel.jobnest.infrastructure.abstractions.producer.MessageProducer;
+import com.miguel.jobnest.application.abstractions.repositories.EventOutboxRepository;
 import com.miguel.jobnest.application.abstractions.providers.CodeGenerator;
 import com.miguel.jobnest.application.abstractions.providers.PasswordEncryption;
 import com.miguel.jobnest.application.abstractions.repositories.UserCodeRepository;
@@ -41,13 +41,13 @@ public class CreateUserUseCaseTest {
     private CodeGenerator codeGenerator;
 
     @Mock
-    private TransactionExecutor transactionExecutor;
+    private EventOutboxRepository eventOutboxRepository;
 
     @Mock
-    private MessageProducer messageProducer;
+    private TransactionExecutor transactionExecutor;
 
     @Test
-    void shouldCreateUser() {
+    void shouldCreateUser_whenCallExecute() {
         final String code = "1BC34TD1";
 
         final String name = "Robert";
@@ -78,7 +78,7 @@ public class CreateUserUseCaseTest {
         Mockito.when(this.userRepository.save(Mockito.any())).thenAnswer(returnsFirstArg());
         Mockito.when(this.codeGenerator.generateCode(Mockito.anyInt(), Mockito.any())).thenReturn(code);
         Mockito.when(this.userCodeRepository.save(Mockito.any())).thenAnswer(returnsFirstArg());
-        Mockito.doNothing().when(this.messageProducer).publish(Mockito.any());
+        Mockito.doNothing().when(this.eventOutboxRepository).save(Mockito.any(), Mockito.any(), Mockito.any());
 
         this.useCase.execute(input);
 
@@ -107,11 +107,11 @@ public class CreateUserUseCaseTest {
                         Objects.nonNull(userCodeSaved.getExpiresIn()) &&
                         Objects.nonNull(userCodeSaved.getCreatedAt())
         ));
-        Mockito.verify(this.messageProducer, Mockito.times(1)).publish(Mockito.any());
+        Mockito.verify(this.eventOutboxRepository, Mockito.times(1)).save(Mockito.any(), Mockito.any(), Mockito.any());
     }
 
     @Test
-    void shouldThrowDomainException_whenEmailIsAlreadyBeingUsed() {
+    void shouldThrowDomainException_whenCallExecute_becauseEmailIsAlreadyBeingUsed() {
         final String name = "Robert";
         final String email = "robertrenan1947@gmail.com";
         final String password = "12345";

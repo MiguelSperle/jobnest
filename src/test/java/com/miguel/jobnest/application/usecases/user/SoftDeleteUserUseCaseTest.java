@@ -6,7 +6,7 @@ import com.miguel.jobnest.domain.entities.User;
 import com.miguel.jobnest.domain.enums.AuthorizationRole;
 import com.miguel.jobnest.domain.enums.UserStatus;
 import com.miguel.jobnest.domain.exceptions.NotFoundException;
-import com.miguel.jobnest.application.utils.UserTestBuilder;
+import com.miguel.jobnest.application.builders.UserTestBuilder;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -32,7 +32,7 @@ public class SoftDeleteUserUseCaseTest {
     private SecurityService securityService;
 
     @Test
-    void shouldDeleteUser() {
+    void shouldDeleteUser_whenCallExecute() {
         final User user = UserTestBuilder.aUser().userStatus(UserStatus.VERIFIED).authorizationRole(AuthorizationRole.CANDIDATE).build();
 
         Mockito.when(this.securityService.getPrincipal()).thenReturn(user.getId());
@@ -49,7 +49,7 @@ public class SoftDeleteUserUseCaseTest {
     }
 
     @Test
-    void shouldThrowNotFoundException_whenUserDoesNotExist() {
+    void shouldThrowNotFoundException_whenCallExecute_becauseUserDoesNotExist() {
         Mockito.when(this.userRepository.findById(Mockito.any())).thenReturn(Optional.empty());
 
         final var ex = Assertions.assertThrows(NotFoundException.class, () ->

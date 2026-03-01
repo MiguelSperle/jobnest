@@ -14,8 +14,8 @@ import com.miguel.jobnest.domain.exceptions.DomainException;
 import com.miguel.jobnest.domain.exceptions.NotFoundException;
 import com.miguel.jobnest.domain.utils.IdentifierUtils;
 import com.miguel.jobnest.domain.utils.TimeUtils;
-import com.miguel.jobnest.application.utils.UserTestBuilder;
-import com.miguel.jobnest.application.utils.UserCodeTestBuilder;
+import com.miguel.jobnest.application.builders.UserTestBuilder;
+import com.miguel.jobnest.application.builders.UserCodeTestBuilder;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -47,7 +47,7 @@ public class ResetUserPasswordUseCaseTest {
     private TransactionExecutor transactionExecutor;
 
     @Test
-    void shouldResetUserPassword() {
+    void shouldResetUserPassword_whenCallExecute() {
         final User user = UserTestBuilder.aUser().userStatus(UserStatus.VERIFIED).authorizationRole(AuthorizationRole.CANDIDATE).build();
         final UserCode userCode = UserCodeTestBuilder.aUserCode().userId(user.getId()).userCodeType(UserCodeType.PASSWORD_RESET).expiresIn(TimeUtils.now().plusMinutes(15)).build();
         final String password = "123456A";
@@ -83,7 +83,7 @@ public class ResetUserPasswordUseCaseTest {
     }
 
     @Test
-    void shouldThrowNotFoundException_whenTheCodeDoesNotExist() {
+    void shouldThrowNotFoundException_whenCallExecute_becauseTheCodeDoesNotExist() {
         final String code = "1234BC";
         final String password = "123456A";
 
@@ -106,7 +106,7 @@ public class ResetUserPasswordUseCaseTest {
     }
 
     @Test
-    void shouldThrowDomainException_whenTheCodeIsExpired() {
+    void shouldThrowDomainException_whenCallExecute_becauseTheCodeIsExpired() {
         final User user = UserTestBuilder.aUser().userStatus(UserStatus.VERIFIED).authorizationRole(AuthorizationRole.CANDIDATE).build();
         final UserCode userCode = UserCodeTestBuilder.aUserCode().userId(user.getId()).userCodeType(UserCodeType.PASSWORD_RESET).expiresIn(TimeUtils.now().minusDays(1)).build();
         final String password = "123456A";
@@ -134,7 +134,7 @@ public class ResetUserPasswordUseCaseTest {
     }
 
     @Test
-    void shouldThrowNotFoundException_whenUserDoesNotExist() {
+    void shouldThrowNotFoundException_whenCallExecute_becauseUserDoesNotExist() {
         final UserCode userCode = UserCodeTestBuilder.aUserCode().userId(IdentifierUtils.generateNewId()).userCodeType(UserCodeType.PASSWORD_RESET).expiresIn(TimeUtils.now().plusMinutes(15)).build();
         final String code = "1234BC";
         final String password = "123456A";

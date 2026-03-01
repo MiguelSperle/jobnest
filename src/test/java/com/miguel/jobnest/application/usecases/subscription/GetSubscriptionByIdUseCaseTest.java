@@ -10,9 +10,9 @@ import com.miguel.jobnest.domain.enums.AuthorizationRole;
 import com.miguel.jobnest.domain.enums.UserStatus;
 import com.miguel.jobnest.domain.exceptions.NotFoundException;
 import com.miguel.jobnest.domain.utils.IdentifierUtils;
-import com.miguel.jobnest.application.utils.JobVacancyTestBuilder;
-import com.miguel.jobnest.application.utils.SubscriptionTestBuilder;
-import com.miguel.jobnest.application.utils.UserTestBuilder;
+import com.miguel.jobnest.application.builders.JobVacancyTestBuilder;
+import com.miguel.jobnest.application.builders.SubscriptionTestBuilder;
+import com.miguel.jobnest.application.builders.UserTestBuilder;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -32,11 +32,11 @@ public class GetSubscriptionByIdUseCaseTest {
     private SubscriptionRepository subscriptionRepository;
 
     @Test
-    void shouldGetSubscriptionById() {
+    void shouldGetSubscriptionById_whenCallExecute() {
         final User userCandidate = UserTestBuilder.aUser().userStatus(UserStatus.VERIFIED).authorizationRole(AuthorizationRole.CANDIDATE).build();
         final User userRecruiter = UserTestBuilder.aUser().userStatus(UserStatus.VERIFIED).authorizationRole(AuthorizationRole.RECRUITER).build();
         final JobVacancy jobVacancy = JobVacancyTestBuilder.aJobVacancy().userId(userRecruiter.getId()).build();
-        final Subscription subscription = SubscriptionTestBuilder.aSubscription().userId(userCandidate.getId()).jobVacancyId(jobVacancy.getId().value()).build();
+        final Subscription subscription = SubscriptionTestBuilder.aSubscription().userId(userCandidate.getId()).jobVacancyId(jobVacancy.getId()).build();
 
         final GetSubscriptionByIdUseCaseInput input = GetSubscriptionByIdUseCaseInput.with(
                 subscription.getId()
@@ -59,7 +59,7 @@ public class GetSubscriptionByIdUseCaseTest {
     }
 
     @Test
-    void shouldThrowNotFoundException_whenSubscriptionDoesNotExist() {
+    void shouldThrowNotFoundException_whenCallExecute_becauseSubscriptionDoesNotExist() {
         final GetSubscriptionByIdUseCaseInput input = GetSubscriptionByIdUseCaseInput.with(
                 IdentifierUtils.generateNewId()
         );

@@ -9,7 +9,7 @@ import com.miguel.jobnest.domain.enums.AuthorizationRole;
 import com.miguel.jobnest.domain.enums.UserStatus;
 import com.miguel.jobnest.domain.exceptions.DomainException;
 import com.miguel.jobnest.domain.exceptions.NotFoundException;
-import com.miguel.jobnest.application.utils.UserTestBuilder;
+import com.miguel.jobnest.application.builders.UserTestBuilder;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -38,7 +38,7 @@ public class UpdateUserPasswordUseCaseTest {
     private SecurityService securityService;
 
     @Test
-    void shouldUpdateUserPassword() {
+    void shouldUpdateUserPassword_whenCallExecute() {
         final User user = UserTestBuilder.aUser().userStatus(UserStatus.VERIFIED).authorizationRole(AuthorizationRole.CANDIDATE).build();
         final String password = "123456A";
 
@@ -65,7 +65,7 @@ public class UpdateUserPasswordUseCaseTest {
     }
 
     @Test
-    void shouldThrowNotFoundException_whenUserDoesNotExist() {
+    void shouldThrowNotFoundException_whenCallExecute_becauseUserDoesNotExist() {
         final String currentPassword = "1234BC";
         final String password = "123456A";
 
@@ -88,7 +88,7 @@ public class UpdateUserPasswordUseCaseTest {
     }
 
     @Test
-    void shouldThrowDomainException_whenCurrentPasswordIsInvalid() {
+    void shouldThrowDomainException_whenExecute_becauseCurrentPasswordIsInvalid() {
         final User user = UserTestBuilder.aUser().userStatus(UserStatus.VERIFIED).authorizationRole(AuthorizationRole.CANDIDATE).build();
         final String currentPassword = "1234BC";
         final String password = "123456A";
