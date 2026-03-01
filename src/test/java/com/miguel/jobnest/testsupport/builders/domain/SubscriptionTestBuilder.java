@@ -1,4 +1,4 @@
-package com.miguel.jobnest.application.builders;
+package com.miguel.jobnest.testsupport.builders.domain;
 
 import com.miguel.jobnest.domain.entities.Subscription;
 import com.miguel.jobnest.domain.utils.IdentifierUtils;
@@ -28,8 +28,8 @@ public class SubscriptionTestBuilder {
     }
 
     public Subscription build() {
-        Objects.requireNonNull(this.userId, "UserId must not be null");
-        Objects.requireNonNull(this.jobVacancyId, "JobVacancyId must not be null");
+        Objects.requireNonNull(this.userId, "UserId should not be null");
+        Objects.requireNonNull(this.jobVacancyId, "JobVacancyId should not be null");
 
         return Subscription.with(
                 IdentifierUtils.generateNewId(),

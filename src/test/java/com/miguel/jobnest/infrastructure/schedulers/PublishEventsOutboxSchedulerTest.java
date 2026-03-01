@@ -2,7 +2,7 @@ package com.miguel.jobnest.infrastructure.schedulers;
 
 import com.miguel.jobnest.application.abstractions.wrapper.TransactionExecutor;
 import com.miguel.jobnest.infrastructure.abstractions.producer.MessageProducer;
-import com.miguel.jobnest.infrastructure.builders.JpaEventOutboxEntityTestBuilder;
+import com.miguel.jobnest.testsupport.builders.jpa.JpaEventOutboxEntityTestBuilder;
 import com.miguel.jobnest.infrastructure.persistence.jpa.entities.JpaEventOutboxEntity;
 import com.miguel.jobnest.infrastructure.persistence.jpa.repositories.JpaEventOutboxRepository;
 import org.junit.jupiter.api.Test;
@@ -32,7 +32,7 @@ public class PublishEventsOutboxSchedulerTest {
 
     @Test
     void shouldPublishPendingEventsOutbox_whenPublishEventsOutboxSchedulerRuns() {
-        final JpaEventOutboxEntity eventOutboxEntity = JpaEventOutboxEntityTestBuilder.aEventOutboxEntity().build();
+        final JpaEventOutboxEntity eventOutboxEntity = JpaEventOutboxEntityTestBuilder.aJpaEventOutboxEntity().build();
 
         Mockito.doAnswer(invocationOnMock -> {
             Runnable runnable = invocationOnMock.getArgument(0);

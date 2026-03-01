@@ -10,9 +10,10 @@ import com.miguel.jobnest.domain.entities.JobVacancy;
 import com.miguel.jobnest.domain.entities.User;
 import com.miguel.jobnest.domain.enums.AuthorizationRole;
 import com.miguel.jobnest.domain.enums.UserStatus;
+import com.miguel.jobnest.domain.events.SubscriptionCreatedEvent;
 import com.miguel.jobnest.domain.exceptions.DomainException;
-import com.miguel.jobnest.application.builders.JobVacancyTestBuilder;
-import com.miguel.jobnest.application.builders.UserTestBuilder;
+import com.miguel.jobnest.testsupport.builders.domain.JobVacancyTestBuilder;
+import com.miguel.jobnest.testsupport.builders.domain.UserTestBuilder;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -82,7 +83,11 @@ public class CreateSubscriptionUseCaseTest {
                         Objects.equals(subscriptionSaved.getIsCanceled(), false) &&
                         Objects.nonNull(subscriptionSaved.getCreatedAt())
         ));
-        Mockito.verify(this.eventOutboxRepository, Mockito.times(1)).save(Mockito.any(), Mockito.any(), Mockito.any());
+        Mockito.verify(this.eventOutboxRepository, Mockito.times(1)).save(
+                Mockito.eq("subscription.created.exchange"),
+                Mockito.eq("subscription.created.routing.key"),
+                Mockito.argThat(event -> event instanceof SubscriptionCreatedEvent)
+        );
     }
 
     @Test

@@ -4,6 +4,7 @@ import com.miguel.jobnest.domain.utils.IdentifierUtils;
 import com.miguel.jobnest.domain.utils.TimeUtils;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
@@ -12,6 +13,7 @@ import java.time.LocalDateTime;
 @Table(name = "processed_events")
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
 public class JpaProcessedEventEntity {
     @Id
     @Column(nullable = false, length = 36)
@@ -26,7 +28,7 @@ public class JpaProcessedEventEntity {
     @Column(name = "processed_at", nullable = false)
     private LocalDateTime processedAt;
 
-    public static JpaProcessedEventEntity newProcessedEventEntity(final String eventId, final String listener) {
+    public static JpaProcessedEventEntity newJpaProcessedEventEntity(final String eventId, final String listener) {
         return new JpaProcessedEventEntity(
                 IdentifierUtils.generateNewId(),
                 eventId,

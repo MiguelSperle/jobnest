@@ -10,6 +10,7 @@ import com.miguel.jobnest.application.usecases.user.inputs.CreateUserUseCaseInpu
 import com.miguel.jobnest.domain.enums.AuthorizationRole;
 import com.miguel.jobnest.domain.enums.UserCodeType;
 import com.miguel.jobnest.domain.enums.UserStatus;
+import com.miguel.jobnest.domain.events.UserCodeCreatedEvent;
 import com.miguel.jobnest.domain.exceptions.DomainException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -107,7 +108,11 @@ public class CreateUserUseCaseTest {
                         Objects.nonNull(userCodeSaved.getExpiresIn()) &&
                         Objects.nonNull(userCodeSaved.getCreatedAt())
         ));
-        Mockito.verify(this.eventOutboxRepository, Mockito.times(1)).save(Mockito.any(), Mockito.any(), Mockito.any());
+        Mockito.verify(this.eventOutboxRepository, Mockito.times(1)).save(
+                Mockito.eq("user.code.created.exchange"),
+                Mockito.eq("user.code.created.routing.key"),
+                Mockito.argThat(event -> event instanceof UserCodeCreatedEvent)
+        );
     }
 
     @Test

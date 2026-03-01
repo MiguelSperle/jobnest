@@ -28,7 +28,6 @@ public record SubscriptionCreatedEvent(
                 aggregateId,
                 Subscription.class.getSimpleName(),
                 TimeUtils.now()
-
         );
     }
 }

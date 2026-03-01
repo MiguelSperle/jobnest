@@ -11,11 +11,12 @@ import com.miguel.jobnest.domain.entities.UserCode;
 import com.miguel.jobnest.domain.enums.AuthorizationRole;
 import com.miguel.jobnest.domain.enums.UserCodeType;
 import com.miguel.jobnest.domain.enums.UserStatus;
+import com.miguel.jobnest.domain.events.UserCodeCreatedEvent;
 import com.miguel.jobnest.domain.exceptions.DomainException;
 import com.miguel.jobnest.domain.exceptions.NotFoundException;
 import com.miguel.jobnest.domain.utils.TimeUtils;
-import com.miguel.jobnest.application.builders.UserTestBuilder;
-import com.miguel.jobnest.application.builders.UserCodeTestBuilder;
+import com.miguel.jobnest.testsupport.builders.domain.UserTestBuilder;
+import com.miguel.jobnest.testsupport.builders.domain.UserCodeTestBuilder;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -81,7 +82,11 @@ public class ResendVerificationCodeUseCaseTest {
                         userCodeSaved.getExpiresIn().isAfter(TimeUtils.now()) &&
                         Objects.nonNull(userCodeSaved.getCreatedAt())
         ));
-        Mockito.verify(this.eventOutboxRepository, Mockito.times(1)).save(Mockito.any(), Mockito.any(), Mockito.any());
+        Mockito.verify(this.eventOutboxRepository, Mockito.times(1)).save(
+                Mockito.eq("user.code.created.exchange"),
+                Mockito.eq("user.code.created.routing.key"),
+                Mockito.argThat(event -> event instanceof UserCodeCreatedEvent)
+        );
     }
 
     @Test
@@ -119,7 +124,11 @@ public class ResendVerificationCodeUseCaseTest {
                         userCodeSaved.getExpiresIn().isAfter(TimeUtils.now()) &&
                         Objects.nonNull(userCodeSaved.getCreatedAt())
         ));
-        Mockito.verify(this.eventOutboxRepository, Mockito.times(1)).save(Mockito.any(), Mockito.any(), Mockito.any());
+        Mockito.verify(this.eventOutboxRepository, Mockito.times(1)).save(
+                Mockito.eq("user.code.created.exchange"),
+                Mockito.eq("user.code.created.routing.key"),
+                Mockito.argThat(event -> event instanceof UserCodeCreatedEvent)
+        );
     }
 
     @Test

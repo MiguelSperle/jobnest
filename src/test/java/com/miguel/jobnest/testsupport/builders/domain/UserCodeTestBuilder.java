@@ -1,4 +1,4 @@
-package com.miguel.jobnest.application.builders;
+package com.miguel.jobnest.testsupport.builders.domain;
 
 import com.miguel.jobnest.domain.entities.UserCode;
 import com.miguel.jobnest.domain.enums.UserCodeType;
@@ -36,9 +36,9 @@ public class UserCodeTestBuilder {
     }
 
     public UserCode build() {
-        Objects.requireNonNull(this.userId, "UserId must not be null");
-        Objects.requireNonNull(this.userCodeType, "UserCodeType must not be null");
-        Objects.requireNonNull(this.expiresIn, "ExpiresIn must not be null");
+        Objects.requireNonNull(this.userId, "UserId should not be null");
+        Objects.requireNonNull(this.userCodeType, "UserCodeType should not be null");
+        Objects.requireNonNull(this.expiresIn, "ExpiresIn should not be null");
 
         return UserCode.with(
                 IdentifierUtils.generateNewId(),

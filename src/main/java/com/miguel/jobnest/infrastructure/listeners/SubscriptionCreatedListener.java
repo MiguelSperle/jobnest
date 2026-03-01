@@ -23,7 +23,7 @@ import org.springframework.stereotype.Component;
 public class SubscriptionCreatedListener {
     private final UserRepository userRepository;
     private final JobVacancyRepository jobVacancyRepository;
-    private final JpaProcessedEventRepository processedEventRepository;
+    private final JpaProcessedEventRepository jpaProcessedEventRepository;
     private final EmailService emailService;
 
     private static final String SUBSCRIPTION_CREATED_QUEUE = "subscription.created.queue";
@@ -37,7 +37,7 @@ public class SubscriptionCreatedListener {
         final String eventId = event.eventId();
         final String listenerName = SubscriptionCreatedListener.class.getSimpleName();
 
-        if (this.processedEventRepository.existsByEventIdAndListener(eventId, listenerName)) {
+        if (this.jpaProcessedEventRepository.existsByEventIdAndListener(eventId, listenerName)) {
             log.info("Event with id: {} has already been processed by the listener: {}", eventId, listenerName);
             return;
         }
@@ -51,7 +51,7 @@ public class SubscriptionCreatedListener {
 
         this.emailService.sendEmail(user.getEmail(), text, subject);
 
-        this.processedEventRepository.save(JpaProcessedEventEntity.newProcessedEventEntity(eventId, listenerName));
+        this.jpaProcessedEventRepository.save(JpaProcessedEventEntity.newJpaProcessedEventEntity(eventId, listenerName));
 
         log.info("Event with id: {} has been successfully processed by the listener: {}", eventId, listenerName);
     }

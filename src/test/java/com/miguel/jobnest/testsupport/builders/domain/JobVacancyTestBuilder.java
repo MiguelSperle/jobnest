@@ -1,4 +1,4 @@
-package com.miguel.jobnest.application.builders;
+package com.miguel.jobnest.testsupport.builders.domain;
 
 import com.miguel.jobnest.domain.entities.JobVacancy;
 import com.miguel.jobnest.domain.enums.Modality;
@@ -24,7 +24,7 @@ public class JobVacancyTestBuilder {
     }
 
     public JobVacancy build() {
-        Objects.requireNonNull(this.userId, "UserId must not be null");
+        Objects.requireNonNull(this.userId, "UserId should not be null");
 
         return JobVacancy.with(
                 IdentifierUtils.generateNewId(),

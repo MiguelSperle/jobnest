@@ -4,6 +4,7 @@ import com.miguel.jobnest.domain.enums.AuthorizationRole;
 import com.miguel.jobnest.domain.enums.UserStatus;
 import com.miguel.jobnest.domain.utils.IdentifierUtils;
 import com.miguel.jobnest.domain.utils.TimeUtils;
+import com.miguel.jobnest.testsupport.builders.domain.UserTestBuilder;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -89,31 +90,7 @@ public class UserTest {
 
     @Test
     void shouldReturnUpdatedUser_whenCallWithName() {
-        final String id = IdentifierUtils.generateNewId();
-        final String name = "Leonardo Jardim";
-        final String email = "leo1898@gmail.com";
-        final String description = "My description";
-        final String password = "12345";
-        final UserStatus userStatus = UserStatus.UNVERIFIED;
-        final AuthorizationRole authorizationRole = AuthorizationRole.CANDIDATE;
-        final String city = "Rio de Janeiro";
-        final String state = "Rio de Janeiro";
-        final String country = "Brazil";
-        final LocalDateTime createdAt = TimeUtils.now();
-
-        final User user = User.with(
-                id,
-                name,
-                email,
-                description,
-                password,
-                userStatus,
-                authorizationRole,
-                city,
-                state,
-                country,
-                createdAt
-        );
+        final User user = UserTestBuilder.aUser().userStatus(UserStatus.UNVERIFIED).authorizationRole(AuthorizationRole.CANDIDATE).build();
 
         final String newName = "Leo Jardim";
 
@@ -125,31 +102,7 @@ public class UserTest {
 
     @Test
     void shouldReturnUpdatedUser_whenCallWithEmail() {
-        final String id = IdentifierUtils.generateNewId();
-        final String name = "Leonardo Jardim";
-        final String email = "leo1898@gmail.com";
-        final String description = "My description";
-        final String password = "12345";
-        final UserStatus userStatus = UserStatus.UNVERIFIED;
-        final AuthorizationRole authorizationRole = AuthorizationRole.CANDIDATE;
-        final String city = "Rio de Janeiro";
-        final String state = "Rio de Janeiro";
-        final String country = "Brazil";
-        final LocalDateTime createdAt = TimeUtils.now();
-
-        final User user = User.with(
-                id,
-                name,
-                email,
-                description,
-                password,
-                userStatus,
-                authorizationRole,
-                city,
-                state,
-                country,
-                createdAt
-        );
+        final User user = UserTestBuilder.aUser().userStatus(UserStatus.UNVERIFIED).authorizationRole(AuthorizationRole.CANDIDATE).build();
 
         final String newEmail = "leojardim@gmail.com";
 
@@ -161,31 +114,7 @@ public class UserTest {
 
     @Test
     void shouldReturnUpdatedUser_whenCallWithDescription() {
-        final String id = IdentifierUtils.generateNewId();
-        final String name = "Leonardo Jardim";
-        final String email = "leo1898@gmail.com";
-        final String description = "My description";
-        final String password = "12345";
-        final UserStatus userStatus = UserStatus.UNVERIFIED;
-        final AuthorizationRole authorizationRole = AuthorizationRole.CANDIDATE;
-        final String city = "Rio de Janeiro";
-        final String state = "Rio de Janeiro";
-        final String country = "Brazil";
-        final LocalDateTime createdAt = TimeUtils.now();
-
-        final User user = User.with(
-                id,
-                name,
-                email,
-                description,
-                password,
-                userStatus,
-                authorizationRole,
-                city,
-                state,
-                country,
-                createdAt
-        );
+        final User user = UserTestBuilder.aUser().userStatus(UserStatus.UNVERIFIED).authorizationRole(AuthorizationRole.CANDIDATE).build();
 
         final String newDescription = "My description about me";
 
@@ -197,31 +126,7 @@ public class UserTest {
 
     @Test
     void shouldReturnUpdatedUser_whenCallWithCity() {
-        final String id = IdentifierUtils.generateNewId();
-        final String name = "Leonardo Jardim";
-        final String email = "leo1898@gmail.com";
-        final String description = "My description";
-        final String password = "12345";
-        final UserStatus userStatus = UserStatus.UNVERIFIED;
-        final AuthorizationRole authorizationRole = AuthorizationRole.CANDIDATE;
-        final String city = "Rio de Janeiro";
-        final String state = "Rio de Janeiro";
-        final String country = "Brazil";
-        final LocalDateTime createdAt = TimeUtils.now();
-
-        final User user = User.with(
-                id,
-                name,
-                email,
-                description,
-                password,
-                userStatus,
-                authorizationRole,
-                city,
-                state,
-                country,
-                createdAt
-        );
+        final User user = UserTestBuilder.aUser().userStatus(UserStatus.UNVERIFIED).authorizationRole(AuthorizationRole.CANDIDATE).build();
 
         final String newCity = "São Paulo";
 
@@ -233,31 +138,7 @@ public class UserTest {
 
     @Test
     void shouldReturnUpdatedUser_whenCallWithState() {
-        final String id = IdentifierUtils.generateNewId();
-        final String name = "Leonardo Jardim";
-        final String email = "leo1898@gmail.com";
-        final String description = "My description";
-        final String password = "12345";
-        final UserStatus userStatus = UserStatus.UNVERIFIED;
-        final AuthorizationRole authorizationRole = AuthorizationRole.CANDIDATE;
-        final String city = "Rio de Janeiro";
-        final String state = "Rio de Janeiro";
-        final String country = "Brazil";
-        final LocalDateTime createdAt = TimeUtils.now();
-
-        final User user = User.with(
-                id,
-                name,
-                email,
-                description,
-                password,
-                userStatus,
-                authorizationRole,
-                city,
-                state,
-                country,
-                createdAt
-        );
+        final User user = UserTestBuilder.aUser().userStatus(UserStatus.UNVERIFIED).authorizationRole(AuthorizationRole.CANDIDATE).build();
 
         final String newState = "São Paulo";
 
@@ -269,31 +150,7 @@ public class UserTest {
 
     @Test
     void shouldReturnUpdatedUser_whenCallWithCountry() {
-        final String id = IdentifierUtils.generateNewId();
-        final String name = "Leonardo Jardim";
-        final String email = "leo1898@gmail.com";
-        final String description = "My description";
-        final String password = "12345";
-        final UserStatus userStatus = UserStatus.UNVERIFIED;
-        final AuthorizationRole authorizationRole = AuthorizationRole.CANDIDATE;
-        final String city = "Rio de Janeiro";
-        final String state = "Rio de Janeiro";
-        final String country = "Brazil";
-        final LocalDateTime createdAt = TimeUtils.now();
-
-        final User user = User.with(
-                id,
-                name,
-                email,
-                description,
-                password,
-                userStatus,
-                authorizationRole,
-                city,
-                state,
-                country,
-                createdAt
-        );
+        final User user = UserTestBuilder.aUser().userStatus(UserStatus.UNVERIFIED).authorizationRole(AuthorizationRole.CANDIDATE).build();
 
         final String newCountry = "Brazil";
 
@@ -305,31 +162,7 @@ public class UserTest {
 
     @Test
     void shouldReturnUpdatedUser_whenCallWithUserStatus() {
-        final String id = IdentifierUtils.generateNewId();
-        final String name = "Leonardo Jardim";
-        final String email = "leo1898@gmail.com";
-        final String description = "My description";
-        final String password = "12345";
-        final UserStatus userStatus = UserStatus.UNVERIFIED;
-        final AuthorizationRole authorizationRole = AuthorizationRole.CANDIDATE;
-        final String city = "Rio de Janeiro";
-        final String state = "Rio de Janeiro";
-        final String country = "Brazil";
-        final LocalDateTime createdAt = TimeUtils.now();
-
-        final User user = User.with(
-                id,
-                name,
-                email,
-                description,
-                password,
-                userStatus,
-                authorizationRole,
-                city,
-                state,
-                country,
-                createdAt
-        );
+        final User user = UserTestBuilder.aUser().userStatus(UserStatus.UNVERIFIED).authorizationRole(AuthorizationRole.CANDIDATE).build();
 
         final UserStatus newUserStatus = UserStatus.VERIFIED;
 
@@ -341,31 +174,7 @@ public class UserTest {
 
     @Test
     void shouldReturnUpdatedUser_whenCallWithPassword() {
-        final String id = IdentifierUtils.generateNewId();
-        final String name = "Leonardo Jardim";
-        final String email = "leo1898@gmail.com";
-        final String description = "My description";
-        final String password = "12345";
-        final UserStatus userStatus = UserStatus.UNVERIFIED;
-        final AuthorizationRole authorizationRole = AuthorizationRole.CANDIDATE;
-        final String city = "Rio de Janeiro";
-        final String state = "Rio de Janeiro";
-        final String country = "Brazil";
-        final LocalDateTime createdAt = TimeUtils.now();
-
-        final User user = User.with(
-                id,
-                name,
-                email,
-                description,
-                password,
-                userStatus,
-                authorizationRole,
-                city,
-                state,
-                country,
-                createdAt
-        );
+        final User user = UserTestBuilder.aUser().userStatus(UserStatus.UNVERIFIED).authorizationRole(AuthorizationRole.CANDIDATE).build();
 
         final String newPassword = "123456";
 
@@ -377,47 +186,22 @@ public class UserTest {
 
     @Test
     void shouldReturnFormattedUser_whenCallToString() {
-        final String id = IdentifierUtils.generateNewId();
-        final String name = "Leonardo Jardim";
-        final String email = "leo1898@gmail.com";
-        final String description = "My description";
-        final String password = "12345";
-        final UserStatus userStatus = UserStatus.UNVERIFIED;
-        final AuthorizationRole authorizationRole = AuthorizationRole.CANDIDATE;
-        final String city = "Rio de Janeiro";
-        final String state = "Rio de Janeiro";
-        final String country = "Brazil";
-        final LocalDateTime createdAt = TimeUtils.now();
-
-        final User user = User.with(
-                id,
-                name,
-                email,
-                description,
-                password,
-                userStatus,
-                authorizationRole,
-                city,
-                state,
-                country,
-                createdAt
-        );
+        final User user = UserTestBuilder.aUser().userStatus(UserStatus.UNVERIFIED).authorizationRole(AuthorizationRole.CANDIDATE).build();
 
         final String expectedToString = "User{" +
-                "id='" + id + '\'' +
-                ", name='" + name + '\'' +
-                ", email='" + email + '\'' +
-                ", description='" + description + '\'' +
-                ", password='" + password + '\'' +
-                ", userStatus=" + userStatus +
-                ", authorizationRole=" + authorizationRole +
-                ", city='" + city + '\'' +
-                ", state='" + state + '\'' +
-                ", country='" + country + '\'' +
-                ", createdAt=" + createdAt +
+                "id='" + user.getId() + '\'' +
+                ", name='" + user.getName() + '\'' +
+                ", email='" + user.getEmail() + '\'' +
+                ", description='" + user.getDescription() + '\'' +
+                ", password='" + user.getPassword() + '\'' +
+                ", userStatus=" + user.getUserStatus() +
+                ", authorizationRole=" + user.getAuthorizationRole() +
+                ", city='" + user.getCity() + '\'' +
+                ", state='" + user.getState() + '\'' +
+                ", country='" + user.getCountry() + '\'' +
+                ", createdAt=" + user.getCreatedAt() +
                 '}';
 
-        Assertions.assertNotNull(user);
         Assertions.assertEquals(expectedToString, user.toString());
     }
 }

@@ -16,7 +16,7 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 public class PublishEventsOutboxScheduler {
-    private final JpaEventOutboxRepository eventOutboxRepository;
+    private final JpaEventOutboxRepository jpaEventOutboxRepository;
     private final MessageProducer messageProducer;
     private final TransactionExecutor transactionExecutor;
 
@@ -27,14 +27,14 @@ public class PublishEventsOutboxScheduler {
         log.info("Starting publish events outbox scheduler");
 
         this.transactionExecutor.runTransaction(() -> {
-            final List<JpaEventOutboxEntity> pendingEventsOutbox = this.eventOutboxRepository.findFirst10ByStatus(EventOutboxStatus.PENDING.name());
+            final List<JpaEventOutboxEntity> pendingJpaEventsOutbox = this.jpaEventOutboxRepository.findFirst10ByStatus(EventOutboxStatus.PENDING.name());
 
-            log.info("Found {} unpublished events", pendingEventsOutbox.size());
+            log.info("Found {} unpublished events", pendingJpaEventsOutbox.size());
 
-            for (JpaEventOutboxEntity pendingEventOutbox : pendingEventsOutbox) {
-                this.messageProducer.publish(pendingEventOutbox);
-                this.eventOutboxRepository.save(pendingEventOutbox.withEventOutboxStatus(EventOutboxStatus.PUBLISHED));
-                log.info("Event with id: {} has been successfully published", pendingEventOutbox.getEventId());
+            for (JpaEventOutboxEntity pendingJpaEventOutbox : pendingJpaEventsOutbox) {
+                this.messageProducer.publish(pendingJpaEventOutbox);
+                this.jpaEventOutboxRepository.save(pendingJpaEventOutbox.withEventOutboxStatus(EventOutboxStatus.PUBLISHED));
+                log.info("Event with id: {} has been successfully published", pendingJpaEventOutbox.getEventId());
             }
         });
 

@@ -16,7 +16,7 @@ public class EventOutboxRepositoryImpl implements EventOutboxRepository {
     @Override
     public void save(final String exchange, final String routingKey, final DomainEvent event) {
         final byte[] payload = Json.writeValueAsBytes(event);
-        this.jpaEventOutboxRepository.save(JpaEventOutboxEntity.newEventOutboxEntity(
+        this.jpaEventOutboxRepository.save(JpaEventOutboxEntity.newJpaEventOutboxEntity(
                 event.eventId(),
                 payload,
                 event.aggregateId(),

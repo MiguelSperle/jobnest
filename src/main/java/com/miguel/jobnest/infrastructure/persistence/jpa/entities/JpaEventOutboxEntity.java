@@ -48,7 +48,7 @@ public class JpaEventOutboxEntity {
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
-    public static JpaEventOutboxEntity newEventOutboxEntity(
+    public static JpaEventOutboxEntity newJpaEventOutboxEntity(
             final String eventId,
             final byte[] payload,
             final String aggregateId,

@@ -21,7 +21,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class UserCodeCreatedListener {
     private final UserRepository userRepository;
-    private final JpaProcessedEventRepository processedEventRepository;
+    private final JpaProcessedEventRepository jpaProcessedEventRepository;
     private final EmailService emailService;
 
     private static final String USER_CODE_CREATED_QUEUE = "user.code.created.queue";
@@ -35,7 +35,7 @@ public class UserCodeCreatedListener {
         final String eventId = event.eventId();
         final String listenerName = UserCodeCreatedListener.class.getSimpleName();
 
-        if (this.processedEventRepository.existsByEventIdAndListener(eventId, listenerName)) {
+        if (this.jpaProcessedEventRepository.existsByEventIdAndListener(eventId, listenerName)) {
             log.info("Event with id: {} has already been processed by the listener: {}", eventId, listenerName);
             return;
         }
@@ -55,7 +55,7 @@ public class UserCodeCreatedListener {
 
         this.emailService.sendEmail(user.getEmail(), text, subject);
 
-        this.processedEventRepository.save(JpaProcessedEventEntity.newProcessedEventEntity(eventId, listenerName));
+        this.jpaProcessedEventRepository.save(JpaProcessedEventEntity.newJpaProcessedEventEntity(eventId, listenerName));
 
         log.info("Event with id: {} has been successfully processed by the listener: {}", eventId, listenerName);
     }

@@ -2,6 +2,7 @@ package com.miguel.jobnest.domain.entities;
 
 import com.miguel.jobnest.domain.utils.IdentifierUtils;
 import com.miguel.jobnest.domain.utils.TimeUtils;
+import com.miguel.jobnest.testsupport.builders.domain.SubscriptionTestBuilder;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -59,21 +60,7 @@ public class SubscriptionTest {
 
     @Test
     void shouldReturnUpdatedSubscription_whenCallWithIsCanceled() {
-        final String id = IdentifierUtils.generateNewId();
-        final String userId = IdentifierUtils.generateNewId();
-        final String jobVacancyId = IdentifierUtils.generateNewId();
-        final String resumeUrl = "resume-url";
-        final boolean isCanceled = false;
-        final LocalDateTime createdAt = TimeUtils.now();
-
-        final Subscription subscription = Subscription.with(
-                id,
-                userId,
-                jobVacancyId,
-                resumeUrl,
-                isCanceled,
-                createdAt
-        );
+        final Subscription subscription = SubscriptionTestBuilder.aSubscription().userId(IdentifierUtils.generateNewId()).jobVacancyId(IdentifierUtils.generateNewId()).build();
 
         final Subscription updatedSubscription = subscription.withIsCanceled(true);
 
@@ -83,32 +70,17 @@ public class SubscriptionTest {
 
     @Test
     void shouldReturnFormattedSubscription_whenCallToString() {
-        final String id = IdentifierUtils.generateNewId();
-        final String userId = IdentifierUtils.generateNewId();
-        final String jobVacancyId = IdentifierUtils.generateNewId();
-        final String resumeUrl = "resume-url";
-        final boolean isCanceled = false;
-        final LocalDateTime createdAt = TimeUtils.now();
-
-        final Subscription subscription = Subscription.with(
-                id,
-                userId,
-                jobVacancyId,
-                resumeUrl,
-                isCanceled,
-                createdAt
-        );
+        final Subscription subscription = SubscriptionTestBuilder.aSubscription().userId(IdentifierUtils.generateNewId()).jobVacancyId(IdentifierUtils.generateNewId()).build();
 
         final String expectedToString = "Subscription{" +
-                "id='" + id + '\'' +
-                ", userId='" + userId + '\'' +
-                ", jobVacancyId='" + jobVacancyId + '\'' +
-                ", resumeUrl='" + resumeUrl + '\'' +
-                ", isCanceled='" + isCanceled + '\'' +
-                ", createdAt=" + createdAt +
+                "id='" + subscription.getId() + '\'' +
+                ", userId='" + subscription.getUserId() + '\'' +
+                ", jobVacancyId='" + subscription.getJobVacancyId() + '\'' +
+                ", resumeUrl='" + subscription.getResumeUrl() + '\'' +
+                ", isCanceled='" + subscription.getIsCanceled() + '\'' +
+                ", createdAt=" + subscription.getCreatedAt() +
                 '}';
 
-        Assertions.assertNotNull(subscription);
         Assertions.assertEquals(expectedToString, subscription.toString());
     }
 }

@@ -1,4 +1,4 @@
-package com.miguel.jobnest.application.builders;
+package com.miguel.jobnest.testsupport.builders.domain;
 
 import com.miguel.jobnest.domain.entities.User;
 import com.miguel.jobnest.domain.enums.AuthorizationRole;
@@ -30,8 +30,8 @@ public class UserTestBuilder {
     }
 
     public User build() {
-        Objects.requireNonNull(this.userStatus, "UserStatus must not be null");
-        Objects.requireNonNull(this.authorizationRole, "AuthorizationRole must not be null");
+        Objects.requireNonNull(this.userStatus, "UserStatus should not be null");
+        Objects.requireNonNull(this.authorizationRole, "AuthorizationRole should not be null");
 
         return User.with(
                 IdentifierUtils.generateNewId(),

@@ -3,6 +3,7 @@ package com.miguel.jobnest.domain.entities;
 import com.miguel.jobnest.domain.enums.UserCodeType;
 import com.miguel.jobnest.domain.utils.IdentifierUtils;
 import com.miguel.jobnest.domain.utils.TimeUtils;
+import com.miguel.jobnest.testsupport.builders.domain.UserCodeTestBuilder;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -60,32 +61,17 @@ public class UserCodeTest {
 
     @Test
     void shouldReturnFormattedUserCode_whenCallToString() {
-        final String id = IdentifierUtils.generateNewId();
-        final String userId = IdentifierUtils.generateNewId();
-        final String code = "1A2C3V4A";
-        final UserCodeType userCodeType = UserCodeType.USER_VERIFICATION;
-        final LocalDateTime expiresIn = TimeUtils.now().plusMinutes(15);
-        final LocalDateTime createdAt = TimeUtils.now();
-
-        final UserCode userCode = UserCode.with(
-                id,
-                userId,
-                code,
-                userCodeType,
-                expiresIn,
-                createdAt
-        );
+        final UserCode userCode = UserCodeTestBuilder.aUserCode().userId(IdentifierUtils.generateNewId()).userCodeType(UserCodeType.USER_VERIFICATION).expiresIn(TimeUtils.now().plusMinutes(15)).build();
 
         final String expectedToString = "UserCode{" +
-                "id='" + id + '\'' +
-                ", userId='" + userId + '\'' +
-                ", code='" + code + '\'' +
-                ", userCodeType=" + userCodeType +
-                ", expiresIn=" + expiresIn +
-                ", createdAt=" + createdAt +
+                "id='" + userCode.getId() + '\'' +
+                ", userId='" + userCode.getUserId() + '\'' +
+                ", code='" + userCode.getCode() + '\'' +
+                ", userCodeType=" + userCode.getUserCodeType() +
+                ", expiresIn=" + userCode.getExpiresIn() +
+                ", createdAt=" + userCode.getCreatedAt() +
                 '}';
 
-        Assertions.assertNotNull(userCode);
         Assertions.assertEquals(expectedToString, userCode.toString());
     }
 }

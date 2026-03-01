@@ -5,6 +5,7 @@ import com.miguel.jobnest.domain.enums.Modality;
 import com.miguel.jobnest.domain.enums.SeniorityLevel;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
@@ -13,6 +14,7 @@ import java.time.LocalDateTime;
 @Table(name = "job_vacancies")
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
 public class JpaJobVacancyEntity {
     @Id
     @Column(nullable = false, length = 36)
@@ -69,6 +71,30 @@ public class JpaJobVacancyEntity {
                 this.companyName,
                 this.isDeleted,
                 this.createdAt
+        );
+    }
+
+    public static JpaJobVacancyEntity with(
+            final String id,
+            final String userId,
+            final String title,
+            final String description,
+            final SeniorityLevel seniorityLevel,
+            final Modality modality,
+            final String companyName,
+            final boolean isDeleted,
+            final LocalDateTime createdAt
+    ){
+        return new JpaJobVacancyEntity(
+                id,
+                userId,
+                title,
+                description,
+                seniorityLevel,
+                modality,
+                companyName,
+                isDeleted,
+                createdAt
         );
     }
 }

@@ -1,4 +1,4 @@
-package com.miguel.jobnest.infrastructure.builders;
+package com.miguel.jobnest.testsupport.builders.jpa;
 
 import com.miguel.jobnest.domain.utils.IdentifierUtils;
 import com.miguel.jobnest.domain.utils.TimeUtils;
@@ -10,7 +10,7 @@ public class JpaEventOutboxEntityTestBuilder {
     private JpaEventOutboxEntityTestBuilder() {
     }
 
-    public static JpaEventOutboxEntityTestBuilder aEventOutboxEntity() {
+    public static JpaEventOutboxEntityTestBuilder aJpaEventOutboxEntity() {
         return new JpaEventOutboxEntityTestBuilder();
     }
 
