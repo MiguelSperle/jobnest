@@ -3,8 +3,8 @@ package com.miguel.jobnest.infrastructure.persistence.jpa.entities;
 import com.miguel.jobnest.domain.entities.Subscription;
 import com.miguel.jobnest.domain.utils.IdentifierUtils;
 import com.miguel.jobnest.domain.utils.TimeUtils;
-import com.miguel.jobnest.testsupport.builders.domain.SubscriptionTestBuilder;
-import com.miguel.jobnest.testsupport.builders.jpa.JpaSubscriptionEntityTestBuilder;
+import com.miguel.jobnest.testsupport.builders.entities.domain.SubscriptionTestBuilder;
+import com.miguel.jobnest.testsupport.builders.entities.jpa.JpaSubscriptionEntityTestBuilder;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

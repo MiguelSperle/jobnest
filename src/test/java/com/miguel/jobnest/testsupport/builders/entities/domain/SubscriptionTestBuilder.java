@@ -1,4 +1,4 @@
-package com.miguel.jobnest.testsupport.builders.domain;
+package com.miguel.jobnest.testsupport.builders.entities.domain;
 
 import com.miguel.jobnest.domain.entities.Subscription;
 import com.miguel.jobnest.domain.utils.IdentifierUtils;

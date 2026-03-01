@@ -5,8 +5,8 @@ import com.miguel.jobnest.domain.enums.Modality;
 import com.miguel.jobnest.domain.enums.SeniorityLevel;
 import com.miguel.jobnest.domain.utils.IdentifierUtils;
 import com.miguel.jobnest.domain.utils.TimeUtils;
-import com.miguel.jobnest.testsupport.builders.domain.JobVacancyTestBuilder;
-import com.miguel.jobnest.testsupport.builders.jpa.JpaJobVacancyEntityTestBuilder;
+import com.miguel.jobnest.testsupport.builders.entities.domain.JobVacancyTestBuilder;
+import com.miguel.jobnest.testsupport.builders.entities.jpa.JpaJobVacancyEntityTestBuilder;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

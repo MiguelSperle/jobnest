@@ -3,7 +3,7 @@ package com.miguel.jobnest.infrastructure.persistence.jpa.entities;
 import com.miguel.jobnest.domain.utils.IdentifierUtils;
 import com.miguel.jobnest.domain.utils.TimeUtils;
 import com.miguel.jobnest.infrastructure.enums.EventOutboxStatus;
-import com.miguel.jobnest.testsupport.builders.jpa.JpaEventOutboxEntityTestBuilder;
+import com.miguel.jobnest.testsupport.builders.entities.jpa.JpaEventOutboxEntityTestBuilder;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

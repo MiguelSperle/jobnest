@@ -5,8 +5,8 @@ import com.miguel.jobnest.domain.enums.AuthorizationRole;
 import com.miguel.jobnest.domain.enums.UserStatus;
 import com.miguel.jobnest.domain.utils.IdentifierUtils;
 import com.miguel.jobnest.domain.utils.TimeUtils;
-import com.miguel.jobnest.testsupport.builders.domain.UserTestBuilder;
-import com.miguel.jobnest.testsupport.builders.jpa.JpaUserEntityTestBuilder;
+import com.miguel.jobnest.testsupport.builders.entities.domain.UserTestBuilder;
+import com.miguel.jobnest.testsupport.builders.entities.jpa.JpaUserEntityTestBuilder;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

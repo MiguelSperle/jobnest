@@ -2,7 +2,7 @@ package com.miguel.jobnest.domain.entities;
 
 import com.miguel.jobnest.domain.utils.IdentifierUtils;
 import com.miguel.jobnest.domain.utils.TimeUtils;
-import com.miguel.jobnest.testsupport.builders.domain.SubscriptionTestBuilder;
+import com.miguel.jobnest.testsupport.builders.entities.domain.SubscriptionTestBuilder;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

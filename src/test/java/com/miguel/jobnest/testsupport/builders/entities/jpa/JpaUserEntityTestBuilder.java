@@ -1,4 +1,4 @@
-package com.miguel.jobnest.testsupport.builders.jpa;
+package com.miguel.jobnest.testsupport.builders.entities.jpa;
 
 import com.miguel.jobnest.domain.enums.AuthorizationRole;
 import com.miguel.jobnest.domain.enums.UserStatus;
