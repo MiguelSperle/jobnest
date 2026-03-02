@@ -4,6 +4,7 @@ import com.miguel.jobnest.application.abstractions.repositories.UserCodeReposito
 import com.miguel.jobnest.application.abstractions.repositories.UserRepository;
 import com.miguel.jobnest.application.abstractions.wrapper.TransactionExecutor;
 import com.miguel.jobnest.application.usecases.user.inputs.UpdateUserToVerifiedUseCaseInput;
+import com.miguel.jobnest.domain.Fixture;
 import com.miguel.jobnest.domain.entities.User;
 import com.miguel.jobnest.domain.entities.UserCode;
 import com.miguel.jobnest.domain.enums.AuthorizationRole;
@@ -11,9 +12,8 @@ import com.miguel.jobnest.domain.enums.UserCodeType;
 import com.miguel.jobnest.domain.enums.UserStatus;
 import com.miguel.jobnest.domain.exceptions.DomainException;
 import com.miguel.jobnest.domain.exceptions.NotFoundException;
+import com.miguel.jobnest.domain.utils.IdentifierUtils;
 import com.miguel.jobnest.domain.utils.TimeUtils;
-import com.miguel.jobnest.testsupport.builders.entities.domain.UserTestBuilder;
-import com.miguel.jobnest.testsupport.builders.entities.domain.UserCodeTestBuilder;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -43,8 +43,10 @@ public class UpdateUserToVerifiedUseCaseTest {
 
     @Test
     void shouldUpdateUserToVerified_whenCallExecute() {
-        final User user = UserTestBuilder.aUser().userStatus(UserStatus.UNVERIFIED).authorizationRole(AuthorizationRole.CANDIDATE).build();
-        final UserCode userCode = UserCodeTestBuilder.aUserCode().userId(user.getId()).userCodeType(UserCodeType.USER_VERIFICATION).expiresIn(TimeUtils.now().plusMinutes(15)).build();
+        final User user = Fixture.UserFixture.withUserStatus(
+                Fixture.UserFixture.newUser(AuthorizationRole.CANDIDATE), UserStatus.UNVERIFIED
+        );
+        final UserCode userCode = Fixture.UserCodeFixture.newUserCode(user.getId(), UserCodeType.USER_VERIFICATION);
 
         final UpdateUserToVerifiedUseCaseInput input = UpdateUserToVerifiedUseCaseInput.with(userCode.getCode());
 
@@ -92,8 +94,12 @@ public class UpdateUserToVerifiedUseCaseTest {
 
     @Test
     void shouldThrowDomainException_whenCallExecute_becauseTheCodeIsExpired() {
-        final User user = UserTestBuilder.aUser().userStatus(UserStatus.UNVERIFIED).authorizationRole(AuthorizationRole.CANDIDATE).build();
-        final UserCode userCode = UserCodeTestBuilder.aUserCode().userId(user.getId()).userCodeType(UserCodeType.USER_VERIFICATION).expiresIn(TimeUtils.now().minusDays(1)).build();
+        final User user = Fixture.UserFixture.withUserStatus(
+                Fixture.UserFixture.newUser(AuthorizationRole.CANDIDATE), UserStatus.UNVERIFIED
+        );
+        final UserCode userCode = Fixture.UserCodeFixture.withExpiresIn(
+                Fixture.UserCodeFixture.newUserCode(user.getId(), UserCodeType.USER_VERIFICATION), TimeUtils.now().minusDays(1)
+        );
 
         final UpdateUserToVerifiedUseCaseInput input = UpdateUserToVerifiedUseCaseInput.with(userCode.getCode());
 
@@ -116,8 +122,9 @@ public class UpdateUserToVerifiedUseCaseTest {
 
     @Test
     void shouldThrowNotFoundException_whenCallExecute_becauseUserDoesNotExist() {
-        final User user = UserTestBuilder.aUser().userStatus(UserStatus.UNVERIFIED).authorizationRole(AuthorizationRole.CANDIDATE).build();
-        final UserCode userCode = UserCodeTestBuilder.aUserCode().userId(user.getId()).userCodeType(UserCodeType.USER_VERIFICATION).expiresIn(TimeUtils.now().plusMinutes(15)).build();
+        final UserCode userCode = Fixture.UserCodeFixture.withExpiresIn(
+                Fixture.UserCodeFixture.newUserCode(IdentifierUtils.generateNewId(), UserCodeType.USER_VERIFICATION), TimeUtils.now().plusMinutes(15)
+        );
 
         final UpdateUserToVerifiedUseCaseInput input = UpdateUserToVerifiedUseCaseInput.with(userCode.getCode());
 

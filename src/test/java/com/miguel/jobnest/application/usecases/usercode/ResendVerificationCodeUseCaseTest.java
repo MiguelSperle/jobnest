@@ -6,6 +6,7 @@ import com.miguel.jobnest.application.abstractions.providers.CodeGenerator;
 import com.miguel.jobnest.application.abstractions.repositories.UserCodeRepository;
 import com.miguel.jobnest.application.abstractions.repositories.UserRepository;
 import com.miguel.jobnest.application.usecases.usercode.inputs.ResendVerificationCodeUseCaseInput;
+import com.miguel.jobnest.domain.Fixture;
 import com.miguel.jobnest.domain.entities.User;
 import com.miguel.jobnest.domain.entities.UserCode;
 import com.miguel.jobnest.domain.enums.AuthorizationRole;
@@ -15,8 +16,6 @@ import com.miguel.jobnest.domain.events.UserCodeCreatedEvent;
 import com.miguel.jobnest.domain.exceptions.DomainException;
 import com.miguel.jobnest.domain.exceptions.NotFoundException;
 import com.miguel.jobnest.domain.utils.TimeUtils;
-import com.miguel.jobnest.testsupport.builders.entities.domain.UserTestBuilder;
-import com.miguel.jobnest.testsupport.builders.entities.domain.UserCodeTestBuilder;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -52,7 +51,9 @@ public class ResendVerificationCodeUseCaseTest {
 
     @Test
     void shouldResendVerificationCode_whenCallExecute() {
-        final User user = UserTestBuilder.aUser().userStatus(UserStatus.UNVERIFIED).authorizationRole(AuthorizationRole.CANDIDATE).build();
+        final User user = Fixture.UserFixture.withUserStatus(
+                Fixture.UserFixture.newUser(AuthorizationRole.CANDIDATE), UserStatus.UNVERIFIED
+        );
         final String code = "123AB24J";
 
         final ResendVerificationCodeUseCaseInput input = ResendVerificationCodeUseCaseInput.with(user.getEmail());
@@ -61,7 +62,7 @@ public class ResendVerificationCodeUseCaseTest {
         Mockito.when(this.userCodeRepository.findByUserIdAndCodeType(Mockito.any(), Mockito.any())).thenReturn(Optional.empty());
         Mockito.when(this.codeGenerator.generateCode(Mockito.anyInt(), Mockito.any())).thenReturn(code);
         Mockito.doAnswer(invocationOnMock -> {
-            Runnable runnable = invocationOnMock.getArgument(0);
+            final Runnable runnable = invocationOnMock.getArgument(0);
             runnable.run();
             return runnable;
         }).when(this.transactionExecutor).runTransaction(Mockito.any());
@@ -91,8 +92,10 @@ public class ResendVerificationCodeUseCaseTest {
 
     @Test
     void shouldReplaceVerificationCodeAndSend_whenCallExecute_becauseUserAlreadyHasOne() {
-        final User user = UserTestBuilder.aUser().userStatus(UserStatus.UNVERIFIED).authorizationRole(AuthorizationRole.CANDIDATE).build();
-        final UserCode userCode = UserCodeTestBuilder.aUserCode().userId(user.getId()).userCodeType(UserCodeType.USER_VERIFICATION).expiresIn(TimeUtils.now().plusMinutes(15)).build();
+        final User user = Fixture.UserFixture.withUserStatus(
+                Fixture.UserFixture.newUser(AuthorizationRole.CANDIDATE), UserStatus.UNVERIFIED
+        );
+        final UserCode userCode = Fixture.UserCodeFixture.newUserCode(user.getId(), UserCodeType.USER_VERIFICATION);
         final String code = "123AB24J";
 
         final ResendVerificationCodeUseCaseInput input = ResendVerificationCodeUseCaseInput.with(user.getEmail());
@@ -102,7 +105,7 @@ public class ResendVerificationCodeUseCaseTest {
         Mockito.doNothing().when(this.userCodeRepository).deleteById(Mockito.any());
         Mockito.when(this.codeGenerator.generateCode(Mockito.anyInt(), Mockito.any())).thenReturn(code);
         Mockito.doAnswer(invocationOnMock -> {
-            Runnable runnable = invocationOnMock.getArgument(0);
+            final Runnable runnable = invocationOnMock.getArgument(0);
             runnable.run();
             return runnable;
         }).when(this.transactionExecutor).runTransaction(Mockito.any());
@@ -152,7 +155,9 @@ public class ResendVerificationCodeUseCaseTest {
 
     @Test
     void shouldThrowDomainException_whenCallExecute_becauseUserIsAlreadyVerified() {
-        final User user = UserTestBuilder.aUser().userStatus(UserStatus.VERIFIED).authorizationRole(AuthorizationRole.CANDIDATE).build();
+        final User user = Fixture.UserFixture.withUserStatus(
+                Fixture.UserFixture.newUser(AuthorizationRole.CANDIDATE), UserStatus.VERIFIED
+        );
 
         final ResendVerificationCodeUseCaseInput input = ResendVerificationCodeUseCaseInput.with(user.getEmail());
 
@@ -173,7 +178,9 @@ public class ResendVerificationCodeUseCaseTest {
 
     @Test
     void shouldThrowDomainException_whenCallExecute_becauseUserIsDeleted() {
-        final User user = UserTestBuilder.aUser().userStatus(UserStatus.DELETED).authorizationRole(AuthorizationRole.CANDIDATE).build();
+        final User user = Fixture.UserFixture.withUserStatus(
+                Fixture.UserFixture.newUser(AuthorizationRole.CANDIDATE), UserStatus.DELETED
+        );
 
         final ResendVerificationCodeUseCaseInput input = ResendVerificationCodeUseCaseInput.with(user.getEmail());
 

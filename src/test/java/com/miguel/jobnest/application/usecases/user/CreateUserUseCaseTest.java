@@ -72,7 +72,7 @@ public class CreateUserUseCaseTest {
         Mockito.when(this.userRepository.existsByEmail(Mockito.any())).thenReturn(false);
         Mockito.when(this.passwordEncryption.encode(Mockito.any())).thenReturn(input.password());
         Mockito.doAnswer(invocationOnMock -> {
-            Runnable runnable = invocationOnMock.getArgument(0);
+            final Runnable runnable = invocationOnMock.getArgument(0);
             runnable.run();
             return runnable;
         }).when(this.transactionExecutor).runTransaction(Mockito.any());

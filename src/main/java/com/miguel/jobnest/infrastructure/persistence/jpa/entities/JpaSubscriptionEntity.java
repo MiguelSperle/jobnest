@@ -6,7 +6,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
@@ -15,7 +14,6 @@ import java.time.LocalDateTime;
 @Table(name = "subscriptions")
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
 public class JpaSubscriptionEntity {
     @Id
     @Column(nullable = false, length = 36)
@@ -55,24 +53,6 @@ public class JpaSubscriptionEntity {
                 this.resumeUrl,
                 this.isCanceled,
                 this.createdAt
-        );
-    }
-
-    public static JpaSubscriptionEntity with(
-            final String id,
-            final String userId,
-            final String jobVacancyId,
-            final String resumeUrl,
-            final boolean isCanceled,
-            final LocalDateTime createdAt
-    ) {
-        return new JpaSubscriptionEntity(
-                id,
-                userId,
-                jobVacancyId,
-                resumeUrl,
-                isCanceled,
-                createdAt
         );
     }
 }

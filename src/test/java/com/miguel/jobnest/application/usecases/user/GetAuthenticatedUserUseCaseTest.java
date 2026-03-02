@@ -3,11 +3,11 @@ package com.miguel.jobnest.application.usecases.user;
 import com.miguel.jobnest.application.abstractions.repositories.UserRepository;
 import com.miguel.jobnest.application.abstractions.services.SecurityService;
 import com.miguel.jobnest.application.usecases.user.outputs.GetAuthenticatedUserUseCaseOutput;
+import com.miguel.jobnest.domain.Fixture;
 import com.miguel.jobnest.domain.entities.User;
 import com.miguel.jobnest.domain.enums.AuthorizationRole;
 import com.miguel.jobnest.domain.enums.UserStatus;
 import com.miguel.jobnest.domain.exceptions.NotFoundException;
-import com.miguel.jobnest.testsupport.builders.entities.domain.UserTestBuilder;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -31,7 +31,9 @@ public class GetAuthenticatedUserUseCaseTest {
 
     @Test
     void shouldGetAuthenticatedUser_whenCallExecute() {
-        final User user = UserTestBuilder.aUser().userStatus(UserStatus.VERIFIED).authorizationRole(AuthorizationRole.CANDIDATE).build();
+        final User user = Fixture.UserFixture.withUserStatus(
+                Fixture.UserFixture.newUser(AuthorizationRole.CANDIDATE), UserStatus.VERIFIED
+        );
 
         Mockito.when(this.securityService.getPrincipal()).thenReturn(user.getId());
         Mockito.when(this.userRepository.findById(Mockito.any())).thenReturn(Optional.of(user));

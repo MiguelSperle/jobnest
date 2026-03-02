@@ -4,12 +4,12 @@ import com.miguel.jobnest.application.abstractions.providers.PasswordEncryption;
 import com.miguel.jobnest.application.abstractions.repositories.UserRepository;
 import com.miguel.jobnest.application.abstractions.services.SecurityService;
 import com.miguel.jobnest.application.usecases.user.inputs.UpdateUserPasswordUseCaseInput;
+import com.miguel.jobnest.domain.Fixture;
 import com.miguel.jobnest.domain.entities.User;
 import com.miguel.jobnest.domain.enums.AuthorizationRole;
 import com.miguel.jobnest.domain.enums.UserStatus;
 import com.miguel.jobnest.domain.exceptions.DomainException;
 import com.miguel.jobnest.domain.exceptions.NotFoundException;
-import com.miguel.jobnest.testsupport.builders.entities.domain.UserTestBuilder;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -39,7 +39,9 @@ public class UpdateUserPasswordUseCaseTest {
 
     @Test
     void shouldUpdateUserPassword_whenCallExecute() {
-        final User user = UserTestBuilder.aUser().userStatus(UserStatus.VERIFIED).authorizationRole(AuthorizationRole.CANDIDATE).build();
+        final User user = Fixture.UserFixture.withUserStatus(
+                Fixture.UserFixture.newUser(AuthorizationRole.CANDIDATE), UserStatus.VERIFIED
+        );
         final String password = "123456A";
 
         final UpdateUserPasswordUseCaseInput input = UpdateUserPasswordUseCaseInput.with(
@@ -89,7 +91,9 @@ public class UpdateUserPasswordUseCaseTest {
 
     @Test
     void shouldThrowDomainException_whenExecute_becauseCurrentPasswordIsInvalid() {
-        final User user = UserTestBuilder.aUser().userStatus(UserStatus.VERIFIED).authorizationRole(AuthorizationRole.CANDIDATE).build();
+        final User user = Fixture.UserFixture.withUserStatus(
+                Fixture.UserFixture.newUser(AuthorizationRole.CANDIDATE), UserStatus.VERIFIED
+        );
         final String currentPassword = "1234BC";
         final String password = "123456A";
 

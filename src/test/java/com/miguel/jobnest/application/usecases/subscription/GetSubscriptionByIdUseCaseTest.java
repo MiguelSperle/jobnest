@@ -3,6 +3,7 @@ package com.miguel.jobnest.application.usecases.subscription;
 import com.miguel.jobnest.application.abstractions.repositories.SubscriptionRepository;
 import com.miguel.jobnest.application.usecases.subscription.inputs.GetSubscriptionByIdUseCaseInput;
 import com.miguel.jobnest.application.usecases.subscription.outputs.GetSubscriptionByIdUseCaseOutput;
+import com.miguel.jobnest.domain.Fixture;
 import com.miguel.jobnest.domain.entities.JobVacancy;
 import com.miguel.jobnest.domain.entities.Subscription;
 import com.miguel.jobnest.domain.entities.User;
@@ -10,9 +11,6 @@ import com.miguel.jobnest.domain.enums.AuthorizationRole;
 import com.miguel.jobnest.domain.enums.UserStatus;
 import com.miguel.jobnest.domain.exceptions.NotFoundException;
 import com.miguel.jobnest.domain.utils.IdentifierUtils;
-import com.miguel.jobnest.testsupport.builders.entities.domain.JobVacancyTestBuilder;
-import com.miguel.jobnest.testsupport.builders.entities.domain.SubscriptionTestBuilder;
-import com.miguel.jobnest.testsupport.builders.entities.domain.UserTestBuilder;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -33,10 +31,15 @@ public class GetSubscriptionByIdUseCaseTest {
 
     @Test
     void shouldGetSubscriptionById_whenCallExecute() {
-        final User userCandidate = UserTestBuilder.aUser().userStatus(UserStatus.VERIFIED).authorizationRole(AuthorizationRole.CANDIDATE).build();
-        final User userRecruiter = UserTestBuilder.aUser().userStatus(UserStatus.VERIFIED).authorizationRole(AuthorizationRole.RECRUITER).build();
-        final JobVacancy jobVacancy = JobVacancyTestBuilder.aJobVacancy().userId(userRecruiter.getId()).build();
-        final Subscription subscription = SubscriptionTestBuilder.aSubscription().userId(userCandidate.getId()).jobVacancyId(jobVacancy.getId()).build();
+        final User userRecruiter = Fixture.UserFixture.withUserStatus(
+                Fixture.UserFixture.newUser(AuthorizationRole.RECRUITER), UserStatus.VERIFIED
+        );
+        final User userCandidate = Fixture.UserFixture.withUserStatus(
+                Fixture.UserFixture.newUser(AuthorizationRole.CANDIDATE), UserStatus.VERIFIED
+        );
+
+        final JobVacancy jobVacancy = Fixture.JobVacancyFixture.newJobVacancy(userRecruiter.getId());
+        final Subscription subscription = Fixture.SubscriptionFixture.newSubscription(userCandidate.getId(), jobVacancy.getId());
 
         final GetSubscriptionByIdUseCaseInput input = GetSubscriptionByIdUseCaseInput.with(
                 subscription.getId()

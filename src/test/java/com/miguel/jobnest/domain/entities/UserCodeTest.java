@@ -1,9 +1,9 @@
 package com.miguel.jobnest.domain.entities;
 
+import com.miguel.jobnest.domain.Fixture;
 import com.miguel.jobnest.domain.enums.UserCodeType;
 import com.miguel.jobnest.domain.utils.IdentifierUtils;
 import com.miguel.jobnest.domain.utils.TimeUtils;
-import com.miguel.jobnest.testsupport.builders.entities.domain.UserCodeTestBuilder;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -61,7 +61,7 @@ public class UserCodeTest {
 
     @Test
     void shouldReturnFormattedUserCode_whenCallToString() {
-        final UserCode userCode = UserCodeTestBuilder.aUserCode().userId(IdentifierUtils.generateNewId()).userCodeType(UserCodeType.USER_VERIFICATION).expiresIn(TimeUtils.now().plusMinutes(15)).build();
+        final UserCode userCode = Fixture.UserCodeFixture.newUserCode(IdentifierUtils.generateNewId(), UserCodeType.USER_VERIFICATION);
 
         final String expectedToString = "UserCode{" +
                 "id='" + userCode.getId() + '\'' +

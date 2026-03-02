@@ -6,14 +6,13 @@ import com.miguel.jobnest.application.abstractions.repositories.SubscriptionRepo
 import com.miguel.jobnest.application.abstractions.services.SecurityService;
 import com.miguel.jobnest.application.abstractions.services.UploadService;
 import com.miguel.jobnest.application.usecases.subscription.inputs.CreateSubscriptionUseCaseInput;
+import com.miguel.jobnest.domain.Fixture;
 import com.miguel.jobnest.domain.entities.JobVacancy;
 import com.miguel.jobnest.domain.entities.User;
 import com.miguel.jobnest.domain.enums.AuthorizationRole;
 import com.miguel.jobnest.domain.enums.UserStatus;
 import com.miguel.jobnest.domain.events.SubscriptionCreatedEvent;
 import com.miguel.jobnest.domain.exceptions.DomainException;
-import com.miguel.jobnest.testsupport.builders.entities.domain.JobVacancyTestBuilder;
-import com.miguel.jobnest.testsupport.builders.entities.domain.UserTestBuilder;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -48,9 +47,15 @@ public class CreateSubscriptionUseCaseTest {
 
     @Test
     void shouldCreateSubscription_whenCallExecute() {
-        final User userCandidate = UserTestBuilder.aUser().userStatus(UserStatus.VERIFIED).authorizationRole(AuthorizationRole.CANDIDATE).build();
-        final User userRecruiter = UserTestBuilder.aUser().userStatus(UserStatus.VERIFIED).authorizationRole(AuthorizationRole.RECRUITER).build();
-        final JobVacancy jobVacancy = JobVacancyTestBuilder.aJobVacancy().userId(userRecruiter.getId()).build();
+        final User userRecruiter = Fixture.UserFixture.withUserStatus(
+                Fixture.UserFixture.newUser(AuthorizationRole.RECRUITER), UserStatus.VERIFIED
+        );
+        final User userCandidate = Fixture.UserFixture.withUserStatus(
+                Fixture.UserFixture.newUser(AuthorizationRole.CANDIDATE), UserStatus.VERIFIED
+        );
+
+        final JobVacancy jobVacancy = Fixture.JobVacancyFixture.newJobVacancy(userRecruiter.getId());
+
         final String resumeUrl = "resume-url/resume-file/1Ab.pdf";
 
         final CreateSubscriptionUseCaseInput input = CreateSubscriptionUseCaseInput.with(
@@ -62,7 +67,7 @@ public class CreateSubscriptionUseCaseTest {
         Mockito.when(this.subscriptionRepository.existsByUserIdAndJobVacancyId(Mockito.any(), Mockito.any())).thenReturn(false);
         Mockito.when(this.uploadService.uploadFile(Mockito.any(), Mockito.any(), Mockito.any())).thenReturn(resumeUrl);
         Mockito.doAnswer(invocationOnMock -> {
-            Runnable runnable = invocationOnMock.getArgument(0);
+            final Runnable runnable = invocationOnMock.getArgument(0);
             runnable.run();
             return runnable;
         }).when(this.transactionExecutor).runTransaction(Mockito.any());
@@ -92,9 +97,14 @@ public class CreateSubscriptionUseCaseTest {
 
     @Test
     void shouldThrowDomainException_whenCallExecute_becauseSubscriptionAlreadyExists() {
-        final User userCandidate = UserTestBuilder.aUser().userStatus(UserStatus.VERIFIED).authorizationRole(AuthorizationRole.CANDIDATE).build();
-        final User userRecruiter = UserTestBuilder.aUser().userStatus(UserStatus.VERIFIED).authorizationRole(AuthorizationRole.RECRUITER).build();
-        final JobVacancy jobVacancy = JobVacancyTestBuilder.aJobVacancy().userId(userRecruiter.getId()).build();
+        final User userRecruiter = Fixture.UserFixture.withUserStatus(
+                Fixture.UserFixture.newUser(AuthorizationRole.RECRUITER), UserStatus.VERIFIED
+        );
+        final User userCandidate = Fixture.UserFixture.withUserStatus(
+                Fixture.UserFixture.newUser(AuthorizationRole.CANDIDATE), UserStatus.VERIFIED
+        );
+
+        final JobVacancy jobVacancy = Fixture.JobVacancyFixture.newJobVacancy(userRecruiter.getId());
 
         final CreateSubscriptionUseCaseInput input = CreateSubscriptionUseCaseInput.with(
                 new byte[0],
@@ -120,9 +130,15 @@ public class CreateSubscriptionUseCaseTest {
 
     @Test
     void shouldRollbackFileUpload_whenCallExecute_becauseSavingSubscriptionFails() {
-        final User userCandidate = UserTestBuilder.aUser().userStatus(UserStatus.VERIFIED).authorizationRole(AuthorizationRole.CANDIDATE).build();
-        final User userRecruiter = UserTestBuilder.aUser().userStatus(UserStatus.VERIFIED).authorizationRole(AuthorizationRole.RECRUITER).build();
-        final JobVacancy jobVacancy = JobVacancyTestBuilder.aJobVacancy().userId(userRecruiter.getId()).build();
+        final User userRecruiter = Fixture.UserFixture.withUserStatus(
+                Fixture.UserFixture.newUser(AuthorizationRole.RECRUITER), UserStatus.VERIFIED
+        );
+        final User userCandidate = Fixture.UserFixture.withUserStatus(
+                Fixture.UserFixture.newUser(AuthorizationRole.CANDIDATE), UserStatus.VERIFIED
+        );
+
+        final JobVacancy jobVacancy = Fixture.JobVacancyFixture.newJobVacancy(userRecruiter.getId());
+
         final String resumeUrl = "resume-url/resume-file/1Ab.pdf";
 
         final CreateSubscriptionUseCaseInput input = CreateSubscriptionUseCaseInput.with(

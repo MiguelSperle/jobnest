@@ -1,10 +1,10 @@
 package com.miguel.jobnest.domain.entities;
 
+import com.miguel.jobnest.domain.Fixture;
 import com.miguel.jobnest.domain.enums.AuthorizationRole;
 import com.miguel.jobnest.domain.enums.UserStatus;
 import com.miguel.jobnest.domain.utils.IdentifierUtils;
 import com.miguel.jobnest.domain.utils.TimeUtils;
-import com.miguel.jobnest.testsupport.builders.entities.domain.UserTestBuilder;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -90,7 +90,9 @@ public class UserTest {
 
     @Test
     void shouldReturnUpdatedUser_whenCallWithName() {
-        final User user = UserTestBuilder.aUser().userStatus(UserStatus.UNVERIFIED).authorizationRole(AuthorizationRole.CANDIDATE).build();
+        final User user = Fixture.UserFixture.withUserStatus(
+                Fixture.UserFixture.newUser(AuthorizationRole.CANDIDATE), UserStatus.VERIFIED
+        );
 
         final String newName = "Leo Jardim";
 
@@ -102,7 +104,9 @@ public class UserTest {
 
     @Test
     void shouldReturnUpdatedUser_whenCallWithEmail() {
-        final User user = UserTestBuilder.aUser().userStatus(UserStatus.UNVERIFIED).authorizationRole(AuthorizationRole.CANDIDATE).build();
+        final User user = Fixture.UserFixture.withUserStatus(
+                Fixture.UserFixture.newUser(AuthorizationRole.CANDIDATE), UserStatus.VERIFIED
+        );
 
         final String newEmail = "leojardim@gmail.com";
 
@@ -114,7 +118,9 @@ public class UserTest {
 
     @Test
     void shouldReturnUpdatedUser_whenCallWithDescription() {
-        final User user = UserTestBuilder.aUser().userStatus(UserStatus.UNVERIFIED).authorizationRole(AuthorizationRole.CANDIDATE).build();
+        final User user = Fixture.UserFixture.withUserStatus(
+                Fixture.UserFixture.newUser(AuthorizationRole.CANDIDATE), UserStatus.VERIFIED
+        );
 
         final String newDescription = "My description about me";
 
@@ -126,7 +132,9 @@ public class UserTest {
 
     @Test
     void shouldReturnUpdatedUser_whenCallWithCity() {
-        final User user = UserTestBuilder.aUser().userStatus(UserStatus.UNVERIFIED).authorizationRole(AuthorizationRole.CANDIDATE).build();
+        final User user = Fixture.UserFixture.withUserStatus(
+                Fixture.UserFixture.newUser(AuthorizationRole.CANDIDATE), UserStatus.VERIFIED
+        );
 
         final String newCity = "São Paulo";
 
@@ -138,7 +146,9 @@ public class UserTest {
 
     @Test
     void shouldReturnUpdatedUser_whenCallWithState() {
-        final User user = UserTestBuilder.aUser().userStatus(UserStatus.UNVERIFIED).authorizationRole(AuthorizationRole.CANDIDATE).build();
+        final User user = Fixture.UserFixture.withUserStatus(
+                Fixture.UserFixture.newUser(AuthorizationRole.CANDIDATE), UserStatus.VERIFIED
+        );
 
         final String newState = "São Paulo";
 
@@ -150,7 +160,9 @@ public class UserTest {
 
     @Test
     void shouldReturnUpdatedUser_whenCallWithCountry() {
-        final User user = UserTestBuilder.aUser().userStatus(UserStatus.UNVERIFIED).authorizationRole(AuthorizationRole.CANDIDATE).build();
+        final User user = Fixture.UserFixture.withUserStatus(
+                Fixture.UserFixture.newUser(AuthorizationRole.CANDIDATE), UserStatus.VERIFIED
+        );
 
         final String newCountry = "Brazil";
 
@@ -162,7 +174,9 @@ public class UserTest {
 
     @Test
     void shouldReturnUpdatedUser_whenCallWithUserStatus() {
-        final User user = UserTestBuilder.aUser().userStatus(UserStatus.UNVERIFIED).authorizationRole(AuthorizationRole.CANDIDATE).build();
+        final User user = Fixture.UserFixture.withUserStatus(
+                Fixture.UserFixture.newUser(AuthorizationRole.CANDIDATE), UserStatus.UNVERIFIED
+        );
 
         final UserStatus newUserStatus = UserStatus.VERIFIED;
 
@@ -174,7 +188,9 @@ public class UserTest {
 
     @Test
     void shouldReturnUpdatedUser_whenCallWithPassword() {
-        final User user = UserTestBuilder.aUser().userStatus(UserStatus.UNVERIFIED).authorizationRole(AuthorizationRole.CANDIDATE).build();
+        final User user = Fixture.UserFixture.withUserStatus(
+                Fixture.UserFixture.newUser(AuthorizationRole.CANDIDATE), UserStatus.VERIFIED
+        );
 
         final String newPassword = "123456";
 
@@ -186,7 +202,9 @@ public class UserTest {
 
     @Test
     void shouldReturnFormattedUser_whenCallToString() {
-        final User user = UserTestBuilder.aUser().userStatus(UserStatus.UNVERIFIED).authorizationRole(AuthorizationRole.CANDIDATE).build();
+        final User user = Fixture.UserFixture.withUserStatus(
+                Fixture.UserFixture.newUser(AuthorizationRole.CANDIDATE), UserStatus.VERIFIED
+        );
 
         final String expectedToString = "User{" +
                 "id='" + user.getId() + '\'' +

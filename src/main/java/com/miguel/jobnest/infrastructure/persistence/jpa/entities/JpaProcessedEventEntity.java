@@ -4,7 +4,6 @@ import com.miguel.jobnest.domain.utils.IdentifierUtils;
 import com.miguel.jobnest.domain.utils.TimeUtils;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
@@ -13,7 +12,6 @@ import java.time.LocalDateTime;
 @Table(name = "processed_events")
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
 public class JpaProcessedEventEntity {
     @Id
     @Column(nullable = false, length = 36)

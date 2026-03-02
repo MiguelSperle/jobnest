@@ -3,11 +3,11 @@ package com.miguel.jobnest.application.usecases.user;
 import com.miguel.jobnest.application.abstractions.repositories.UserRepository;
 import com.miguel.jobnest.application.abstractions.services.SecurityService;
 import com.miguel.jobnest.application.usecases.user.inputs.UpdateUserUseCaseInput;
+import com.miguel.jobnest.domain.Fixture;
 import com.miguel.jobnest.domain.entities.User;
 import com.miguel.jobnest.domain.enums.AuthorizationRole;
 import com.miguel.jobnest.domain.enums.UserStatus;
 import com.miguel.jobnest.domain.exceptions.NotFoundException;
-import com.miguel.jobnest.testsupport.builders.entities.domain.UserTestBuilder;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -34,7 +34,9 @@ public class UpdateUserUseCaseTest {
 
     @Test
     void shouldUpdateUser_whenCallExecute() {
-        final User user = UserTestBuilder.aUser().userStatus(UserStatus.VERIFIED).authorizationRole(AuthorizationRole.CANDIDATE).build();
+        final User user = Fixture.UserFixture.withUserStatus(
+                Fixture.UserFixture.newUser(AuthorizationRole.CANDIDATE), UserStatus.VERIFIED
+        );
         final String name = "Alex";
         final String email = "alexhand1898@gmail.com";
         final String description = "This is my description about me";
@@ -77,7 +79,6 @@ public class UpdateUserUseCaseTest {
         final String city = "New York City";
         final String state = "New York";
         final String country = "United States";
-
 
         final UpdateUserUseCaseInput input = UpdateUserUseCaseInput.with(
                 name,

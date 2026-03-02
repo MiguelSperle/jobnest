@@ -1,8 +1,8 @@
 package com.miguel.jobnest.infrastructure.schedulers;
 
 import com.miguel.jobnest.application.abstractions.wrapper.TransactionExecutor;
+import com.miguel.jobnest.infrastructure.Fixture;
 import com.miguel.jobnest.infrastructure.abstractions.producer.MessageProducer;
-import com.miguel.jobnest.testsupport.builders.entities.jpa.JpaEventOutboxEntityTestBuilder;
 import com.miguel.jobnest.infrastructure.persistence.jpa.entities.JpaEventOutboxEntity;
 import com.miguel.jobnest.infrastructure.persistence.jpa.repositories.JpaEventOutboxRepository;
 import org.junit.jupiter.api.Test;
@@ -32,14 +32,14 @@ public class PublishEventsOutboxSchedulerTest {
 
     @Test
     void shouldPublishPendingEventsOutbox_whenPublishEventsOutboxSchedulerRuns() {
-        final JpaEventOutboxEntity eventOutboxEntity = JpaEventOutboxEntityTestBuilder.aJpaEventOutboxEntity().build();
+        final JpaEventOutboxEntity jpaEventOutboxEntity = Fixture.JpaEventOutboxEntityFixture.newJpaEventOutboxEntity();
 
         Mockito.doAnswer(invocationOnMock -> {
-            Runnable runnable = invocationOnMock.getArgument(0);
+            final Runnable runnable = invocationOnMock.getArgument(0);
             runnable.run();
             return runnable;
         }).when(this.transactionExecutor).runTransaction(Mockito.any());
-        Mockito.when(this.eventOutboxRepository.findFirst10ByStatus(Mockito.any())).thenReturn(List.of(eventOutboxEntity));
+        Mockito.when(this.eventOutboxRepository.findFirst10ByStatus(Mockito.any())).thenReturn(List.of(jpaEventOutboxEntity));
         Mockito.doNothing().when(this.messageProducer).publish(Mockito.any());
         Mockito.when(this.eventOutboxRepository.save(Mockito.any())).thenAnswer(returnsFirstArg());
 
@@ -54,7 +54,7 @@ public class PublishEventsOutboxSchedulerTest {
     @Test
     void shouldNotPublishPendingEventsOutbox_whenPublishEventsOutboxSchedulerRuns_becauseNoneWereFound() {
         Mockito.doAnswer(invocationOnMock -> {
-            Runnable runnable = invocationOnMock.getArgument(0);
+            final Runnable runnable = invocationOnMock.getArgument(0);
             runnable.run();
             return runnable;
         }).when(this.transactionExecutor).runTransaction(Mockito.any());

@@ -5,11 +5,11 @@ import com.miguel.jobnest.application.abstractions.repositories.UserRepository;
 import com.miguel.jobnest.application.abstractions.services.JwtService;
 import com.miguel.jobnest.application.usecases.user.inputs.AuthenticateUserUseCaseInput;
 import com.miguel.jobnest.application.usecases.user.outputs.AuthenticateUserUseCaseOutput;
+import com.miguel.jobnest.domain.Fixture;
 import com.miguel.jobnest.domain.entities.User;
 import com.miguel.jobnest.domain.enums.AuthorizationRole;
 import com.miguel.jobnest.domain.enums.UserStatus;
 import com.miguel.jobnest.domain.exceptions.DomainException;
-import com.miguel.jobnest.testsupport.builders.entities.domain.UserTestBuilder;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -36,7 +36,9 @@ public class AuthenticateUserUseCaseTest {
 
     @Test
     void shouldAuthenticateUser_whenCallExecute() {
-        final User user = UserTestBuilder.aUser().userStatus(UserStatus.VERIFIED).authorizationRole(AuthorizationRole.CANDIDATE).build();
+        final User user = Fixture.UserFixture.withUserStatus(
+                Fixture.UserFixture.newUser(AuthorizationRole.CANDIDATE), UserStatus.VERIFIED
+        );
         final String jwt = "json-web-token";
 
         final AuthenticateUserUseCaseInput input = AuthenticateUserUseCaseInput.with(
@@ -87,7 +89,9 @@ public class AuthenticateUserUseCaseTest {
 
     @Test
     void shouldThrowDomainException_whenCallExecute_becausePasswordIsInvalid() {
-        final User user = UserTestBuilder.aUser().userStatus(UserStatus.VERIFIED).authorizationRole(AuthorizationRole.CANDIDATE).build();
+        final User user = Fixture.UserFixture.withUserStatus(
+                Fixture.UserFixture.newUser(AuthorizationRole.CANDIDATE), UserStatus.VERIFIED
+        );
         final String password = "1234BC";
 
         final AuthenticateUserUseCaseInput input = AuthenticateUserUseCaseInput.with(
@@ -114,7 +118,9 @@ public class AuthenticateUserUseCaseTest {
 
     @Test
     void shouldThrowDomainException_whenCallExecute_becauseUserIsNotVerified() {
-        final User user = UserTestBuilder.aUser().userStatus(UserStatus.UNVERIFIED).authorizationRole(AuthorizationRole.CANDIDATE).build();
+        final User user = Fixture.UserFixture.withUserStatus(
+                Fixture.UserFixture.newUser(AuthorizationRole.CANDIDATE), UserStatus.UNVERIFIED
+        );
 
         final AuthenticateUserUseCaseInput input = AuthenticateUserUseCaseInput.with(
                 user.getEmail(),
@@ -141,7 +147,9 @@ public class AuthenticateUserUseCaseTest {
 
     @Test
     void shouldThrowDomainException_whenCallExecute_becauseUserIsDeleted() {
-        final User user = UserTestBuilder.aUser().userStatus(UserStatus.DELETED).authorizationRole(AuthorizationRole.CANDIDATE).build();
+        final User user = Fixture.UserFixture.withUserStatus(
+                Fixture.UserFixture.newUser(AuthorizationRole.CANDIDATE), UserStatus.DELETED
+        );
 
         final AuthenticateUserUseCaseInput input = AuthenticateUserUseCaseInput.with(
                 user.getEmail(),

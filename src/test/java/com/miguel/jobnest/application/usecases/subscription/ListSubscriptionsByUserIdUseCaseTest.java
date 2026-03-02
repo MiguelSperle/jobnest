@@ -4,6 +4,7 @@ import com.miguel.jobnest.application.abstractions.repositories.SubscriptionRepo
 import com.miguel.jobnest.application.abstractions.services.SecurityService;
 import com.miguel.jobnest.application.usecases.subscription.inputs.ListSubscriptionsByUserIdUseCaseInput;
 import com.miguel.jobnest.application.usecases.subscription.outputs.ListSubscriptionsByUserIdUseCaseOutput;
+import com.miguel.jobnest.domain.Fixture;
 import com.miguel.jobnest.domain.entities.JobVacancy;
 import com.miguel.jobnest.domain.entities.Subscription;
 import com.miguel.jobnest.domain.entities.User;
@@ -12,9 +13,6 @@ import com.miguel.jobnest.domain.enums.UserStatus;
 import com.miguel.jobnest.domain.pagination.Pagination;
 import com.miguel.jobnest.domain.pagination.PaginationMetadata;
 import com.miguel.jobnest.domain.pagination.SearchQuery;
-import com.miguel.jobnest.testsupport.builders.entities.domain.JobVacancyTestBuilder;
-import com.miguel.jobnest.testsupport.builders.entities.domain.SubscriptionTestBuilder;
-import com.miguel.jobnest.testsupport.builders.entities.domain.UserTestBuilder;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -38,11 +36,18 @@ public class ListSubscriptionsByUserIdUseCaseTest {
 
     @Test
     void shouldListSubscriptionsByUserId_whenCallExecute() {
-        final User userCandidate = UserTestBuilder.aUser().userStatus(UserStatus.VERIFIED).authorizationRole(AuthorizationRole.CANDIDATE).build();
-        final User userRecruiter = UserTestBuilder.aUser().userStatus(UserStatus.VERIFIED).authorizationRole(AuthorizationRole.RECRUITER).build();
-        final JobVacancy jobVacancy = JobVacancyTestBuilder.aJobVacancy().userId(userRecruiter.getId()).build();
-        final Subscription subscription = SubscriptionTestBuilder.aSubscription().userId(userCandidate.getId()).jobVacancyId(jobVacancy.getId()).build();
+        final User userRecruiter = Fixture.UserFixture.withUserStatus(
+                Fixture.UserFixture.newUser(AuthorizationRole.RECRUITER), UserStatus.VERIFIED
+        );
+        final User userCandidate = Fixture.UserFixture.withUserStatus(
+                Fixture.UserFixture.newUser(AuthorizationRole.CANDIDATE), UserStatus.VERIFIED
+        );
+
+        final JobVacancy jobVacancy = Fixture.JobVacancyFixture.newJobVacancy(userRecruiter.getId());
+        final Subscription subscription = Fixture.SubscriptionFixture.newSubscription(userCandidate.getId(), jobVacancy.getId());
+
         final List<Subscription> subscriptions = List.of(subscription);
+
         final int page = 0;
         final int perPage = 10;
         final String sort = "createdAt";
@@ -80,7 +85,10 @@ public class ListSubscriptionsByUserIdUseCaseTest {
 
     @Test
     void shouldListEmptySubscriptionsByUserId_whenCallExecute() {
-        final User userCandidate = UserTestBuilder.aUser().userStatus(UserStatus.VERIFIED).authorizationRole(AuthorizationRole.CANDIDATE).build();
+        final User user = Fixture.UserFixture.withUserStatus(
+                Fixture.UserFixture.newUser(AuthorizationRole.CANDIDATE), UserStatus.VERIFIED
+        );
+
         final int page = 0;
         final int perPage = 10;
         final String sort = "createdAt";
@@ -101,7 +109,7 @@ public class ListSubscriptionsByUserIdUseCaseTest {
                 metadata, List.of()
         );
 
-        Mockito.when(this.securityService.getPrincipal()).thenReturn(userCandidate.getId());
+        Mockito.when(this.securityService.getPrincipal()).thenReturn(user.getId());
         Mockito.when(this.subscriptionRepository.findAllPaginatedByUserId(Mockito.any(), Mockito.any())).thenReturn(paginatedSubscriptions);
 
         final ListSubscriptionsByUserIdUseCaseOutput output = this.useCase.execute(input);

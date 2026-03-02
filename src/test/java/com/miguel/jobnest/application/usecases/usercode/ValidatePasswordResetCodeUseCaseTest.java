@@ -2,6 +2,7 @@ package com.miguel.jobnest.application.usecases.usercode;
 
 import com.miguel.jobnest.application.abstractions.repositories.UserCodeRepository;
 import com.miguel.jobnest.application.usecases.usercode.inputs.ValidatePasswordResetCodeUseCaseInput;
+import com.miguel.jobnest.domain.Fixture;
 import com.miguel.jobnest.domain.entities.User;
 import com.miguel.jobnest.domain.entities.UserCode;
 import com.miguel.jobnest.domain.enums.AuthorizationRole;
@@ -10,8 +11,6 @@ import com.miguel.jobnest.domain.enums.UserStatus;
 import com.miguel.jobnest.domain.exceptions.DomainException;
 import com.miguel.jobnest.domain.exceptions.NotFoundException;
 import com.miguel.jobnest.domain.utils.TimeUtils;
-import com.miguel.jobnest.testsupport.builders.entities.domain.UserTestBuilder;
-import com.miguel.jobnest.testsupport.builders.entities.domain.UserCodeTestBuilder;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -32,8 +31,10 @@ public class ValidatePasswordResetCodeUseCaseTest {
 
     @Test
     void shouldValidatePasswordResetCode_whenCallExecute() {
-        final User user = UserTestBuilder.aUser().userStatus(UserStatus.UNVERIFIED).authorizationRole(AuthorizationRole.CANDIDATE).build();
-        final UserCode userCode = UserCodeTestBuilder.aUserCode().userId(user.getId()).userCodeType(UserCodeType.PASSWORD_RESET).expiresIn(TimeUtils.now().plusMinutes(15)).build();
+        final User user = Fixture.UserFixture.withUserStatus(
+                Fixture.UserFixture.newUser(AuthorizationRole.CANDIDATE), UserStatus.UNVERIFIED
+        );
+        final UserCode userCode = Fixture.UserCodeFixture.newUserCode(user.getId(), UserCodeType.PASSWORD_RESET);
 
         final ValidatePasswordResetCodeUseCaseInput input = ValidatePasswordResetCodeUseCaseInput.with(userCode.getCode());
 
@@ -65,8 +66,12 @@ public class ValidatePasswordResetCodeUseCaseTest {
 
     @Test
     void shouldThrowDomainException_whenCallExecute_becauseTheCodeIsExpired() {
-        final User user = UserTestBuilder.aUser().userStatus(UserStatus.UNVERIFIED).authorizationRole(AuthorizationRole.CANDIDATE).build();
-        final UserCode userCode = UserCodeTestBuilder.aUserCode().userId(user.getId()).userCodeType(UserCodeType.PASSWORD_RESET).expiresIn(TimeUtils.now().minusDays(1)).build();
+        final User user = Fixture.UserFixture.withUserStatus(
+                Fixture.UserFixture.newUser(AuthorizationRole.CANDIDATE), UserStatus.UNVERIFIED
+        );
+        final UserCode userCode = Fixture.UserCodeFixture.withExpiresIn(
+                Fixture.UserCodeFixture.newUserCode(user.getId(), UserCodeType.PASSWORD_RESET), TimeUtils.now().minusDays(1)
+        );
 
         final ValidatePasswordResetCodeUseCaseInput input = ValidatePasswordResetCodeUseCaseInput.with(userCode.getCode());
 

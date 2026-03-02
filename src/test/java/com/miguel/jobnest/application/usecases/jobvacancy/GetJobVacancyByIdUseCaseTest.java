@@ -3,14 +3,13 @@ package com.miguel.jobnest.application.usecases.jobvacancy;
 import com.miguel.jobnest.application.abstractions.repositories.JobVacancyRepository;
 import com.miguel.jobnest.application.usecases.jobvacancy.inputs.GetJobVacancyByIdUseCaseInput;
 import com.miguel.jobnest.application.usecases.jobvacancy.outputs.GetJobVacancyByIdUseCaseOutput;
+import com.miguel.jobnest.domain.Fixture;
 import com.miguel.jobnest.domain.entities.JobVacancy;
 import com.miguel.jobnest.domain.entities.User;
 import com.miguel.jobnest.domain.enums.AuthorizationRole;
 import com.miguel.jobnest.domain.enums.UserStatus;
 import com.miguel.jobnest.domain.exceptions.NotFoundException;
 import com.miguel.jobnest.domain.utils.IdentifierUtils;
-import com.miguel.jobnest.testsupport.builders.entities.domain.JobVacancyTestBuilder;
-import com.miguel.jobnest.testsupport.builders.entities.domain.UserTestBuilder;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -31,8 +30,10 @@ public class GetJobVacancyByIdUseCaseTest {
 
     @Test
     void shouldGetJobVacancyById_whenCallExecute() {
-        final User user = UserTestBuilder.aUser().userStatus(UserStatus.VERIFIED).authorizationRole(AuthorizationRole.RECRUITER).build();
-        final JobVacancy jobVacancy = JobVacancyTestBuilder.aJobVacancy().userId(user.getId()).build();
+        final User user = Fixture.UserFixture.withUserStatus(
+                Fixture.UserFixture.newUser(AuthorizationRole.RECRUITER), UserStatus.VERIFIED
+        );
+        final JobVacancy jobVacancy = Fixture.JobVacancyFixture.newJobVacancy(user.getId());
 
         final GetJobVacancyByIdUseCaseInput input = GetJobVacancyByIdUseCaseInput.with(
                 jobVacancy.getId()

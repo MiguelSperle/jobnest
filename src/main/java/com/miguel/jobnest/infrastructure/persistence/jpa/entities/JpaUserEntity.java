@@ -5,7 +5,6 @@ import com.miguel.jobnest.domain.enums.AuthorizationRole;
 import com.miguel.jobnest.domain.enums.UserStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
@@ -14,7 +13,6 @@ import java.time.LocalDateTime;
 @Table(name = "users")
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
 public class JpaUserEntity {
     @Id
     @Column(nullable = false, length = 36)
@@ -81,34 +79,6 @@ public class JpaUserEntity {
                 this.state,
                 this.country,
                 this.createdAt
-        );
-    }
-
-    public static JpaUserEntity with(
-            final String id,
-            final String name,
-            final String email,
-            final String description,
-            final String password,
-            final UserStatus userStatus,
-            final AuthorizationRole authorizationRole,
-            final String city,
-            final String state,
-            final String country,
-            final LocalDateTime createdAt
-    ) {
-        return new JpaUserEntity(
-                id,
-                name,
-                email,
-                description,
-                password,
-                userStatus,
-                authorizationRole,
-                city,
-                state,
-                country,
-                createdAt
         );
     }
 }

@@ -1,8 +1,8 @@
 package com.miguel.jobnest.domain.entities;
 
+import com.miguel.jobnest.domain.Fixture;
 import com.miguel.jobnest.domain.utils.IdentifierUtils;
 import com.miguel.jobnest.domain.utils.TimeUtils;
-import com.miguel.jobnest.testsupport.builders.entities.domain.SubscriptionTestBuilder;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -60,7 +60,7 @@ public class SubscriptionTest {
 
     @Test
     void shouldReturnUpdatedSubscription_whenCallWithIsCanceled() {
-        final Subscription subscription = SubscriptionTestBuilder.aSubscription().userId(IdentifierUtils.generateNewId()).jobVacancyId(IdentifierUtils.generateNewId()).build();
+        final Subscription subscription = Fixture.SubscriptionFixture.newSubscription(IdentifierUtils.generateNewId(), IdentifierUtils.generateNewId());
 
         final Subscription updatedSubscription = subscription.withIsCanceled(true);
 
@@ -70,7 +70,7 @@ public class SubscriptionTest {
 
     @Test
     void shouldReturnFormattedSubscription_whenCallToString() {
-        final Subscription subscription = SubscriptionTestBuilder.aSubscription().userId(IdentifierUtils.generateNewId()).jobVacancyId(IdentifierUtils.generateNewId()).build();
+        final Subscription subscription = Fixture.SubscriptionFixture.newSubscription(IdentifierUtils.generateNewId(), IdentifierUtils.generateNewId());
 
         final String expectedToString = "Subscription{" +
                 "id='" + subscription.getId() + '\'' +

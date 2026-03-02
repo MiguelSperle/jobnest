@@ -1,10 +1,10 @@
 package com.miguel.jobnest.domain.entities;
 
+import com.miguel.jobnest.domain.Fixture;
 import com.miguel.jobnest.domain.enums.Modality;
 import com.miguel.jobnest.domain.enums.SeniorityLevel;
 import com.miguel.jobnest.domain.utils.IdentifierUtils;
 import com.miguel.jobnest.domain.utils.TimeUtils;
-import com.miguel.jobnest.testsupport.builders.entities.domain.JobVacancyTestBuilder;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -80,7 +80,7 @@ public class JobVacancyTest {
 
     @Test
     void shouldReturnUpdatedJobVacancy_whenCallWithTitle() {
-        final JobVacancy jobVacancy = JobVacancyTestBuilder.aJobVacancy().userId(IdentifierUtils.generateNewId()).build();
+        final JobVacancy jobVacancy = Fixture.JobVacancyFixture.newJobVacancy(IdentifierUtils.generateNewId());
 
         final String newTitle = "PHP Developer";
 
@@ -92,7 +92,7 @@ public class JobVacancyTest {
 
     @Test
     void shouldReturnUpdatedJobVacancy_whenCallWithDescription() {
-        final JobVacancy jobVacancy = JobVacancyTestBuilder.aJobVacancy().userId(IdentifierUtils.generateNewId()).build();
+        final JobVacancy jobVacancy = Fixture.JobVacancyFixture.newJobVacancy(IdentifierUtils.generateNewId());
 
         final String newDescription = "This is the new job vacancy description";
 
@@ -104,7 +104,7 @@ public class JobVacancyTest {
 
     @Test
     void shouldReturnUpdatedJobVacancy_whenCallWithSeniorityLevel() {
-        final JobVacancy jobVacancy = JobVacancyTestBuilder.aJobVacancy().userId(IdentifierUtils.generateNewId()).build();
+        final JobVacancy jobVacancy = Fixture.JobVacancyFixture.newJobVacancy(IdentifierUtils.generateNewId());
 
         final SeniorityLevel newSeniorityLevel = SeniorityLevel.INTERMEDIATE;
 
@@ -116,7 +116,7 @@ public class JobVacancyTest {
 
     @Test
     void shouldReturnUpdatedJobVacancy_whenCallWithModality() {
-        final JobVacancy jobVacancy = JobVacancyTestBuilder.aJobVacancy().userId(IdentifierUtils.generateNewId()).build();
+        final JobVacancy jobVacancy = Fixture.JobVacancyFixture.newJobVacancy(IdentifierUtils.generateNewId());
 
         final Modality newModality = Modality.HYBRID;
 
@@ -128,7 +128,7 @@ public class JobVacancyTest {
 
     @Test
     void shouldReturnUpdatedJobVacancy_whenCallWithCompanyName() {
-        final JobVacancy jobVacancy = JobVacancyTestBuilder.aJobVacancy().userId(IdentifierUtils.generateNewId()).build();
+        final JobVacancy jobVacancy = Fixture.JobVacancyFixture.newJobVacancy(IdentifierUtils.generateNewId());
 
         final String newCompanyName = "New company name";
 
@@ -140,7 +140,7 @@ public class JobVacancyTest {
 
     @Test
     void shouldReturnUpdatedJobVacancy_whenCallWithIsDeleted() {
-        final JobVacancy jobVacancy = JobVacancyTestBuilder.aJobVacancy().userId(IdentifierUtils.generateNewId()).build();
+        final JobVacancy jobVacancy = Fixture.JobVacancyFixture.newJobVacancy(IdentifierUtils.generateNewId());
 
         final JobVacancy updatedJobVacancy = jobVacancy.withIsDeleted(true);
 
@@ -150,7 +150,7 @@ public class JobVacancyTest {
 
     @Test
     void shouldReturnFormattedJobVacancy_whenCallToString() {
-        final JobVacancy jobVacancy = JobVacancyTestBuilder.aJobVacancy().userId(IdentifierUtils.generateNewId()).build();
+        final JobVacancy jobVacancy = Fixture.JobVacancyFixture.newJobVacancy(IdentifierUtils.generateNewId());
 
         final String expectedToString = "JobVacancy{" +
                 "id='" + jobVacancy.getId() + '\'' +
