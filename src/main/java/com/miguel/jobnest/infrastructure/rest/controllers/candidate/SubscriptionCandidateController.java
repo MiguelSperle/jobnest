@@ -13,7 +13,6 @@ import com.miguel.jobnest.infrastructure.rest.dtos.MessageResponse;
 import com.miguel.jobnest.infrastructure.rest.dtos.subscription.req.CreateSubscriptionRequest;
 import com.miguel.jobnest.infrastructure.rest.dtos.subscription.res.ListSubscriptionsByUserIdResponse;
 import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,11 +22,20 @@ import java.io.IOException;
 
 @RestController
 @RequestMapping("/api/v1/candidate/subscriptions")
-@RequiredArgsConstructor
 public class SubscriptionCandidateController {
     private final CreateSubscriptionUseCase createSubscriptionUseCase;
     private final ListSubscriptionsByUserIdUseCase listSubscriptionsByUserIdUseCase;
     private final CancelSubscriptionUseCase cancelSubscriptionUseCase;
+
+    public SubscriptionCandidateController(
+            final CreateSubscriptionUseCase createSubscriptionUseCase,
+            final ListSubscriptionsByUserIdUseCase listSubscriptionsByUserIdUseCase,
+            final CancelSubscriptionUseCase cancelSubscriptionUseCase
+    ) {
+        this.createSubscriptionUseCase = createSubscriptionUseCase;
+        this.listSubscriptionsByUserIdUseCase = listSubscriptionsByUserIdUseCase;
+        this.cancelSubscriptionUseCase = cancelSubscriptionUseCase;
+    }
 
     @PostMapping
     @RateLimiter(name = "rateLimitConfiguration")

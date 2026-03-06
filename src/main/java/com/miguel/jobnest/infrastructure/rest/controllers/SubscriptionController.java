@@ -4,7 +4,6 @@ import com.miguel.jobnest.application.abstractions.usecases.subscription.GetSubs
 import com.miguel.jobnest.application.usecases.subscription.inputs.GetSubscriptionByIdUseCaseInput;
 import com.miguel.jobnest.application.usecases.subscription.outputs.GetSubscriptionByIdUseCaseOutput;
 import com.miguel.jobnest.infrastructure.rest.dtos.subscription.res.GetSubscriptionByIdResponse;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,9 +12,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/v1/subscriptions")
-@RequiredArgsConstructor
 public class SubscriptionController {
     private final GetSubscriptionByIdUseCase getSubscriptionByIdUseCase;
+
+    public SubscriptionController(final GetSubscriptionByIdUseCase getSubscriptionByIdUseCase) {
+        this.getSubscriptionByIdUseCase = getSubscriptionByIdUseCase;
+    }
 
     @GetMapping("/{subscriptionId}")
     public ResponseEntity<GetSubscriptionByIdResponse> getSubscriptionById(@PathVariable String subscriptionId) {

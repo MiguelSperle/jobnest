@@ -1,29 +1,27 @@
 package com.miguel.jobnest.infrastructure.persistence;
 
-import com.miguel.jobnest.application.abstractions.repositories.EventOutboxRepository;
-import com.miguel.jobnest.domain.events.DomainEvent;
-import com.miguel.jobnest.infrastructure.configurations.json.Json;
+import com.miguel.jobnest.infrastructure.abstractions.repositories.EventOutboxRepository;
 import com.miguel.jobnest.infrastructure.persistence.jpa.entities.JpaEventOutboxEntity;
 import com.miguel.jobnest.infrastructure.persistence.jpa.repositories.JpaEventOutboxRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
-@RequiredArgsConstructor
 public class EventOutboxRepositoryImpl implements EventOutboxRepository {
     private final JpaEventOutboxRepository jpaEventOutboxRepository;
 
+    public EventOutboxRepositoryImpl(final JpaEventOutboxRepository jpaEventOutboxRepository) {
+        this.jpaEventOutboxRepository = jpaEventOutboxRepository;
+    }
+
     @Override
-    public void save(final String exchange, final String routingKey, final DomainEvent event) {
-        final byte[] payload = Json.writeValueAsBytes(event);
-        this.jpaEventOutboxRepository.save(JpaEventOutboxEntity.newJpaEventOutboxEntity(
-                event.eventId(),
-                payload,
-                event.aggregateId(),
-                event.aggregateType(),
-                event.eventType(),
-                exchange,
-                routingKey
-        ));
+    public void save(JpaEventOutboxEntity jpaEventOutboxEntity) {
+        this.jpaEventOutboxRepository.save(jpaEventOutboxEntity);
+    }
+
+    @Override
+    public List<JpaEventOutboxEntity> findFirst10ByStatus(String status) {
+        return this.jpaEventOutboxRepository.findFirst10ByStatus(status);
     }
 }

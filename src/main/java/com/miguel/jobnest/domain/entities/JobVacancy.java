@@ -1,5 +1,6 @@
 package com.miguel.jobnest.domain.entities;
 
+import com.miguel.jobnest.domain.Entity;
 import com.miguel.jobnest.domain.enums.Modality;
 import com.miguel.jobnest.domain.enums.SeniorityLevel;
 import com.miguel.jobnest.domain.utils.IdentifierUtils;
@@ -7,8 +8,7 @@ import com.miguel.jobnest.domain.utils.TimeUtils;
 
 import java.time.LocalDateTime;
 
-public class JobVacancy {
-    private final String id;
+public class JobVacancy extends Entity {
     private final String userId;
     private final String title;
     private final String description;
@@ -29,7 +29,7 @@ public class JobVacancy {
             final Boolean isDeleted,
             final LocalDateTime createdAt
     ) {
-        this.id = id;
+        super(id);
         this.userId = userId;
         this.title = title;
         this.description = description;
@@ -87,7 +87,7 @@ public class JobVacancy {
 
     public JobVacancy withTitle(final String title) {
         return new JobVacancy(
-                this.id,
+                this.getId(),
                 this.userId,
                 title,
                 this.description,
@@ -101,7 +101,7 @@ public class JobVacancy {
 
     public JobVacancy withDescription(final String description) {
         return new JobVacancy(
-                this.id,
+                this.getId(),
                 this.userId,
                 this.title,
                 description,
@@ -115,7 +115,7 @@ public class JobVacancy {
 
     public JobVacancy withSeniorityLevel(final SeniorityLevel seniorityLevel) {
         return new JobVacancy(
-                this.id,
+                this.getId(),
                 this.userId,
                 this.title,
                 this.description,
@@ -129,7 +129,7 @@ public class JobVacancy {
 
     public JobVacancy withModality(final Modality modality) {
         return new JobVacancy(
-                this.id,
+                this.getId(),
                 this.userId,
                 this.title,
                 this.description,
@@ -143,7 +143,7 @@ public class JobVacancy {
 
     public JobVacancy withCompanyName(final String companyName) {
         return new JobVacancy(
-                this.id,
+                this.getId(),
                 this.userId,
                 this.title,
                 this.description,
@@ -157,7 +157,7 @@ public class JobVacancy {
 
     public JobVacancy withIsDeleted(final Boolean isDeleted) {
         return new JobVacancy(
-                this.id,
+                this.getId(),
                 this.userId,
                 this.title,
                 this.description,
@@ -167,10 +167,6 @@ public class JobVacancy {
                 isDeleted,
                 this.createdAt
         );
-    }
-
-    public String getId() {
-        return this.id;
     }
 
     public String getUserId() {
@@ -208,14 +204,14 @@ public class JobVacancy {
     @Override
     public String toString() {
         return "JobVacancy{" +
-                "id='" + this.id + '\'' +
+                "id='" + this.getId() + '\'' +
                 ", userId='" + this.userId + '\'' +
                 ", title='" + this.title + '\'' +
                 ", description='" + this.description + '\'' +
                 ", seniorityLevel=" + this.seniorityLevel +
                 ", modality=" + this.modality +
                 ", companyName='" + this.companyName + '\'' +
-                ", isDeleted='" + this.isDeleted + '\'' +
+                ", isDeleted=" + this.isDeleted +
                 ", createdAt=" + this.createdAt +
                 '}';
     }

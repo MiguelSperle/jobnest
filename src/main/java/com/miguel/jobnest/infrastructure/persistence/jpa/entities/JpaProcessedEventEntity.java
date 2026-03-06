@@ -3,15 +3,11 @@ package com.miguel.jobnest.infrastructure.persistence.jpa.entities;
 import com.miguel.jobnest.domain.utils.IdentifierUtils;
 import com.miguel.jobnest.domain.utils.TimeUtils;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "processed_events")
-@AllArgsConstructor
-@NoArgsConstructor
 public class JpaProcessedEventEntity {
     @Id
     @Column(nullable = false, length = 36)
@@ -26,6 +22,21 @@ public class JpaProcessedEventEntity {
     @Column(name = "processed_at", nullable = false)
     private LocalDateTime processedAt;
 
+    protected JpaProcessedEventEntity() {
+    }
+
+    private JpaProcessedEventEntity(
+            final String id,
+            final String eventId,
+            final String listener,
+            final LocalDateTime processedAt
+    ) {
+        this.id = id;
+        this.eventId = eventId;
+        this.listener = listener;
+        this.processedAt = processedAt;
+    }
+
     public static JpaProcessedEventEntity newJpaProcessedEventEntity(final String eventId, final String listener) {
         return new JpaProcessedEventEntity(
                 IdentifierUtils.generateNewId(),
@@ -33,5 +44,21 @@ public class JpaProcessedEventEntity {
                 listener,
                 TimeUtils.now()
         );
+    }
+
+    public String getId() {
+        return this.id;
+    }
+
+    public String getEventId() {
+        return this.eventId;
+    }
+
+    public String getListener() {
+        return this.listener;
+    }
+
+    public LocalDateTime getProcessedAt() {
+        return this.processedAt;
     }
 }

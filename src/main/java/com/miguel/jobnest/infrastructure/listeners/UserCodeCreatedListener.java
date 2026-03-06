@@ -5,11 +5,10 @@ import com.miguel.jobnest.domain.enums.UserCodeType;
 import com.miguel.jobnest.domain.events.UserCodeCreatedEvent;
 import com.miguel.jobnest.domain.entities.User;
 import com.miguel.jobnest.domain.exceptions.NotFoundException;
+import com.miguel.jobnest.infrastructure.abstractions.repositories.ProcessedEventRepository;
 import com.miguel.jobnest.infrastructure.abstractions.services.EmailService;
 import com.miguel.jobnest.infrastructure.configurations.json.Json;
 import com.miguel.jobnest.infrastructure.persistence.jpa.entities.JpaProcessedEventEntity;
-import com.miguel.jobnest.infrastructure.persistence.jpa.repositories.JpaProcessedEventRepository;
-import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.Message;
@@ -18,11 +17,20 @@ import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
 
 @Component
-@RequiredArgsConstructor
 public class UserCodeCreatedListener {
     private final UserRepository userRepository;
-    private final JpaProcessedEventRepository jpaProcessedEventRepository;
+    private final ProcessedEventRepository processedEventRepository;
     private final EmailService emailService;
+
+    public UserCodeCreatedListener(
+            final UserRepository userRepository,
+            final ProcessedEventRepository processedEventRepository,
+            final EmailService emailService
+    ) {
+        this.userRepository = userRepository;
+        this.processedEventRepository = processedEventRepository;
+        this.emailService = emailService;
+    }
 
     private static final String USER_CODE_CREATED_QUEUE = "user.code.created.queue";
 
@@ -35,7 +43,7 @@ public class UserCodeCreatedListener {
         final String eventId = event.eventId();
         final String listenerName = UserCodeCreatedListener.class.getSimpleName();
 
-        if (this.jpaProcessedEventRepository.existsByEventIdAndListener(eventId, listenerName)) {
+        if (this.processedEventRepository.existsByEventIdAndListener(eventId, listenerName)) {
             log.info("Event with id: {} has already been processed by the listener: {}", eventId, listenerName);
             return;
         }
@@ -55,7 +63,7 @@ public class UserCodeCreatedListener {
 
         this.emailService.sendEmail(user.getEmail(), text, subject);
 
-        this.jpaProcessedEventRepository.save(JpaProcessedEventEntity.newJpaProcessedEventEntity(eventId, listenerName));
+        this.processedEventRepository.save(JpaProcessedEventEntity.newJpaProcessedEventEntity(eventId, listenerName));
 
         log.info("Event with id: {} has been successfully processed by the listener: {}", eventId, listenerName);
     }

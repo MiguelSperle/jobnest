@@ -5,7 +5,7 @@ import com.miguel.jobnest.application.abstractions.repositories.UserRepository;
 import com.miguel.jobnest.application.abstractions.services.JwtService;
 import com.miguel.jobnest.application.usecases.user.inputs.AuthenticateUserUseCaseInput;
 import com.miguel.jobnest.application.usecases.user.outputs.AuthenticateUserUseCaseOutput;
-import com.miguel.jobnest.domain.Fixture;
+import com.miguel.jobnest.domain.builders.UserBuilder;
 import com.miguel.jobnest.domain.entities.User;
 import com.miguel.jobnest.domain.enums.AuthorizationRole;
 import com.miguel.jobnest.domain.enums.UserStatus;
@@ -36,9 +36,8 @@ public class AuthenticateUserUseCaseTest {
 
     @Test
     void shouldAuthenticateUser_whenCallExecute() {
-        final User user = Fixture.UserFixture.withUserStatus(
-                Fixture.UserFixture.newUser(AuthorizationRole.CANDIDATE), UserStatus.VERIFIED
-        );
+        final User user = UserBuilder.user().email("john@gmail.com").password("123456").userStatus(UserStatus.VERIFIED)
+                .authorizationRole(AuthorizationRole.CANDIDATE).build();
         final String jwt = "json-web-token";
 
         final AuthenticateUserUseCaseInput input = AuthenticateUserUseCaseInput.with(
@@ -89,9 +88,7 @@ public class AuthenticateUserUseCaseTest {
 
     @Test
     void shouldThrowDomainException_whenCallExecute_becausePasswordIsInvalid() {
-        final User user = Fixture.UserFixture.withUserStatus(
-                Fixture.UserFixture.newUser(AuthorizationRole.CANDIDATE), UserStatus.VERIFIED
-        );
+        final User user = UserBuilder.user().email("john@gmail.com").build();
         final String password = "1234BC";
 
         final AuthenticateUserUseCaseInput input = AuthenticateUserUseCaseInput.with(
@@ -118,9 +115,7 @@ public class AuthenticateUserUseCaseTest {
 
     @Test
     void shouldThrowDomainException_whenCallExecute_becauseUserIsNotVerified() {
-        final User user = Fixture.UserFixture.withUserStatus(
-                Fixture.UserFixture.newUser(AuthorizationRole.CANDIDATE), UserStatus.UNVERIFIED
-        );
+        final User user = UserBuilder.user().email("john@gmail.com").password("123456").userStatus(UserStatus.UNVERIFIED).build();
 
         final AuthenticateUserUseCaseInput input = AuthenticateUserUseCaseInput.with(
                 user.getEmail(),
@@ -147,9 +142,7 @@ public class AuthenticateUserUseCaseTest {
 
     @Test
     void shouldThrowDomainException_whenCallExecute_becauseUserIsDeleted() {
-        final User user = Fixture.UserFixture.withUserStatus(
-                Fixture.UserFixture.newUser(AuthorizationRole.CANDIDATE), UserStatus.DELETED
-        );
+        final User user = UserBuilder.user().email("john@gmail.com").password("123456").userStatus(UserStatus.DELETED).build();
 
         final AuthenticateUserUseCaseInput input = AuthenticateUserUseCaseInput.with(
                 user.getEmail(),

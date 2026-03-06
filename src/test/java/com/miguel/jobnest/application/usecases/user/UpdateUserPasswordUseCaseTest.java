@@ -4,12 +4,11 @@ import com.miguel.jobnest.application.abstractions.providers.PasswordEncryption;
 import com.miguel.jobnest.application.abstractions.repositories.UserRepository;
 import com.miguel.jobnest.application.abstractions.services.SecurityService;
 import com.miguel.jobnest.application.usecases.user.inputs.UpdateUserPasswordUseCaseInput;
-import com.miguel.jobnest.domain.Fixture;
+import com.miguel.jobnest.domain.builders.UserBuilder;
 import com.miguel.jobnest.domain.entities.User;
-import com.miguel.jobnest.domain.enums.AuthorizationRole;
-import com.miguel.jobnest.domain.enums.UserStatus;
 import com.miguel.jobnest.domain.exceptions.DomainException;
 import com.miguel.jobnest.domain.exceptions.NotFoundException;
+import com.miguel.jobnest.domain.utils.IdentifierUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -39,9 +38,7 @@ public class UpdateUserPasswordUseCaseTest {
 
     @Test
     void shouldUpdateUserPassword_whenCallExecute() {
-        final User user = Fixture.UserFixture.withUserStatus(
-                Fixture.UserFixture.newUser(AuthorizationRole.CANDIDATE), UserStatus.VERIFIED
-        );
+        final User user = UserBuilder.user().id(IdentifierUtils.generateNewId()).password("1234te2").build();
         final String password = "123456A";
 
         final UpdateUserPasswordUseCaseInput input = UpdateUserPasswordUseCaseInput.with(
@@ -91,17 +88,15 @@ public class UpdateUserPasswordUseCaseTest {
 
     @Test
     void shouldThrowDomainException_whenExecute_becauseCurrentPasswordIsInvalid() {
-        final User user = Fixture.UserFixture.withUserStatus(
-                Fixture.UserFixture.newUser(AuthorizationRole.CANDIDATE), UserStatus.VERIFIED
-        );
-        final String currentPassword = "1234BC";
+        final User user = UserBuilder.user().id(IdentifierUtils.generateNewId()).password("1234BC").build();
         final String password = "123456A";
 
         final UpdateUserPasswordUseCaseInput input = UpdateUserPasswordUseCaseInput.with(
-                currentPassword,
+                user.getPassword(),
                 password
         );
 
+        Mockito.when(this.securityService.getPrincipal()).thenReturn(user.getId());
         Mockito.when(this.userRepository.findById(Mockito.any())).thenReturn(Optional.of(user));
         Mockito.when(this.passwordEncryption.matches(Mockito.any(), Mockito.any())).thenReturn(false);
 

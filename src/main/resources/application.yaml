@@ -26,8 +26,8 @@ spring:
           multiplier: 2
           max-interval: 12000
   redis:
-      host: ${REDIS_HOST}
-      port: 6379
+    host: ${REDIS_HOST}
+    port: 6379
   mail:
     host: smtp.gmail.com
     port: 587
@@ -56,3 +56,28 @@ resilience4j:
         limitForPeriod: 5
         limitRefreshPeriod: 10s
         timeoutDuration: 0
+
+broker:
+  messageConfigurations:
+    UserCodeCreated:
+      exchange:
+        name: user.code.events
+        type: direct
+      routingKey: user.code.created
+      queue:
+        name: user.code.created.queue
+        deadLetterQueue:
+          name: user.code.created.queue.dlq
+          exchange: user.code.events.dlq
+          routing-key: user.code.created.dlq
+    SubscriptionCreated:
+      exchange:
+        name: subscription.events
+        type: direct
+      routingKey: subscription.created
+      queue:
+        name: subscription.created.queue
+        deadLetterQueue:
+          name: subscription.created.queue.dlq
+          exchange: subscription.events.dlq
+          routing-key: subscription.created.dlq

@@ -1,7 +1,6 @@
 package com.miguel.jobnest.infrastructure.wrapper;
 
 import com.miguel.jobnest.application.abstractions.wrapper.TransactionExecutor;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
@@ -10,9 +9,12 @@ import org.springframework.transaction.support.TransactionSynchronizationManager
 import org.springframework.transaction.support.TransactionTemplate;
 
 @Component
-@RequiredArgsConstructor
 public class TransactionExecutorImpl implements TransactionExecutor {
     private final PlatformTransactionManager platformTransactionManager;
+
+    public TransactionExecutorImpl(final PlatformTransactionManager platformTransactionManager) {
+        this.platformTransactionManager = platformTransactionManager;
+    }
 
     @Override
     public void runTransaction(final Runnable runnable) {

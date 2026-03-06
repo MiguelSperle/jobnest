@@ -8,7 +8,6 @@ import com.miguel.jobnest.domain.pagination.SearchQuery;
 import com.miguel.jobnest.infrastructure.persistence.jpa.entities.JpaJobVacancyEntity;
 import com.miguel.jobnest.infrastructure.persistence.jpa.repositories.JpaJobVacancyRepository;
 import com.miguel.jobnest.infrastructure.persistence.jpa.specifications.JpaJobVacancySpecification;
-import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -19,13 +18,17 @@ import java.util.List;
 import java.util.Optional;
 
 @Component
-@RequiredArgsConstructor
 public class JobVacancyRepositoryImpl implements JobVacancyRepository {
     private final JpaJobVacancyRepository jpaJobVacancyRepository;
 
+    public JobVacancyRepositoryImpl(final JpaJobVacancyRepository jpaJobVacancyRepository) {
+        this.jpaJobVacancyRepository = jpaJobVacancyRepository;
+    }
+
     @Override
     public JobVacancy save(final JobVacancy jobVacancy) {
-        return this.jpaJobVacancyRepository.save(JpaJobVacancyEntity.toEntity(jobVacancy)).toDomain();
+        this.jpaJobVacancyRepository.save(JpaJobVacancyEntity.toEntity(jobVacancy));
+        return jobVacancy;
     }
 
     @Override

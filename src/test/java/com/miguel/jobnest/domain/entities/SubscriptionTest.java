@@ -1,6 +1,6 @@
 package com.miguel.jobnest.domain.entities;
 
-import com.miguel.jobnest.domain.Fixture;
+import com.miguel.jobnest.domain.builders.SubscriptionBuilder;
 import com.miguel.jobnest.domain.utils.IdentifierUtils;
 import com.miguel.jobnest.domain.utils.TimeUtils;
 import org.junit.jupiter.api.Assertions;
@@ -60,27 +60,38 @@ public class SubscriptionTest {
 
     @Test
     void shouldReturnUpdatedSubscription_whenCallWithIsCanceled() {
-        final Subscription subscription = Fixture.SubscriptionFixture.newSubscription(IdentifierUtils.generateNewId(), IdentifierUtils.generateNewId());
+        final Subscription subscription = SubscriptionBuilder.subscription().isCanceled(false).build();
 
-        final Subscription updatedSubscription = subscription.withIsCanceled(true);
+        final boolean newIsCanceled = true;
+
+        final Subscription updatedSubscription = subscription.withIsCanceled(newIsCanceled);
 
         Assertions.assertNotNull(updatedSubscription);
-        Assertions.assertEquals(true, updatedSubscription.getIsCanceled());
+        Assertions.assertEquals(newIsCanceled, updatedSubscription.getIsCanceled());
     }
 
     @Test
     void shouldReturnFormattedSubscription_whenCallToString() {
-        final Subscription subscription = Fixture.SubscriptionFixture.newSubscription(IdentifierUtils.generateNewId(), IdentifierUtils.generateNewId());
+        final Subscription subscription = SubscriptionBuilder.subscription()
+                .userId(IdentifierUtils.generateNewId())
+                .jobVacancyId(IdentifierUtils.generateNewId())
+                .resumeUrl("resume-url")
+                .isCanceled(false)
+                .createdAt(TimeUtils.now())
+                .build();
 
         final String expectedToString = "Subscription{" +
                 "id='" + subscription.getId() + '\'' +
                 ", userId='" + subscription.getUserId() + '\'' +
                 ", jobVacancyId='" + subscription.getJobVacancyId() + '\'' +
                 ", resumeUrl='" + subscription.getResumeUrl() + '\'' +
-                ", isCanceled='" + subscription.getIsCanceled() + '\'' +
+                ", isCanceled=" + subscription.getIsCanceled() +
                 ", createdAt=" + subscription.getCreatedAt() +
                 '}';
 
-        Assertions.assertEquals(expectedToString, subscription.toString());
+        final String toStringResult = subscription.toString();
+
+        Assertions.assertNotNull(toStringResult);
+        Assertions.assertEquals(expectedToString, toStringResult);
     }
 }

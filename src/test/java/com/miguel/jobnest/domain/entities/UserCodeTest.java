@@ -1,6 +1,6 @@
 package com.miguel.jobnest.domain.entities;
 
-import com.miguel.jobnest.domain.Fixture;
+import com.miguel.jobnest.domain.builders.UserCodeBuilder;
 import com.miguel.jobnest.domain.enums.UserCodeType;
 import com.miguel.jobnest.domain.utils.IdentifierUtils;
 import com.miguel.jobnest.domain.utils.TimeUtils;
@@ -61,7 +61,14 @@ public class UserCodeTest {
 
     @Test
     void shouldReturnFormattedUserCode_whenCallToString() {
-        final UserCode userCode = Fixture.UserCodeFixture.newUserCode(IdentifierUtils.generateNewId(), UserCodeType.USER_VERIFICATION);
+        final UserCode userCode = UserCodeBuilder.userCode()
+                .id(IdentifierUtils.generateNewId())
+                .code("123TYE")
+                .userId(IdentifierUtils.generateNewId())
+                .userCodeType(UserCodeType.USER_VERIFICATION)
+                .expiresIn(TimeUtils.now().plusMinutes(15))
+                .createdAt(TimeUtils.now())
+                .build();
 
         final String expectedToString = "UserCode{" +
                 "id='" + userCode.getId() + '\'' +
@@ -72,6 +79,9 @@ public class UserCodeTest {
                 ", createdAt=" + userCode.getCreatedAt() +
                 '}';
 
-        Assertions.assertEquals(expectedToString, userCode.toString());
+        final String toStringResult = userCode.toString();
+
+        Assertions.assertNotNull(toStringResult);
+        Assertions.assertEquals(expectedToString, toStringResult);
     }
 }

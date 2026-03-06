@@ -1,19 +1,16 @@
 package com.miguel.jobnest.application.usecases.usercode;
 
-import com.miguel.jobnest.application.abstractions.repositories.EventOutboxRepository;
-import com.miguel.jobnest.application.abstractions.wrapper.TransactionExecutor;
 import com.miguel.jobnest.application.abstractions.providers.CodeGenerator;
 import com.miguel.jobnest.application.abstractions.repositories.UserCodeRepository;
 import com.miguel.jobnest.application.abstractions.repositories.UserRepository;
 import com.miguel.jobnest.application.usecases.usercode.inputs.SendPasswordResetCodeUseCaseInput;
-import com.miguel.jobnest.domain.Fixture;
+import com.miguel.jobnest.domain.builders.UserBuilder;
+import com.miguel.jobnest.domain.builders.UserCodeBuilder;
 import com.miguel.jobnest.domain.entities.User;
 import com.miguel.jobnest.domain.entities.UserCode;
-import com.miguel.jobnest.domain.enums.AuthorizationRole;
 import com.miguel.jobnest.domain.enums.UserCodeType;
-import com.miguel.jobnest.domain.enums.UserStatus;
-import com.miguel.jobnest.domain.events.UserCodeCreatedEvent;
 import com.miguel.jobnest.domain.exceptions.NotFoundException;
+import com.miguel.jobnest.domain.utils.IdentifierUtils;
 import com.miguel.jobnest.domain.utils.TimeUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -42,17 +39,10 @@ public class SendPasswordResetCodeUseCaseTest {
     @Mock
     private CodeGenerator codeGenerator;
 
-    @Mock
-    private EventOutboxRepository eventOutboxRepository;
-
-    @Mock
-    private TransactionExecutor transactionExecutor;
-
     @Test
     void shouldSendPasswordResetCode_whenCallExecute() {
-        final User user = Fixture.UserFixture.withUserStatus(
-                Fixture.UserFixture.newUser(AuthorizationRole.CANDIDATE), UserStatus.UNVERIFIED
-        );
+        final User user = UserBuilder.user().email("jhon@gmail.com").build();
+
         final String code = "123AB24J";
 
         final SendPasswordResetCodeUseCaseInput input = SendPasswordResetCodeUseCaseInput.with(user.getEmail());
@@ -60,41 +50,28 @@ public class SendPasswordResetCodeUseCaseTest {
         Mockito.when(this.userRepository.findByEmail(Mockito.any())).thenReturn(Optional.of(user));
         Mockito.when(this.userCodeRepository.findByUserIdAndCodeType(Mockito.any(), Mockito.any())).thenReturn(Optional.empty());
         Mockito.when(this.codeGenerator.generateCode(Mockito.anyInt(), Mockito.any())).thenReturn(code);
-        Mockito.doAnswer(invocationOnMock -> {
-            final Runnable runnable = invocationOnMock.getArgument(0);
-            runnable.run();
-            return runnable;
-        }).when(this.transactionExecutor).runTransaction(Mockito.any());
         Mockito.when(this.userCodeRepository.save(Mockito.any())).thenAnswer(returnsFirstArg());
-        Mockito.doNothing().when(this.eventOutboxRepository).save(Mockito.any(), Mockito.any(), Mockito.any());
 
         this.useCase.execute(input);
 
         Mockito.verify(this.userRepository, Mockito.times(1)).findByEmail(Mockito.any());
         Mockito.verify(this.userCodeRepository, Mockito.times(1)).findByUserIdAndCodeType(Mockito.any(), Mockito.any());
         Mockito.verify(this.codeGenerator, Mockito.times(1)).generateCode(Mockito.anyInt(), Mockito.any());
-        Mockito.verify(this.transactionExecutor, Mockito.times(1)).runTransaction(Mockito.any());
         Mockito.verify(this.userCodeRepository, Mockito.times(1)).save(Mockito.argThat(userCodeSaved ->
                 Objects.nonNull(userCodeSaved.getId()) &&
                         Objects.equals(userCodeSaved.getUserId(), user.getId()) &&
                         Objects.equals(userCodeSaved.getCode(), code) &&
-                        Objects.equals(userCodeSaved.getUserCodeType(), UserCodeType.PASSWORD_RESET) &&
+                        userCodeSaved.getUserCodeType() == UserCodeType.PASSWORD_RESET &&
                         userCodeSaved.getExpiresIn().isAfter(TimeUtils.now()) &&
                         Objects.nonNull(userCodeSaved.getCreatedAt())
         ));
-        Mockito.verify(this.eventOutboxRepository, Mockito.times(1)).save(
-                Mockito.eq("user.code.created.exchange"),
-                Mockito.eq("user.code.created.routing.key"),
-                Mockito.argThat(event -> event instanceof UserCodeCreatedEvent)
-        );
     }
 
     @Test
     void shouldReplacePasswordResetCodeAndSend_whenCallExecute_becauseUserAlreadyHasOne() {
-        final User user = Fixture.UserFixture.withUserStatus(
-                Fixture.UserFixture.newUser(AuthorizationRole.CANDIDATE), UserStatus.UNVERIFIED
-        );
-        final UserCode userCode = Fixture.UserCodeFixture.newUserCode(user.getId(),  UserCodeType.PASSWORD_RESET);
+        final User user = UserBuilder.user().id(IdentifierUtils.generateNewId()).email("john@gmail.com").build();
+        final UserCode userCode = UserCodeBuilder.userCode().id(IdentifierUtils.generateNewId()).userId(user.getId()).build();
+
         final String code = "123AB24J";
 
         final SendPasswordResetCodeUseCaseInput input = SendPasswordResetCodeUseCaseInput.with(user.getEmail());
@@ -103,13 +80,7 @@ public class SendPasswordResetCodeUseCaseTest {
         Mockito.when(this.userCodeRepository.findByUserIdAndCodeType(Mockito.any(), Mockito.any())).thenReturn(Optional.of(userCode));
         Mockito.doNothing().when(this.userCodeRepository).deleteById(Mockito.any());
         Mockito.when(this.codeGenerator.generateCode(Mockito.anyInt(), Mockito.any())).thenReturn(code);
-        Mockito.doAnswer(invocationOnMock -> {
-            final Runnable runnable = invocationOnMock.getArgument(0);
-            runnable.run();
-            return runnable;
-        }).when(this.transactionExecutor).runTransaction(Mockito.any());
         Mockito.when(this.userCodeRepository.save(Mockito.any())).thenAnswer(returnsFirstArg());
-        Mockito.doNothing().when(this.eventOutboxRepository).save(Mockito.any(), Mockito.any(), Mockito.any());
 
         this.useCase.execute(input);
 
@@ -117,20 +88,14 @@ public class SendPasswordResetCodeUseCaseTest {
         Mockito.verify(this.userCodeRepository, Mockito.times(1)).findByUserIdAndCodeType(Mockito.any(), Mockito.any());
         Mockito.verify(this.userCodeRepository, Mockito.times(1)).deleteById(Mockito.any());
         Mockito.verify(this.codeGenerator, Mockito.times(1)).generateCode(Mockito.anyInt(), Mockito.any());
-        Mockito.verify(this.transactionExecutor, Mockito.times(1)).runTransaction(Mockito.any());
         Mockito.verify(this.userCodeRepository, Mockito.times(1)).save(Mockito.argThat(userCodeSaved ->
                 Objects.nonNull(userCodeSaved.getId()) &&
                         Objects.equals(userCodeSaved.getUserId(), user.getId()) &&
                         Objects.equals(userCodeSaved.getCode(), code) &&
-                        Objects.equals(userCodeSaved.getUserCodeType(), UserCodeType.PASSWORD_RESET) &&
+                        userCodeSaved.getUserCodeType() == UserCodeType.PASSWORD_RESET &&
                         userCodeSaved.getExpiresIn().isAfter(TimeUtils.now()) &&
                         Objects.nonNull(userCodeSaved.getCreatedAt())
         ));
-        Mockito.verify(this.eventOutboxRepository, Mockito.times(1)).save(
-                Mockito.eq("user.code.created.exchange"),
-                Mockito.eq("user.code.created.routing.key"),
-                Mockito.argThat(event -> event instanceof UserCodeCreatedEvent)
-        );
     }
 
     @Test

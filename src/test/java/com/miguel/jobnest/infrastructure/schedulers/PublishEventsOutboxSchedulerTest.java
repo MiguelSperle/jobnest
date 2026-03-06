@@ -1,8 +1,9 @@
 package com.miguel.jobnest.infrastructure.schedulers;
 
 import com.miguel.jobnest.application.abstractions.wrapper.TransactionExecutor;
-import com.miguel.jobnest.infrastructure.Fixture;
+import com.miguel.jobnest.domain.utils.IdentifierUtils;
 import com.miguel.jobnest.infrastructure.abstractions.producer.MessageProducer;
+import com.miguel.jobnest.infrastructure.enums.EventOutboxStatus;
 import com.miguel.jobnest.infrastructure.persistence.jpa.entities.JpaEventOutboxEntity;
 import com.miguel.jobnest.infrastructure.persistence.jpa.repositories.JpaEventOutboxRepository;
 import org.junit.jupiter.api.Test;
@@ -22,7 +23,7 @@ public class PublishEventsOutboxSchedulerTest {
     private PublishEventsOutboxScheduler publishEventsOutboxScheduler;
 
     @Mock
-    private JpaEventOutboxRepository eventOutboxRepository;
+    private JpaEventOutboxRepository jpaEventOutboxRepository;
 
     @Mock
     private MessageProducer messageProducer;
@@ -32,23 +33,26 @@ public class PublishEventsOutboxSchedulerTest {
 
     @Test
     void shouldPublishPendingEventsOutbox_whenPublishEventsOutboxSchedulerRuns() {
-        final JpaEventOutboxEntity jpaEventOutboxEntity = Fixture.JpaEventOutboxEntityFixture.newJpaEventOutboxEntity();
+        final JpaEventOutboxEntity jpaEventOutboxEntity = JpaEventOutboxEntity.builder().eventId(IdentifierUtils.generateNewId())
+                .eventOutboxStatus(EventOutboxStatus.PENDING).build();
 
         Mockito.doAnswer(invocationOnMock -> {
             final Runnable runnable = invocationOnMock.getArgument(0);
             runnable.run();
             return runnable;
         }).when(this.transactionExecutor).runTransaction(Mockito.any());
-        Mockito.when(this.eventOutboxRepository.findFirst10ByStatus(Mockito.any())).thenReturn(List.of(jpaEventOutboxEntity));
+        Mockito.when(this.jpaEventOutboxRepository.findFirst10ByStatus(Mockito.any())).thenReturn(List.of(jpaEventOutboxEntity));
         Mockito.doNothing().when(this.messageProducer).publish(Mockito.any());
-        Mockito.when(this.eventOutboxRepository.save(Mockito.any())).thenAnswer(returnsFirstArg());
+        Mockito.when(this.jpaEventOutboxRepository.save(Mockito.any())).thenAnswer(returnsFirstArg());
 
         this.publishEventsOutboxScheduler.publishEvent();
 
         Mockito.verify(this.transactionExecutor, Mockito.times(1)).runTransaction(Mockito.any());
-        Mockito.verify(this.eventOutboxRepository, Mockito.times(1)).findFirst10ByStatus(Mockito.any());
+        Mockito.verify(this.jpaEventOutboxRepository, Mockito.times(1)).findFirst10ByStatus(Mockito.any());
         Mockito.verify(this.messageProducer, Mockito.times(1)).publish(Mockito.any());
-        Mockito.verify(this.eventOutboxRepository, Mockito.times(1)).save(Mockito.any());
+        Mockito.verify(this.jpaEventOutboxRepository, Mockito.times(1)).save(Mockito.argThat(jpaEventOutboxEntitySaved ->
+                jpaEventOutboxEntitySaved.getEventOutboxStatus() == EventOutboxStatus.PUBLISHED
+        ));
     }
 
     @Test
@@ -58,13 +62,13 @@ public class PublishEventsOutboxSchedulerTest {
             runnable.run();
             return runnable;
         }).when(this.transactionExecutor).runTransaction(Mockito.any());
-        Mockito.when(this.eventOutboxRepository.findFirst10ByStatus(Mockito.any())).thenReturn(List.of());
+        Mockito.when(this.jpaEventOutboxRepository.findFirst10ByStatus(Mockito.any())).thenReturn(List.of());
 
         this.publishEventsOutboxScheduler.publishEvent();
 
         Mockito.verify(this.transactionExecutor, Mockito.times(1)).runTransaction(Mockito.any());
-        Mockito.verify(this.eventOutboxRepository, Mockito.times(1)).findFirst10ByStatus(Mockito.any());
+        Mockito.verify(this.jpaEventOutboxRepository, Mockito.times(1)).findFirst10ByStatus(Mockito.any());
         Mockito.verify(this.messageProducer, Mockito.never()).publish(Mockito.any());
-        Mockito.verify(this.eventOutboxRepository, Mockito.never()).save(Mockito.any());
+        Mockito.verify(this.jpaEventOutboxRepository, Mockito.never()).save(Mockito.any());
     }
 }

@@ -3,12 +3,8 @@ package com.miguel.jobnest.application.usecases.subscription;
 import com.miguel.jobnest.application.abstractions.repositories.SubscriptionRepository;
 import com.miguel.jobnest.application.usecases.subscription.inputs.GetSubscriptionByIdUseCaseInput;
 import com.miguel.jobnest.application.usecases.subscription.outputs.GetSubscriptionByIdUseCaseOutput;
-import com.miguel.jobnest.domain.Fixture;
-import com.miguel.jobnest.domain.entities.JobVacancy;
+import com.miguel.jobnest.domain.builders.SubscriptionBuilder;
 import com.miguel.jobnest.domain.entities.Subscription;
-import com.miguel.jobnest.domain.entities.User;
-import com.miguel.jobnest.domain.enums.AuthorizationRole;
-import com.miguel.jobnest.domain.enums.UserStatus;
 import com.miguel.jobnest.domain.exceptions.NotFoundException;
 import com.miguel.jobnest.domain.utils.IdentifierUtils;
 import org.junit.jupiter.api.Assertions;
@@ -31,15 +27,7 @@ public class GetSubscriptionByIdUseCaseTest {
 
     @Test
     void shouldGetSubscriptionById_whenCallExecute() {
-        final User userRecruiter = Fixture.UserFixture.withUserStatus(
-                Fixture.UserFixture.newUser(AuthorizationRole.RECRUITER), UserStatus.VERIFIED
-        );
-        final User userCandidate = Fixture.UserFixture.withUserStatus(
-                Fixture.UserFixture.newUser(AuthorizationRole.CANDIDATE), UserStatus.VERIFIED
-        );
-
-        final JobVacancy jobVacancy = Fixture.JobVacancyFixture.newJobVacancy(userRecruiter.getId());
-        final Subscription subscription = Fixture.SubscriptionFixture.newSubscription(userCandidate.getId(), jobVacancy.getId());
+        final Subscription subscription = SubscriptionBuilder.subscription().id(IdentifierUtils.generateNewId()).build();
 
         final GetSubscriptionByIdUseCaseInput input = GetSubscriptionByIdUseCaseInput.with(
                 subscription.getId()

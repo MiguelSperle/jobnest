@@ -1,18 +1,33 @@
 package com.miguel.jobnest.infrastructure.persistence;
 
 import com.miguel.jobnest.application.abstractions.repositories.UserCodeRepository;
+import com.miguel.jobnest.application.abstractions.wrapper.TransactionExecutor;
 import com.miguel.jobnest.domain.entities.UserCode;
+import com.miguel.jobnest.domain.events.DomainEvent;
+import com.miguel.jobnest.infrastructure.abstractions.repositories.EventOutboxRepository;
+import com.miguel.jobnest.infrastructure.configurations.json.Json;
+import com.miguel.jobnest.infrastructure.persistence.jpa.entities.JpaEventOutboxEntity;
 import com.miguel.jobnest.infrastructure.persistence.jpa.entities.JpaUserCodeEntity;
 import com.miguel.jobnest.infrastructure.persistence.jpa.repositories.JpaUserCodeRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
 @Component
-@RequiredArgsConstructor
 public class UserCodeRepositoryImpl implements UserCodeRepository {
     private final JpaUserCodeRepository jpaUserCodeRepository;
+    private final EventOutboxRepository eventOutboxRepository;
+    private final TransactionExecutor transactionExecutor;
+
+    public UserCodeRepositoryImpl(
+            final JpaUserCodeRepository jpaUserCodeRepository,
+            final EventOutboxRepository eventOutboxRepository,
+            final TransactionExecutor transactionExecutor
+    ) {
+        this.jpaUserCodeRepository = jpaUserCodeRepository;
+        this.eventOutboxRepository = eventOutboxRepository;
+        this.transactionExecutor = transactionExecutor;
+    }
 
     @Override
     public Optional<UserCode> findById(final String id) {
@@ -21,7 +36,20 @@ public class UserCodeRepositoryImpl implements UserCodeRepository {
 
     @Override
     public UserCode save(final UserCode userCode) {
-        return this.jpaUserCodeRepository.save(JpaUserCodeEntity.toEntity(userCode)).toDomain();
+        this.transactionExecutor.runTransaction(() -> {
+            this.jpaUserCodeRepository.save(JpaUserCodeEntity.toEntity(userCode));
+            for (DomainEvent domainEvent : userCode.getDomainEvents()) {
+                this.eventOutboxRepository.save(JpaEventOutboxEntity.newJpaEventOutboxEntity(
+                        domainEvent.eventId(),
+                        Json.writeValueAsBytes(domainEvent),
+                        domainEvent.aggregateId(),
+                        domainEvent.aggregateType(),
+                        domainEvent.eventType()
+                ));
+            }
+        });
+
+        return userCode;
     }
 
     @Override

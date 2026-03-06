@@ -3,7 +3,6 @@ package com.miguel.jobnest.infrastructure.services;
 import com.miguel.jobnest.infrastructure.abstractions.services.EmailService;
 import com.miguel.jobnest.infrastructure.exceptions.EmailSendFailedException;
 import jakarta.mail.internet.MimeMessage;
-import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -12,9 +11,12 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 @Service
-@RequiredArgsConstructor
 public class SmtpEmailServiceImpl implements EmailService {
     private final JavaMailSender javaMailSender;
+
+    public SmtpEmailServiceImpl(final JavaMailSender javaMailSender) {
+        this.javaMailSender = javaMailSender;
+    }
 
     @Value("${spring.mail.username}")
     private String from;

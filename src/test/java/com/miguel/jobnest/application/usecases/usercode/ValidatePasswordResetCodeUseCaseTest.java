@@ -2,12 +2,8 @@ package com.miguel.jobnest.application.usecases.usercode;
 
 import com.miguel.jobnest.application.abstractions.repositories.UserCodeRepository;
 import com.miguel.jobnest.application.usecases.usercode.inputs.ValidatePasswordResetCodeUseCaseInput;
-import com.miguel.jobnest.domain.Fixture;
-import com.miguel.jobnest.domain.entities.User;
+import com.miguel.jobnest.domain.builders.UserCodeBuilder;
 import com.miguel.jobnest.domain.entities.UserCode;
-import com.miguel.jobnest.domain.enums.AuthorizationRole;
-import com.miguel.jobnest.domain.enums.UserCodeType;
-import com.miguel.jobnest.domain.enums.UserStatus;
 import com.miguel.jobnest.domain.exceptions.DomainException;
 import com.miguel.jobnest.domain.exceptions.NotFoundException;
 import com.miguel.jobnest.domain.utils.TimeUtils;
@@ -31,10 +27,7 @@ public class ValidatePasswordResetCodeUseCaseTest {
 
     @Test
     void shouldValidatePasswordResetCode_whenCallExecute() {
-        final User user = Fixture.UserFixture.withUserStatus(
-                Fixture.UserFixture.newUser(AuthorizationRole.CANDIDATE), UserStatus.UNVERIFIED
-        );
-        final UserCode userCode = Fixture.UserCodeFixture.newUserCode(user.getId(), UserCodeType.PASSWORD_RESET);
+        final UserCode userCode = UserCodeBuilder.userCode().expiresIn(TimeUtils.now().plusMinutes(15)).build();
 
         final ValidatePasswordResetCodeUseCaseInput input = ValidatePasswordResetCodeUseCaseInput.with(userCode.getCode());
 
@@ -66,12 +59,7 @@ public class ValidatePasswordResetCodeUseCaseTest {
 
     @Test
     void shouldThrowDomainException_whenCallExecute_becauseTheCodeIsExpired() {
-        final User user = Fixture.UserFixture.withUserStatus(
-                Fixture.UserFixture.newUser(AuthorizationRole.CANDIDATE), UserStatus.UNVERIFIED
-        );
-        final UserCode userCode = Fixture.UserCodeFixture.withExpiresIn(
-                Fixture.UserCodeFixture.newUserCode(user.getId(), UserCodeType.PASSWORD_RESET), TimeUtils.now().minusDays(1)
-        );
+        final UserCode userCode = UserCodeBuilder.userCode().expiresIn(TimeUtils.now().minusDays(1)).build();
 
         final ValidatePasswordResetCodeUseCaseInput input = ValidatePasswordResetCodeUseCaseInput.with(userCode.getCode());
 

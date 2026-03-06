@@ -10,7 +10,6 @@ import com.miguel.jobnest.infrastructure.rest.dtos.MessageResponse;
 import com.miguel.jobnest.infrastructure.rest.dtos.user.res.AuthenticateUserResponse;
 import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,10 +19,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/v1/auth")
-@RequiredArgsConstructor
 public class AuthController {
     private final CreateUserUseCase createUserUseCase;
     private final AuthenticateUserUseCase authenticateUserUseCase;
+
+    public AuthController(
+            final CreateUserUseCase createUserUseCase,
+            final AuthenticateUserUseCase authenticateUserUseCase
+    ) {
+        this.createUserUseCase = createUserUseCase;
+        this.authenticateUserUseCase = authenticateUserUseCase;
+    }
 
     @PostMapping("/create")
     @RateLimiter(name = "rateLimitConfiguration")

@@ -4,7 +4,6 @@ import com.cloudinary.Cloudinary;
 import com.miguel.jobnest.application.abstractions.services.UploadService;
 import com.miguel.jobnest.infrastructure.exceptions.FileDestructionFailedException;
 import com.miguel.jobnest.infrastructure.exceptions.FileUploadFailedException;
-import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -13,9 +12,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Service
-@RequiredArgsConstructor
 public class CloudinaryServiceImpl implements UploadService {
     private final Cloudinary cloudinary;
+
+    public CloudinaryServiceImpl(final Cloudinary cloudinary) {
+        this.cloudinary = cloudinary;
+    }
 
     private static final Logger log = LoggerFactory.getLogger(CloudinaryServiceImpl.class);
 

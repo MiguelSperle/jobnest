@@ -4,11 +4,10 @@ import com.miguel.jobnest.application.abstractions.repositories.UserCodeReposito
 import com.miguel.jobnest.application.abstractions.repositories.UserRepository;
 import com.miguel.jobnest.application.abstractions.wrapper.TransactionExecutor;
 import com.miguel.jobnest.application.usecases.user.inputs.UpdateUserToVerifiedUseCaseInput;
-import com.miguel.jobnest.domain.Fixture;
+import com.miguel.jobnest.domain.builders.UserBuilder;
+import com.miguel.jobnest.domain.builders.UserCodeBuilder;
 import com.miguel.jobnest.domain.entities.User;
 import com.miguel.jobnest.domain.entities.UserCode;
-import com.miguel.jobnest.domain.enums.AuthorizationRole;
-import com.miguel.jobnest.domain.enums.UserCodeType;
 import com.miguel.jobnest.domain.enums.UserStatus;
 import com.miguel.jobnest.domain.exceptions.DomainException;
 import com.miguel.jobnest.domain.exceptions.NotFoundException;
@@ -22,7 +21,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Objects;
 import java.util.Optional;
 
 import static org.mockito.AdditionalAnswers.returnsFirstArg;
@@ -43,10 +41,8 @@ public class UpdateUserToVerifiedUseCaseTest {
 
     @Test
     void shouldUpdateUserToVerified_whenCallExecute() {
-        final User user = Fixture.UserFixture.withUserStatus(
-                Fixture.UserFixture.newUser(AuthorizationRole.CANDIDATE), UserStatus.UNVERIFIED
-        );
-        final UserCode userCode = Fixture.UserCodeFixture.newUserCode(user.getId(), UserCodeType.USER_VERIFICATION);
+        final User user = UserBuilder.user().id(IdentifierUtils.generateNewId()).userStatus(UserStatus.UNVERIFIED).build();
+        final UserCode userCode = UserCodeBuilder.userCode().code("123TETEL").userId(user.getId()).expiresIn(TimeUtils.now().plusMinutes(15)).build();
 
         final UpdateUserToVerifiedUseCaseInput input = UpdateUserToVerifiedUseCaseInput.with(userCode.getCode());
 
@@ -68,7 +64,7 @@ public class UpdateUserToVerifiedUseCaseTest {
         Mockito.verify(this.userRepository, Mockito.times(1)).findById(Mockito.any());
         Mockito.verify(this.transactionExecutor, Mockito.times(1)).runTransaction(Mockito.any());
         Mockito.verify(this.userRepository, Mockito.times(1)).save(Mockito.argThat(userSaved ->
-                Objects.equals(userSaved.getUserStatus(), UserStatus.VERIFIED)
+                userSaved.getUserStatus() == UserStatus.VERIFIED
         ));
         Mockito.verify(this.userCodeRepository, Mockito.times(1)).deleteById(Mockito.any());
     }
@@ -94,12 +90,7 @@ public class UpdateUserToVerifiedUseCaseTest {
 
     @Test
     void shouldThrowDomainException_whenCallExecute_becauseTheCodeIsExpired() {
-        final User user = Fixture.UserFixture.withUserStatus(
-                Fixture.UserFixture.newUser(AuthorizationRole.CANDIDATE), UserStatus.UNVERIFIED
-        );
-        final UserCode userCode = Fixture.UserCodeFixture.withExpiresIn(
-                Fixture.UserCodeFixture.newUserCode(user.getId(), UserCodeType.USER_VERIFICATION), TimeUtils.now().minusDays(1)
-        );
+        final UserCode userCode = UserCodeBuilder.userCode().code("TATU12345").expiresIn(TimeUtils.now().minusDays(1)).build();
 
         final UpdateUserToVerifiedUseCaseInput input = UpdateUserToVerifiedUseCaseInput.with(userCode.getCode());
 
@@ -122,14 +113,11 @@ public class UpdateUserToVerifiedUseCaseTest {
 
     @Test
     void shouldThrowNotFoundException_whenCallExecute_becauseUserDoesNotExist() {
-        final UserCode userCode = Fixture.UserCodeFixture.withExpiresIn(
-                Fixture.UserCodeFixture.newUserCode(IdentifierUtils.generateNewId(), UserCodeType.USER_VERIFICATION), TimeUtils.now().plusMinutes(15)
-        );
+        final UserCode userCode = UserCodeBuilder.userCode().code("EYE142TA").expiresIn(TimeUtils.now().plusMinutes(15)).build();
 
         final UpdateUserToVerifiedUseCaseInput input = UpdateUserToVerifiedUseCaseInput.with(userCode.getCode());
 
         Mockito.when(this.userCodeRepository.findByCodeAndCodeType(Mockito.any(), Mockito.any())).thenReturn(Optional.of(userCode));
-
         Mockito.when(this.userRepository.findById(Mockito.any())).thenReturn(Optional.empty());
 
         final var ex = Assertions.assertThrows(NotFoundException.class, () ->

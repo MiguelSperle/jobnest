@@ -11,13 +11,11 @@ import com.miguel.jobnest.infrastructure.rest.dtos.user.req.UpdateUserPasswordRe
 import com.miguel.jobnest.infrastructure.rest.dtos.user.res.GetAuthenticatedUserResponse;
 import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/users")
-@RequiredArgsConstructor
 public class UserController {
     private final UpdateUserToVerifiedUseCase updateUserToVerifiedUseCase;
     private final ResetUserPasswordUseCase resetUserPasswordUseCase;
@@ -25,6 +23,22 @@ public class UserController {
     private final UpdateUserUseCase updateUserUseCase;
     private final UpdateUserPasswordUseCase updateUserPasswordUseCase;
     private final SoftDeleteUserUseCase softDeleteUserUseCase;
+
+    public UserController(
+            final UpdateUserToVerifiedUseCase updateUserToVerifiedUseCase,
+            final ResetUserPasswordUseCase resetUserPasswordUseCase,
+            final GetAuthenticatedUserUseCase getAuthenticatedUserUseCase,
+            final UpdateUserUseCase updateUserUseCase,
+            final UpdateUserPasswordUseCase updateUserPasswordUseCase,
+            final SoftDeleteUserUseCase softDeleteUserUseCase
+    ) {
+        this.updateUserToVerifiedUseCase = updateUserToVerifiedUseCase;
+        this.resetUserPasswordUseCase = resetUserPasswordUseCase;
+        this.getAuthenticatedUserUseCase = getAuthenticatedUserUseCase;
+        this.updateUserUseCase = updateUserUseCase;
+        this.updateUserPasswordUseCase = updateUserPasswordUseCase;
+        this.softDeleteUserUseCase = softDeleteUserUseCase;
+    }
 
     @PatchMapping("/verification/{code}")
     @RateLimiter(name = "rateLimitConfiguration")

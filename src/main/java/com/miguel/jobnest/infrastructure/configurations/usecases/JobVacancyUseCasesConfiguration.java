@@ -13,8 +13,8 @@ import org.springframework.context.annotation.Configuration;
 public class JobVacancyUseCasesConfiguration {
     @Bean
     public CreateJobVacancyUseCase createJobVacancyUseCase(
-            JobVacancyRepository jobVacancyRepository,
-            SecurityService securityService
+            final JobVacancyRepository jobVacancyRepository,
+            final SecurityService securityService
     ) {
         return new DefaultCreateJobVacancyUseCase(
                 jobVacancyRepository,
@@ -24,8 +24,8 @@ public class JobVacancyUseCasesConfiguration {
 
     @Bean
     public ListJobVacanciesByUserIdUseCase listJobVacanciesByUserIdUseCase(
-            JobVacancyRepository jobVacancyRepository,
-            SecurityService securityService
+            final JobVacancyRepository jobVacancyRepository,
+            final SecurityService securityService
     ) {
         return new DefaultListJobVacanciesByUserIdUseCase(
                 jobVacancyRepository,
@@ -34,25 +34,25 @@ public class JobVacancyUseCasesConfiguration {
     }
 
     @Bean
-    public UpdateJobVacancyUseCase updateJobVacancyUseCase(JobVacancyRepository jobVacancyRepository) {
+    public UpdateJobVacancyUseCase updateJobVacancyUseCase(final JobVacancyRepository jobVacancyRepository) {
         return new DefaultUpdateJobVacancyUseCase(jobVacancyRepository);
     }
 
     @Bean
-    public ListJobVacanciesUseCase listJobVacanciesUseCase(JobVacancyRepository jobVacancyRepository) {
+    public ListJobVacanciesUseCase listJobVacanciesUseCase(final JobVacancyRepository jobVacancyRepository) {
         return new DefaultListJobVacanciesUseCase(jobVacancyRepository);
     }
 
     @Bean
-    public GetJobVacancyByIdUseCase getJobVacancyByIdUseCase(JobVacancyRepository jobVacancyRepository) {
+    public GetJobVacancyByIdUseCase getJobVacancyByIdUseCase(final JobVacancyRepository jobVacancyRepository) {
         return new DefaultGetJobVacancyByIdUseCase(jobVacancyRepository);
     }
 
     @Bean
     public SoftDeleteJobVacancyUseCase deleteJobVacancyUseCase(
-            JobVacancyRepository jobVacancyRepository,
-            SubscriptionRepository subscriptionRepository,
-            TransactionExecutor transactionExecutor
+            final JobVacancyRepository jobVacancyRepository,
+            final SubscriptionRepository subscriptionRepository,
+            final TransactionExecutor transactionExecutor
     ) {
         return new DefaultSoftDeleteJobVacancyUseCase(
                 jobVacancyRepository,

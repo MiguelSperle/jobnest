@@ -5,15 +5,11 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "subscriptions")
-@AllArgsConstructor
-@NoArgsConstructor
 public class JpaSubscriptionEntity {
     @Id
     @Column(nullable = false, length = 36)
@@ -33,6 +29,25 @@ public class JpaSubscriptionEntity {
 
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
+
+    protected JpaSubscriptionEntity() {
+    }
+
+    private JpaSubscriptionEntity(
+            final String id,
+            final String userId,
+            final String jobVacancyId,
+            final String resumeUrl,
+            final Boolean isCanceled,
+            final LocalDateTime createdAt
+    ) {
+        this.id = id;
+        this.userId = userId;
+        this.jobVacancyId = jobVacancyId;
+        this.resumeUrl = resumeUrl;
+        this.isCanceled = isCanceled;
+        this.createdAt = createdAt;
+    }
 
     public static JpaSubscriptionEntity toEntity(final Subscription subscription) {
         return new JpaSubscriptionEntity(
@@ -54,5 +69,29 @@ public class JpaSubscriptionEntity {
                 this.isCanceled,
                 this.createdAt
         );
+    }
+
+    public String getId() {
+        return this.id;
+    }
+
+    public String getUserId() {
+        return this.userId;
+    }
+
+    public String getJobVacancyId() {
+        return this.jobVacancyId;
+    }
+
+    public String getResumeUrl() {
+        return this.resumeUrl;
+    }
+
+    public Boolean getIsCanceled() {
+        return this.isCanceled;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return this.createdAt;
     }
 }

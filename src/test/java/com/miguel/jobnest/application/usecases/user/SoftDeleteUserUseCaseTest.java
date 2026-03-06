@@ -2,11 +2,11 @@ package com.miguel.jobnest.application.usecases.user;
 
 import com.miguel.jobnest.application.abstractions.repositories.UserRepository;
 import com.miguel.jobnest.application.abstractions.services.SecurityService;
-import com.miguel.jobnest.domain.Fixture;
+import com.miguel.jobnest.domain.builders.UserBuilder;
 import com.miguel.jobnest.domain.entities.User;
-import com.miguel.jobnest.domain.enums.AuthorizationRole;
 import com.miguel.jobnest.domain.enums.UserStatus;
 import com.miguel.jobnest.domain.exceptions.NotFoundException;
+import com.miguel.jobnest.domain.utils.IdentifierUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,7 +15,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Objects;
 import java.util.Optional;
 
 import static org.mockito.AdditionalAnswers.returnsFirstArg;
@@ -33,9 +32,7 @@ public class SoftDeleteUserUseCaseTest {
 
     @Test
     void shouldDeleteUser_whenCallExecute() {
-        final User user = Fixture.UserFixture.withUserStatus(
-                Fixture.UserFixture.newUser(AuthorizationRole.CANDIDATE), UserStatus.VERIFIED
-        );
+        final User user = UserBuilder.user().id(IdentifierUtils.generateNewId()).userStatus(UserStatus.VERIFIED).build();
 
         Mockito.when(this.securityService.getPrincipal()).thenReturn(user.getId());
         Mockito.when(this.userRepository.findById(Mockito.any())).thenReturn(Optional.of(user));
@@ -46,7 +43,7 @@ public class SoftDeleteUserUseCaseTest {
         Mockito.verify(this.securityService, Mockito.times(1)).getPrincipal();
         Mockito.verify(this.userRepository, Mockito.times(1)).findById(Mockito.any());
         Mockito.verify(this.userRepository, Mockito.times(1)).save(Mockito.argThat(userSaved ->
-                Objects.equals(userSaved.getUserStatus(), UserStatus.DELETED)
+                userSaved.getUserStatus() == UserStatus.DELETED
         ));
     }
 

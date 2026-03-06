@@ -7,7 +7,6 @@ import com.miguel.jobnest.domain.pagination.Pagination;
 import com.miguel.jobnest.domain.pagination.SearchQuery;
 import com.miguel.jobnest.infrastructure.rest.dtos.jobvacancy.res.ListJobVacanciesResponse;
 import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,9 +15,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/v1/candidate/job-vacancies")
-@RequiredArgsConstructor
 public class JobVacancyCandidateController {
     private final ListJobVacanciesUseCase listJobVacanciesUseCase;
+
+    public JobVacancyCandidateController(final ListJobVacanciesUseCase listJobVacanciesUseCase) {
+        this.listJobVacanciesUseCase = listJobVacanciesUseCase;
+    }
 
     @GetMapping
     @RateLimiter(name = "rateLimitConfiguration")

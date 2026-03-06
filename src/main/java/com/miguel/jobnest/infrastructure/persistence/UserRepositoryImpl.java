@@ -4,15 +4,17 @@ import com.miguel.jobnest.application.abstractions.repositories.UserRepository;
 import com.miguel.jobnest.domain.entities.User;
 import com.miguel.jobnest.infrastructure.persistence.jpa.entities.JpaUserEntity;
 import com.miguel.jobnest.infrastructure.persistence.jpa.repositories.JpaUserRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
 @Component
-@RequiredArgsConstructor
 public class UserRepositoryImpl implements UserRepository {
     private final JpaUserRepository jpaUserRepository;
+
+    public UserRepositoryImpl(final JpaUserRepository jpaUserRepository) {
+        this.jpaUserRepository = jpaUserRepository;
+    }
 
     @Override
     public Optional<User> findById(final String id) {
@@ -21,7 +23,8 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public User save(final User user) {
-        return this.jpaUserRepository.save(JpaUserEntity.toEntity(user)).toDomain();
+        this.jpaUserRepository.save(JpaUserEntity.toEntity(user));
+        return user;
     }
 
     @Override

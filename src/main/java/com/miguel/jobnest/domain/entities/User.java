@@ -1,5 +1,6 @@
 package com.miguel.jobnest.domain.entities;
 
+import com.miguel.jobnest.domain.Entity;
 import com.miguel.jobnest.domain.enums.AuthorizationRole;
 import com.miguel.jobnest.domain.enums.UserStatus;
 import com.miguel.jobnest.domain.utils.IdentifierUtils;
@@ -7,8 +8,7 @@ import com.miguel.jobnest.domain.utils.TimeUtils;
 
 import java.time.LocalDateTime;
 
-public class User {
-    private final String id;
+public class User extends Entity {
     private final String name;
     private final String email;
     private final String description;
@@ -33,7 +33,7 @@ public class User {
             final String country,
             final LocalDateTime createdAt
     ) {
-        this.id = id;
+        super(id);
         this.name = name;
         this.email = email;
         this.description = description;
@@ -100,7 +100,7 @@ public class User {
 
     public User withName(final String name) {
         return new User(
-                this.id,
+                this.getId(),
                 name,
                 this.email,
                 this.description,
@@ -116,7 +116,7 @@ public class User {
 
     public User withEmail(final String email) {
         return new User(
-                this.id,
+                this.getId(),
                 this.name,
                 email,
                 this.description,
@@ -132,7 +132,7 @@ public class User {
 
     public User withDescription(final String description) {
         return new User(
-                this.id,
+                this.getId(),
                 this.name,
                 this.email,
                 description,
@@ -148,7 +148,7 @@ public class User {
 
     public User withCity(final String city) {
         return new User(
-                this.id,
+                this.getId(),
                 this.name,
                 this.email,
                 this.description,
@@ -164,7 +164,7 @@ public class User {
 
     public User withState(final String state) {
         return new User(
-                this.id,
+                this.getId(),
                 this.name,
                 this.email,
                 this.description,
@@ -180,7 +180,7 @@ public class User {
 
     public User withCountry(final String country) {
         return new User(
-                this.id,
+                this.getId(),
                 this.name,
                 this.email,
                 this.description,
@@ -196,7 +196,7 @@ public class User {
 
     public User withUserStatus(final UserStatus userStatus) {
         return new User(
-                this.id,
+                this.getId(),
                 this.name,
                 this.email,
                 this.description,
@@ -212,7 +212,7 @@ public class User {
 
     public User withPassword(final String password) {
         return new User(
-                this.id,
+                this.getId(),
                 this.name,
                 this.email,
                 this.description,
@@ -224,10 +224,6 @@ public class User {
                 this.country,
                 this.createdAt
         );
-    }
-
-    public String getId() {
-        return this.id;
     }
 
     public String getName() {
@@ -273,7 +269,7 @@ public class User {
     @Override
     public String toString() {
         return "User{" +
-                "id='" + this.id + '\'' +
+                "id='" + this.getId() + '\'' +
                 ", name='" + this.name + '\'' +
                 ", email='" + this.email + '\'' +
                 ", description='" + this.description + '\'' +

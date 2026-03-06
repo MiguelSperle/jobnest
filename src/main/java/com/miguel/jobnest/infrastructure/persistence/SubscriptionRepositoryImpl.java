@@ -1,14 +1,18 @@
 package com.miguel.jobnest.infrastructure.persistence;
 
 import com.miguel.jobnest.application.abstractions.repositories.SubscriptionRepository;
+import com.miguel.jobnest.application.abstractions.wrapper.TransactionExecutor;
 import com.miguel.jobnest.domain.entities.Subscription;
+import com.miguel.jobnest.domain.events.DomainEvent;
 import com.miguel.jobnest.domain.pagination.Pagination;
 import com.miguel.jobnest.domain.pagination.PaginationMetadata;
 import com.miguel.jobnest.domain.pagination.SearchQuery;
+import com.miguel.jobnest.infrastructure.abstractions.repositories.EventOutboxRepository;
+import com.miguel.jobnest.infrastructure.configurations.json.Json;
+import com.miguel.jobnest.infrastructure.persistence.jpa.entities.JpaEventOutboxEntity;
 import com.miguel.jobnest.infrastructure.persistence.jpa.entities.JpaSubscriptionEntity;
 import com.miguel.jobnest.infrastructure.persistence.jpa.repositories.JpaSubscriptionRepository;
 import com.miguel.jobnest.infrastructure.persistence.jpa.specifications.JpaSubscriptionSpecification;
-import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -19,9 +23,20 @@ import java.util.List;
 import java.util.Optional;
 
 @Component
-@RequiredArgsConstructor
 public class SubscriptionRepositoryImpl implements SubscriptionRepository {
     private final JpaSubscriptionRepository jpaSubscriptionRepository;
+    private final EventOutboxRepository eventOutboxRepository;
+    private final TransactionExecutor transactionExecutor;
+
+    public SubscriptionRepositoryImpl(
+            final JpaSubscriptionRepository jpaSubscriptionRepository,
+            final EventOutboxRepository eventOutboxRepository,
+            final TransactionExecutor transactionExecutor
+    ) {
+        this.jpaSubscriptionRepository = jpaSubscriptionRepository;
+        this.eventOutboxRepository = eventOutboxRepository;
+        this.transactionExecutor = transactionExecutor;
+    }
 
     @Override
     public boolean existsByUserIdAndJobVacancyId(final String userId, final String jobVacancyId) {
@@ -30,7 +45,20 @@ public class SubscriptionRepositoryImpl implements SubscriptionRepository {
 
     @Override
     public Subscription save(final Subscription subscription) {
-        return this.jpaSubscriptionRepository.save(JpaSubscriptionEntity.toEntity(subscription)).toDomain();
+        this.transactionExecutor.runTransaction(() -> {
+            this.jpaSubscriptionRepository.save(JpaSubscriptionEntity.toEntity(subscription));
+            for (DomainEvent domainEvent : subscription.getDomainEvents()) {
+                this.eventOutboxRepository.save(JpaEventOutboxEntity.newJpaEventOutboxEntity(
+                        domainEvent.eventId(),
+                        Json.writeValueAsBytes(domainEvent),
+                        domainEvent.aggregateId(),
+                        domainEvent.aggregateType(),
+                        domainEvent.eventType()
+                ));
+            }
+        });
+
+        return subscription;
     }
 
     @Override

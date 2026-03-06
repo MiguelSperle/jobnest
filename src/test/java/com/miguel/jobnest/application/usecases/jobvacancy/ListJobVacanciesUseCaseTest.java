@@ -3,11 +3,8 @@ package com.miguel.jobnest.application.usecases.jobvacancy;
 import com.miguel.jobnest.application.abstractions.repositories.JobVacancyRepository;
 import com.miguel.jobnest.application.usecases.jobvacancy.inputs.ListJobVacanciesUseCaseInput;
 import com.miguel.jobnest.application.usecases.jobvacancy.outputs.ListJobVacanciesUseCaseOutput;
-import com.miguel.jobnest.domain.Fixture;
+import com.miguel.jobnest.domain.builders.JobVacancyBuilder;
 import com.miguel.jobnest.domain.entities.JobVacancy;
-import com.miguel.jobnest.domain.entities.User;
-import com.miguel.jobnest.domain.enums.AuthorizationRole;
-import com.miguel.jobnest.domain.enums.UserStatus;
 import com.miguel.jobnest.domain.pagination.Pagination;
 import com.miguel.jobnest.domain.pagination.PaginationMetadata;
 import com.miguel.jobnest.domain.pagination.SearchQuery;
@@ -31,10 +28,7 @@ public class ListJobVacanciesUseCaseTest {
 
     @Test
     void shouldListJobVacancies_whenCallExecute() {
-        final User user = Fixture.UserFixture.withUserStatus(
-                Fixture.UserFixture.newUser(AuthorizationRole.RECRUITER), UserStatus.VERIFIED
-        );
-        final JobVacancy jobVacancy = Fixture.JobVacancyFixture.newJobVacancy(user.getId());
+        final JobVacancy jobVacancy = JobVacancyBuilder.jobVacancy().build();
 
         final List<JobVacancy> jobVacancies = List.of(jobVacancy);
 

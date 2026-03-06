@@ -1,6 +1,5 @@
 package com.miguel.jobnest.application.usecases.user;
 
-import com.miguel.jobnest.application.abstractions.repositories.EventOutboxRepository;
 import com.miguel.jobnest.application.abstractions.providers.CodeGenerator;
 import com.miguel.jobnest.application.abstractions.providers.PasswordEncryption;
 import com.miguel.jobnest.application.abstractions.repositories.UserCodeRepository;
@@ -10,7 +9,6 @@ import com.miguel.jobnest.application.usecases.user.inputs.CreateUserUseCaseInpu
 import com.miguel.jobnest.domain.enums.AuthorizationRole;
 import com.miguel.jobnest.domain.enums.UserCodeType;
 import com.miguel.jobnest.domain.enums.UserStatus;
-import com.miguel.jobnest.domain.events.UserCodeCreatedEvent;
 import com.miguel.jobnest.domain.exceptions.DomainException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -40,9 +38,6 @@ public class CreateUserUseCaseTest {
 
     @Mock
     private CodeGenerator codeGenerator;
-
-    @Mock
-    private EventOutboxRepository eventOutboxRepository;
 
     @Mock
     private TransactionExecutor transactionExecutor;
@@ -79,7 +74,6 @@ public class CreateUserUseCaseTest {
         Mockito.when(this.userRepository.save(Mockito.any())).thenAnswer(returnsFirstArg());
         Mockito.when(this.codeGenerator.generateCode(Mockito.anyInt(), Mockito.any())).thenReturn(code);
         Mockito.when(this.userCodeRepository.save(Mockito.any())).thenAnswer(returnsFirstArg());
-        Mockito.doNothing().when(this.eventOutboxRepository).save(Mockito.any(), Mockito.any(), Mockito.any());
 
         this.useCase.execute(input);
 
@@ -108,11 +102,6 @@ public class CreateUserUseCaseTest {
                         Objects.nonNull(userCodeSaved.getExpiresIn()) &&
                         Objects.nonNull(userCodeSaved.getCreatedAt())
         ));
-        Mockito.verify(this.eventOutboxRepository, Mockito.times(1)).save(
-                Mockito.eq("user.code.created.exchange"),
-                Mockito.eq("user.code.created.routing.key"),
-                Mockito.argThat(event -> event instanceof UserCodeCreatedEvent)
-        );
     }
 
     @Test

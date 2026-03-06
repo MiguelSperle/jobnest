@@ -5,12 +5,11 @@ import com.miguel.jobnest.application.abstractions.repositories.UserCodeReposito
 import com.miguel.jobnest.application.abstractions.repositories.UserRepository;
 import com.miguel.jobnest.application.abstractions.wrapper.TransactionExecutor;
 import com.miguel.jobnest.application.usecases.user.inputs.ResetUserPasswordUseCaseInput;
-import com.miguel.jobnest.domain.Fixture;
+import com.miguel.jobnest.domain.builders.UserBuilder;
+import com.miguel.jobnest.domain.builders.UserCodeBuilder;
 import com.miguel.jobnest.domain.entities.User;
 import com.miguel.jobnest.domain.entities.UserCode;
-import com.miguel.jobnest.domain.enums.AuthorizationRole;
 import com.miguel.jobnest.domain.enums.UserCodeType;
-import com.miguel.jobnest.domain.enums.UserStatus;
 import com.miguel.jobnest.domain.exceptions.DomainException;
 import com.miguel.jobnest.domain.exceptions.NotFoundException;
 import com.miguel.jobnest.domain.utils.IdentifierUtils;
@@ -47,15 +46,12 @@ public class ResetUserPasswordUseCaseTest {
 
     @Test
     void shouldResetUserPassword_whenCallExecute() {
-        final User user = Fixture.UserFixture.withUserStatus(
-                Fixture.UserFixture.newUser(AuthorizationRole.CANDIDATE), UserStatus.VERIFIED
-        );
-        final UserCode userCode = Fixture.UserCodeFixture.newUserCode(user.getId(), UserCodeType.PASSWORD_RESET);
-        final String password = "123456A";
+        final User user = UserBuilder.user().id(IdentifierUtils.generateNewId()).password("123456A").build();
+        final UserCode userCode = UserCodeBuilder.userCode().code("123BTE").userId(user.getId()).build();
 
         final ResetUserPasswordUseCaseInput input = ResetUserPasswordUseCaseInput.with(
                 userCode.getCode(),
-                password
+                user.getPassword()
         );
 
         Mockito.when(this.userCodeRepository.findByCodeAndCodeType(Mockito.any(), Mockito.any())).thenReturn(Optional.of(userCode));
@@ -108,12 +104,7 @@ public class ResetUserPasswordUseCaseTest {
 
     @Test
     void shouldThrowDomainException_whenCallExecute_becauseTheCodeIsExpired() {
-        final User user = Fixture.UserFixture.withUserStatus(
-                Fixture.UserFixture.newUser(AuthorizationRole.CANDIDATE), UserStatus.VERIFIED
-        );
-        final UserCode userCode = Fixture.UserCodeFixture.withExpiresIn(
-                Fixture.UserCodeFixture.newUserCode(user.getId(), UserCodeType.PASSWORD_RESET), TimeUtils.now().minusDays(1)
-        );
+        final UserCode userCode = UserCodeBuilder.userCode().code("12BT24").expiresIn(TimeUtils.now().minusDays(1)).build();
         final String password = "123456A";
 
         final ResetUserPasswordUseCaseInput input = ResetUserPasswordUseCaseInput.with(
@@ -140,12 +131,11 @@ public class ResetUserPasswordUseCaseTest {
 
     @Test
     void shouldThrowNotFoundException_whenCallExecute_becauseUserDoesNotExist() {
-        final UserCode userCode = Fixture.UserCodeFixture.newUserCode(IdentifierUtils.generateNewId(), UserCodeType.PASSWORD_RESET);
-        final String code = "1234BC";
+        final UserCode userCode = UserCodeBuilder.userCode().code("1234BC").userCodeType(UserCodeType.PASSWORD_RESET).build();
         final String password = "123456A";
 
         final ResetUserPasswordUseCaseInput input = ResetUserPasswordUseCaseInput.with(
-                code,
+                userCode.getCode(),
                 password
         );
 

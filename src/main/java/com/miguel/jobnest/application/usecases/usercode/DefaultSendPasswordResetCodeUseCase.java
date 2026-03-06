@@ -1,11 +1,9 @@
 package com.miguel.jobnest.application.usecases.usercode;
 
 import com.miguel.jobnest.application.abstractions.providers.CodeGenerator;
-import com.miguel.jobnest.application.abstractions.repositories.EventOutboxRepository;
 import com.miguel.jobnest.application.abstractions.repositories.UserCodeRepository;
 import com.miguel.jobnest.application.abstractions.repositories.UserRepository;
 import com.miguel.jobnest.application.abstractions.usecases.usercode.SendPasswordResetCodeUseCase;
-import com.miguel.jobnest.application.abstractions.wrapper.TransactionExecutor;
 import com.miguel.jobnest.application.usecases.usercode.inputs.SendPasswordResetCodeUseCaseInput;
 import com.miguel.jobnest.domain.entities.User;
 import com.miguel.jobnest.domain.entities.UserCode;
@@ -19,27 +17,18 @@ public class DefaultSendPasswordResetCodeUseCase implements SendPasswordResetCod
     private final UserRepository userRepository;
     private final UserCodeRepository userCodeRepository;
     private final CodeGenerator codeGenerator;
-    private final EventOutboxRepository eventOutboxRepository;
-    private final TransactionExecutor transactionExecutor;
 
     private final static int CODE_LENGTH = 8;
     private final static String ALPHANUMERIC_CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
-    private static final String USER_CODE_CREATED_EXCHANGE = "user.code.created.exchange";
-    private static final String USER_CODE_CREATED_ROUTING_KEY = "user.code.created.routing.key";
-
     public DefaultSendPasswordResetCodeUseCase(
             final UserRepository userRepository,
             final UserCodeRepository userCodeRepository,
-            final CodeGenerator codeGenerator,
-            final EventOutboxRepository eventOutboxRepository,
-            final TransactionExecutor transactionExecutor
+            final CodeGenerator codeGenerator
     ) {
         this.userRepository = userRepository;
         this.userCodeRepository = userCodeRepository;
         this.codeGenerator = codeGenerator;
-        this.eventOutboxRepository = eventOutboxRepository;
-        this.transactionExecutor = transactionExecutor;
     }
 
     @Override
@@ -54,18 +43,14 @@ public class DefaultSendPasswordResetCodeUseCase implements SendPasswordResetCod
 
         final UserCode newUserCode = UserCode.newUserCode(user.getId(), codeGenerated, UserCodeType.PASSWORD_RESET);
 
-        this.transactionExecutor.runTransaction(() -> {
-            final UserCode savedUserCode = this.saveUserCode(newUserCode);
+        newUserCode.registerEvent(new UserCodeCreatedEvent(
+                newUserCode.getId(),
+                newUserCode.getCode(),
+                newUserCode.getUserCodeType(),
+                newUserCode.getUserId()
+        ));
 
-            this.eventOutboxRepository.save(
-                    USER_CODE_CREATED_EXCHANGE, USER_CODE_CREATED_ROUTING_KEY, new UserCodeCreatedEvent(
-                            savedUserCode.getId(),
-                            savedUserCode.getCode(),
-                            savedUserCode.getUserCodeType(),
-                            savedUserCode.getUserId()
-                    )
-            );
-        });
+        this.saveUserCode(newUserCode);
     }
 
     private User getUserByEmail(final String email) {
@@ -80,7 +65,7 @@ public class DefaultSendPasswordResetCodeUseCase implements SendPasswordResetCod
         this.userCodeRepository.deleteById(id);
     }
 
-    private UserCode saveUserCode(final UserCode userCode) {
-        return this.userCodeRepository.save(userCode);
+    private void saveUserCode(final UserCode userCode) {
+        this.userCodeRepository.save(userCode);
     }
 }

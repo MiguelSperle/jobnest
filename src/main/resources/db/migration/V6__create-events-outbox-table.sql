@@ -6,7 +6,5 @@ CREATE TABLE events_outbox (
     aggregate_type VARCHAR(40) NOT NULL,
     event_type VARCHAR(100) NOT NULL,
     status VARCHAR(10) NOT NULL,
-    exchange VARCHAR(100) NOT NULL,
-    routing_key VARCHAR(100) NOT NULL,
     created_at TIMESTAMP NOT NULL
 );

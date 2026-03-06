@@ -1,7 +1,6 @@
 package com.miguel.jobnest.infrastructure.services;
 
 import com.miguel.jobnest.infrastructure.abstractions.services.RedisService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
@@ -9,9 +8,12 @@ import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 @Component
-@RequiredArgsConstructor
 public class RedisServiceImpl implements RedisService {
     private final RedisTemplate<String, Object> redisTemplate;
+
+    public RedisServiceImpl(final RedisTemplate<String, Object> redisTemplate) {
+        this.redisTemplate = redisTemplate;
+    }
 
     @Override
     public <T> Optional<T> get(final String key, final Class<T> type) {

@@ -13,7 +13,6 @@ import com.miguel.jobnest.infrastructure.rest.dtos.jobvacancy.req.UpdateJobVacan
 import com.miguel.jobnest.infrastructure.rest.dtos.jobvacancy.res.ListJobVacanciesByUserIdResponse;
 import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,12 +21,23 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/recruiter/job-vacancies")
-@RequiredArgsConstructor
 public class JobVacancyRecruiterController {
     private final CreateJobVacancyUseCase createJobVacancyUseCase;
     private final ListJobVacanciesByUserIdUseCase listJobVacanciesByUserIdUseCase;
     private final UpdateJobVacancyUseCase updateJobVacancyUseCase;
     private final SoftDeleteJobVacancyUseCase softDeleteJobVacancyUseCase;
+
+    public JobVacancyRecruiterController(
+            final CreateJobVacancyUseCase createJobVacancyUseCase,
+            final ListJobVacanciesByUserIdUseCase listJobVacanciesByUserIdUseCase,
+            final UpdateJobVacancyUseCase updateJobVacancyUseCase,
+            final SoftDeleteJobVacancyUseCase softDeleteJobVacancyUseCase
+    ) {
+        this.createJobVacancyUseCase = createJobVacancyUseCase;
+        this.listJobVacanciesByUserIdUseCase = listJobVacanciesByUserIdUseCase;
+        this.updateJobVacancyUseCase = updateJobVacancyUseCase;
+        this.softDeleteJobVacancyUseCase = softDeleteJobVacancyUseCase;
+    }
 
     @PostMapping
     @RateLimiter(name = "rateLimitConfiguration")

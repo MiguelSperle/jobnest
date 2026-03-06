@@ -1,12 +1,12 @@
 package com.miguel.jobnest.domain.entities;
 
+import com.miguel.jobnest.domain.Entity;
 import com.miguel.jobnest.domain.utils.IdentifierUtils;
 import com.miguel.jobnest.domain.utils.TimeUtils;
 
 import java.time.LocalDateTime;
 
-public class Subscription {
-    private final String id;
+public class Subscription extends Entity {
     private final String userId;
     private final String jobVacancyId;
     private final String resumeUrl;
@@ -21,7 +21,7 @@ public class Subscription {
             final Boolean isCanceled,
             final LocalDateTime createdAt
     ) {
-        this.id = id;
+        super(id);
         this.userId = userId;
         this.jobVacancyId = jobVacancyId;
         this.resumeUrl = resumeUrl;
@@ -64,17 +64,13 @@ public class Subscription {
 
     public Subscription withIsCanceled(final Boolean isCanceled) {
         return new Subscription(
-                this.id,
+                this.getId(),
                 this.userId,
                 this.jobVacancyId,
                 this.resumeUrl,
                 isCanceled,
                 this.createdAt
         );
-    }
-
-    public String getId() {
-        return this.id;
     }
 
     public String getUserId() {
@@ -100,11 +96,11 @@ public class Subscription {
     @Override
     public String toString() {
         return "Subscription{" +
-                "id='" + this.id + '\'' +
+                "id='" + this.getId() + '\'' +
                 ", userId='" + this.userId + '\'' +
                 ", jobVacancyId='" + this.jobVacancyId + '\'' +
                 ", resumeUrl='" + this.resumeUrl + '\'' +
-                ", isCanceled='" + this.isCanceled + '\'' +
+                ", isCanceled=" + this.isCanceled +
                 ", createdAt=" + this.createdAt +
                 '}';
     }

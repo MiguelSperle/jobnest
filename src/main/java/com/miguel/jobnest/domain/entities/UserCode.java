@@ -1,13 +1,13 @@
 package com.miguel.jobnest.domain.entities;
 
+import com.miguel.jobnest.domain.Entity;
 import com.miguel.jobnest.domain.enums.UserCodeType;
 import com.miguel.jobnest.domain.utils.IdentifierUtils;
 import com.miguel.jobnest.domain.utils.TimeUtils;
 
 import java.time.LocalDateTime;
 
-public class UserCode {
-    private final String id;
+public class UserCode extends Entity {
     private final String userId;
     private final String code;
     private final UserCodeType userCodeType;
@@ -22,7 +22,7 @@ public class UserCode {
             final LocalDateTime expiresIn,
             final LocalDateTime createdAt
     ) {
-        this.id = id;
+        super(id);
         this.userId = userId;
         this.code = code;
         this.userCodeType = userCodeType;
@@ -63,10 +63,6 @@ public class UserCode {
         );
     }
 
-    public String getId() {
-        return this.id;
-    }
-
     public String getUserId() {
         return this.userId;
     }
@@ -90,7 +86,7 @@ public class UserCode {
     @Override
     public String toString() {
         return "UserCode{" +
-                "id='" + this.id + '\'' +
+                "id='" + this.getId() + '\'' +
                 ", userId='" + this.userId + '\'' +
                 ", code='" + this.code + '\'' +
                 ", userCodeType=" + this.userCodeType +

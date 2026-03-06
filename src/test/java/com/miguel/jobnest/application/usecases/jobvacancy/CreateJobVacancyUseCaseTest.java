@@ -3,12 +3,11 @@ package com.miguel.jobnest.application.usecases.jobvacancy;
 import com.miguel.jobnest.application.abstractions.repositories.JobVacancyRepository;
 import com.miguel.jobnest.application.abstractions.services.SecurityService;
 import com.miguel.jobnest.application.usecases.jobvacancy.inputs.CreateJobVacancyUseCaseInput;
-import com.miguel.jobnest.domain.Fixture;
+import com.miguel.jobnest.domain.builders.UserBuilder;
 import com.miguel.jobnest.domain.entities.User;
-import com.miguel.jobnest.domain.enums.AuthorizationRole;
 import com.miguel.jobnest.domain.enums.Modality;
 import com.miguel.jobnest.domain.enums.SeniorityLevel;
-import com.miguel.jobnest.domain.enums.UserStatus;
+import com.miguel.jobnest.domain.utils.IdentifierUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -33,7 +32,7 @@ public class CreateJobVacancyUseCaseTest {
 
     @Test
     void shouldCreateJobVacancy_whenCallExecute() {
-        final User user = Fixture.UserFixture.withUserStatus(Fixture.UserFixture.newUser(AuthorizationRole.RECRUITER), UserStatus.VERIFIED);
+        final User user = UserBuilder.user().id(IdentifierUtils.generateNewId()).build();
 
         final String title = "Java Developer";
         final String description = "This is the job vacancy description";
@@ -58,10 +57,10 @@ public class CreateJobVacancyUseCaseTest {
                         Objects.equals(jobVacancySaved.getUserId(), user.getId()) &&
                         Objects.equals(jobVacancySaved.getTitle(), input.title()) &&
                         Objects.equals(jobVacancySaved.getDescription(), input.description()) &&
-                        Objects.equals(jobVacancySaved.getSeniorityLevel(), SeniorityLevel.JUNIOR) &&
-                        Objects.equals(jobVacancySaved.getModality(), Modality.REMOTE) &&
+                        jobVacancySaved.getSeniorityLevel() == SeniorityLevel.JUNIOR &&
+                        jobVacancySaved.getModality() == Modality.REMOTE &&
                         Objects.equals(jobVacancySaved.getCompanyName(), input.companyName()) &&
-                        Objects.equals(jobVacancySaved.getIsDeleted(), false) &&
+                        !jobVacancySaved.getIsDeleted() &&
                         Objects.nonNull(jobVacancySaved.getCreatedAt())
         ));
     }

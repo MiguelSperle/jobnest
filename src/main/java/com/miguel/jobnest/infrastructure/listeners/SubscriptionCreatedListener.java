@@ -6,11 +6,10 @@ import com.miguel.jobnest.domain.entities.JobVacancy;
 import com.miguel.jobnest.domain.entities.User;
 import com.miguel.jobnest.domain.events.SubscriptionCreatedEvent;
 import com.miguel.jobnest.domain.exceptions.NotFoundException;
+import com.miguel.jobnest.infrastructure.abstractions.repositories.ProcessedEventRepository;
 import com.miguel.jobnest.infrastructure.abstractions.services.EmailService;
 import com.miguel.jobnest.infrastructure.configurations.json.Json;
 import com.miguel.jobnest.infrastructure.persistence.jpa.entities.JpaProcessedEventEntity;
-import com.miguel.jobnest.infrastructure.persistence.jpa.repositories.JpaProcessedEventRepository;
-import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.Message;
@@ -19,12 +18,23 @@ import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
 
 @Component
-@RequiredArgsConstructor
 public class SubscriptionCreatedListener {
     private final UserRepository userRepository;
     private final JobVacancyRepository jobVacancyRepository;
-    private final JpaProcessedEventRepository jpaProcessedEventRepository;
+    private final ProcessedEventRepository processedEventRepository;
     private final EmailService emailService;
+
+    public SubscriptionCreatedListener(
+            final UserRepository userRepository,
+            final JobVacancyRepository jobVacancyRepository,
+            final ProcessedEventRepository processedEventRepository,
+            final EmailService emailService
+    ) {
+        this.userRepository = userRepository;
+        this.jobVacancyRepository = jobVacancyRepository;
+        this.processedEventRepository = processedEventRepository;
+        this.emailService = emailService;
+    }
 
     private static final String SUBSCRIPTION_CREATED_QUEUE = "subscription.created.queue";
 
@@ -37,7 +47,7 @@ public class SubscriptionCreatedListener {
         final String eventId = event.eventId();
         final String listenerName = SubscriptionCreatedListener.class.getSimpleName();
 
-        if (this.jpaProcessedEventRepository.existsByEventIdAndListener(eventId, listenerName)) {
+        if (this.processedEventRepository.existsByEventIdAndListener(eventId, listenerName)) {
             log.info("Event with id: {} has already been processed by the listener: {}", eventId, listenerName);
             return;
         }
@@ -51,7 +61,7 @@ public class SubscriptionCreatedListener {
 
         this.emailService.sendEmail(user.getEmail(), text, subject);
 
-        this.jpaProcessedEventRepository.save(JpaProcessedEventEntity.newJpaProcessedEventEntity(eventId, listenerName));
+        this.processedEventRepository.save(JpaProcessedEventEntity.newJpaProcessedEventEntity(eventId, listenerName));
 
         log.info("Event with id: {} has been successfully processed by the listener: {}", eventId, listenerName);
     }

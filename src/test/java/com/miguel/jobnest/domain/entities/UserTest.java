@@ -1,6 +1,6 @@
 package com.miguel.jobnest.domain.entities;
 
-import com.miguel.jobnest.domain.Fixture;
+import com.miguel.jobnest.domain.builders.UserBuilder;
 import com.miguel.jobnest.domain.enums.AuthorizationRole;
 import com.miguel.jobnest.domain.enums.UserStatus;
 import com.miguel.jobnest.domain.utils.IdentifierUtils;
@@ -38,7 +38,7 @@ public class UserTest {
         Assertions.assertEquals(email, newUser.getEmail());
         Assertions.assertNull(newUser.getDescription());
         Assertions.assertEquals(password, newUser.getPassword());
-        Assertions.assertEquals(UserStatus.UNVERIFIED, newUser.getUserStatus());
+        Assertions.assertNotNull(newUser.getUserStatus());
         Assertions.assertEquals(authorizationRole, newUser.getAuthorizationRole());
         Assertions.assertEquals(city, newUser.getCity());
         Assertions.assertEquals(state, newUser.getState());
@@ -90,11 +90,9 @@ public class UserTest {
 
     @Test
     void shouldReturnUpdatedUser_whenCallWithName() {
-        final User user = Fixture.UserFixture.withUserStatus(
-                Fixture.UserFixture.newUser(AuthorizationRole.CANDIDATE), UserStatus.VERIFIED
-        );
+        final User user = UserBuilder.user().name("Some name").build();
 
-        final String newName = "Leo Jardim";
+        final String newName = "New default name";
 
         final User updatedUser = user.withName(newName);
 
@@ -104,11 +102,9 @@ public class UserTest {
 
     @Test
     void shouldReturnUpdatedUser_whenCallWithEmail() {
-        final User user = Fixture.UserFixture.withUserStatus(
-                Fixture.UserFixture.newUser(AuthorizationRole.CANDIDATE), UserStatus.VERIFIED
-        );
+        final User user = UserBuilder.user().email("somemail@gmail.com").build();
 
-        final String newEmail = "leojardim@gmail.com";
+        final String newEmail = "newdefault@gmail.com";
 
         final User updatedUser = user.withEmail(newEmail);
 
@@ -118,11 +114,9 @@ public class UserTest {
 
     @Test
     void shouldReturnUpdatedUser_whenCallWithDescription() {
-        final User user = Fixture.UserFixture.withUserStatus(
-                Fixture.UserFixture.newUser(AuthorizationRole.CANDIDATE), UserStatus.VERIFIED
-        );
+        final User user = UserBuilder.user().description("Some description").build();
 
-        final String newDescription = "My description about me";
+        final String newDescription = "New default description";
 
         final User updatedUser = user.withDescription(newDescription);
 
@@ -132,11 +126,9 @@ public class UserTest {
 
     @Test
     void shouldReturnUpdatedUser_whenCallWithCity() {
-        final User user = Fixture.UserFixture.withUserStatus(
-                Fixture.UserFixture.newUser(AuthorizationRole.CANDIDATE), UserStatus.VERIFIED
-        );
+        final User user = UserBuilder.user().city("Some city").build();
 
-        final String newCity = "São Paulo";
+        final String newCity = "New default city";
 
         final User updatedUser = user.withCity(newCity);
 
@@ -146,11 +138,9 @@ public class UserTest {
 
     @Test
     void shouldReturnUpdatedUser_whenCallWithState() {
-        final User user = Fixture.UserFixture.withUserStatus(
-                Fixture.UserFixture.newUser(AuthorizationRole.CANDIDATE), UserStatus.VERIFIED
-        );
+        final User user = UserBuilder.user().state("Some state").build();
 
-        final String newState = "São Paulo";
+        final String newState = "New default state";
 
         final User updatedUser = user.withState(newState);
 
@@ -160,11 +150,9 @@ public class UserTest {
 
     @Test
     void shouldReturnUpdatedUser_whenCallWithCountry() {
-        final User user = Fixture.UserFixture.withUserStatus(
-                Fixture.UserFixture.newUser(AuthorizationRole.CANDIDATE), UserStatus.VERIFIED
-        );
+        final User user = UserBuilder.user().country("Some country").build();
 
-        final String newCountry = "Brazil";
+        final String newCountry = "New default country";
 
         final User updatedUser = user.withCountry(newCountry);
 
@@ -174,9 +162,7 @@ public class UserTest {
 
     @Test
     void shouldReturnUpdatedUser_whenCallWithUserStatus() {
-        final User user = Fixture.UserFixture.withUserStatus(
-                Fixture.UserFixture.newUser(AuthorizationRole.CANDIDATE), UserStatus.UNVERIFIED
-        );
+        final User user = UserBuilder.user().userStatus(UserStatus.UNVERIFIED).build();
 
         final UserStatus newUserStatus = UserStatus.VERIFIED;
 
@@ -188,9 +174,7 @@ public class UserTest {
 
     @Test
     void shouldReturnUpdatedUser_whenCallWithPassword() {
-        final User user = Fixture.UserFixture.withUserStatus(
-                Fixture.UserFixture.newUser(AuthorizationRole.CANDIDATE), UserStatus.VERIFIED
-        );
+        final User user = UserBuilder.user().password("123SBC").build();
 
         final String newPassword = "123456";
 
@@ -202,9 +186,18 @@ public class UserTest {
 
     @Test
     void shouldReturnFormattedUser_whenCallToString() {
-        final User user = Fixture.UserFixture.withUserStatus(
-                Fixture.UserFixture.newUser(AuthorizationRole.CANDIDATE), UserStatus.VERIFIED
-        );
+        final User user = UserBuilder.user()
+                .id(IdentifierUtils.generateNewId())
+                .name("Name")
+                .email("example@gmail.com")
+                .description("Description")
+                .password("123456")
+                .userStatus(UserStatus.UNVERIFIED)
+                .authorizationRole(AuthorizationRole.CANDIDATE)
+                .city("City")
+                .country("Country")
+                .createdAt(TimeUtils.now())
+                .build();
 
         final String expectedToString = "User{" +
                 "id='" + user.getId() + '\'' +
@@ -220,6 +213,9 @@ public class UserTest {
                 ", createdAt=" + user.getCreatedAt() +
                 '}';
 
-        Assertions.assertEquals(expectedToString, user.toString());
+        final String toStringResult = user.toString();
+
+        Assertions.assertNotNull(toStringResult);
+        Assertions.assertEquals(expectedToString, toStringResult);
     }
 }

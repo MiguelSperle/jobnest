@@ -4,15 +4,11 @@ import com.miguel.jobnest.domain.entities.JobVacancy;
 import com.miguel.jobnest.domain.enums.Modality;
 import com.miguel.jobnest.domain.enums.SeniorityLevel;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "job_vacancies")
-@AllArgsConstructor
-@NoArgsConstructor
 public class JpaJobVacancyEntity {
     @Id
     @Column(nullable = false, length = 36)
@@ -44,6 +40,31 @@ public class JpaJobVacancyEntity {
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
+    protected JpaJobVacancyEntity() {
+    }
+
+    private JpaJobVacancyEntity(
+            final String id,
+            final String userId,
+            final String title,
+            final String description,
+            final SeniorityLevel seniorityLevel,
+            final Modality modality,
+            final String companyName,
+            final Boolean isDeleted,
+            final LocalDateTime createdAt
+    ) {
+        this.id = id;
+        this.userId = userId;
+        this.title = title;
+        this.description = description;
+        this.seniorityLevel = seniorityLevel;
+        this.modality = modality;
+        this.companyName = companyName;
+        this.isDeleted = isDeleted;
+        this.createdAt = createdAt;
+    }
+
     public static JpaJobVacancyEntity toEntity(final JobVacancy jobVacancy) {
         return new JpaJobVacancyEntity(
                 jobVacancy.getId(),
@@ -70,5 +91,41 @@ public class JpaJobVacancyEntity {
                 this.isDeleted,
                 this.createdAt
         );
+    }
+
+    public String getId() {
+        return this.id;
+    }
+
+    public String getUserId() {
+        return this.userId;
+    }
+
+    public String getTitle() {
+        return this.title;
+    }
+
+    public String getDescription() {
+        return this.description;
+    }
+
+    public SeniorityLevel getSeniorityLevel() {
+        return this.seniorityLevel;
+    }
+
+    public Modality getModality() {
+        return this.modality;
+    }
+
+    public String getCompanyName() {
+        return this.companyName;
+    }
+
+    public Boolean getIsDeleted() {
+        return this.isDeleted;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return this.createdAt;
     }
 }

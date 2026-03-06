@@ -4,14 +4,14 @@ import com.miguel.jobnest.application.abstractions.repositories.JobVacancyReposi
 import com.miguel.jobnest.application.abstractions.services.SecurityService;
 import com.miguel.jobnest.application.usecases.jobvacancy.inputs.ListJobVacanciesByUserIdUseCaseInput;
 import com.miguel.jobnest.application.usecases.jobvacancy.outputs.ListJobVacanciesByUserIdUseCaseOutput;
-import com.miguel.jobnest.domain.Fixture;
+import com.miguel.jobnest.domain.builders.JobVacancyBuilder;
+import com.miguel.jobnest.domain.builders.UserBuilder;
 import com.miguel.jobnest.domain.entities.JobVacancy;
 import com.miguel.jobnest.domain.entities.User;
-import com.miguel.jobnest.domain.enums.AuthorizationRole;
-import com.miguel.jobnest.domain.enums.UserStatus;
 import com.miguel.jobnest.domain.pagination.Pagination;
 import com.miguel.jobnest.domain.pagination.PaginationMetadata;
 import com.miguel.jobnest.domain.pagination.SearchQuery;
+import com.miguel.jobnest.domain.utils.IdentifierUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -35,10 +35,8 @@ public class ListJobVacanciesByUserIdUseCaseTest {
 
     @Test
     void shouldListJobVacanciesByUserId_whenCallExecute() {
-        final User user = Fixture.UserFixture.withUserStatus(
-                Fixture.UserFixture.newUser(AuthorizationRole.RECRUITER), UserStatus.VERIFIED
-        );
-        final JobVacancy jobVacancy = Fixture.JobVacancyFixture.newJobVacancy(user.getId());
+        final User user = UserBuilder.user().id(IdentifierUtils.generateNewId()).build();
+        final JobVacancy jobVacancy = JobVacancyBuilder.jobVacancy().userId(user.getId()).build();
 
         final List<JobVacancy> jobVacancies = List.of(jobVacancy);
 
@@ -79,9 +77,7 @@ public class ListJobVacanciesByUserIdUseCaseTest {
 
     @Test
     void shouldListEmptyJobVacanciesByUserId_whenCallExecute() {
-        final User user = Fixture.UserFixture.withUserStatus(
-                Fixture.UserFixture.newUser(AuthorizationRole.RECRUITER), UserStatus.VERIFIED
-        );
+        final User user = UserBuilder.user().id(IdentifierUtils.generateNewId()).build();
 
         final int page = 0;
         final int perPage = 10;

@@ -10,17 +10,25 @@ import com.miguel.jobnest.infrastructure.rest.dtos.usercode.req.ResendVerificati
 import com.miguel.jobnest.infrastructure.rest.dtos.MessageResponse;
 import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/user-codes")
-@RequiredArgsConstructor
 public class UserCodeController {
     private final ResendVerificationCodeUseCase resendVerificationCodeUseCase;
     private final SendPasswordResetCodeUseCase sendPasswordResetCodeUseCase;
     private final ValidatePasswordResetCodeUseCase validatePasswordResetCodeUseCase;
+
+    public UserCodeController(
+            final ResendVerificationCodeUseCase resendVerificationCodeUseCase,
+            final SendPasswordResetCodeUseCase sendPasswordResetCodeUseCase,
+            final ValidatePasswordResetCodeUseCase validatePasswordResetCodeUseCase
+    ) {
+        this.resendVerificationCodeUseCase = resendVerificationCodeUseCase;
+        this.sendPasswordResetCodeUseCase = sendPasswordResetCodeUseCase;
+        this.validatePasswordResetCodeUseCase = validatePasswordResetCodeUseCase;
+    }
 
     @PostMapping("/verification/resending")
     @RateLimiter(name = "rateLimitConfiguration")

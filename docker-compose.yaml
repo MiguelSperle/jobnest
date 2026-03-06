@@ -18,9 +18,16 @@ services:
     environment:
       - RABBITMQ_DEFAULT_USER=${RABBITMQ_USERNAME}
       - RABBITMQ_DEFAULT_PASS=${RABBITMQ_PASSWORD}
+    configs:
+      - source: rabbitmq-plugins
+        target: /etc/rabbitmq/enabled_plugins
 
   redis:
     container_name: redis-container-jobnest
     image: redis
     ports:
       - "6379:6379"
+
+configs:
+  rabbitmq-plugins:
+    content: "[rabbitmq_shovel, rabbitmq_shovel_management]."

@@ -1,18 +1,15 @@
 package com.miguel.jobnest.application.usecases.subscription;
 
-import com.miguel.jobnest.application.abstractions.repositories.EventOutboxRepository;
-import com.miguel.jobnest.application.abstractions.wrapper.TransactionExecutor;
 import com.miguel.jobnest.application.abstractions.repositories.SubscriptionRepository;
 import com.miguel.jobnest.application.abstractions.services.SecurityService;
 import com.miguel.jobnest.application.abstractions.services.UploadService;
 import com.miguel.jobnest.application.usecases.subscription.inputs.CreateSubscriptionUseCaseInput;
-import com.miguel.jobnest.domain.Fixture;
+import com.miguel.jobnest.domain.builders.JobVacancyBuilder;
+import com.miguel.jobnest.domain.builders.UserBuilder;
 import com.miguel.jobnest.domain.entities.JobVacancy;
 import com.miguel.jobnest.domain.entities.User;
-import com.miguel.jobnest.domain.enums.AuthorizationRole;
-import com.miguel.jobnest.domain.enums.UserStatus;
-import com.miguel.jobnest.domain.events.SubscriptionCreatedEvent;
 import com.miguel.jobnest.domain.exceptions.DomainException;
+import com.miguel.jobnest.domain.utils.IdentifierUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -39,22 +36,10 @@ public class CreateSubscriptionUseCaseTest {
     @Mock
     private SecurityService securityService;
 
-    @Mock
-    private EventOutboxRepository eventOutboxRepository;
-
-    @Mock
-    private TransactionExecutor transactionExecutor;
-
     @Test
     void shouldCreateSubscription_whenCallExecute() {
-        final User userRecruiter = Fixture.UserFixture.withUserStatus(
-                Fixture.UserFixture.newUser(AuthorizationRole.RECRUITER), UserStatus.VERIFIED
-        );
-        final User userCandidate = Fixture.UserFixture.withUserStatus(
-                Fixture.UserFixture.newUser(AuthorizationRole.CANDIDATE), UserStatus.VERIFIED
-        );
-
-        final JobVacancy jobVacancy = Fixture.JobVacancyFixture.newJobVacancy(userRecruiter.getId());
+        final User userCandidate = UserBuilder.user().id(IdentifierUtils.generateNewId()).build();
+        final JobVacancy jobVacancy = JobVacancyBuilder.jobVacancy().id(IdentifierUtils.generateNewId()).build();
 
         final String resumeUrl = "resume-url/resume-file/1Ab.pdf";
 
@@ -66,45 +51,27 @@ public class CreateSubscriptionUseCaseTest {
         Mockito.when(this.securityService.getPrincipal()).thenReturn(userCandidate.getId());
         Mockito.when(this.subscriptionRepository.existsByUserIdAndJobVacancyId(Mockito.any(), Mockito.any())).thenReturn(false);
         Mockito.when(this.uploadService.uploadFile(Mockito.any(), Mockito.any(), Mockito.any())).thenReturn(resumeUrl);
-        Mockito.doAnswer(invocationOnMock -> {
-            final Runnable runnable = invocationOnMock.getArgument(0);
-            runnable.run();
-            return runnable;
-        }).when(this.transactionExecutor).runTransaction(Mockito.any());
         Mockito.when(this.subscriptionRepository.save(Mockito.any())).thenAnswer(returnsFirstArg());
-        Mockito.doNothing().when(this.eventOutboxRepository).save(Mockito.any(), Mockito.any(), Mockito.any());
 
         this.useCase.execute(input);
 
         Mockito.verify(this.securityService, Mockito.times(1)).getPrincipal();
         Mockito.verify(this.subscriptionRepository, Mockito.times(1)).existsByUserIdAndJobVacancyId(Mockito.any(), Mockito.any());
         Mockito.verify(this.uploadService, Mockito.times(1)).uploadFile(Mockito.any(), Mockito.any(), Mockito.any());
-        Mockito.verify(this.transactionExecutor, Mockito.times(1)).runTransaction(Mockito.any());
         Mockito.verify(this.subscriptionRepository, Mockito.times(1)).save(Mockito.argThat(subscriptionSaved ->
                 Objects.nonNull(subscriptionSaved.getId()) &&
                         Objects.equals(subscriptionSaved.getUserId(), userCandidate.getId()) &&
                         Objects.equals(subscriptionSaved.getJobVacancyId(), input.jobVacancyId()) &&
                         Objects.equals(subscriptionSaved.getResumeUrl(), resumeUrl) &&
-                        Objects.equals(subscriptionSaved.getIsCanceled(), false) &&
+                        !subscriptionSaved.getIsCanceled() &&
                         Objects.nonNull(subscriptionSaved.getCreatedAt())
         ));
-        Mockito.verify(this.eventOutboxRepository, Mockito.times(1)).save(
-                Mockito.eq("subscription.created.exchange"),
-                Mockito.eq("subscription.created.routing.key"),
-                Mockito.argThat(event -> event instanceof SubscriptionCreatedEvent)
-        );
     }
 
     @Test
     void shouldThrowDomainException_whenCallExecute_becauseSubscriptionAlreadyExists() {
-        final User userRecruiter = Fixture.UserFixture.withUserStatus(
-                Fixture.UserFixture.newUser(AuthorizationRole.RECRUITER), UserStatus.VERIFIED
-        );
-        final User userCandidate = Fixture.UserFixture.withUserStatus(
-                Fixture.UserFixture.newUser(AuthorizationRole.CANDIDATE), UserStatus.VERIFIED
-        );
-
-        final JobVacancy jobVacancy = Fixture.JobVacancyFixture.newJobVacancy(userRecruiter.getId());
+        final User userCandidate = UserBuilder.user().id(IdentifierUtils.generateNewId()).build();
+        final JobVacancy jobVacancy = JobVacancyBuilder.jobVacancy().id(IdentifierUtils.generateNewId()).build();
 
         final CreateSubscriptionUseCaseInput input = CreateSubscriptionUseCaseInput.with(
                 new byte[0],
@@ -130,14 +97,8 @@ public class CreateSubscriptionUseCaseTest {
 
     @Test
     void shouldRollbackFileUpload_whenCallExecute_becauseSavingSubscriptionFails() {
-        final User userRecruiter = Fixture.UserFixture.withUserStatus(
-                Fixture.UserFixture.newUser(AuthorizationRole.RECRUITER), UserStatus.VERIFIED
-        );
-        final User userCandidate = Fixture.UserFixture.withUserStatus(
-                Fixture.UserFixture.newUser(AuthorizationRole.CANDIDATE), UserStatus.VERIFIED
-        );
-
-        final JobVacancy jobVacancy = Fixture.JobVacancyFixture.newJobVacancy(userRecruiter.getId());
+        final User userCandidate = UserBuilder.user().id(IdentifierUtils.generateNewId()).build();
+        final JobVacancy jobVacancy = JobVacancyBuilder.jobVacancy().id(IdentifierUtils.generateNewId()).build();
 
         final String resumeUrl = "resume-url/resume-file/1Ab.pdf";
 
@@ -149,11 +110,6 @@ public class CreateSubscriptionUseCaseTest {
         Mockito.when(this.securityService.getPrincipal()).thenReturn(userCandidate.getId());
         Mockito.when(this.subscriptionRepository.existsByUserIdAndJobVacancyId(Mockito.any(), Mockito.any())).thenReturn(false);
         Mockito.when(this.uploadService.uploadFile(Mockito.any(), Mockito.any(), Mockito.any())).thenReturn(resumeUrl);
-        Mockito.doAnswer(invocationOnMock -> {
-            Runnable runnable = invocationOnMock.getArgument(0);
-            runnable.run();
-            return runnable;
-        }).when(this.transactionExecutor).runTransaction(Mockito.any());
         Mockito.when(this.subscriptionRepository.save(Mockito.any())).thenThrow(new RuntimeException());
         Mockito.doNothing().when(this.uploadService).destroyFile(Mockito.any(), Mockito.any());
 
@@ -162,7 +118,6 @@ public class CreateSubscriptionUseCaseTest {
         Mockito.verify(this.securityService, Mockito.times(1)).getPrincipal();
         Mockito.verify(this.subscriptionRepository, Mockito.times(1)).existsByUserIdAndJobVacancyId(Mockito.any(), Mockito.any());
         Mockito.verify(this.uploadService, Mockito.times(1)).uploadFile(Mockito.any(), Mockito.any(), Mockito.any());
-        Mockito.verify(this.transactionExecutor, Mockito.times(1)).runTransaction(Mockito.any());
         Mockito.verify(this.subscriptionRepository, Mockito.times(1)).save(Mockito.any());
         Mockito.verify(this.uploadService, Mockito.times(1)).destroyFile(Mockito.any(), Mockito.any());
     }

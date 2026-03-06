@@ -7,15 +7,17 @@ import com.miguel.jobnest.domain.pagination.Pagination;
 import com.miguel.jobnest.domain.pagination.SearchQuery;
 import com.miguel.jobnest.infrastructure.rest.dtos.subscription.res.ListSubscriptionsByJobVacancyIdResponse;
 import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/recruiter/subscriptions")
-@RequiredArgsConstructor
 public class SubscriptionRecruiterController {
     private final ListSubscriptionsByJobVacancyIdUseCase listSubscriptionsByJobVacancyIdUseCase;
+
+    public SubscriptionRecruiterController(final ListSubscriptionsByJobVacancyIdUseCase listSubscriptionsByJobVacancyIdUseCase) {
+        this.listSubscriptionsByJobVacancyIdUseCase = listSubscriptionsByJobVacancyIdUseCase;
+    }
 
     @GetMapping("/{jobVacancyId}")
     @RateLimiter(name = "rateLimitConfiguration")
@@ -27,8 +29,8 @@ public class SubscriptionRecruiterController {
             @RequestParam(name = "direction", required = false, defaultValue = "desc") String direction
     ) {
         final ListSubscriptionsByJobVacancyIdUseCaseOutput output = this.listSubscriptionsByJobVacancyIdUseCase.execute(
-                ListSubscriptionsByJobVacancyIdUseCaseInput.with(jobVacancyId, SearchQuery.newSearchQuery(page, perPage, sort, direction)
-        ));
+                ListSubscriptionsByJobVacancyIdUseCaseInput.with(jobVacancyId, SearchQuery.newSearchQuery(page, perPage, sort, direction))
+        );
 
         return ResponseEntity.ok().body(ListSubscriptionsByJobVacancyIdResponse.from(output));
     }
