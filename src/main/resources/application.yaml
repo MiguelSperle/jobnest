@@ -52,32 +52,32 @@ security:
 resilience4j:
   ratelimiter:
     instances:
-      rateLimitConfiguration:
-        limitForPeriod: 5
-        limitRefreshPeriod: 10s
-        timeoutDuration: 0
+      rate-limit-configuration:
+        limit-for-period: 5
+        limit-refresh-period: 10s
+        timeout-duration: 0
 
 broker:
-  messageConfigurations:
-    UserCodeCreated:
+  queues:
+    user-code-created:
       exchange:
         name: user.code.events
         type: direct
-      routingKey: user.code.created
+      routing-key: user.code.created
       queue:
         name: user.code.created.queue
-        deadLetterQueue:
+        dead-letter-queue:
           name: user.code.created.queue.dlq
           exchange: user.code.events.dlq
           routing-key: user.code.created.dlq
-    SubscriptionCreated:
+    subscription-created:
       exchange:
         name: subscription.events
         type: direct
-      routingKey: subscription.created
+      routing-key: subscription.created
       queue:
         name: subscription.created.queue
-        deadLetterQueue:
+        dead-letter-queue:
           name: subscription.created.queue.dlq
           exchange: subscription.events.dlq
           routing-key: subscription.created.dlq

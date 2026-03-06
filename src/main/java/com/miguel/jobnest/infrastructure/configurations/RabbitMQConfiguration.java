@@ -27,18 +27,18 @@ public class RabbitMQConfiguration {
     public Declarables declarables() {
         final List<Declarable> declarables = new ArrayList<>();
 
-        this.rabbitMQProperties.getMessageConfigurations().forEach((key, messageConfiguration) -> {
-            final Exchange exchange = this.configureExchange(messageConfiguration.getExchange());
+        this.rabbitMQProperties.getQueues().forEach((key, queueProperties) -> {
+            final Exchange exchange = this.configureExchange(queueProperties.getExchange());
 
             declarables.add(exchange);
 
-            final Queue queue = this.configureQueue(messageConfiguration.getQueue());
+            final Queue queue = this.configureQueue(queueProperties.getQueue());
             declarables.add(queue);
 
-            declarables.add(BindingBuilder.bind(queue).to(exchange).with(messageConfiguration.getRoutingKey()).noargs());
+            declarables.add(BindingBuilder.bind(queue).to(exchange).with(queueProperties.getRoutingKey()).noargs());
 
-            if (messageConfiguration.getQueue().getDeadLetterQueue() != null) {
-                final List<Declarable> deadLetterQueue = this.configureDeadLetterQueue(messageConfiguration.getQueue());
+            if (queueProperties.getQueue().getDeadLetterQueue() != null) {
+                final List<Declarable> deadLetterQueue = this.configureDeadLetterQueue(queueProperties.getQueue());
                 declarables.addAll(deadLetterQueue);
             }
         });
@@ -51,7 +51,7 @@ public class RabbitMQConfiguration {
             case "topic" -> new TopicExchange(exchange.getName(), true, false);
             case "fanout" -> new FanoutExchange(exchange.getName(), true, false);
             case "direct" -> new DirectExchange(exchange.getName(), true, false);
-            default -> throw new IllegalArgumentException("Unknown exchange type: " + exchange.getType());
+            default -> throw new IllegalArgumentException("Invalid exchange type: " + exchange.getType());
         };
     }
 

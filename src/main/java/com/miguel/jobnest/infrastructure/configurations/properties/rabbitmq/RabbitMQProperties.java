@@ -8,17 +8,17 @@ import java.util.Map;
 @Configuration
 @ConfigurationProperties(prefix = "broker")
 public class RabbitMQProperties {
-    private Map<String, MessageConfiguration> messageConfigurations;
+    private Map<String, QueueProperties> queues;
 
-    public Map<String, MessageConfiguration> getMessageConfigurations() {
-        return this.messageConfigurations;
+    public Map<String, QueueProperties> getQueues() {
+        return this.queues;
     }
 
-    public void setMessageConfigurations(final Map<String, MessageConfiguration> messageConfigurations) {
-        this.messageConfigurations = messageConfigurations;
+    public void setQueues(final Map<String, QueueProperties> queues) {
+        this.queues = queues;
     }
 
-    public static class MessageConfiguration {
+    public static class QueueProperties {
         private Exchange exchange;
         private String routingKey;
         private Queue queue;

@@ -1,7 +1,7 @@
-package com.miguel.jobnest.infrastructure.abstractions.producer;
+package com.miguel.jobnest.infrastructure.abstractions.services;
 
 import com.miguel.jobnest.infrastructure.persistence.jpa.entities.JpaEventOutboxEntity;
 
-public interface MessageProducer {
+public interface EventBusService {
     void publish(JpaEventOutboxEntity jpaEventOutboxEntity);
 }

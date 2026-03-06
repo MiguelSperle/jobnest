@@ -2,7 +2,7 @@ package com.miguel.jobnest.infrastructure.schedulers;
 
 import com.miguel.jobnest.application.abstractions.wrapper.TransactionExecutor;
 import com.miguel.jobnest.domain.utils.IdentifierUtils;
-import com.miguel.jobnest.infrastructure.abstractions.producer.MessageProducer;
+import com.miguel.jobnest.infrastructure.abstractions.services.EventBusService;
 import com.miguel.jobnest.infrastructure.enums.EventOutboxStatus;
 import com.miguel.jobnest.infrastructure.persistence.jpa.entities.JpaEventOutboxEntity;
 import com.miguel.jobnest.infrastructure.persistence.jpa.repositories.JpaEventOutboxRepository;
@@ -26,7 +26,7 @@ public class PublishEventsOutboxSchedulerTest {
     private JpaEventOutboxRepository jpaEventOutboxRepository;
 
     @Mock
-    private MessageProducer messageProducer;
+    private EventBusService eventBusService;
 
     @Mock
     private TransactionExecutor transactionExecutor;
@@ -42,14 +42,14 @@ public class PublishEventsOutboxSchedulerTest {
             return runnable;
         }).when(this.transactionExecutor).runTransaction(Mockito.any());
         Mockito.when(this.jpaEventOutboxRepository.findFirst10ByStatus(Mockito.any())).thenReturn(List.of(jpaEventOutboxEntity));
-        Mockito.doNothing().when(this.messageProducer).publish(Mockito.any());
+        Mockito.doNothing().when(this.eventBusService).publish(Mockito.any());
         Mockito.when(this.jpaEventOutboxRepository.save(Mockito.any())).thenAnswer(returnsFirstArg());
 
         this.publishEventsOutboxScheduler.publishEvent();
 
         Mockito.verify(this.transactionExecutor, Mockito.times(1)).runTransaction(Mockito.any());
         Mockito.verify(this.jpaEventOutboxRepository, Mockito.times(1)).findFirst10ByStatus(Mockito.any());
-        Mockito.verify(this.messageProducer, Mockito.times(1)).publish(Mockito.any());
+        Mockito.verify(this.eventBusService, Mockito.times(1)).publish(Mockito.any());
         Mockito.verify(this.jpaEventOutboxRepository, Mockito.times(1)).save(Mockito.argThat(jpaEventOutboxEntitySaved ->
                 jpaEventOutboxEntitySaved.getEventOutboxStatus() == EventOutboxStatus.PUBLISHED
         ));
@@ -68,7 +68,7 @@ public class PublishEventsOutboxSchedulerTest {
 
         Mockito.verify(this.transactionExecutor, Mockito.times(1)).runTransaction(Mockito.any());
         Mockito.verify(this.jpaEventOutboxRepository, Mockito.times(1)).findFirst10ByStatus(Mockito.any());
-        Mockito.verify(this.messageProducer, Mockito.never()).publish(Mockito.any());
+        Mockito.verify(this.eventBusService, Mockito.never()).publish(Mockito.any());
         Mockito.verify(this.jpaEventOutboxRepository, Mockito.never()).save(Mockito.any());
     }
 }

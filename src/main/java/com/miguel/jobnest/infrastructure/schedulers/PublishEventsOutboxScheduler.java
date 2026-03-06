@@ -1,7 +1,7 @@
 package com.miguel.jobnest.infrastructure.schedulers;
 
 import com.miguel.jobnest.application.abstractions.wrapper.TransactionExecutor;
-import com.miguel.jobnest.infrastructure.abstractions.producer.MessageProducer;
+import com.miguel.jobnest.infrastructure.abstractions.services.EventBusService;
 import com.miguel.jobnest.infrastructure.abstractions.repositories.EventOutboxRepository;
 import com.miguel.jobnest.infrastructure.enums.EventOutboxStatus;
 import com.miguel.jobnest.infrastructure.persistence.jpa.entities.JpaEventOutboxEntity;
@@ -15,16 +15,16 @@ import java.util.List;
 @Component
 public class PublishEventsOutboxScheduler {
     private final EventOutboxRepository eventOutboxRepository;
-    private final MessageProducer messageProducer;
+    private final EventBusService eventBusService;
     private final TransactionExecutor transactionExecutor;
 
     public PublishEventsOutboxScheduler(
             final EventOutboxRepository eventOutboxRepository,
-            final MessageProducer messageProducer,
+            final EventBusService eventBusService,
             final TransactionExecutor transactionExecutor
     ) {
         this.eventOutboxRepository = eventOutboxRepository;
-        this.messageProducer = messageProducer;
+        this.eventBusService = eventBusService;
         this.transactionExecutor = transactionExecutor;
     }
 
@@ -40,7 +40,7 @@ public class PublishEventsOutboxScheduler {
             log.info("Found {} unpublished events", pendingJpaEventsOutbox.size());
 
             for (JpaEventOutboxEntity pendingJpaEventOutbox : pendingJpaEventsOutbox) {
-                this.messageProducer.publish(pendingJpaEventOutbox);
+                this.eventBusService.publish(pendingJpaEventOutbox);
                 this.eventOutboxRepository.save(pendingJpaEventOutbox.withEventOutboxStatus(EventOutboxStatus.PUBLISHED));
                 log.info("Event with id: {} has been successfully published", pendingJpaEventOutbox.getEventId());
             }
