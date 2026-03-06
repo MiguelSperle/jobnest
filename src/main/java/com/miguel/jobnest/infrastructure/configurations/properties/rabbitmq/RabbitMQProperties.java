@@ -8,26 +8,27 @@ import java.util.Map;
 @Configuration
 @ConfigurationProperties(prefix = "broker")
 public class RabbitMQProperties {
-    private Map<String, QueueProperties> queues;
+    private Map<String, QueueConfig> queues;
 
-    public Map<String, QueueProperties> getQueues() {
+    public Map<String, QueueConfig> getQueues() {
         return this.queues;
     }
 
-    public void setQueues(final Map<String, QueueProperties> queues) {
+    public void setQueues(Map<String, QueueConfig> queues) {
         this.queues = queues;
     }
 
-    public static class QueueProperties {
-        private Exchange exchange;
+    public static class QueueConfig {
+        private ExchangeConfig exchange;
         private String routingKey;
-        private Queue queue;
+        private String queue;
+        private DeadLetterQueueConfig deadLetterQueue;
 
-        public Exchange getExchange() {
+        public ExchangeConfig getExchange() {
             return this.exchange;
         }
 
-        public void setExchange(final Exchange exchange) {
+        public void setExchange(final ExchangeConfig exchange) {
             this.exchange = exchange;
         }
 
@@ -39,16 +40,24 @@ public class RabbitMQProperties {
             this.routingKey = routingKey;
         }
 
-        public Queue getQueue() {
+        public String getQueue() {
             return this.queue;
         }
 
-        public void setQueue(final Queue queue) {
+        public void setQueue(final String queue) {
             this.queue = queue;
+        }
+
+        public DeadLetterQueueConfig getDeadLetterQueue() {
+            return this.deadLetterQueue;
+        }
+
+        public void setDeadLetterQueue(final DeadLetterQueueConfig deadLetterQueue) {
+            this.deadLetterQueue = deadLetterQueue;
         }
     }
 
-    public static class Exchange {
+    public static class ExchangeConfig {
         private String name;
         private String type;
 
@@ -69,28 +78,7 @@ public class RabbitMQProperties {
         }
     }
 
-    public static class Queue {
-        private String name;
-        private DeadLetterQueue deadLetterQueue;
-
-        public String getName() {
-            return this.name;
-        }
-
-        public void setName(final String name) {
-            this.name = name;
-        }
-
-        public DeadLetterQueue getDeadLetterQueue() {
-            return this.deadLetterQueue;
-        }
-
-        public void setDeadLetterQueue(final DeadLetterQueue deadLetterQueue) {
-            this.deadLetterQueue = deadLetterQueue;
-        }
-    }
-
-    public static class DeadLetterQueue {
+    public static class DeadLetterQueueConfig {
         private String name;
         private String exchange;
         private String routingKey;

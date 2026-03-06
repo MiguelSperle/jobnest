@@ -90,9 +90,9 @@ public class UserTest {
 
     @Test
     void shouldReturnUpdatedUser_whenCallWithName() {
-        final User user = UserBuilder.user().name("Some name").build();
+        final User user = UserBuilder.user().name("Some queueName").build();
 
-        final String newName = "New default name";
+        final String newName = "New default queueName";
 
         final User updatedUser = user.withName(newName);
 
@@ -201,7 +201,7 @@ public class UserTest {
 
         final String expectedToString = "User{" +
                 "id='" + user.getId() + '\'' +
-                ", name='" + user.getName() + '\'' +
+                ", queueName='" + user.getName() + '\'' +
                 ", email='" + user.getEmail() + '\'' +
                 ", description='" + user.getDescription() + '\'' +
                 ", password='" + user.getPassword() + '\'' +

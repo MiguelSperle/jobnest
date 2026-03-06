@@ -270,7 +270,7 @@ public class User extends Entity {
     public String toString() {
         return "User{" +
                 "id='" + this.getId() + '\'' +
-                ", name='" + this.name + '\'' +
+                ", queueName='" + this.name + '\'' +
                 ", email='" + this.email + '\'' +
                 ", description='" + this.description + '\'' +
                 ", password='" + this.password + '\'' +

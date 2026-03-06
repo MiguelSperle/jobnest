@@ -34,14 +34,14 @@ public class UpdateJobVacancyUseCaseTest {
         final JobVacancy jobVacancy = JobVacancyBuilder.jobVacancy().id(IdentifierUtils.generateNewId())
                 .title("Old title")
                 .description("Old description")
-                .companyName("Old company name")
+                .companyName("Old company queueName")
                 .seniorityLevel(SeniorityLevel.INTERN)
                 .modality(Modality.ON_SITE)
                 .build();
 
         final String title = "Java developer";
         final String description = "This is the job vacancy description";
-        final String companyName = "Company name";
+        final String companyName = "Company queueName";
 
         final UpdateJobVacancyUseCaseInput input = UpdateJobVacancyUseCaseInput.with(
                 jobVacancy.getId(),

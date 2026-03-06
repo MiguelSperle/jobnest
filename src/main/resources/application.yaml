@@ -64,20 +64,18 @@ broker:
         name: user.code.events
         type: direct
       routing-key: user.code.created
-      queue:
-        name: user.code.created.queue
-        dead-letter-queue:
-          name: user.code.created.queue.dlq
-          exchange: user.code.events.dlq
-          routing-key: user.code.created.dlq
+      queue: user.code.created.queue
+      dead-letter-queue:
+        name: user.code.created.queue.dlq
+        exchange: user.code.events.dlq
+        routing-key: user.code.created.dlq
     subscription-created:
       exchange:
         name: subscription.events
         type: direct
       routing-key: subscription.created
-      queue:
-        name: subscription.created.queue
-        dead-letter-queue:
-          name: subscription.created.queue.dlq
-          exchange: subscription.events.dlq
-          routing-key: subscription.created.dlq
+      queue: subscription.created.queue
+      dead-letter-queue:
+        name: subscription.created.queue.dlq
+        exchange: subscription.events.dlq
+        routing-key: subscription.created.dlq

@@ -18,7 +18,7 @@ public class JobVacancyTest {
         final String description = "This is job vacancy description";
         final SeniorityLevel seniorityLevel = SeniorityLevel.JUNIOR;
         final Modality modality = Modality.REMOTE;
-        final String companyName = "Company name";
+        final String companyName = "Company queueName";
 
         final JobVacancy newJobVacancy = JobVacancy.newJobVacancy(
                 userId,
@@ -49,7 +49,7 @@ public class JobVacancyTest {
         final String description = "This is job vacancy description";
         final SeniorityLevel seniorityLevel = SeniorityLevel.JUNIOR;
         final Modality modality = Modality.REMOTE;
-        final String companyName = "Company name";
+        final String companyName = "Company queueName";
         final boolean isDeleted = false;
         final LocalDateTime createdAt = TimeUtils.now();
 
@@ -127,9 +127,9 @@ public class JobVacancyTest {
 
     @Test
     void shouldReturnUpdatedJobVacancy_whenCallWithCompanyName() {
-        final JobVacancy jobVacancy = JobVacancyBuilder.jobVacancy().companyName("Company name").build();
+        final JobVacancy jobVacancy = JobVacancyBuilder.jobVacancy().companyName("Company queueName").build();
 
-        final String newCompanyName = "New company name";
+        final String newCompanyName = "New company queueName";
 
         final JobVacancy updatedJobVacancy = jobVacancy.withCompanyName(newCompanyName);
 
@@ -157,7 +157,7 @@ public class JobVacancyTest {
                 .description("Description")
                 .seniorityLevel(SeniorityLevel.JUNIOR)
                 .modality(Modality.REMOTE)
-                .companyName("Company name")
+                .companyName("Company queueName")
                 .isDeleted(false)
                 .createdAt(TimeUtils.now()).build();
 

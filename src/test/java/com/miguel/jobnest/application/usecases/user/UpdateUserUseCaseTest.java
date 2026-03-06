@@ -34,7 +34,7 @@ public class UpdateUserUseCaseTest {
     @Test
     void shouldUpdateUser_whenCallExecute() {
         final User user = UserBuilder.user().id(IdentifierUtils.generateNewId())
-                .name("Old name")
+                .name("Old queueName")
                 .email("Old email")
                 .description("Old description")
                 .city("Old city")

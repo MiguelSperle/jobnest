@@ -22,8 +22,8 @@ public record CreateJobVacancyRequest(
         @EnumCheck(enumClass = Modality.class, message = "Modality should be either ON_SITE, HYBRID or REMOTE")
         String modality,
 
-        @NotBlank(message = "Company name should not be neither null nor blank")
-        @Size(max = 80, message = "Company name should not exceed 80 characters")
+        @NotBlank(message = "Company queueName should not be neither null nor blank")
+        @Size(max = 80, message = "Company queueName should not exceed 80 characters")
         String companyName
 ) {
     public CreateJobVacancyUseCaseInput toInput() {
