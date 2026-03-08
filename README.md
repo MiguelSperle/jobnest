@@ -63,7 +63,7 @@ docker-compose up -d
 ```
 spring:
   application:
-    name: jobnest
+    queue: jobnest
 
   datasource:
     url: ${DB_URL}
@@ -109,7 +109,7 @@ spring:
             required: true
 
   cloudinary:
-    cloud-name: ${CLOUDINARY_CLOUD_NAME}
+    cloud-queue: ${CLOUDINARY_CLOUD_NAME}
     api-key: ${CLOUDINARY_API_KEY}
     api-secret: ${CLOUDINARY_API_SECRET}
 

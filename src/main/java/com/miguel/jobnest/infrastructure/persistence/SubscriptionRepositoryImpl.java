@@ -28,6 +28,9 @@ public class SubscriptionRepositoryImpl implements SubscriptionRepository {
     private final EventOutboxRepository eventOutboxRepository;
     private final TransactionExecutor transactionExecutor;
 
+    private static final String SUBSCRIPTION_EVENTS_EXCHANGE = "subscription.events";
+    private static final String SUBSCRIPTION_CREATED_ROUTING_KEY = "subscription.created";
+
     public SubscriptionRepositoryImpl(
             final JpaSubscriptionRepository jpaSubscriptionRepository,
             final EventOutboxRepository eventOutboxRepository,
@@ -53,7 +56,9 @@ public class SubscriptionRepositoryImpl implements SubscriptionRepository {
                         Json.writeValueAsBytes(domainEvent),
                         domainEvent.aggregateId(),
                         domainEvent.aggregateType(),
-                        domainEvent.eventType()
+                        domainEvent.eventType(),
+                        SUBSCRIPTION_EVENTS_EXCHANGE,
+                        SUBSCRIPTION_CREATED_ROUTING_KEY
                 ));
             }
         });

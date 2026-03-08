@@ -30,7 +30,7 @@ public class PublishEventsOutboxScheduler {
 
     private static final Logger log = LoggerFactory.getLogger(PublishEventsOutboxScheduler.class);
 
-    @Scheduled(fixedRate = 10000L) // 10 seconds
+    @Scheduled(fixedRate = 5000L) // 5 seconds
     public void publishEvent() {
         log.info("Starting publish events outbox scheduler");
 

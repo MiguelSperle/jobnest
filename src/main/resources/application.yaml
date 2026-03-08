@@ -57,25 +57,25 @@ resilience4j:
         limit-refresh-period: 10s
         timeout-duration: 0
 
-broker:
+amqp:
   queues:
     user-code-created:
-      exchange:
+      exchange-properties:
         name: user.code.events
         type: direct
       routing-key: user.code.created
       queue: user.code.created.queue
-      dead-letter-queue:
-        name: user.code.created.queue.dlq
+      dead-letter-queue-properties:
+        queue: user.code.created.queue.dlq
         exchange: user.code.events.dlq
         routing-key: user.code.created.dlq
     subscription-created:
-      exchange:
+      exchange-properties:
         name: subscription.events
         type: direct
       routing-key: subscription.created
       queue: subscription.created.queue
-      dead-letter-queue:
-        name: subscription.created.queue.dlq
+      dead-letter-queue-properties:
+        queue: subscription.created.queue.dlq
         exchange: subscription.events.dlq
         routing-key: subscription.created.dlq

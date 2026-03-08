@@ -35,6 +35,12 @@ public class JpaEventOutboxEntity {
     @Column(name = "status", nullable = false, length = 10)
     private EventOutboxStatus eventOutboxStatus;
 
+    @Column(nullable = false, length = 100)
+    private String exchange;
+
+    @Column(name = "routing_key", nullable = false, length = 100)
+    private String routingKey;
+
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
@@ -49,6 +55,8 @@ public class JpaEventOutboxEntity {
             final String aggregateType,
             final String eventType,
             final EventOutboxStatus eventOutboxStatus,
+            final String exchange,
+            final String routingKey,
             final LocalDateTime createdAt
     ) {
         this.id = id;
@@ -58,6 +66,8 @@ public class JpaEventOutboxEntity {
         this.aggregateType = aggregateType;
         this.eventType = eventType;
         this.eventOutboxStatus = eventOutboxStatus;
+        this.exchange = exchange;
+        this.routingKey = routingKey;
         this.createdAt = createdAt;
     }
 
@@ -66,7 +76,9 @@ public class JpaEventOutboxEntity {
             final byte[] payload,
             final String aggregateId,
             final String aggregateType,
-            final String eventType
+            final String eventType,
+            final String exchange,
+            final String routingKey
     ) {
         return new JpaEventOutboxEntity(
                 IdentifierUtils.generateNewId(),
@@ -76,6 +88,8 @@ public class JpaEventOutboxEntity {
                 aggregateType,
                 eventType,
                 EventOutboxStatus.PENDING,
+                exchange,
+                routingKey,
                 TimeUtils.now()
         );
     }
@@ -89,6 +103,8 @@ public class JpaEventOutboxEntity {
                 this.aggregateType,
                 this.eventType,
                 eventOutboxStatus,
+                this.exchange,
+                this.routingKey,
                 this.createdAt
         );
     }
@@ -119,6 +135,14 @@ public class JpaEventOutboxEntity {
 
     public EventOutboxStatus getEventOutboxStatus() {
         return this.eventOutboxStatus;
+    }
+
+    public String getExchange() {
+        return this.exchange;
+    }
+
+    public String getRoutingKey() {
+        return this.routingKey;
     }
 
     public LocalDateTime getCreatedAt() {

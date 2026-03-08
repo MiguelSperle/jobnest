@@ -19,6 +19,9 @@ public class UserCodeRepositoryImpl implements UserCodeRepository {
     private final EventOutboxRepository eventOutboxRepository;
     private final TransactionExecutor transactionExecutor;
 
+    private final static String USER_CODE_EVENTS_EXCHANGE = "user.code.events";
+    private final static String USER_CODE_CREATED_ROUTING_KEY = "user.code.created";
+
     public UserCodeRepositoryImpl(
             final JpaUserCodeRepository jpaUserCodeRepository,
             final EventOutboxRepository eventOutboxRepository,
@@ -44,7 +47,9 @@ public class UserCodeRepositoryImpl implements UserCodeRepository {
                         Json.writeValueAsBytes(domainEvent),
                         domainEvent.aggregateId(),
                         domainEvent.aggregateType(),
-                        domainEvent.eventType()
+                        domainEvent.eventType(),
+                        USER_CODE_EVENTS_EXCHANGE,
+                        USER_CODE_CREATED_ROUTING_KEY
                 ));
             }
         });

@@ -7,10 +7,12 @@ public class JwtTokenCreationFailedExceptionTest {
     @Test
     void shouldReturnJwtTokenCreationFailedException_whenCallWith() {
         final String message = "Error message";
+        final Throwable cause = new RuntimeException();
 
-        final var ex = JwtTokenCreationFailedException.with(message);
+        final var ex = JwtTokenCreationFailedException.with(message, cause);
 
         Assertions.assertNotNull(ex);
         Assertions.assertEquals(message, ex.getMessage());
+        Assertions.assertEquals(cause, ex.getCause());
     }
 }

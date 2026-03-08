@@ -27,18 +27,17 @@ public class RabbitMQConfiguration {
     public Declarables declarables() {
         final List<Declarable> declarables = new ArrayList<>();
 
-        this.rabbitMQProperties.getQueues().forEach((key, queueConfig) -> {
-            final Exchange exchange = this.configureExchange(queueConfig.getExchange());
-
+        this.rabbitMQProperties.getQueues().forEach((key, queueProperties) -> {
+            final Exchange exchange = this.configureExchange(queueProperties.getExchangeProperties());
             declarables.add(exchange);
 
-            final Queue queue = this.configureQueue(queueConfig.getQueue(), queueConfig.getDeadLetterQueue());
+            final Queue queue = this.configureQueue(queueProperties.getQueue(), queueProperties.getDeadLetterQueueProperties());
             declarables.add(queue);
 
-            declarables.add(BindingBuilder.bind(queue).to(exchange).with(queueConfig.getRoutingKey()).noargs());
+            declarables.add(BindingBuilder.bind(queue).to(exchange).with(queueProperties.getRoutingKey()).noargs());
 
-            if (queueConfig.getDeadLetterQueue() != null) {
-                final List<Declarable> deadLetterQueue = this.configureDeadLetterQueue(queueConfig.getDeadLetterQueue());
+            if (queueProperties.getDeadLetterQueueProperties() != null) {
+                final List<Declarable> deadLetterQueue = this.configureDeadLetterQueue(queueProperties.getDeadLetterQueueProperties());
                 declarables.addAll(deadLetterQueue);
             }
         });
@@ -46,37 +45,37 @@ public class RabbitMQConfiguration {
         return new Declarables(declarables);
     }
 
-    private Exchange configureExchange(final RabbitMQProperties.ExchangeConfig exchangeConfig) {
-        return switch (exchangeConfig.getType()) {
-            case "topic" -> new TopicExchange(exchangeConfig.getName(), true, false);
-            case "fanout" -> new FanoutExchange(exchangeConfig.getName(), true, false);
-            case "direct" -> new DirectExchange(exchangeConfig.getName(), true, false);
-            default -> throw new IllegalArgumentException("Invalid exchangeConfig type: " + exchangeConfig.getType());
+    private Exchange configureExchange(final RabbitMQProperties.ExchangeProperties exchangeProperties) {
+        return switch (exchangeProperties.getType()) {
+            case "topic" -> new TopicExchange(exchangeProperties.getName(), true, false);
+            case "fanout" -> new FanoutExchange(exchangeProperties.getName(), true, false);
+            case "direct" -> new DirectExchange(exchangeProperties.getName(), true, false);
+            default -> throw new IllegalArgumentException("Invalid exchange type: " + exchangeProperties.getType());
         };
     }
 
-    private Queue configureQueue(final String queueName, final RabbitMQProperties.DeadLetterQueueConfig deadLetterQueueConfig) {
-        final QueueBuilder queueBuilder = QueueBuilder.durable(queueName);
+    private Queue configureQueue(final String queue, final RabbitMQProperties.DeadLetterQueueProperties deadLetterQueueProperties) {
+        final QueueBuilder queueBuilder = QueueBuilder.durable(queue);
 
-        if (deadLetterQueueConfig != null) {
-            queueBuilder.deadLetterExchange(deadLetterQueueConfig.getExchange());
-            queueBuilder.deadLetterRoutingKey(deadLetterQueueConfig.getRoutingKey());
+        if (deadLetterQueueProperties != null) {
+            queueBuilder.deadLetterExchange(deadLetterQueueProperties.getExchange());
+            queueBuilder.deadLetterRoutingKey(deadLetterQueueProperties.getRoutingKey());
         }
 
         return queueBuilder.build();
     }
 
-    private List<Declarable> configureDeadLetterQueue(final RabbitMQProperties.DeadLetterQueueConfig deadLetterQueueConfig) {
+    private List<Declarable> configureDeadLetterQueue(final RabbitMQProperties.DeadLetterQueueProperties deadLetterQueueProperties) {
         final List<Declarable> deadLetterQueueDeclarables = new ArrayList<>();
 
-        final DirectExchange deadLetterQueueExchange = new DirectExchange(deadLetterQueueConfig.getExchange(), true, false);
+        final DirectExchange directExchange = new DirectExchange(deadLetterQueueProperties.getExchange(), true, false);
 
-        final Queue deadLetterQueue = QueueBuilder.durable(deadLetterQueueConfig.getName()).build();
+        final Queue queue = QueueBuilder.durable(deadLetterQueueProperties.getQueue()).build();
 
-        final Binding binding = BindingBuilder.bind(deadLetterQueue).to(deadLetterQueueExchange).with(deadLetterQueueConfig.getRoutingKey());
+        final Binding binding = BindingBuilder.bind(queue).to(directExchange).with(deadLetterQueueProperties.getRoutingKey());
 
-        deadLetterQueueDeclarables.add(deadLetterQueueExchange);
-        deadLetterQueueDeclarables.add(deadLetterQueue);
+        deadLetterQueueDeclarables.add(directExchange);
+        deadLetterQueueDeclarables.add(queue);
         deadLetterQueueDeclarables.add(binding);
 
         return deadLetterQueueDeclarables;

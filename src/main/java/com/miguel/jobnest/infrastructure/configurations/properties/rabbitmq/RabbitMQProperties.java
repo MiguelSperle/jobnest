@@ -6,30 +6,30 @@ import org.springframework.context.annotation.Configuration;
 import java.util.Map;
 
 @Configuration
-@ConfigurationProperties(prefix = "broker")
+@ConfigurationProperties(prefix = "amqp")
 public class RabbitMQProperties {
-    private Map<String, QueueConfig> queues;
+    private Map<String, QueueProperties> queues;
 
-    public Map<String, QueueConfig> getQueues() {
+    public Map<String, QueueProperties> getQueues() {
         return this.queues;
     }
 
-    public void setQueues(Map<String, QueueConfig> queues) {
+    public void setQueues(final Map<String, QueueProperties> queues) {
         this.queues = queues;
     }
 
-    public static class QueueConfig {
-        private ExchangeConfig exchange;
+    public static class QueueProperties {
+        private ExchangeProperties exchangeProperties;
         private String routingKey;
         private String queue;
-        private DeadLetterQueueConfig deadLetterQueue;
+        private DeadLetterQueueProperties deadLetterQueueProperties;
 
-        public ExchangeConfig getExchange() {
-            return this.exchange;
+        public ExchangeProperties getExchangeProperties() {
+            return this.exchangeProperties;
         }
 
-        public void setExchange(final ExchangeConfig exchange) {
-            this.exchange = exchange;
+        public void setExchangeProperties(final ExchangeProperties exchangeProperties) {
+            this.exchangeProperties = exchangeProperties;
         }
 
         public String getRoutingKey() {
@@ -48,16 +48,16 @@ public class RabbitMQProperties {
             this.queue = queue;
         }
 
-        public DeadLetterQueueConfig getDeadLetterQueue() {
-            return this.deadLetterQueue;
+        public DeadLetterQueueProperties getDeadLetterQueueProperties() {
+            return this.deadLetterQueueProperties;
         }
 
-        public void setDeadLetterQueue(final DeadLetterQueueConfig deadLetterQueue) {
-            this.deadLetterQueue = deadLetterQueue;
+        public void setDeadLetterQueueProperties(final DeadLetterQueueProperties deadLetterQueueProperties) {
+            this.deadLetterQueueProperties = deadLetterQueueProperties;
         }
     }
 
-    public static class ExchangeConfig {
+    public static class ExchangeProperties {
         private String name;
         private String type;
 
@@ -78,17 +78,17 @@ public class RabbitMQProperties {
         }
     }
 
-    public static class DeadLetterQueueConfig {
-        private String name;
+    public static class DeadLetterQueueProperties {
+        private String queue;
         private String exchange;
         private String routingKey;
 
-        public String getName() {
-            return this.name;
+        public String getQueue() {
+            return this.queue;
         }
 
-        public void setName(final String name) {
-            this.name = name;
+        public void setQueue(final String queue) {
+            this.queue = queue;
         }
 
         public String getExchange() {

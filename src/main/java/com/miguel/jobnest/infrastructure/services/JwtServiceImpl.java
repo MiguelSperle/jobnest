@@ -35,7 +35,7 @@ public class JwtServiceImpl implements JwtService {
                     .sign(algorithm);
         } catch (final Exception ex) {
             log.error("Failed to create JWT token for userId {} with role {}", userId, role, ex);
-            throw JwtTokenCreationFailedException.with("Failed to create JWT token");
+            throw JwtTokenCreationFailedException.with("Failed to create JWT token", ex);
         }
     }
 
@@ -49,7 +49,7 @@ public class JwtServiceImpl implements JwtService {
             return new DecodedJwtToken(decodedJWT.getSubject(), decodedJWT.getClaim("role").asString());
         } catch (final Exception ex) {
             log.error("Failed to validate JWT token", ex);
-            throw JwtTokenValidationFailedException.with("Invalid JWT token");
+            throw JwtTokenValidationFailedException.with("Invalid JWT token", ex);
         }
     }
 
