@@ -16,7 +16,7 @@ public class SearchQueryTest {
         final Map<String, String> filters = Map.of("status", "active");
 
         final SearchQuery searchQuery = SearchQuery.newSearchQuery(page, perPage, terms, sort, direction, filters);
-        System.out.println(searchQuery);
+
         Assertions.assertNotNull(searchQuery);
         Assertions.assertEquals(page, searchQuery.page());
         Assertions.assertEquals(perPage, searchQuery.perPage());

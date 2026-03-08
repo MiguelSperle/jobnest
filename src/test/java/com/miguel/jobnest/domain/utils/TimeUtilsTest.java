@@ -15,9 +15,7 @@ public class TimeUtilsTest {
 
     @Test
     void shouldReturnTrue_whenTimeIsExpired() {
-        final LocalDateTime time = TimeUtils.now().minusDays(1);
-
-        final boolean isExpired = TimeUtils.isExpired(time, TimeUtils.now());
+        final boolean isExpired = TimeUtils.isExpired(TimeUtils.now().minusDays(1), TimeUtils.now());
 
         Assertions.assertTrue(isExpired);
     }

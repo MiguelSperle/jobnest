@@ -2,6 +2,7 @@ package com.miguel.jobnest.domain.entities;
 
 import com.miguel.jobnest.domain.builders.UserCodeBuilder;
 import com.miguel.jobnest.domain.enums.UserCodeType;
+import com.miguel.jobnest.domain.events.UserCodeCreatedEvent;
 import com.miguel.jobnest.domain.utils.IdentifierUtils;
 import com.miguel.jobnest.domain.utils.TimeUtils;
 import org.junit.jupiter.api.Assertions;
@@ -83,5 +84,27 @@ public class UserCodeTest {
 
         Assertions.assertNotNull(toStringResult);
         Assertions.assertEquals(expectedToString, toStringResult);
+    }
+
+    @Test
+    void shouldRegisterUserCodeCreatedEvent_whenCallRegisterEvent() {
+        final UserCode userCode = UserCodeBuilder.userCode()
+                .id(IdentifierUtils.generateNewId())
+                .code("123TYE")
+                .userCodeType(UserCodeType.USER_VERIFICATION)
+                .userId(IdentifierUtils.generateNewId())
+                .build();
+
+        final UserCodeCreatedEvent event = new UserCodeCreatedEvent(
+                userCode.getId(),
+                userCode.getCode(),
+                userCode.getUserCodeType(),
+                userCode.getUserId()
+        );
+
+        userCode.registerEvent(event);
+
+        Assertions.assertEquals(1, userCode.getDomainEvents().size());
+        Assertions.assertEquals(event, userCode.getDomainEvents().getFirst());
     }
 }

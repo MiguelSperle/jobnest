@@ -1,6 +1,7 @@
 package com.miguel.jobnest.domain.entities;
 
 import com.miguel.jobnest.domain.builders.SubscriptionBuilder;
+import com.miguel.jobnest.domain.events.SubscriptionCreatedEvent;
 import com.miguel.jobnest.domain.utils.IdentifierUtils;
 import com.miguel.jobnest.domain.utils.TimeUtils;
 import org.junit.jupiter.api.Assertions;
@@ -93,5 +94,25 @@ public class SubscriptionTest {
 
         Assertions.assertNotNull(toStringResult);
         Assertions.assertEquals(expectedToString, toStringResult);
+    }
+
+    @Test
+    void shouldRegisterSubscriptionCreatedEvent_whenCallRegisterEvent() {
+        final Subscription subscription = SubscriptionBuilder.subscription()
+                .id(IdentifierUtils.generateNewId())
+                .userId(IdentifierUtils.generateNewId())
+                .jobVacancyId(IdentifierUtils.generateNewId())
+                .build();
+
+        final SubscriptionCreatedEvent event = new SubscriptionCreatedEvent(
+                subscription.getId(),
+                subscription.getUserId(),
+                subscription.getJobVacancyId()
+        );
+
+        subscription.registerEvent(event);
+
+        Assertions.assertEquals(1, subscription.getDomainEvents().size());
+        Assertions.assertEquals(event, subscription.getDomainEvents().getFirst());
     }
 }

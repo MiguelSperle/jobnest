@@ -8,7 +8,7 @@ public class NotFoundExceptionTest {
     void shouldReturnNotFoundException_whenCallWith() {
         final String message = "Error message";
 
-        final var ex = NotFoundException.with(message);
+        final NotFoundException ex = NotFoundException.with(message);
 
         Assertions.assertNotNull(ex);
         Assertions.assertEquals(message, ex.getMessage());

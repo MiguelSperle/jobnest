@@ -21,7 +21,7 @@ public class EntityTest {
     @Test
     void shouldRegisterAnDomainEvent_whenCallRegisterEvent() {
         final Entity entity = this.createEntity(IdentifierUtils.generateNewId());
-        final EntityCreatedEvent event = new EntityCreatedEvent(IdentifierUtils.generateNewId());
+        final EntityCreatedEvent event = new EntityCreatedEvent(entity.getId());
 
         entity.registerEvent(event);
 
@@ -30,7 +30,7 @@ public class EntityTest {
     }
 
     @Test
-    void shouldNotRegisterEvent_whenEventIsNull() {
+    void shouldNotRegisterEvent_whenDomainEventIsNull() {
         final Entity entity = this.createEntity(IdentifierUtils.generateNewId());
 
         entity.registerEvent(null);
@@ -66,9 +66,9 @@ public class EntityTest {
         public EntityCreatedEvent(String aggregateId) {
             this(
                     IdentifierUtils.generateNewId(),
-                    "TestCreated",
+                    "EntityCreated",
                     aggregateId,
-                    "Test",
+                    "Entity",
                     TimeUtils.now()
             );
         }
