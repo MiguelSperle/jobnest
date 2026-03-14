@@ -1,3 +1,0 @@
-VHOST: /
-QUEUE: subscription.created.queue.dlq
-INDEX: v2
