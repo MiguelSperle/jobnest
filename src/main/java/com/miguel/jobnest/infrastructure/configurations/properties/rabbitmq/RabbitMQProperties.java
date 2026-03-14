@@ -3,12 +3,13 @@ package com.miguel.jobnest.infrastructure.configurations.properties.rabbitmq;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @Configuration
 @ConfigurationProperties(prefix = "amqp")
 public class RabbitMQProperties {
-    private Map<String, QueueProperties> queues;
+    private Map<String, QueueProperties> queues = new HashMap<>();
 
     public Map<String, QueueProperties> getQueues() {
         return this.queues;

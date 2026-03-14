@@ -1,0 +1,3 @@
+VHOST: /
+QUEUE: user.code.created.queue
+INDEX: v2

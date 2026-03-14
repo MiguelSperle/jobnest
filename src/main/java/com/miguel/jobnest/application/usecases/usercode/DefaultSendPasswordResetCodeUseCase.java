@@ -58,7 +58,7 @@ public class DefaultSendPasswordResetCodeUseCase implements SendPasswordResetCod
     }
 
     private Optional<UserCode> getPreviousUserCodeByUserIdAndCodeType(final String id) {
-        return this.userCodeRepository.findByUserIdAndCodeType(id, UserCodeType.USER_VERIFICATION.name());
+        return this.userCodeRepository.findByUserIdAndCodeType(id, UserCodeType.PASSWORD_RESET.name());
     }
 
     private void deleteUserCodeById(final String id) {

@@ -1,6 +1,38 @@
 services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: jobnest-app
+    ports:
+      - "8080:8080"
+    environment:
+      DB_HOST: ${DB_HOST}
+      DB_NAME: ${DB_NAME}
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+      RABBITMQ_HOST: ${RABBITMQ_HOST}
+      RABBITMQ_USERNAME: ${RABBITMQ_USERNAME}
+      RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD}
+      REDIS_HOST: ${REDIS_HOST}
+      MAIL_USERNAME: ${MAIL_USERNAME}
+      MAIL_PASSWORD: ${MAIL_PASSWORD}
+      CLOUDINARY_CLOUD_NAME: ${CLOUDINARY_CLOUD_NAME}
+      CLOUDINARY_API_KEY: ${CLOUDINARY_API_KEY}
+      CLOUDINARY_API_SECRET: ${CLOUDINARY_API_SECRET}
+      JWT_SECRET: ${JWT_SECRET}
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - jobnest-network
+
   postgres:
-    container_name: postgres-container-jobnest
+    container_name: jobnest-database
     image: postgres
     ports:
       - "5432:5432"
@@ -8,26 +40,68 @@ services:
       - POSTGRES_USER=${DB_USERNAME}
       - POSTGRES_PASSWORD=${DB_PASSWORD}
       - POSTGRES_DB=${DB_NAME}
+    healthcheck:
+      test: [ "CMD", "pg_isready" ]
+      interval: 15s
+      timeout: 10s
+      retries: 5
+      start_period: 20s
+    volumes:
+      - postgres-data:/var/lib/postgresql
+    networks:
+      - jobnest-network
 
   rabbitmq:
-    container_name: rabbitmq-container-jobnest
+    container_name: jobnest-rabbitmq
     image: rabbitmq:management
+    hostname: rabbitmq
     ports:
       - "5672:5672"
       - "15672:15672"
     environment:
       - RABBITMQ_DEFAULT_USER=${RABBITMQ_USERNAME}
       - RABBITMQ_DEFAULT_PASS=${RABBITMQ_PASSWORD}
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 15s
+      timeout: 10s
+      retries: 5
+      start_period: 20s
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
     configs:
       - source: rabbitmq-plugins
         target: /etc/rabbitmq/enabled_plugins
+    networks:
+      - jobnest-network
 
   redis:
-    container_name: redis-container-jobnest
+    container_name: jobnest-redis
     image: redis
     ports:
       - "6379:6379"
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - redis-data:/data
+    networks:
+      - jobnest-network
+
+volumes:
+  postgres-data:
+    external: false
+  rabbitmq-data:
+    external: false
+  redis-data:
+    external: false
 
 configs:
   rabbitmq-plugins:
     content: "[rabbitmq_shovel, rabbitmq_shovel_management]."
+
+networks:
+  jobnest-network:
+    driver: bridge

@@ -14,6 +14,8 @@ spring:
     schemas: public
     default-schema: public
   rabbitmq:
+    host: ${RABBITMQ_HOST}
+    port: 5672
     username: ${RABBITMQ_USERNAME}
     password: ${RABBITMQ_PASSWORD}
     listener:
@@ -25,9 +27,10 @@ spring:
           initial-interval: 3000
           multiplier: 2
           max-interval: 12000
-  redis:
-    host: ${REDIS_HOST}
-    port: 6379
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: 6379
   mail:
     host: smtp.gmail.com
     port: 587

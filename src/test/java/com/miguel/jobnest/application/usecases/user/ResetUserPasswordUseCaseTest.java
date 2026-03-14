@@ -47,7 +47,7 @@ public class ResetUserPasswordUseCaseTest {
     @Test
     void shouldResetUserPassword_whenCallExecute() {
         final User user = UserBuilder.user().id(IdentifierUtils.generateNewId()).password("123456A").build();
-        final UserCode userCode = UserCodeBuilder.userCode().code("123BTE").userId(user.getId()).build();
+        final UserCode userCode = UserCodeBuilder.userCode().code("123BTE").userId(user.getId()).expiresIn(TimeUtils.now().plusMinutes(15)).build();
 
         final ResetUserPasswordUseCaseInput input = ResetUserPasswordUseCaseInput.with(
                 userCode.getCode(),
@@ -131,7 +131,7 @@ public class ResetUserPasswordUseCaseTest {
 
     @Test
     void shouldThrowNotFoundException_whenCallExecute_becauseUserDoesNotExist() {
-        final UserCode userCode = UserCodeBuilder.userCode().code("1234BC").userCodeType(UserCodeType.PASSWORD_RESET).build();
+        final UserCode userCode = UserCodeBuilder.userCode().id(IdentifierUtils.generateNewId()).code("1234BC").userCodeType(UserCodeType.PASSWORD_RESET).expiresIn(TimeUtils.now().plusMinutes(15)).build();
         final String password = "123456A";
 
         final ResetUserPasswordUseCaseInput input = ResetUserPasswordUseCaseInput.with(
