@@ -35,5 +35,5 @@ build/
 ### Environment Variables ###
 .env
 
-### Docker volumes ###
-/docker_conf/
+### Docker Volumes ###
+docker_conf/
