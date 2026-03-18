@@ -4,7 +4,6 @@ import com.miguel.jobnest.domain.exceptions.DomainException;
 import com.miguel.jobnest.domain.exceptions.NotFoundException;
 import com.miguel.jobnest.infrastructure.exceptions.*;
 import com.miguel.jobnest.infrastructure.utils.ApiError;
-import io.github.resilience4j.ratelimiter.RequestNotPermitted;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -59,14 +58,6 @@ public class GlobalExceptionHandler {
         log.info("Handling not found exception: {}", ex.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ApiError.from(
                 Collections.singletonList(ex.getMessage()), HttpStatus.NOT_FOUND.getReasonPhrase()
-        ));
-    }
-
-    @ExceptionHandler(RequestNotPermitted.class)
-    public ResponseEntity<ApiError> handleRequestNotPermitted(final RequestNotPermitted ex) {
-        log.info("Handling request not permitted exception: {}", ex.getMessage());
-        return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).body(ApiError.from(
-                Collections.singletonList("Too many requests occurred at the same time"), HttpStatus.TOO_MANY_REQUESTS.getReasonPhrase()
         ));
     }
 

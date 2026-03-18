@@ -4,23 +4,21 @@ import com.miguel.jobnest.application.abstractions.usecases.usercode.SendPasswor
 import com.miguel.jobnest.application.abstractions.usecases.usercode.ResendVerificationCodeUseCase;
 import com.miguel.jobnest.application.abstractions.usecases.usercode.ValidatePasswordResetCodeUseCase;
 import com.miguel.jobnest.application.usecases.usercode.inputs.ValidatePasswordResetCodeUseCaseInput;
+import com.miguel.jobnest.infrastructure.abstractions.rest.controllers.UserCodeControllerAPI;
 import com.miguel.jobnest.infrastructure.idempotency.IdempotencyKey;
 import com.miguel.jobnest.infrastructure.rest.dtos.usercode.req.SendPasswordResetCodeRequest;
 import com.miguel.jobnest.infrastructure.rest.dtos.usercode.req.ResendVerificationCodeRequest;
 import com.miguel.jobnest.infrastructure.rest.dtos.MessageResponse;
-import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
-import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/v1/user-codes")
-public class UserCodeController {
+public class UserCodeRestController implements UserCodeControllerAPI {
     private final ResendVerificationCodeUseCase resendVerificationCodeUseCase;
     private final SendPasswordResetCodeUseCase sendPasswordResetCodeUseCase;
     private final ValidatePasswordResetCodeUseCase validatePasswordResetCodeUseCase;
 
-    public UserCodeController(
+    public UserCodeRestController(
             final ResendVerificationCodeUseCase resendVerificationCodeUseCase,
             final SendPasswordResetCodeUseCase sendPasswordResetCodeUseCase,
             final ValidatePasswordResetCodeUseCase validatePasswordResetCodeUseCase
@@ -30,27 +28,24 @@ public class UserCodeController {
         this.validatePasswordResetCodeUseCase = validatePasswordResetCodeUseCase;
     }
 
-    @PostMapping("/verification/resending")
-    @RateLimiter(name = "rateLimitConfiguration")
+    @Override
     @IdempotencyKey
-    public ResponseEntity<MessageResponse> resendVerificationCode(@RequestBody @Valid ResendVerificationCodeRequest request) {
+    public ResponseEntity<MessageResponse> resendVerificationCode(final ResendVerificationCodeRequest request) {
         this.resendVerificationCodeUseCase.execute(request.toInput());
 
         return ResponseEntity.ok().body(MessageResponse.from("Verification code sent again successfully"));
     }
 
-    @PostMapping("/password-recovery")
-    @RateLimiter(name = "rateLimitConfiguration")
+    @Override
     @IdempotencyKey
-    public ResponseEntity<MessageResponse> sendPasswordResetCode(@RequestBody @Valid SendPasswordResetCodeRequest request) {
+    public ResponseEntity<MessageResponse> sendPasswordResetCode(final SendPasswordResetCodeRequest request) {
         this.sendPasswordResetCodeUseCase.execute(request.toInput());
 
         return ResponseEntity.ok().body(MessageResponse.from("Password reset code sent successfully"));
     }
 
-    @GetMapping("/password-recovery/{code}/validation")
-    @RateLimiter(name = "rateLimitConfiguration")
-    public ResponseEntity<Void> validatePasswordResetCode(@PathVariable String code) {
+    @Override
+    public ResponseEntity<Void> validatePasswordResetCode(final String code) {
         this.validatePasswordResetCodeUseCase.execute(ValidatePasswordResetCodeUseCaseInput.with(code));
 
         return ResponseEntity.noContent().build();

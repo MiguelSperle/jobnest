@@ -5,28 +5,26 @@ import com.miguel.jobnest.application.usecases.subscription.inputs.ListSubscript
 import com.miguel.jobnest.application.usecases.subscription.outputs.ListSubscriptionsByJobVacancyIdUseCaseOutput;
 import com.miguel.jobnest.domain.pagination.Pagination;
 import com.miguel.jobnest.domain.pagination.SearchQuery;
+import com.miguel.jobnest.infrastructure.abstractions.rest.controllers.recruiter.SubscriptionRecruiterControllerAPI;
 import com.miguel.jobnest.infrastructure.rest.dtos.subscription.res.ListSubscriptionsByJobVacancyIdResponse;
-import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/v1/recruiter/subscriptions")
-public class SubscriptionRecruiterController {
+public class SubscriptionRecruiterRestController implements SubscriptionRecruiterControllerAPI {
     private final ListSubscriptionsByJobVacancyIdUseCase listSubscriptionsByJobVacancyIdUseCase;
 
-    public SubscriptionRecruiterController(final ListSubscriptionsByJobVacancyIdUseCase listSubscriptionsByJobVacancyIdUseCase) {
+    public SubscriptionRecruiterRestController(final ListSubscriptionsByJobVacancyIdUseCase listSubscriptionsByJobVacancyIdUseCase) {
         this.listSubscriptionsByJobVacancyIdUseCase = listSubscriptionsByJobVacancyIdUseCase;
     }
 
-    @GetMapping("/{jobVacancyId}")
-    @RateLimiter(name = "rateLimitConfiguration")
+    @Override
     public ResponseEntity<Pagination<ListSubscriptionsByJobVacancyIdResponse>> listSubscriptionsByJobVacancyId(
-            @PathVariable String jobVacancyId,
-            @RequestParam(name = "page", required = false, defaultValue = "0") int page,
-            @RequestParam(name = "perPage", required = false, defaultValue = "10") int perPage,
-            @RequestParam(name = "sort", required = false, defaultValue = "createdAt") String sort,
-            @RequestParam(name = "direction", required = false, defaultValue = "desc") String direction
+            final String jobVacancyId,
+            final int page,
+            final int perPage,
+            final String sort,
+            final String direction
     ) {
         final ListSubscriptionsByJobVacancyIdUseCaseOutput output = this.listSubscriptionsByJobVacancyIdUseCase.execute(
                 ListSubscriptionsByJobVacancyIdUseCaseInput.with(jobVacancyId, SearchQuery.newSearchQuery(page, perPage, sort, direction))

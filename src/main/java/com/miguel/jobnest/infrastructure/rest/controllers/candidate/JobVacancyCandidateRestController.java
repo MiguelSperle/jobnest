@@ -5,31 +5,26 @@ import com.miguel.jobnest.application.usecases.jobvacancy.inputs.ListJobVacancie
 import com.miguel.jobnest.application.usecases.jobvacancy.outputs.ListJobVacanciesUseCaseOutput;
 import com.miguel.jobnest.domain.pagination.Pagination;
 import com.miguel.jobnest.domain.pagination.SearchQuery;
+import com.miguel.jobnest.infrastructure.abstractions.rest.controllers.candidate.JobVacancyCandidateControllerAPI;
 import com.miguel.jobnest.infrastructure.rest.dtos.jobvacancy.res.ListJobVacanciesResponse;
-import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/v1/candidate/job-vacancies")
-public class JobVacancyCandidateController {
+public class JobVacancyCandidateRestController implements JobVacancyCandidateControllerAPI {
     private final ListJobVacanciesUseCase listJobVacanciesUseCase;
 
-    public JobVacancyCandidateController(final ListJobVacanciesUseCase listJobVacanciesUseCase) {
+    public JobVacancyCandidateRestController(final ListJobVacanciesUseCase listJobVacanciesUseCase) {
         this.listJobVacanciesUseCase = listJobVacanciesUseCase;
     }
 
-    @GetMapping
-    @RateLimiter(name = "rateLimitConfiguration")
+    @Override
     public ResponseEntity<Pagination<ListJobVacanciesResponse>> listJobVacancies(
-            @RequestParam(name = "page", required = false, defaultValue = "0") int page,
-            @RequestParam(name = "perPage", required = false, defaultValue = "10") int perPage,
-            @RequestParam(name = "search", required = false, defaultValue = "") String search,
-            @RequestParam(name = "sort", required = false, defaultValue = "createdAt") String sort,
-            @RequestParam(name = "direction", required = false, defaultValue = "desc") String direction
+            final int page,
+            final int perPage,
+            final String search,
+            final String sort,
+            final String direction
     ) {
         final ListJobVacanciesUseCaseOutput output = this.listJobVacanciesUseCase.execute(ListJobVacanciesUseCaseInput.with(
                 SearchQuery.newSearchQuery(page, perPage, search, sort, direction)

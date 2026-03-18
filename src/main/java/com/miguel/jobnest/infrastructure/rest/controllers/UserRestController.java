@@ -3,20 +3,18 @@ package com.miguel.jobnest.infrastructure.rest.controllers;
 import com.miguel.jobnest.application.abstractions.usecases.user.*;
 import com.miguel.jobnest.application.usecases.user.inputs.UpdateUserToVerifiedUseCaseInput;
 import com.miguel.jobnest.application.usecases.user.outputs.GetAuthenticatedUserUseCaseOutput;
+import com.miguel.jobnest.infrastructure.abstractions.rest.controllers.UserControllerAPI;
 import com.miguel.jobnest.infrastructure.idempotency.IdempotencyKey;
 import com.miguel.jobnest.infrastructure.rest.dtos.MessageResponse;
 import com.miguel.jobnest.infrastructure.rest.dtos.user.req.ResetUserPasswordRequest;
 import com.miguel.jobnest.infrastructure.rest.dtos.user.req.UpdateUserRequest;
 import com.miguel.jobnest.infrastructure.rest.dtos.user.req.UpdateUserPasswordRequest;
 import com.miguel.jobnest.infrastructure.rest.dtos.user.res.GetAuthenticatedUserResponse;
-import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
-import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/v1/users")
-public class UserController {
+public class UserRestController implements UserControllerAPI {
     private final UpdateUserToVerifiedUseCase updateUserToVerifiedUseCase;
     private final ResetUserPasswordUseCase resetUserPasswordUseCase;
     private final GetAuthenticatedUserUseCase getAuthenticatedUserUseCase;
@@ -24,7 +22,7 @@ public class UserController {
     private final UpdateUserPasswordUseCase updateUserPasswordUseCase;
     private final SoftDeleteUserUseCase softDeleteUserUseCase;
 
-    public UserController(
+    public UserRestController(
             final UpdateUserToVerifiedUseCase updateUserToVerifiedUseCase,
             final ResetUserPasswordUseCase resetUserPasswordUseCase,
             final GetAuthenticatedUserUseCase getAuthenticatedUserUseCase,
@@ -40,53 +38,44 @@ public class UserController {
         this.softDeleteUserUseCase = softDeleteUserUseCase;
     }
 
-    @PatchMapping("/verification/{code}")
-    @RateLimiter(name = "rateLimitConfiguration")
+    @Override
     @IdempotencyKey
-    public ResponseEntity<MessageResponse> updateUserToVerified(@PathVariable String code) {
+    public ResponseEntity<MessageResponse> updateUserToVerified(final String code) {
         this.updateUserToVerifiedUseCase.execute(UpdateUserToVerifiedUseCaseInput.with(code));
 
         return ResponseEntity.ok().body(MessageResponse.from("User verified successfully"));
     }
 
-    @PatchMapping("/password-reset/{code}")
-    @RateLimiter(name = "rateLimitConfiguration")
+    @Override
     @IdempotencyKey
-    public ResponseEntity<MessageResponse> resetUserPassword(
-            @PathVariable String code,
-            @RequestBody @Valid ResetUserPasswordRequest request
-    ) {
+    public ResponseEntity<MessageResponse> resetUserPassword(final String code, final ResetUserPasswordRequest request) {
         this.resetUserPasswordUseCase.execute(request.toInput(code));
 
         return ResponseEntity.ok().body(MessageResponse.from("User password reset successfully"));
     }
 
-    @GetMapping("/me")
-    @RateLimiter(name = "rateLimitConfiguration")
+    @Override
     public ResponseEntity<GetAuthenticatedUserResponse> getAuthenticatedUser() {
         final GetAuthenticatedUserUseCaseOutput output = this.getAuthenticatedUserUseCase.execute();
 
         return ResponseEntity.ok().body(GetAuthenticatedUserResponse.from(output));
     }
 
-    @PatchMapping("/update/information")
-    @RateLimiter(name = "rateLimitConfiguration")
-    public ResponseEntity<MessageResponse> updateUser(@RequestBody @Valid UpdateUserRequest request) {
+    @Override
+    public ResponseEntity<MessageResponse> updateUser(final UpdateUserRequest request) {
         this.updateUserUseCase.execute(request.toInput());
 
         return ResponseEntity.ok().body(MessageResponse.from("User updated successfully"));
     }
 
-    @PatchMapping("/update/password")
-    @RateLimiter(name = "rateLimitConfiguration")
-    public ResponseEntity<MessageResponse> updateUserPassword(@RequestBody @Valid UpdateUserPasswordRequest request) {
+    @Override
+    public ResponseEntity<MessageResponse> updateUserPassword(final UpdateUserPasswordRequest request) {
         this.updateUserPasswordUseCase.execute(request.toInput());
 
         return ResponseEntity.ok().body(MessageResponse.from("User password updated successfully"));
     }
 
-    @DeleteMapping("/delete")
-    @RateLimiter(name = "rateLimitConfiguration")
+    @Override
     public ResponseEntity<MessageResponse> deleteUser() {
         this.softDeleteUserUseCase.execute();
 

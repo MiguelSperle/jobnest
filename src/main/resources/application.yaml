@@ -52,14 +52,6 @@ security:
   token:
     secret: ${JWT_SECRET}
 
-resilience4j:
-  ratelimiter:
-    instances:
-      rate-limit-configuration:
-        limit-for-period: 5
-        limit-refresh-period: 10s
-        timeout-duration: 0
-
 amqp:
   queues:
     user-code-created:

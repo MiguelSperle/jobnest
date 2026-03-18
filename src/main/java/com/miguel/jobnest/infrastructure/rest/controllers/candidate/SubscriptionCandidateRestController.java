@@ -8,11 +8,11 @@ import com.miguel.jobnest.application.usecases.subscription.inputs.CancelSubscri
 import com.miguel.jobnest.application.usecases.subscription.outputs.ListSubscriptionsByUserIdUseCaseOutput;
 import com.miguel.jobnest.domain.pagination.Pagination;
 import com.miguel.jobnest.domain.pagination.SearchQuery;
+import com.miguel.jobnest.infrastructure.abstractions.rest.controllers.candidate.SubscriptionCandidateControllerAPI;
 import com.miguel.jobnest.infrastructure.idempotency.IdempotencyKey;
 import com.miguel.jobnest.infrastructure.rest.dtos.MessageResponse;
 import com.miguel.jobnest.infrastructure.rest.dtos.subscription.req.CreateSubscriptionRequest;
 import com.miguel.jobnest.infrastructure.rest.dtos.subscription.res.ListSubscriptionsByUserIdResponse;
-import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,13 +21,12 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 
 @RestController
-@RequestMapping("/api/v1/candidate/subscriptions")
-public class SubscriptionCandidateController {
+public class SubscriptionCandidateRestController implements SubscriptionCandidateControllerAPI {
     private final CreateSubscriptionUseCase createSubscriptionUseCase;
     private final ListSubscriptionsByUserIdUseCase listSubscriptionsByUserIdUseCase;
     private final CancelSubscriptionUseCase cancelSubscriptionUseCase;
 
-    public SubscriptionCandidateController(
+    public SubscriptionCandidateRestController(
             final CreateSubscriptionUseCase createSubscriptionUseCase,
             final ListSubscriptionsByUserIdUseCase listSubscriptionsByUserIdUseCase,
             final CancelSubscriptionUseCase cancelSubscriptionUseCase
@@ -37,22 +36,20 @@ public class SubscriptionCandidateController {
         this.cancelSubscriptionUseCase = cancelSubscriptionUseCase;
     }
 
-    @PostMapping
-    @RateLimiter(name = "rateLimitConfiguration")
+    @Override
     @IdempotencyKey
-    public ResponseEntity<MessageResponse> createSubscription(@RequestPart CreateSubscriptionRequest request, @RequestPart MultipartFile resumeFile) throws IOException {
+    public ResponseEntity<MessageResponse> createSubscription(final CreateSubscriptionRequest request, final MultipartFile resumeFile) throws IOException {
         this.createSubscriptionUseCase.execute(request.toInput(resumeFile.getBytes()));
 
         return ResponseEntity.status(HttpStatus.CREATED).body(MessageResponse.from("Subscription created successfully"));
     }
 
-    @GetMapping
-    @RateLimiter(name = "rateLimitConfiguration")
+    @Override
     public ResponseEntity<Pagination<ListSubscriptionsByUserIdResponse>> listSubscriptionsByUserId(
-            @RequestParam(name = "page", required = false, defaultValue = "0") int page,
-            @RequestParam(name = "perPage", required = false, defaultValue = "10") int perPage,
-            @RequestParam(name = "sort", required = false, defaultValue = "createdAt") String sort,
-            @RequestParam(name = "direction", required = false, defaultValue = "desc") String direction
+            final int page,
+            final int perPage,
+            final String sort,
+            final String direction
     ) {
         final ListSubscriptionsByUserIdUseCaseOutput output = this.listSubscriptionsByUserIdUseCase.execute(
                 ListSubscriptionsByUserIdUseCaseInput.with(SearchQuery.newSearchQuery(page, perPage, sort, direction))
@@ -61,9 +58,8 @@ public class SubscriptionCandidateController {
         return ResponseEntity.ok().body(ListSubscriptionsByUserIdResponse.from(output));
     }
 
-    @PatchMapping("/{subscriptionId}")
-    @RateLimiter(name = "rateLimitConfiguration")
-    public ResponseEntity<MessageResponse> cancelSubscription(@PathVariable String subscriptionId) {
+    @Override
+    public ResponseEntity<MessageResponse> cancelSubscription(final String subscriptionId) {
         this.cancelSubscriptionUseCase.execute(CancelSubscriptionUseCaseInput.with(subscriptionId));
 
         return ResponseEntity.ok().body(MessageResponse.from("Subscription canceled successfully"));

@@ -7,7 +7,6 @@
     <img src="https://img.shields.io/badge/Spring_data_jpa-6DB33F?style=for-the-badge&logo=hibernate&logoColor=white" alt="Spring Data Jpa Badge" />
     <img src="https://img.shields.io/badge/-postgresql-336791?style=for-the-badge&logo=postgresql&logoColor=white" alt="Postgres Badge"/>
     <img src="https://img.shields.io/badge/-rabbitmq-%23FF6600?style=for-the-badge&logo=rabbitmq&logoColor=white" alt="RabbitMQ Badge"/>
-    <img src="https://img.shields.io/badge/-resilience4j-000000?style=for-the-badge" alt="Resilience4j Badge" />
     <img src="https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white" alt="Docker Badge"/>
     <img src="https://img.shields.io/badge/junit-%23E33332?style=for-the-badge&logo=junit5&logoColor=white" alt="Junit Badge"/>
     <img src="https://img.shields.io/badge/Mockito-25A162?style=for-the-badge" alt="Mockito Badge" />
@@ -19,7 +18,7 @@ both for those who publish job vacancies and for those who seek to apply for the
 </p>
 
 <p>
-It's important to emphasize that this is a study project, designed to explore and implement complex concepts, such as: Clean Architecture, SOLID principles, Messaging, Database Transactions, Unit Tests, Rate Limiting. and Idempotency.
+It's important to emphasize that this is a study project, designed to explore and implement complex concepts, such as: Clean Architecture, SOLID principles, Messaging, Database Transactions, Unit Tests, and Idempotency.
 </p>
 
 <p>
@@ -52,7 +51,7 @@ cd jobnest
 mvn clean install
 ```
 
-<h3>⌨️ Command to run Docker Compose</h3>
+<h3>⌨️ Command to create and start containers in Docker Compose</h3>
 
 ```
 docker-compose up -d
@@ -62,39 +61,38 @@ docker-compose up -d
 
 ```
 spring:
+  config:
+    import: optional:file:.env[.properties]
   application:
-    queue: jobnest
-
+    name: jobnest
   datasource:
-    url: ${DB_URL}
+    url: jdbc:postgresql://${DB_HOST}:5432/${DB_NAME}
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
-
   jpa:
     hibernate:
       ddl-auto: none
-
   flyway:
     schemas: public
     default-schema: public
-
-  api:
-    security:
-      token:
-        secret: ${JWT_SECRET}
-
   rabbitmq:
+    host: ${RABBITMQ_HOST}
+    port: 5672
     username: ${RABBITMQ_USERNAME}
     password: ${RABBITMQ_PASSWORD}
     listener:
       simple:
+        acknowledge-mode: auto
         retry:
           enabled: true
           max-attempts: 4
           initial-interval: 3000
           multiplier: 2
           max-interval: 12000
-
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: 6379
   mail:
     host: smtp.gmail.com
     port: 587
@@ -107,19 +105,37 @@ spring:
           starttls:
             enable: true
             required: true
-
   cloudinary:
-    cloud-queue: ${CLOUDINARY_CLOUD_NAME}
+    cloud-name: ${CLOUDINARY_CLOUD_NAME}
     api-key: ${CLOUDINARY_API_KEY}
     api-secret: ${CLOUDINARY_API_SECRET}
 
-resilience4j:
-  ratelimiter:
-    instances:
-      rateLimitConfiguration:
-        limitForPeriod: 5
-        limitRefreshPeriod: 10s
-        timeoutDuration: 0
+security:
+  token:
+    secret: ${JWT_SECRET}
+
+amqp:
+  queues:
+    user-code-created:
+      exchange-properties:
+        name: user.code.events
+        type: direct
+      routing-key: user.code.created
+      queue: user.code.created.queue
+      dead-letter-queue-properties:
+        queue: user.code.created.queue.dlq
+        exchange: user.code.events.dlq
+        routing-key: user.code.created.dlq
+    subscription-created:
+      exchange-properties:
+        name: subscription.events
+        type: direct
+      routing-key: subscription.created
+      queue: subscription.created.queue
+      dead-letter-queue-properties:
+        queue: subscription.created.queue.dlq
+        exchange: subscription.events.dlq
+        routing-key: subscription.created.dlq
 ```
 
 <h3>👨🏻‍💻 Developer</h3>

@@ -7,7 +7,6 @@ import com.miguel.jobnest.infrastructure.exceptions.IdempotencyKeyUnsupportedMet
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,11 +27,20 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @Component
-@RequiredArgsConstructor
 public class IdempotencyKeyFilter extends OncePerRequestFilter {
     private final RedisService redisService;
     private final RequestMappingHandlerMapping requestMappingHandlerMapping;
     private final HandlerExceptionResolver handlerExceptionResolver;
+
+    public IdempotencyKeyFilter(
+            final RedisService redisService,
+            final RequestMappingHandlerMapping requestMappingHandlerMapping,
+            final HandlerExceptionResolver handlerExceptionResolver
+    ) {
+        this.redisService = redisService;
+        this.requestMappingHandlerMapping = requestMappingHandlerMapping;
+        this.handlerExceptionResolver = handlerExceptionResolver;
+    }
 
     private static final String IDEMPOTENCY_KEY_REDIS_PREFIX = "idempotency-key:";
 
