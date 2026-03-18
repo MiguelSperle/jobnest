@@ -4,6 +4,7 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: jobnest-backend
+    image: jobnest-app:${APP_VERSION:-latest}
     ports:
       - "8080:8080"
     environment:
