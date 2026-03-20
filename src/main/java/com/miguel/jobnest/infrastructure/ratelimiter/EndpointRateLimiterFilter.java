@@ -18,15 +18,16 @@ import org.springframework.web.servlet.HandlerExecutionChain;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
 import java.lang.reflect.Method;
+import java.util.Optional;
 
 @Component
 @Order(value = Ordered.HIGHEST_PRECEDENCE)
-public class RateLimiterFilter extends OncePerRequestFilter {
+public class EndpointRateLimiterFilter extends OncePerRequestFilter {
     private final RateLimiterRegistry rateLimiterRegistry;
     private final RequestMappingHandlerMapping requestMappingHandlerMapping;
     private final HandlerExceptionResolver handlerExceptionResolver;
 
-    public RateLimiterFilter(
+    public EndpointRateLimiterFilter(
             final RateLimiterRegistry rateLimiterRegistry,
             final RequestMappingHandlerMapping requestMappingHandlerMapping,
             final HandlerExceptionResolver handlerExceptionResolver
@@ -45,14 +46,14 @@ public class RateLimiterFilter extends OncePerRequestFilter {
         try {
             final HandlerMethod handlerMethod = this.getHandlerMethod(request);
 
-            if (handlerMethod != null && this.isCustomRateLimiterAnnotated(handlerMethod)) {
-                final CustomRateLimiter customRateLimiterValues = this.getCustomRateLimiterValues(handlerMethod);
+            if (handlerMethod != null && this.isEndpointRateLimiterAnnotated(handlerMethod)) {
+                final EndpointRateLimiter endpointRateLimiterValue = this.getCustomRateLimiterValues(handlerMethod);
 
-                final String instanceName = customRateLimiterValues.instanceName();
+                final String instanceName = endpointRateLimiterValue.instanceName();
 
-                final RateLimiter rateLimiter = this.rateLimiterRegistry.rateLimiter(instanceName);
+                final Optional<RateLimiter> rateLimiter = this.rateLimiterRegistry.find(instanceName);
 
-                if (!rateLimiter.acquirePermission()) {
+                if (rateLimiter.isPresent() && !rateLimiter.get().acquirePermission()) {
                     throw TooManyRequestsException.with("Too many requests occurred - Rate Limit Exceeded. Wait a moment before trying again");
                 }
 
@@ -81,12 +82,12 @@ public class RateLimiterFilter extends OncePerRequestFilter {
         return null;
     }
 
-    private boolean isCustomRateLimiterAnnotated(final HandlerMethod handlerMethod) {
+    private boolean isEndpointRateLimiterAnnotated(final HandlerMethod handlerMethod) {
         final Method method = handlerMethod.getMethod();
-        return method.isAnnotationPresent(CustomRateLimiter.class) && handlerMethod.getBeanType().isAnnotationPresent(RestController.class);
+        return method.isAnnotationPresent(EndpointRateLimiter.class) && handlerMethod.getBeanType().isAnnotationPresent(RestController.class);
     }
 
-    private CustomRateLimiter getCustomRateLimiterValues(final HandlerMethod handlerMethod) {
-        return handlerMethod.getMethodAnnotation(CustomRateLimiter.class);
+    private EndpointRateLimiter getCustomRateLimiterValues(final HandlerMethod handlerMethod) {
+        return handlerMethod.getMethodAnnotation(EndpointRateLimiter.class);
     }
 }

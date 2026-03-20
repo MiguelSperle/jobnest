@@ -6,7 +6,7 @@ import com.miguel.jobnest.application.abstractions.usecases.usercode.ValidatePas
 import com.miguel.jobnest.application.usecases.usercode.inputs.ValidatePasswordResetCodeUseCaseInput;
 import com.miguel.jobnest.infrastructure.abstractions.rest.controllers.UserCodeControllerAPI;
 import com.miguel.jobnest.infrastructure.idempotency.IdempotencyKey;
-import com.miguel.jobnest.infrastructure.ratelimiter.CustomRateLimiter;
+import com.miguel.jobnest.infrastructure.ratelimiter.EndpointRateLimiter;
 import com.miguel.jobnest.infrastructure.rest.dtos.usercode.req.SendPasswordResetCodeRequest;
 import com.miguel.jobnest.infrastructure.rest.dtos.usercode.req.ResendVerificationCodeRequest;
 import com.miguel.jobnest.infrastructure.rest.dtos.MessageResponse;
@@ -31,7 +31,7 @@ public class UserCodeRestController implements UserCodeControllerAPI {
 
     @Override
     @IdempotencyKey
-    @CustomRateLimiter
+    @EndpointRateLimiter
     public ResponseEntity<MessageResponse> resendVerificationCode(final ResendVerificationCodeRequest request) {
         this.resendVerificationCodeUseCase.execute(request.toInput());
 
@@ -40,7 +40,7 @@ public class UserCodeRestController implements UserCodeControllerAPI {
 
     @Override
     @IdempotencyKey
-    @CustomRateLimiter
+    @EndpointRateLimiter
     public ResponseEntity<MessageResponse> sendPasswordResetCode(final SendPasswordResetCodeRequest request) {
         this.sendPasswordResetCodeUseCase.execute(request.toInput());
 
@@ -48,7 +48,7 @@ public class UserCodeRestController implements UserCodeControllerAPI {
     }
 
     @Override
-    @CustomRateLimiter
+    @EndpointRateLimiter
     public ResponseEntity<Void> validatePasswordResetCode(final String code) {
         this.validatePasswordResetCodeUseCase.execute(ValidatePasswordResetCodeUseCaseInput.with(code));
 

@@ -7,6 +7,7 @@
     <img src="https://img.shields.io/badge/Spring_data_jpa-6DB33F?style=for-the-badge&logo=hibernate&logoColor=white" alt="Spring Data Jpa Badge" />
     <img src="https://img.shields.io/badge/-postgresql-336791?style=for-the-badge&logo=postgresql&logoColor=white" alt="Postgres Badge"/>
     <img src="https://img.shields.io/badge/-rabbitmq-%23FF6600?style=for-the-badge&logo=rabbitmq&logoColor=white" alt="RabbitMQ Badge"/>
+    <img src="https://img.shields.io/badge/-resilience4j-000000?style=for-the-badge" alt="Resilience4j Badge" />
     <img src="https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white" alt="Docker Badge"/>
     <img src="https://img.shields.io/badge/junit-%23E33332?style=for-the-badge&logo=junit5&logoColor=white" alt="Junit Badge"/>
     <img src="https://img.shields.io/badge/Mockito-25A162?style=for-the-badge" alt="Mockito Badge" />
@@ -18,7 +19,7 @@ both for those who publish job vacancies and for those who seek to apply for the
 </p>
 
 <p>
-It's important to emphasize that this is a study project, designed to explore and implement complex concepts, such as: Clean Architecture, SOLID principles, Messaging, Database Transactions, Unit Tests, and Idempotency.
+It's important to emphasize that this is a study project, designed to explore and implement complex concepts, such as: Clean Architecture, SOLID principles, Messaging, Database Transactions, Unit Tests, Rate Limiting and Idempotency.
 </p>
 
 <p>
@@ -113,6 +114,14 @@ spring:
 security:
   token:
     secret: ${JWT_SECRET}
+ 
+resilience4j:
+  ratelimiter:
+    instances:
+      defaultConfiguration:
+        limitForPeriod: 5
+        limitRefreshPeriod: 15s
+        timeoutDuration: 0
 
 amqp:
   queues:

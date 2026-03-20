@@ -57,7 +57,7 @@ resilience4j:
     instances:
       defaultConfiguration:
         limitForPeriod: 5
-        limitRefreshPeriod: 10s
+        limitRefreshPeriod: 15s
         timeoutDuration: 0
 
 amqp:

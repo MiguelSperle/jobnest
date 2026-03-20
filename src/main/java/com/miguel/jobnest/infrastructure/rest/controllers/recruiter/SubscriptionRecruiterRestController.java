@@ -6,7 +6,7 @@ import com.miguel.jobnest.application.usecases.subscription.outputs.ListSubscrip
 import com.miguel.jobnest.domain.pagination.Pagination;
 import com.miguel.jobnest.domain.pagination.SearchQuery;
 import com.miguel.jobnest.infrastructure.abstractions.rest.controllers.recruiter.SubscriptionRecruiterControllerAPI;
-import com.miguel.jobnest.infrastructure.ratelimiter.CustomRateLimiter;
+import com.miguel.jobnest.infrastructure.ratelimiter.EndpointRateLimiter;
 import com.miguel.jobnest.infrastructure.rest.dtos.subscription.res.ListSubscriptionsByJobVacancyIdResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +20,7 @@ public class SubscriptionRecruiterRestController implements SubscriptionRecruite
     }
 
     @Override
-    @CustomRateLimiter
+    @EndpointRateLimiter
     public ResponseEntity<Pagination<ListSubscriptionsByJobVacancyIdResponse>> listSubscriptionsByJobVacancyId(
             final String jobVacancyId,
             final int page,
