@@ -5,6 +5,7 @@ import com.miguel.jobnest.application.usecases.user.inputs.UpdateUserToVerifiedU
 import com.miguel.jobnest.application.usecases.user.outputs.GetAuthenticatedUserUseCaseOutput;
 import com.miguel.jobnest.infrastructure.abstractions.rest.controllers.UserControllerAPI;
 import com.miguel.jobnest.infrastructure.idempotency.IdempotencyKey;
+import com.miguel.jobnest.infrastructure.ratelimiter.CustomRateLimiter;
 import com.miguel.jobnest.infrastructure.rest.dtos.MessageResponse;
 import com.miguel.jobnest.infrastructure.rest.dtos.user.req.ResetUserPasswordRequest;
 import com.miguel.jobnest.infrastructure.rest.dtos.user.req.UpdateUserRequest;
@@ -40,6 +41,7 @@ public class UserRestController implements UserControllerAPI {
 
     @Override
     @IdempotencyKey
+    @CustomRateLimiter
     public ResponseEntity<MessageResponse> updateUserToVerified(final String code) {
         this.updateUserToVerifiedUseCase.execute(UpdateUserToVerifiedUseCaseInput.with(code));
 
@@ -48,6 +50,7 @@ public class UserRestController implements UserControllerAPI {
 
     @Override
     @IdempotencyKey
+    @CustomRateLimiter
     public ResponseEntity<MessageResponse> resetUserPassword(final String code, final ResetUserPasswordRequest request) {
         this.resetUserPasswordUseCase.execute(request.toInput(code));
 
@@ -55,6 +58,7 @@ public class UserRestController implements UserControllerAPI {
     }
 
     @Override
+    @CustomRateLimiter
     public ResponseEntity<GetAuthenticatedUserResponse> getAuthenticatedUser() {
         final GetAuthenticatedUserUseCaseOutput output = this.getAuthenticatedUserUseCase.execute();
 
@@ -62,6 +66,7 @@ public class UserRestController implements UserControllerAPI {
     }
 
     @Override
+    @CustomRateLimiter
     public ResponseEntity<MessageResponse> updateUser(final UpdateUserRequest request) {
         this.updateUserUseCase.execute(request.toInput());
 
@@ -69,6 +74,7 @@ public class UserRestController implements UserControllerAPI {
     }
 
     @Override
+    @CustomRateLimiter
     public ResponseEntity<MessageResponse> updateUserPassword(final UpdateUserPasswordRequest request) {
         this.updateUserPasswordUseCase.execute(request.toInput());
 
@@ -76,6 +82,7 @@ public class UserRestController implements UserControllerAPI {
     }
 
     @Override
+    @CustomRateLimiter
     public ResponseEntity<MessageResponse> deleteUser() {
         this.softDeleteUserUseCase.execute();
 

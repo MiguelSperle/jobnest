@@ -6,6 +6,7 @@ import com.miguel.jobnest.application.usecases.jobvacancy.outputs.ListJobVacanci
 import com.miguel.jobnest.domain.pagination.Pagination;
 import com.miguel.jobnest.domain.pagination.SearchQuery;
 import com.miguel.jobnest.infrastructure.abstractions.rest.controllers.candidate.JobVacancyCandidateControllerAPI;
+import com.miguel.jobnest.infrastructure.ratelimiter.CustomRateLimiter;
 import com.miguel.jobnest.infrastructure.rest.dtos.jobvacancy.res.ListJobVacanciesResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,6 +20,7 @@ public class JobVacancyCandidateRestController implements JobVacancyCandidateCon
     }
 
     @Override
+    @CustomRateLimiter
     public ResponseEntity<Pagination<ListJobVacanciesResponse>> listJobVacancies(
             final int page,
             final int perPage,

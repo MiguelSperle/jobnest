@@ -10,6 +10,7 @@ import com.miguel.jobnest.domain.pagination.Pagination;
 import com.miguel.jobnest.domain.pagination.SearchQuery;
 import com.miguel.jobnest.infrastructure.abstractions.rest.controllers.candidate.SubscriptionCandidateControllerAPI;
 import com.miguel.jobnest.infrastructure.idempotency.IdempotencyKey;
+import com.miguel.jobnest.infrastructure.ratelimiter.CustomRateLimiter;
 import com.miguel.jobnest.infrastructure.rest.dtos.MessageResponse;
 import com.miguel.jobnest.infrastructure.rest.dtos.subscription.req.CreateSubscriptionRequest;
 import com.miguel.jobnest.infrastructure.rest.dtos.subscription.res.ListSubscriptionsByUserIdResponse;
@@ -38,6 +39,7 @@ public class SubscriptionCandidateRestController implements SubscriptionCandidat
 
     @Override
     @IdempotencyKey
+    @CustomRateLimiter
     public ResponseEntity<MessageResponse> createSubscription(final CreateSubscriptionRequest request, final MultipartFile resumeFile) throws IOException {
         this.createSubscriptionUseCase.execute(request.toInput(resumeFile.getBytes()));
 
@@ -45,6 +47,7 @@ public class SubscriptionCandidateRestController implements SubscriptionCandidat
     }
 
     @Override
+    @CustomRateLimiter
     public ResponseEntity<Pagination<ListSubscriptionsByUserIdResponse>> listSubscriptionsByUserId(
             final int page,
             final int perPage,
@@ -59,6 +62,7 @@ public class SubscriptionCandidateRestController implements SubscriptionCandidat
     }
 
     @Override
+    @CustomRateLimiter
     public ResponseEntity<MessageResponse> cancelSubscription(final String subscriptionId) {
         this.cancelSubscriptionUseCase.execute(CancelSubscriptionUseCaseInput.with(subscriptionId));
 

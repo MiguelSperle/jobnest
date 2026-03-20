@@ -91,4 +91,12 @@ public class GlobalExceptionHandler {
                 Collections.singletonList(ex.getMessage()), HttpStatus.CONFLICT.getReasonPhrase()
         ));
     }
+
+    @ExceptionHandler(TooManyRequestsException.class)
+    public ResponseEntity<ApiError> handleTooManyRequestsException(final TooManyRequestsException ex) {
+        log.info("Handling too many requests exception: {}", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).body(ApiError.from(
+                Collections.singletonList(ex.getMessage()), HttpStatus.TOO_MANY_REQUESTS.getReasonPhrase()
+        ));
+    }
 }
