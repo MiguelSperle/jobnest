@@ -80,17 +80,9 @@ public class RabbitMQProperties {
     }
 
     public static class DeadLetterQueueProperties {
-        private String queue;
         private String exchange;
         private String routingKey;
-
-        public String getQueue() {
-            return this.queue;
-        }
-
-        public void setQueue(final String queue) {
-            this.queue = queue;
-        }
+        private String queue;
 
         public String getExchange() {
             return this.exchange;
@@ -106,6 +98,14 @@ public class RabbitMQProperties {
 
         public void setRoutingKey(final String routingKey) {
             this.routingKey = routingKey;
+        }
+
+        public String getQueue() {
+            return this.queue;
+        }
+
+        public void setQueue(final String queue) {
+            this.queue = queue;
         }
     }
 }

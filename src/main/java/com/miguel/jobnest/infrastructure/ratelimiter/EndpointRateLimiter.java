@@ -8,5 +8,5 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.METHOD})
 public @interface EndpointRateLimiter {
-    String instanceName() default "defaultConfiguration";
+    String instanceName() default "default-configuration";
 }

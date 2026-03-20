@@ -55,10 +55,10 @@ security:
 resilience4j:
   ratelimiter:
     instances:
-      defaultConfiguration:
-        limitForPeriod: 5
-        limitRefreshPeriod: 15s
-        timeoutDuration: 0
+      default-configuration:
+        limit-for-period: 5
+        limit-refresh-period: 15s
+        timeout-duration: 0
 
 amqp:
   queues:
@@ -69,9 +69,9 @@ amqp:
       routing-key: user.code.created
       queue: user.code.created.queue
       dead-letter-queue-properties:
-        queue: user.code.created.queue.dlq
         exchange: user.code.events.dlq
         routing-key: user.code.created.dlq
+        queue: user.code.created.queue.dlq
     subscription-created:
       exchange-properties:
         name: subscription.events
@@ -79,6 +79,6 @@ amqp:
       routing-key: subscription.created
       queue: subscription.created.queue
       dead-letter-queue-properties:
-        queue: subscription.created.queue.dlq
         exchange: subscription.events.dlq
         routing-key: subscription.created.dlq
+        queue: subscription.created.queue.dlq
