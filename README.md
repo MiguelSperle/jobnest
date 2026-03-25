@@ -19,7 +19,7 @@ both for those who publish job vacancies and for those who seek to apply for the
 </p>
 
 <p>
-It's important to emphasize that this is a study project, designed to explore and implement complex concepts, such as: Clean Architecture, SOLID principles, Messaging, Database Transactions, Unit Tests, Rate Limiting and Idempotency.
+It's important to emphasize that this is a study project, designed to explore and implement complex concepts, such as: Clean Architecture, SOLID Principles, Messaging using the Inbox and Outbox pattern, Database Transactions, Unit Testing, Rate Limiting and Idempotency.
 </p>
 
 <p>
@@ -147,7 +147,7 @@ amqp:
         routing-key: subscription.created.dlq
 ```
 
-<h3>👨🏻‍💻 Developer</h3>
+<h3>👨🏻‍💻 Contributors</h3>
 
 <table>
   <tr>
