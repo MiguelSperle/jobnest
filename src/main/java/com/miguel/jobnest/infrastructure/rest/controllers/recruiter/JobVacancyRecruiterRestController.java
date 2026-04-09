@@ -8,7 +8,6 @@ import com.miguel.jobnest.domain.pagination.Pagination;
 import com.miguel.jobnest.domain.pagination.SearchQuery;
 import com.miguel.jobnest.infrastructure.abstractions.rest.controllers.recruiter.JobVacancyRecruiterControllerAPI;
 import com.miguel.jobnest.infrastructure.idempotency.IdempotencyKey;
-import com.miguel.jobnest.infrastructure.ratelimiter.EndpointRateLimiter;
 import com.miguel.jobnest.infrastructure.rest.dtos.MessageResponse;
 import com.miguel.jobnest.infrastructure.rest.dtos.jobvacancy.req.CreateJobVacancyRequest;
 import com.miguel.jobnest.infrastructure.rest.dtos.jobvacancy.req.UpdateJobVacancyRequest;
@@ -40,7 +39,6 @@ public class JobVacancyRecruiterRestController implements JobVacancyRecruiterCon
 
     @Override
     @IdempotencyKey
-    @EndpointRateLimiter
     public ResponseEntity<MessageResponse> createJobVacancy(final CreateJobVacancyRequest request) {
         this.createJobVacancyUseCase.execute(request.toInput());
 
@@ -48,7 +46,6 @@ public class JobVacancyRecruiterRestController implements JobVacancyRecruiterCon
     }
 
     @Override
-    @EndpointRateLimiter
     public ResponseEntity<Pagination<ListJobVacanciesByUserIdResponse>> listJobVacanciesByUserId(
             final String userId,
             final int page,
@@ -66,7 +63,6 @@ public class JobVacancyRecruiterRestController implements JobVacancyRecruiterCon
     }
 
     @Override
-    @EndpointRateLimiter
     public ResponseEntity<MessageResponse> updateJobVacancy(final String jobVacancyId, final UpdateJobVacancyRequest request) {
         this.updateJobVacancyUseCase.execute(request.toInput(jobVacancyId));
 
@@ -74,7 +70,6 @@ public class JobVacancyRecruiterRestController implements JobVacancyRecruiterCon
     }
 
     @Override
-    @EndpointRateLimiter
     public ResponseEntity<MessageResponse> deleteJobVacancy(final String jobVacancyId) {
         this.softDeleteJobVacancyUseCase.execute(SoftDeleteJobVacancyUseCaseInput.with(jobVacancyId));
 

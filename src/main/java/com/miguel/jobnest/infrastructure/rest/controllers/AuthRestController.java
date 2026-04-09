@@ -5,7 +5,6 @@ import com.miguel.jobnest.application.abstractions.usecases.user.CreateUserUseCa
 import com.miguel.jobnest.application.usecases.user.outputs.AuthenticateUserUseCaseOutput;
 import com.miguel.jobnest.infrastructure.abstractions.rest.controllers.AuthControllerAPI;
 import com.miguel.jobnest.infrastructure.idempotency.IdempotencyKey;
-import com.miguel.jobnest.infrastructure.ratelimiter.EndpointRateLimiter;
 import com.miguel.jobnest.infrastructure.rest.dtos.user.req.AuthenticateUserRequest;
 import com.miguel.jobnest.infrastructure.rest.dtos.user.req.CreateUserRequest;
 import com.miguel.jobnest.infrastructure.rest.dtos.MessageResponse;
@@ -29,7 +28,6 @@ public class AuthRestController implements AuthControllerAPI {
 
     @Override
     @IdempotencyKey
-    @EndpointRateLimiter
     public ResponseEntity<MessageResponse> createUser(final CreateUserRequest request) {
         this.createUserUseCase.execute(request.toInput());
 
@@ -37,7 +35,6 @@ public class AuthRestController implements AuthControllerAPI {
     }
 
     @Override
-    @EndpointRateLimiter
     public ResponseEntity<AuthenticateUserResponse> authenticateUser(final AuthenticateUserRequest request) {
         final AuthenticateUserUseCaseOutput output = this.authenticateUserUseCase.execute(request.toInput());
 

@@ -15,6 +15,6 @@ public interface AuthControllerAPI {
     @PostMapping("/create")
     ResponseEntity<MessageResponse> createUser(@RequestBody @Valid CreateUserRequest request);
 
-    @PostMapping("/authenticate")
+    @PostMapping("/login")
     ResponseEntity<AuthenticateUserResponse> authenticateUser(@RequestBody @Valid AuthenticateUserRequest request);
 }

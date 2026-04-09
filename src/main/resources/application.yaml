@@ -23,10 +23,10 @@ spring:
         acknowledge-mode: auto
         retry:
           enabled: true
-          max-attempts: 4
           initial-interval: 3000
           multiplier: 2
           max-interval: 12000
+          max-retries: 3
   data:
     redis:
       host: ${REDIS_HOST}
@@ -51,14 +51,6 @@ spring:
 security:
   token:
     secret: ${JWT_SECRET}
-
-resilience4j:
-  ratelimiter:
-    instances:
-      default-configuration:
-        limit-for-period: 5
-        limit-refresh-period: 15s
-        timeout-duration: 0
 
 amqp:
   queues:

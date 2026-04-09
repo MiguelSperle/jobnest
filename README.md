@@ -7,7 +7,6 @@
     <img src="https://img.shields.io/badge/Spring_data_jpa-6DB33F?style=for-the-badge&logo=hibernate&logoColor=white" alt="Spring Data Jpa Badge" />
     <img src="https://img.shields.io/badge/-postgresql-336791?style=for-the-badge&logo=postgresql&logoColor=white" alt="Postgres Badge"/>
     <img src="https://img.shields.io/badge/-rabbitmq-%23FF6600?style=for-the-badge&logo=rabbitmq&logoColor=white" alt="RabbitMQ Badge"/>
-    <img src="https://img.shields.io/badge/-resilience4j-000000?style=for-the-badge" alt="Resilience4j Badge" />
     <img src="https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white" alt="Docker Badge"/>
     <img src="https://img.shields.io/badge/junit-%23E33332?style=for-the-badge&logo=junit5&logoColor=white" alt="Junit Badge"/>
     <img src="https://img.shields.io/badge/Mockito-25A162?style=for-the-badge" alt="Mockito Badge" />
@@ -19,7 +18,7 @@ both for those who publish job vacancies and for those who seek to apply for the
 </p>
 
 <p>
-It's important to emphasize that this is a study project designed to explore and implement complex concepts, such as: Clean Architecture, SOLID Principles, Messaging System combined with the implementation of the Inbox and Outbox pattern, Database Transactions, Unit Testing, Rate Limiting and Idempotency.
+It's important to emphasize that this is a study project designed to explore and implement complex concepts, such as: Clean Architecture, SOLID Principles, Messaging System combined with the implementation of the Inbox and Outbox pattern, Database Transactions, Unit Testing and Idempotency.
 </p>
 
 <p>
@@ -86,10 +85,10 @@ spring:
         acknowledge-mode: auto
         retry:
           enabled: true
-          max-attempts: 4
           initial-interval: 3000
           multiplier: 2
           max-interval: 12000
+          max-retries: 3
   data:
     redis:
       host: ${REDIS_HOST}
@@ -114,14 +113,6 @@ spring:
 security:
   token:
     secret: ${JWT_SECRET}
- 
-resilience4j:
-  ratelimiter:
-    instances:
-      defaultConfiguration:
-        limitForPeriod: 5
-        limitRefreshPeriod: 15s
-        timeoutDuration: 0
 
 amqp:
   queues:
@@ -132,9 +123,9 @@ amqp:
       routing-key: user.code.created
       queue: user.code.created.queue
       dead-letter-queue-properties:
-        queue: user.code.created.queue.dlq
         exchange: user.code.events.dlq
         routing-key: user.code.created.dlq
+        queue: user.code.created.queue.dlq
     subscription-created:
       exchange-properties:
         name: subscription.events
@@ -142,9 +133,9 @@ amqp:
       routing-key: subscription.created
       queue: subscription.created.queue
       dead-letter-queue-properties:
-        queue: subscription.created.queue.dlq
         exchange: subscription.events.dlq
         routing-key: subscription.created.dlq
+        queue: subscription.created.queue.dlq
 ```
 
 <h3>👨🏻‍💻 Contributors</h3>
