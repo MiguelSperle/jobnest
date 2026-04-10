@@ -1,4 +1,4 @@
-<h1>JobNest 💻</h1>
+<h1>Jobnest 💻</h1>
 
 <p>
     <img src="https://img.shields.io/badge/-java-%23ED8B00.svg?style=for-the-badge&logo=openjdk&logoColor=white" alt="Java Badge"/>
@@ -59,84 +59,22 @@ docker-compose up -d
 
 <h3>🔑 System environment variables</h3>
 
-```
-spring:
-  config:
-    import: optional:file:.env[.properties]
-  application:
-    name: jobnest
-  datasource:
-    url: jdbc:postgresql://${DB_HOST}:5432/${DB_NAME}
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
-  jpa:
-    hibernate:
-      ddl-auto: none
-  flyway:
-    schemas: public
-    default-schema: public
-  rabbitmq:
-    host: ${RABBITMQ_HOST}
-    port: 5672
-    username: ${RABBITMQ_USERNAME}
-    password: ${RABBITMQ_PASSWORD}
-    listener:
-      simple:
-        acknowledge-mode: auto
-        retry:
-          enabled: true
-          initial-interval: 3000
-          multiplier: 2
-          max-interval: 12000
-          max-retries: 3
-  data:
-    redis:
-      host: ${REDIS_HOST}
-      port: 6379
-  mail:
-    host: smtp.gmail.com
-    port: 587
-    username: ${MAIL_USERNAME}
-    password: ${MAIL_PASSWORD}
-    properties:
-      mail:
-        smtp:
-          auth: true
-          starttls:
-            enable: true
-            required: true
-  cloudinary:
-    cloud-name: ${CLOUDINARY_CLOUD_NAME}
-    api-key: ${CLOUDINARY_API_KEY}
-    api-secret: ${CLOUDINARY_API_SECRET}
-
-security:
-  token:
-    secret: ${JWT_SECRET}
-
-amqp:
-  queues:
-    user-code-created:
-      exchange-properties:
-        name: user.code.events
-        type: direct
-      routing-key: user.code.created
-      queue: user.code.created.queue
-      dead-letter-queue-properties:
-        exchange: user.code.events.dlq
-        routing-key: user.code.created.dlq
-        queue: user.code.created.queue.dlq
-    subscription-created:
-      exchange-properties:
-        name: subscription.events
-        type: direct
-      routing-key: subscription.created
-      queue: subscription.created.queue
-      dead-letter-queue-properties:
-        exchange: subscription.events.dlq
-        routing-key: subscription.created.dlq
-        queue: subscription.created.queue.dlq
-```
+| Variable | Description
+|----------|------------
+| `DB_HOST` | To specify the Database server address
+| `DB_NAME` | To specify the Database name
+| `DB_USERNAME` | To authenticate with the Database
+| `DB_PASSWORD` | To authenticate with the Database
+| `RABBITMQ_HOST` | To specify the RabbitMQ server address
+| `RABBITMQ_USERNAME` | To authenticate with RabbitMQ
+| `RABBITMQ_PASSWORD` | To authenticate with RabbitMQ
+| `REDIS_HOST` | To specify the Redis server address
+| `MAIL_USERNAME` | To authenticate with the SMTP service
+| `MAIL_PASSWORD` |To authenticate with the SMTP service
+| `CLOUDINARY_CLOUD_NAME` | To identify your account on Cloudinary
+| `CLOUDINARY_API_KEY` | To authenticate with Cloudinary
+| `CLOUDINARY_API_SECRET` | To authenticate with Cloudinary
+| `JWT_SECRET` | To sign and verify JSON Web Tokens
 
 <h3>👨🏻‍💻 Contributors</h3>
 
