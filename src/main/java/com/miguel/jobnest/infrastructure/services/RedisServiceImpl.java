@@ -38,6 +38,6 @@ public class RedisServiceImpl implements RedisService {
 
     @Override
     public long execute(final String script, final List<String> keys, final int seconds) {
-        return this.redisTemplate.execute(new DefaultRedisScript<>(script, long.class), keys, seconds);
+        return this.redisTemplate.execute(new DefaultRedisScript<>(script, Long.class), keys, seconds);
     }
 }
