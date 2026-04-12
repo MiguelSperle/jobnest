@@ -1,4 +1,4 @@
-package com.miguel.jobnest.infrastructure.ratelimiting;
+package com.miguel.jobnest.infrastructure.ratelimiter;
 
 import com.miguel.jobnest.infrastructure.abstractions.services.RedisService;
 import com.miguel.jobnest.infrastructure.exceptions.TooManyRequestsException;
@@ -18,11 +18,11 @@ import java.util.List;
 
 @Component
 @Order(value = Ordered.HIGHEST_PRECEDENCE)
-public class RateLimitingFilter extends OncePerRequestFilter {
+public class RateLimiterFilter extends OncePerRequestFilter {
     private final RedisService redisService;
     private final HandlerExceptionResolver handlerExceptionResolver;
 
-    public RateLimitingFilter(
+    public RateLimiterFilter(
             final RedisService redisService,
             final HandlerExceptionResolver handlerExceptionResolver
     ) {
@@ -31,11 +31,24 @@ public class RateLimitingFilter extends OncePerRequestFilter {
     }
 
     private static final int MAX_REQUESTS_ALLOWED = 50;
+
     private static final int FIXED_WINDOW_SECONDS = 60;
+    private static final String FIXED_WINDOW_SCRIPT = """
+            local key = KEYS[1]
+            local seconds = tonumber(ARGV[1])
+            
+            local count = redis.call('INCR', key)
+            
+            if count == 1 then
+                redis.call('EXPIRE', key, seconds)
+            end
+            
+            return count
+            """;
 
     private static final String RATE_LIMIT_REDIS_PREFIX = "rate-limit:";
 
-    private static final Logger log = LoggerFactory.getLogger(RateLimitingFilter.class);
+    private static final Logger log = LoggerFactory.getLogger(RateLimiterFilter.class);
 
     @Override
     protected void doFilterInternal(
@@ -44,12 +57,12 @@ public class RateLimitingFilter extends OncePerRequestFilter {
             @NonNull final FilterChain filterChain
     ) {
         try {
-            log.info("Processing rate limiting filter");
+            log.info("Processing rate limiter filter");
 
             final String clientIp = this.extractClientIp(request);
             final String redisKey = RATE_LIMIT_REDIS_PREFIX.concat(clientIp);
 
-            final long count = this.redisService.execute(RATE_LIMITING_FIXED_WINDOW_SCRIPT, List.of(redisKey), FIXED_WINDOW_SECONDS);
+            final long count = this.redisService.execute(FIXED_WINDOW_SCRIPT, List.of(redisKey), FIXED_WINDOW_SECONDS);
 
             if (count > MAX_REQUESTS_ALLOWED) {
                 throw TooManyRequestsException.with("Too many requests occurred. Please wait a moment before trying again");
@@ -76,16 +89,4 @@ public class RateLimitingFilter extends OncePerRequestFilter {
 
         return request.getRemoteAddr();
     }
-
-    private static final String RATE_LIMITING_FIXED_WINDOW_SCRIPT = """
-            local key = KEYS[1]
-            local fixedWindowSeconds = tonumber(ARGV[1])
-            local count = redis.call('INCR', key)
-            
-            if count == 1 then
-                redis.call('EXPIRE', key, fixedWindowSeconds)
-            end
-            
-            return count
-            """;
 }
