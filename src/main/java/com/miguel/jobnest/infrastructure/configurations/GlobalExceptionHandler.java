@@ -26,7 +26,7 @@ public class GlobalExceptionHandler {
         log.info("Handling method argument not valid exception: {}", ex.getMessage());
         final List<String> errors = ex.getBindingResult().getFieldErrors().stream().map(FieldError::getDefaultMessage).toList();
 
-        return ResponseEntity.badRequest().body(ApiError.from(errors, HttpStatus.BAD_REQUEST.getReasonPhrase()));
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiError.from(errors, HttpStatus.BAD_REQUEST.getReasonPhrase()));
     }
 
     @ExceptionHandler(JwtTokenValidationFailedException.class)
@@ -40,7 +40,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiError> handleException(final Exception ex) {
         log.error("Handling unexpected exception: {}", ex.getMessage(), ex);
-        return ResponseEntity.internalServerError().body(ApiError.from(
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ApiError.from(
                 Collections.singletonList("An unexpected error occurred"), HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase()
         ));
     }
@@ -63,32 +63,17 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MissingServletRequestPartException.class)
     public ResponseEntity<ApiError> handleMissingServletRequestPartException(final MissingServletRequestPartException ex) {
-        log.info("Handling missing request part exception: {}", ex.getMessage());
-        return ResponseEntity.badRequest().body(ApiError.from(
+        log.info("Handling missing servlet request part exception: {}", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiError.from(
                 Collections.singletonList(ex.getMessage()), HttpStatus.BAD_REQUEST.getReasonPhrase()
         ));
-    }
-
-    @ExceptionHandler(IdempotencyKeyUnsupportedMethodException.class)
-    public ResponseEntity<ApiError> handleIdempotencyKeyUnsupportedMethodException(final IdempotencyKeyUnsupportedMethodException ex) {
-        log.info("Handling idempotency key unsupported method exception: {}", ex.getMessage());
-        return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED)
-                .body(ApiError.from(Collections.singletonList(ex.getMessage()), HttpStatus.METHOD_NOT_ALLOWED.getReasonPhrase()));
     }
 
     @ExceptionHandler(IdempotencyKeyRequiredException.class)
     public ResponseEntity<ApiError> handleIdempotencyKeyRequiredException(final IdempotencyKeyRequiredException ex) {
         log.info("Handling idempotency key required exception: {}", ex.getMessage());
-        return ResponseEntity.badRequest().body(ApiError.from(
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiError.from(
                 Collections.singletonList(ex.getMessage()), HttpStatus.BAD_REQUEST.getReasonPhrase()
-        ));
-    }
-
-    @ExceptionHandler(IdempotencyKeyProcessingException.class)
-    public ResponseEntity<ApiError> handleIdempotencyKeyAlreadyExistsException(final IdempotencyKeyProcessingException ex) {
-        log.info("Handling idempotency key already exists exception: {}", ex.getMessage());
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(ApiError.from(
-                Collections.singletonList(ex.getMessage()), HttpStatus.CONFLICT.getReasonPhrase()
         ));
     }
 

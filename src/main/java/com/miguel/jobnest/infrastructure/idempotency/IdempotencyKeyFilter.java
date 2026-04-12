@@ -1,7 +1,7 @@
 package com.miguel.jobnest.infrastructure.idempotency;
 
 import com.miguel.jobnest.infrastructure.abstractions.services.RedisService;
-import com.miguel.jobnest.infrastructure.exceptions.IdempotencyKeyProcessingException;
+import com.miguel.jobnest.infrastructure.exceptions.IdempotencyKeyAlreadyExistsException;
 import com.miguel.jobnest.infrastructure.exceptions.IdempotencyKeyRequiredException;
 import com.miguel.jobnest.infrastructure.exceptions.IdempotencyKeyUnsupportedMethodException;
 import jakarta.servlet.FilterChain;
@@ -93,7 +93,7 @@ public class IdempotencyKeyFilter extends OncePerRequestFilter {
                 final boolean isAbsent = this.redisService.setIfAbsent(redisKey, IdempotencyKeyValue.init(), timeout, timeUnit);
 
                 if (!isAbsent) {
-                    throw IdempotencyKeyProcessingException.with("Idempotency key is already being processed by another request");
+                    throw IdempotencyKeyAlreadyExistsException.with("Idempotency key already exists");
                 }
 
                 final ContentCachingResponseWrapper contentCachingResponseWrapper = new ContentCachingResponseWrapper(response);
