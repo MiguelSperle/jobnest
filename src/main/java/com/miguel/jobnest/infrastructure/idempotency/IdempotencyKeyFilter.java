@@ -93,7 +93,7 @@ public class IdempotencyKeyFilter extends OncePerRequestFilter {
                 final boolean isAbsent = this.redisService.setIfAbsent(redisKey, IdempotencyKeyValue.init(), timeout, timeUnit);
 
                 if (!isAbsent) {
-                    throw IdempotencyKeyProcessingException.with("This idempotency key is already being processed by another request");
+                    throw IdempotencyKeyProcessingException.with("Idempotency key is already being processed by another request");
                 }
 
                 final ContentCachingResponseWrapper contentCachingResponseWrapper = new ContentCachingResponseWrapper(response);
