@@ -24,7 +24,7 @@ public class RabbitMQEventBusService implements EventBusService {
             this.rabbitTemplate.convertAndSend(jpaEventOutboxEntity.getExchange(), jpaEventOutboxEntity.getRoutingKey(), jpaEventOutboxEntity.getPayload());
         } catch (Exception ex) {
             log.error("Failed to publish event: {}", jpaEventOutboxEntity.getEventType(), ex);
-            throw EventPublishingFailedException.with("Failed to publish event", ex);
+            throw EventPublishingFailedException.with("Failed to publish event");
         }
     }
 }

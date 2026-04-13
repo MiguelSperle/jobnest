@@ -38,13 +38,15 @@ public class UserCodeCreatedListener {
 
     @RabbitListener(queues = USER_CODE_CREATED_QUEUE)
     public void onMessage(@Payload final Message message) {
+        log.info("Received message: {}", message);
+
         final UserCodeCreatedEvent event = Json.readValue(message.getBody(), UserCodeCreatedEvent.class);
 
         final String eventId = event.eventId();
         final String listenerName = UserCodeCreatedListener.class.getSimpleName();
 
         if (this.processedEventRepository.existsByEventIdAndListener(eventId, listenerName)) {
-            log.info("Event with id: {} has already been processed by the listener: {}", eventId, listenerName);
+            log.warn("Event with id: {} has already been processed by the listener: {}", eventId, listenerName);
             return;
         }
 

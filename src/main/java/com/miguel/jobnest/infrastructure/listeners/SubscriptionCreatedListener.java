@@ -42,13 +42,15 @@ public class SubscriptionCreatedListener {
 
     @RabbitListener(queues = SUBSCRIPTION_CREATED_QUEUE)
     public void onMessage(@Payload final Message message) {
+        log.info("Received message: {}", message);
+
         final SubscriptionCreatedEvent event = Json.readValue(message.getBody(), SubscriptionCreatedEvent.class);
 
         final String eventId = event.eventId();
         final String listenerName = SubscriptionCreatedListener.class.getSimpleName();
 
         if (this.processedEventRepository.existsByEventIdAndListener(eventId, listenerName)) {
-            log.info("Event with id: {} has already been processed by the listener: {}", eventId, listenerName);
+            log.warn("Event with id: {} has already been processed by the listener: {}", eventId, listenerName);
             return;
         }
 

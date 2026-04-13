@@ -6,8 +6,6 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.jspecify.annotations.NonNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
@@ -48,8 +46,6 @@ public class RateLimiterFilter extends OncePerRequestFilter {
 
     private static final String RATE_LIMIT_REDIS_PREFIX = "rate-limit:";
 
-    private static final Logger log = LoggerFactory.getLogger(RateLimiterFilter.class);
-
     @Override
     protected void doFilterInternal(
             @NonNull final HttpServletRequest request,
@@ -57,8 +53,6 @@ public class RateLimiterFilter extends OncePerRequestFilter {
             @NonNull final FilterChain filterChain
     ) {
         try {
-            log.info("Processing rate limiter filter");
-
             final String clientIp = this.extractClientIp(request);
             final String redisKey = RATE_LIMIT_REDIS_PREFIX.concat(clientIp);
 

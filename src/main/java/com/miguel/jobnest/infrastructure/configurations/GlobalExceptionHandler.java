@@ -23,7 +23,6 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ApiError> handleMethodArgumentNotValidException(final MethodArgumentNotValidException ex) {
-        log.info("Handling method argument not valid exception: {}", ex.getMessage());
         final List<String> errors = ex.getBindingResult().getFieldErrors().stream().map(FieldError::getDefaultMessage).toList();
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiError.from(errors, HttpStatus.BAD_REQUEST.getReasonPhrase()));
@@ -31,7 +30,6 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(JwtTokenValidationFailedException.class)
     public ResponseEntity<ApiError> handleJwtTokenValidationFailedException(final JwtTokenValidationFailedException ex) {
-        log.info("Handling jwt token validation failed exception: {}", ex.getMessage());
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ApiError.from(
                 Collections.singletonList(ex.getMessage()), HttpStatus.UNAUTHORIZED.getReasonPhrase()
         ));
@@ -47,7 +45,6 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(DomainException.class)
     public ResponseEntity<ApiError> handleDomainException(final DomainException ex) {
-        log.info("Handling domain exception: {}", ex.getMessage());
         return ResponseEntity.status(HttpStatus.valueOf(ex.getStatusCode())).body(ApiError.from(
                 Collections.singletonList(ex.getMessage()), HttpStatus.valueOf(ex.getStatusCode()).getReasonPhrase()
         ));
@@ -55,7 +52,6 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<ApiError> handleNotFoundException(final NotFoundException ex) {
-        log.info("Handling not found exception: {}", ex.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ApiError.from(
                 Collections.singletonList(ex.getMessage()), HttpStatus.NOT_FOUND.getReasonPhrase()
         ));
@@ -63,7 +59,6 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MissingServletRequestPartException.class)
     public ResponseEntity<ApiError> handleMissingServletRequestPartException(final MissingServletRequestPartException ex) {
-        log.info("Handling missing servlet request part exception: {}", ex.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiError.from(
                 Collections.singletonList(ex.getMessage()), HttpStatus.BAD_REQUEST.getReasonPhrase()
         ));
@@ -71,7 +66,6 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(IdempotencyKeyRequiredException.class)
     public ResponseEntity<ApiError> handleIdempotencyKeyRequiredException(final IdempotencyKeyRequiredException ex) {
-        log.info("Handling idempotency key required exception: {}", ex.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiError.from(
                 Collections.singletonList(ex.getMessage()), HttpStatus.BAD_REQUEST.getReasonPhrase()
         ));
@@ -79,7 +73,6 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(TooManyRequestsException.class)
     public ResponseEntity<ApiError> handleTooManyRequestsException(final TooManyRequestsException ex) {
-        log.info("Handling too many requests exception: {}", ex.getMessage());
         return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).body(ApiError.from(
                 Collections.singletonList(ex.getMessage()), HttpStatus.TOO_MANY_REQUESTS.getReasonPhrase()
         ));
