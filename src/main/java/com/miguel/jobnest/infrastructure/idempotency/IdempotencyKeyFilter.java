@@ -52,10 +52,8 @@ public class IdempotencyKeyFilter extends OncePerRequestFilter {
             final HandlerMethod handlerMethod = this.getHandlerMethod(request);
 
             if (handlerMethod != null && this.isIdempotencyKeyAnnotated(handlerMethod)) {
-                final String httpMethod = request.getMethod();
-
-                if (!httpMethod.equals("POST") && !httpMethod.equals("PATCH")) {
-                    throw IdempotencyKeyUnsupportedMethodException.with("Idempotency key is only supported for POST and PATCH methods");
+                if (!this.isSupportedMethod(request)) {
+                    throw IdempotencyKeyUnsupportedMethodException.with("Idempotency key is not supported for the %s method".formatted(request.getMethod()));
                 }
 
                 final String idempotencyKeyHeader = request.getHeader(IdempotencyKey.IDEMPOTENCY_KEY_HEADER);
@@ -137,5 +135,9 @@ public class IdempotencyKeyFilter extends OncePerRequestFilter {
 
     private IdempotencyKey getIdempotencyKeyValues(final HandlerMethod handlerMethod) {
         return handlerMethod.getMethodAnnotation(IdempotencyKey.class);
+    }
+
+    private boolean isSupportedMethod(final HttpServletRequest request) {
+        return request.getMethod().equals("POST") || request.getMethod().equals("PATCH");
     }
 }

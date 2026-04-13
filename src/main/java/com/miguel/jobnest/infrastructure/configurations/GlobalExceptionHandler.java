@@ -64,6 +64,13 @@ public class GlobalExceptionHandler {
         ));
     }
 
+    @ExceptionHandler(IdempotencyKeyUnsupportedMethodException.class)
+    public ResponseEntity<ApiError> handleIdempotencyKeyUnsupportedMethodException(final IdempotencyKeyUnsupportedMethodException ex) {
+        return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).body(ApiError.from(
+                Collections.singletonList(ex.getMessage()), HttpStatus.METHOD_NOT_ALLOWED.getReasonPhrase()
+        ));
+    }
+
     @ExceptionHandler(IdempotencyKeyRequiredException.class)
     public ResponseEntity<ApiError> handleIdempotencyKeyRequiredException(final IdempotencyKeyRequiredException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiError.from(
