@@ -30,15 +30,15 @@ public class RateLimiterFilter extends OncePerRequestFilter {
 
     private static final int MAX_REQUESTS_ALLOWED = 50;
 
-    private static final int FIXED_WINDOW_SECONDS = 60;
+    private static final long FIXED_WINDOW_TIMEOUT = 60L;
     private static final String FIXED_WINDOW_SCRIPT = """
             local key = KEYS[1]
-            local seconds = tonumber(ARGV[1])
+            local timeout = tonumber(ARGV[1])
             
             local count = redis.call('INCR', key)
             
             if count == 1 then
-                redis.call('EXPIRE', key, seconds)
+                redis.call('EXPIRE', key, timeout)
             end
             
             return count
@@ -56,9 +56,9 @@ public class RateLimiterFilter extends OncePerRequestFilter {
             final String clientIp = this.extractClientIp(request);
             final String redisKey = RATE_LIMIT_REDIS_PREFIX.concat(clientIp);
 
-            final long count = this.redisService.execute(FIXED_WINDOW_SCRIPT, List.of(redisKey), FIXED_WINDOW_SECONDS);
+            final Long count = this.redisService.execute(FIXED_WINDOW_SCRIPT, Long.class, List.of(redisKey), FIXED_WINDOW_TIMEOUT);
 
-            if (count > MAX_REQUESTS_ALLOWED) {
+            if (count != null && count > MAX_REQUESTS_ALLOWED) {
                 throw TooManyRequestsException.with("Too many requests occurred. Please wait a moment before trying again");
             }
 

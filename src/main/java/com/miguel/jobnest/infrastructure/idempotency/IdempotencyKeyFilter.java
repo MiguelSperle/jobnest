@@ -20,6 +20,7 @@ import org.springframework.web.util.ContentCachingResponseWrapper;
 
 import java.lang.reflect.Method;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -79,9 +80,9 @@ public class IdempotencyKeyFilter extends OncePerRequestFilter {
                 final long timeout = idempotencyKeyValues.timeout();
                 final TimeUnit timeUnit = idempotencyKeyValues.timeUnit();
 
-                final boolean isAbsent = this.redisService.setIfAbsent(redisKey, IdempotencyKeyValue.init(), timeout, timeUnit);
+                final Boolean isAbsent = this.redisService.setIfAbsent(redisKey, IdempotencyKeyValue.init(), timeout, timeUnit);
 
-                if (!isAbsent) {
+                if (Boolean.FALSE.equals(isAbsent)) {
                     throw IdempotencyKeyAlreadyExistsException.with("Idempotency key already exists");
                 }
 
@@ -95,15 +96,15 @@ public class IdempotencyKeyFilter extends OncePerRequestFilter {
 
                 final Map<String, String> headers = contentCachingResponseWrapper.getHeaderNames().stream().collect(Collectors.toMap(
                         headerName -> headerName,
-                        headerName -> String.join(", ", contentCachingResponseWrapper.getHeaders(headerName)),
-                        (exists, duplicated) -> duplicated
+                        headerName -> Objects.toString(contentCachingResponseWrapper.getHeader(headerName), ""),
+                        (v1, v2) -> v1
                 ));
 
-                final IdempotencyKeyValue idempotencyKeyValue = IdempotencyKeyValue.done(
+                final IdempotencyKeyValue idempotencyKeyValueDone = IdempotencyKeyValue.done(
                         contentCachingResponseWrapper.getStatus(), body, headers
                 );
 
-                this.redisService.set(redisKey, idempotencyKeyValue, timeout, timeUnit);
+                this.redisService.set(redisKey, idempotencyKeyValueDone, timeout, timeUnit);
             } else {
                 filterChain.doFilter(request, response);
             }

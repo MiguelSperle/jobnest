@@ -7,6 +7,6 @@ import java.util.concurrent.TimeUnit;
 public interface RedisService {
     <T> Optional<T> get(String key, Class<T> type);
     <T> void set(String key, T value, long timeout, TimeUnit timeUnit);
-    <T> boolean setIfAbsent(String key, T value, long timeout, TimeUnit timeUnit);
-    long execute(String script, List<String> keys, int timeoutSec);
+    <T> Boolean setIfAbsent(String key, T value, long timeout, TimeUnit timeUnit);
+    <T> T execute(String script, Class<T> resultType, List<String> keys, long timeout);
 }

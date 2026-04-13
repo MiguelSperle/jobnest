@@ -27,7 +27,7 @@ public class RedisServiceImpl implements RedisService {
     }
 
     @Override
-    public <T> boolean setIfAbsent(final String key, final T value, final long timeout, final TimeUnit timeUnit) {
+    public <T> Boolean setIfAbsent(final String key, final T value, final long timeout, final TimeUnit timeUnit) {
         return this.redisTemplate.opsForValue().setIfAbsent(key, value, timeout, timeUnit);
     }
 
@@ -37,7 +37,7 @@ public class RedisServiceImpl implements RedisService {
     }
 
     @Override
-    public long execute(final String script, final List<String> keys, final int seconds) {
-        return this.redisTemplate.execute(new DefaultRedisScript<>(script, Long.class), keys, seconds);
+    public <T> T execute(final String script, final Class<T> resultType, final List<String> keys, final long timeout) {
+        return this.redisTemplate.execute(new DefaultRedisScript<>(script, resultType), keys, timeout);
     }
 }
