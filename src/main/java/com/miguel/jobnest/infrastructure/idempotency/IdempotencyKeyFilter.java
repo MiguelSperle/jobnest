@@ -55,7 +55,7 @@ public class IdempotencyKeyFilter extends OncePerRequestFilter {
                 final String httpMethod = request.getMethod();
 
                 if (!httpMethod.equals("POST") && !httpMethod.equals("PATCH")) {
-                    throw IdempotencyKeyUnsupportedMethodException.with("Idempotency key is only supported for POST and PATCH requests");
+                    throw IdempotencyKeyUnsupportedMethodException.with("Idempotency key is only supported for POST and PATCH methods");
                 }
 
                 final String idempotencyKeyHeader = request.getHeader(IdempotencyKey.IDEMPOTENCY_KEY_HEADER);
@@ -77,8 +77,9 @@ public class IdempotencyKeyFilter extends OncePerRequestFilter {
                     return;
                 }
 
-                final long timeout = 1L;
-                final TimeUnit timeUnit = TimeUnit.HOURS;
+                final IdempotencyKey idempotencyKeyValues = this.getIdempotencyKeyValues(handlerMethod);
+                final long timeout = idempotencyKeyValues.timeout();
+                final TimeUnit timeUnit = idempotencyKeyValues.timeUnit();
 
                 final boolean isAbsent = this.redisService.setIfAbsent(redisKey, IdempotencyKeyValue.init(), timeout, timeUnit);
 
@@ -132,5 +133,9 @@ public class IdempotencyKeyFilter extends OncePerRequestFilter {
     private boolean isIdempotencyKeyAnnotated(final HandlerMethod handlerMethod) {
         final Method method = handlerMethod.getMethod();
         return method.isAnnotationPresent(IdempotencyKey.class) && handlerMethod.getBeanType().isAnnotationPresent(RestController.class);
+    }
+
+    private IdempotencyKey getIdempotencyKeyValues(final HandlerMethod handlerMethod) {
+        return handlerMethod.getMethodAnnotation(IdempotencyKey.class);
     }
 }
