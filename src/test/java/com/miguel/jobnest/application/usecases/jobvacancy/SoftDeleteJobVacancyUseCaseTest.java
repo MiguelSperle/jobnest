@@ -2,7 +2,7 @@ package com.miguel.jobnest.application.usecases.jobvacancy;
 
 import com.miguel.jobnest.application.abstractions.repositories.JobVacancyRepository;
 import com.miguel.jobnest.application.abstractions.repositories.SubscriptionRepository;
-import com.miguel.jobnest.application.abstractions.wrapper.TransactionExecutor;
+import com.miguel.jobnest.application.abstractions.wrapper.TransactionManager;
 import com.miguel.jobnest.application.usecases.jobvacancy.inputs.SoftDeleteJobVacancyUseCaseInput;
 import com.miguel.jobnest.domain.builders.JobVacancyBuilder;
 import com.miguel.jobnest.domain.builders.SubscriptionBuilder;
@@ -35,7 +35,7 @@ public class SoftDeleteJobVacancyUseCaseTest {
     private SubscriptionRepository subscriptionRepository;
 
     @Mock
-    private TransactionExecutor transactionExecutor;
+    private TransactionManager transactionManager;
 
     @Test
     void shouldDeleteJobVacancy_whenCallExecute() {
@@ -52,7 +52,7 @@ public class SoftDeleteJobVacancyUseCaseTest {
             final Runnable runnable = invocationOnMock.getArgument(0);
             runnable.run();
             return runnable;
-        }).when(this.transactionExecutor).runTransaction(Mockito.any());
+        }).when(this.transactionManager).runTransaction(Mockito.any());
         Mockito.when(this.jobVacancyRepository.save(Mockito.any())).thenAnswer(returnsFirstArg());
         Mockito.when(this.subscriptionRepository.save(Mockito.any())).thenAnswer(returnsFirstArg());
 
@@ -60,7 +60,7 @@ public class SoftDeleteJobVacancyUseCaseTest {
 
         Mockito.verify(this.jobVacancyRepository, Mockito.times(1)).findById(Mockito.any());
         Mockito.verify(this.subscriptionRepository, Mockito.times(1)).findAllByJobVacancyId(Mockito.any());
-        Mockito.verify(this.transactionExecutor, Mockito.times(1)).runTransaction(Mockito.any());
+        Mockito.verify(this.transactionManager, Mockito.times(1)).runTransaction(Mockito.any());
         Mockito.verify(this.jobVacancyRepository, Mockito.times(1)).save(Mockito.argThat(JobVacancy::getIsDeleted));
         Mockito.verify(this.subscriptionRepository, Mockito.times(1)).save(Mockito.argThat(Subscription::getIsCanceled));
     }

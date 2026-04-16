@@ -2,7 +2,7 @@ package com.miguel.jobnest.application.usecases.user;
 
 import com.miguel.jobnest.application.abstractions.repositories.UserCodeRepository;
 import com.miguel.jobnest.application.abstractions.repositories.UserRepository;
-import com.miguel.jobnest.application.abstractions.wrapper.TransactionExecutor;
+import com.miguel.jobnest.application.abstractions.wrapper.TransactionManager;
 import com.miguel.jobnest.application.abstractions.usecases.user.UpdateUserToVerifiedUseCase;
 import com.miguel.jobnest.application.usecases.user.inputs.UpdateUserToVerifiedUseCaseInput;
 import com.miguel.jobnest.domain.entities.User;
@@ -16,16 +16,16 @@ import com.miguel.jobnest.domain.utils.TimeUtils;
 public class DefaultUpdateUserToVerifiedUseCase implements UpdateUserToVerifiedUseCase {
     private final UserCodeRepository userCodeRepository;
     private final UserRepository userRepository;
-    private final TransactionExecutor transactionExecutor;
+    private final TransactionManager transactionManager;
 
     public DefaultUpdateUserToVerifiedUseCase(
             final UserCodeRepository userCodeRepository,
             final UserRepository userRepository,
-            final TransactionExecutor transactionExecutor
+            final TransactionManager transactionManager
     ) {
         this.userCodeRepository = userCodeRepository;
         this.userRepository = userRepository;
-        this.transactionExecutor = transactionExecutor;
+        this.transactionManager = transactionManager;
     }
 
     @Override
@@ -41,7 +41,7 @@ public class DefaultUpdateUserToVerifiedUseCase implements UpdateUserToVerifiedU
 
         final User updatedUser = user.withUserStatus(UserStatus.VERIFIED);
 
-        this.transactionExecutor.runTransaction(() -> {
+        this.transactionManager.runTransaction(() -> {
             this.saveUser(updatedUser);
             this.deleteUserCodeById(userCode.getId());
         });

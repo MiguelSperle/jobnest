@@ -1,7 +1,7 @@
 package com.miguel.jobnest.infrastructure.persistence;
 
 import com.miguel.jobnest.application.abstractions.repositories.UserCodeRepository;
-import com.miguel.jobnest.application.abstractions.wrapper.TransactionExecutor;
+import com.miguel.jobnest.application.abstractions.wrapper.TransactionManager;
 import com.miguel.jobnest.domain.entities.UserCode;
 import com.miguel.jobnest.domain.events.DomainEvent;
 import com.miguel.jobnest.infrastructure.abstractions.repositories.EventOutboxRepository;
@@ -17,7 +17,7 @@ import java.util.Optional;
 public class UserCodeRepositoryImpl implements UserCodeRepository {
     private final JpaUserCodeRepository jpaUserCodeRepository;
     private final EventOutboxRepository eventOutboxRepository;
-    private final TransactionExecutor transactionExecutor;
+    private final TransactionManager transactionManager;
 
     private final static String USER_CODE_EVENTS_EXCHANGE = "user.code.events";
     private final static String USER_CODE_CREATED_ROUTING_KEY = "user.code.created";
@@ -25,11 +25,11 @@ public class UserCodeRepositoryImpl implements UserCodeRepository {
     public UserCodeRepositoryImpl(
             final JpaUserCodeRepository jpaUserCodeRepository,
             final EventOutboxRepository eventOutboxRepository,
-            final TransactionExecutor transactionExecutor
+            final TransactionManager transactionManager
     ) {
         this.jpaUserCodeRepository = jpaUserCodeRepository;
         this.eventOutboxRepository = eventOutboxRepository;
-        this.transactionExecutor = transactionExecutor;
+        this.transactionManager = transactionManager;
     }
 
     @Override
@@ -39,7 +39,7 @@ public class UserCodeRepositoryImpl implements UserCodeRepository {
 
     @Override
     public UserCode save(final UserCode userCode) {
-        this.transactionExecutor.runTransaction(() -> {
+        this.transactionManager.runTransaction(() -> {
             this.jpaUserCodeRepository.save(JpaUserCodeEntity.toEntity(userCode));
             for (DomainEvent domainEvent : userCode.getDomainEvents()) {
                 this.eventOutboxRepository.save(JpaEventOutboxEntity.newJpaEventOutboxEntity(

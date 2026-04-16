@@ -3,7 +3,7 @@ package com.miguel.jobnest.application.usecases.user;
 import com.miguel.jobnest.application.abstractions.providers.PasswordEncryption;
 import com.miguel.jobnest.application.abstractions.repositories.UserCodeRepository;
 import com.miguel.jobnest.application.abstractions.repositories.UserRepository;
-import com.miguel.jobnest.application.abstractions.wrapper.TransactionExecutor;
+import com.miguel.jobnest.application.abstractions.wrapper.TransactionManager;
 import com.miguel.jobnest.application.abstractions.usecases.user.ResetUserPasswordUseCase;
 import com.miguel.jobnest.application.usecases.user.inputs.ResetUserPasswordUseCaseInput;
 import com.miguel.jobnest.domain.entities.User;
@@ -17,18 +17,18 @@ public class DefaultResetUserPasswordUseCase implements ResetUserPasswordUseCase
     private final UserRepository userRepository;
     private final UserCodeRepository userCodeRepository;
     private final PasswordEncryption passwordEncryption;
-    private final TransactionExecutor transactionExecutor;
+    private final TransactionManager transactionManager;
 
     public DefaultResetUserPasswordUseCase(
             final UserRepository userRepository,
             final UserCodeRepository userCodeRepository,
             final PasswordEncryption passwordEncryption,
-            final TransactionExecutor transactionExecutor
+            final TransactionManager transactionManager
     ) {
         this.userRepository = userRepository;
         this.userCodeRepository = userCodeRepository;
         this.passwordEncryption = passwordEncryption;
-        this.transactionExecutor = transactionExecutor;
+        this.transactionManager = transactionManager;
     }
 
     @Override
@@ -46,7 +46,7 @@ public class DefaultResetUserPasswordUseCase implements ResetUserPasswordUseCase
 
         final User updatedUser = user.withPassword(encodedPassword);
 
-        this.transactionExecutor.runTransaction(() -> {
+        this.transactionManager.runTransaction(() -> {
             this.saveUser(updatedUser);
             this.deleteUserCodeById(userCode.getId());
         });

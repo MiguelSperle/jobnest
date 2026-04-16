@@ -5,7 +5,7 @@ import com.miguel.jobnest.application.abstractions.providers.PasswordEncryption;
 import com.miguel.jobnest.application.abstractions.repositories.UserCodeRepository;
 import com.miguel.jobnest.application.abstractions.repositories.UserRepository;
 import com.miguel.jobnest.application.abstractions.usecases.user.CreateUserUseCase;
-import com.miguel.jobnest.application.abstractions.wrapper.TransactionExecutor;
+import com.miguel.jobnest.application.abstractions.wrapper.TransactionManager;
 import com.miguel.jobnest.application.usecases.user.inputs.CreateUserUseCaseInput;
 import com.miguel.jobnest.domain.entities.User;
 import com.miguel.jobnest.domain.entities.UserCode;
@@ -19,7 +19,7 @@ public class DefaultCreateUserUseCase implements CreateUserUseCase {
     private final UserCodeRepository userCodeRepository;
     private final PasswordEncryption passwordEncryption;
     private final CodeGenerator codeGenerator;
-    private final TransactionExecutor transactionExecutor;
+    private final TransactionManager transactionManager;
 
     private final static int CODE_LENGTH = 8;
     private final static String ALPHANUMERIC_CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -29,13 +29,13 @@ public class DefaultCreateUserUseCase implements CreateUserUseCase {
             final UserCodeRepository userCodeRepository,
             final PasswordEncryption passwordEncryption,
             final CodeGenerator codeGenerator,
-            final TransactionExecutor transactionExecutor
+            final TransactionManager transactionManager
     ) {
         this.userRepository = userRepository;
         this.userCodeRepository = userCodeRepository;
         this.passwordEncryption = passwordEncryption;
         this.codeGenerator = codeGenerator;
-        this.transactionExecutor = transactionExecutor;
+        this.transactionManager = transactionManager;
     }
 
     @Override
@@ -69,7 +69,7 @@ public class DefaultCreateUserUseCase implements CreateUserUseCase {
                 newUserCode.getUserId()
         ));
 
-        this.transactionExecutor.runTransaction(() -> {
+        this.transactionManager.runTransaction(() -> {
             this.saveUser(newUser);
             this.saveUserCode(newUserCode);
         });

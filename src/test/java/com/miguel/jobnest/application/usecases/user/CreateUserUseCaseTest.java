@@ -4,7 +4,7 @@ import com.miguel.jobnest.application.abstractions.providers.CodeGenerator;
 import com.miguel.jobnest.application.abstractions.providers.PasswordEncryption;
 import com.miguel.jobnest.application.abstractions.repositories.UserCodeRepository;
 import com.miguel.jobnest.application.abstractions.repositories.UserRepository;
-import com.miguel.jobnest.application.abstractions.wrapper.TransactionExecutor;
+import com.miguel.jobnest.application.abstractions.wrapper.TransactionManager;
 import com.miguel.jobnest.application.usecases.user.inputs.CreateUserUseCaseInput;
 import com.miguel.jobnest.domain.enums.AuthorizationRole;
 import com.miguel.jobnest.domain.enums.UserCodeType;
@@ -40,7 +40,7 @@ public class CreateUserUseCaseTest {
     private CodeGenerator codeGenerator;
 
     @Mock
-    private TransactionExecutor transactionExecutor;
+    private TransactionManager transactionManager;
 
     @Test
     void shouldCreateUser_whenCallExecute() {
@@ -70,7 +70,7 @@ public class CreateUserUseCaseTest {
             final Runnable runnable = invocationOnMock.getArgument(0);
             runnable.run();
             return runnable;
-        }).when(this.transactionExecutor).runTransaction(Mockito.any());
+        }).when(this.transactionManager).runTransaction(Mockito.any());
         Mockito.when(this.userRepository.save(Mockito.any())).thenAnswer(returnsFirstArg());
         Mockito.when(this.codeGenerator.generateCode(Mockito.anyInt(), Mockito.any())).thenReturn(code);
         Mockito.when(this.userCodeRepository.save(Mockito.any())).thenAnswer(returnsFirstArg());
@@ -79,7 +79,7 @@ public class CreateUserUseCaseTest {
 
         Mockito.verify(this.userRepository, Mockito.times(1)).existsByEmail(Mockito.any());
         Mockito.verify(this.passwordEncryption, Mockito.times(1)).encode(Mockito.any());
-        Mockito.verify(this.transactionExecutor, Mockito.times(1)).runTransaction(Mockito.any());
+        Mockito.verify(this.transactionManager, Mockito.times(1)).runTransaction(Mockito.any());
         Mockito.verify(this.userRepository, Mockito.times(1)).save(Mockito.argThat(userSaved ->
                 Objects.nonNull(userSaved.getId()) &&
                         Objects.equals(userSaved.getName(), input.name()) &&

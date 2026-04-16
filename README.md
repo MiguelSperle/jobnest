@@ -13,16 +13,18 @@
 </p>
 
 <p>
-To summarize, JobNest is a back-end application designed to efficiently manage and support job vacancy searches. It provides a complete set of functionalities that a system of this kind typically offers, 
+To summarize, Jobnest is a backend application designed to efficiently manage and support job vacancy searches. It provides a complete set of functionalities that a system of this kind typically offers, 
 both for those who publish job vacancies and for those who seek to apply for them.
 </p>
 
 <p>
-It's important to emphasize that this is a study project designed to explore and implement complex concepts, such as: Clean Architecture, SOLID Principles, Messaging System combined with the implementation of the Inbox and Outbox pattern, Database Transactions, Unit Testing and Idempotency.
+It's important to emphasize that this is a study project designed to explore and implement complex concepts, such as: 
+Clean Architecture, SOLID Principles, Messaging System combined with the implementation of the Inbox and Outbox pattern, 
+Database Transactions, Unit Testing and Idempotency.
 </p>
 
 <p>
-This is just a small text to clarify the purpose of the project.
+This is just a brief description to clarify the purpose of the project.
 </p>
 
 <h2>🚀 Getting started</h2>
@@ -82,7 +84,7 @@ docker-compose up -d
   <tr>
     <td>
       <a href="https://github.com/MiguelSperle">
-        <img src="https://avatars.githubusercontent.com/u/102910354?v=4" width="100px;" alt="Miguel Sperle Profile Picture"/><br>
+        <img src="https://avatars.githubusercontent.com/u/102910354?v=4" width="100px;" alt="Profile photo of Miguel Sperle"/><br>
       </a>
     </td>
   </tr>

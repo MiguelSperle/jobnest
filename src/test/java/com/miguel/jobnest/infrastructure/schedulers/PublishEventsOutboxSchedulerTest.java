@@ -1,6 +1,6 @@
 package com.miguel.jobnest.infrastructure.schedulers;
 
-import com.miguel.jobnest.application.abstractions.wrapper.TransactionExecutor;
+import com.miguel.jobnest.application.abstractions.wrapper.TransactionManager;
 import com.miguel.jobnest.domain.utils.IdentifierUtils;
 import com.miguel.jobnest.infrastructure.abstractions.repositories.EventOutboxRepository;
 import com.miguel.jobnest.infrastructure.abstractions.services.EventBusService;
@@ -15,8 +15,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 
-import static org.mockito.AdditionalAnswers.returnsFirstArg;
-
 @ExtendWith(MockitoExtension.class)
 public class PublishEventsOutboxSchedulerTest {
     @InjectMocks
@@ -29,7 +27,7 @@ public class PublishEventsOutboxSchedulerTest {
     private EventBusService eventBusService;
 
     @Mock
-    private TransactionExecutor transactionExecutor;
+    private TransactionManager transactionManager;
 
     @Test
     void shouldPublishPendingEventsOutbox_whenPublishEventsOutboxSchedulerRuns() {
@@ -40,14 +38,14 @@ public class PublishEventsOutboxSchedulerTest {
             final Runnable runnable = invocationOnMock.getArgument(0);
             runnable.run();
             return runnable;
-        }).when(this.transactionExecutor).runTransaction(Mockito.any());
+        }).when(this.transactionManager).runTransaction(Mockito.any());
         Mockito.when(this.eventOutboxRepository.findFirst10ByStatus(Mockito.any())).thenReturn(List.of(jpaEventOutboxEntity));
         Mockito.doNothing().when(this.eventBusService).publish(Mockito.any());
         Mockito.doNothing().when(this.eventOutboxRepository).save(Mockito.any());
 
         this.publishEventsOutboxScheduler.publishEvent();
 
-        Mockito.verify(this.transactionExecutor, Mockito.times(1)).runTransaction(Mockito.any());
+        Mockito.verify(this.transactionManager, Mockito.times(1)).runTransaction(Mockito.any());
         Mockito.verify(this.eventOutboxRepository, Mockito.times(1)).findFirst10ByStatus(Mockito.any());
         Mockito.verify(this.eventBusService, Mockito.times(1)).publish(Mockito.any());
         Mockito.verify(this.eventOutboxRepository, Mockito.times(1)).save(Mockito.argThat(jpaEventOutboxEntitySaved ->
@@ -61,12 +59,12 @@ public class PublishEventsOutboxSchedulerTest {
             final Runnable runnable = invocationOnMock.getArgument(0);
             runnable.run();
             return runnable;
-        }).when(this.transactionExecutor).runTransaction(Mockito.any());
+        }).when(this.transactionManager).runTransaction(Mockito.any());
         Mockito.when(this.eventOutboxRepository.findFirst10ByStatus(Mockito.any())).thenReturn(List.of());
 
         this.publishEventsOutboxScheduler.publishEvent();
 
-        Mockito.verify(this.transactionExecutor, Mockito.times(1)).runTransaction(Mockito.any());
+        Mockito.verify(this.transactionManager, Mockito.times(1)).runTransaction(Mockito.any());
         Mockito.verify(this.eventOutboxRepository, Mockito.times(1)).findFirst10ByStatus(Mockito.any());
         Mockito.verify(this.eventBusService, Mockito.never()).publish(Mockito.any());
         Mockito.verify(this.eventOutboxRepository, Mockito.never()).save(Mockito.any());

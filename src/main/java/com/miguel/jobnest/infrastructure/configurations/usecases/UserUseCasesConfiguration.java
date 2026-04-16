@@ -6,7 +6,7 @@ import com.miguel.jobnest.application.abstractions.repositories.UserCodeReposito
 import com.miguel.jobnest.application.abstractions.repositories.UserRepository;
 import com.miguel.jobnest.application.abstractions.services.JwtService;
 import com.miguel.jobnest.application.abstractions.services.SecurityService;
-import com.miguel.jobnest.application.abstractions.wrapper.TransactionExecutor;
+import com.miguel.jobnest.application.abstractions.wrapper.TransactionManager;
 import com.miguel.jobnest.application.abstractions.usecases.user.*;
 import com.miguel.jobnest.application.usecases.user.*;
 import org.springframework.context.annotation.Bean;
@@ -20,14 +20,14 @@ public class UserUseCasesConfiguration {
             final UserCodeRepository userCodeRepository,
             final PasswordEncryption passwordEncryption,
             final CodeGenerator codeGenerator,
-            final TransactionExecutor transactionExecutor
+            final TransactionManager transactionManager
     ) {
         return new DefaultCreateUserUseCase(
                 userRepository,
                 userCodeRepository,
                 passwordEncryption,
                 codeGenerator,
-                transactionExecutor
+                transactionManager
         );
     }
 
@@ -35,12 +35,12 @@ public class UserUseCasesConfiguration {
     public UpdateUserToVerifiedUseCase updateUserToVerifiedUseCase(
             final UserCodeRepository userCodeRepository,
             final UserRepository userRepository,
-            final TransactionExecutor transactionExecutor
+            final TransactionManager transactionManager
     ) {
         return new DefaultUpdateUserToVerifiedUseCase(
                 userCodeRepository,
                 userRepository,
-                transactionExecutor
+                transactionManager
         );
     }
 
@@ -49,13 +49,13 @@ public class UserUseCasesConfiguration {
             final UserRepository userRepository,
             final UserCodeRepository userCodeRepository,
             final PasswordEncryption passwordEncryption,
-            final TransactionExecutor transactionExecutor
+            final TransactionManager transactionManager
     ) {
         return new DefaultResetUserPasswordUseCase(
                 userRepository,
                 userCodeRepository,
                 passwordEncryption,
-                transactionExecutor
+                transactionManager
         );
     }
 

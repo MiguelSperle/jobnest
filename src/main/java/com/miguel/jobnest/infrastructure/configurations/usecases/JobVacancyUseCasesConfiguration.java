@@ -3,7 +3,7 @@ package com.miguel.jobnest.infrastructure.configurations.usecases;
 import com.miguel.jobnest.application.abstractions.repositories.JobVacancyRepository;
 import com.miguel.jobnest.application.abstractions.repositories.SubscriptionRepository;
 import com.miguel.jobnest.application.abstractions.services.SecurityService;
-import com.miguel.jobnest.application.abstractions.wrapper.TransactionExecutor;
+import com.miguel.jobnest.application.abstractions.wrapper.TransactionManager;
 import com.miguel.jobnest.application.abstractions.usecases.jobvacancy.*;
 import com.miguel.jobnest.application.usecases.jobvacancy.*;
 import org.springframework.context.annotation.Bean;
@@ -52,12 +52,12 @@ public class JobVacancyUseCasesConfiguration {
     public SoftDeleteJobVacancyUseCase deleteJobVacancyUseCase(
             final JobVacancyRepository jobVacancyRepository,
             final SubscriptionRepository subscriptionRepository,
-            final TransactionExecutor transactionExecutor
+            final TransactionManager transactionManager
     ) {
         return new DefaultSoftDeleteJobVacancyUseCase(
                 jobVacancyRepository,
                 subscriptionRepository,
-                transactionExecutor
+                transactionManager
         );
     }
 }

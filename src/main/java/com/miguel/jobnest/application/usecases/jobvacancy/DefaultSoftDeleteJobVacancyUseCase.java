@@ -2,7 +2,7 @@ package com.miguel.jobnest.application.usecases.jobvacancy;
 
 import com.miguel.jobnest.application.abstractions.repositories.JobVacancyRepository;
 import com.miguel.jobnest.application.abstractions.repositories.SubscriptionRepository;
-import com.miguel.jobnest.application.abstractions.wrapper.TransactionExecutor;
+import com.miguel.jobnest.application.abstractions.wrapper.TransactionManager;
 import com.miguel.jobnest.application.abstractions.usecases.jobvacancy.SoftDeleteJobVacancyUseCase;
 import com.miguel.jobnest.application.usecases.jobvacancy.inputs.SoftDeleteJobVacancyUseCaseInput;
 import com.miguel.jobnest.domain.entities.JobVacancy;
@@ -14,16 +14,16 @@ import java.util.List;
 public class DefaultSoftDeleteJobVacancyUseCase implements SoftDeleteJobVacancyUseCase {
     private final JobVacancyRepository jobVacancyRepository;
     private final SubscriptionRepository subscriptionRepository;
-    private final TransactionExecutor transactionExecutor;
+    private final TransactionManager transactionManager;
 
     public DefaultSoftDeleteJobVacancyUseCase(
             final JobVacancyRepository jobVacancyRepository,
             final SubscriptionRepository subscriptionRepository,
-            final TransactionExecutor transactionExecutor
+            final TransactionManager transactionManager
     ) {
         this.jobVacancyRepository = jobVacancyRepository;
         this.subscriptionRepository = subscriptionRepository;
-        this.transactionExecutor = transactionExecutor;
+        this.transactionManager = transactionManager;
     }
 
     @Override
@@ -34,7 +34,7 @@ public class DefaultSoftDeleteJobVacancyUseCase implements SoftDeleteJobVacancyU
 
         final JobVacancy updatedJobVacancy = jobVacancy.withIsDeleted(true);
 
-        this.transactionExecutor.runTransaction(() -> {
+        this.transactionManager.runTransaction(() -> {
             this.saveJobVacancy(updatedJobVacancy);
             subscriptions.stream().map(subscription -> subscription.withIsCanceled(true)).forEach(this::saveSubscription);
         });

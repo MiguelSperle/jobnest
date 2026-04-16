@@ -1,6 +1,6 @@
 package com.miguel.jobnest.infrastructure.wrapper;
 
-import com.miguel.jobnest.application.abstractions.wrapper.TransactionExecutor;
+import com.miguel.jobnest.application.abstractions.wrapper.TransactionManager;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
@@ -9,10 +9,10 @@ import org.springframework.transaction.support.TransactionSynchronizationManager
 import org.springframework.transaction.support.TransactionTemplate;
 
 @Component
-public class TransactionExecutorImpl implements TransactionExecutor {
+public class TransactionManagerImpl implements TransactionManager {
     private final PlatformTransactionManager platformTransactionManager;
 
-    public TransactionExecutorImpl(final PlatformTransactionManager platformTransactionManager) {
+    public TransactionManagerImpl(final PlatformTransactionManager platformTransactionManager) {
         this.platformTransactionManager = platformTransactionManager;
     }
 
@@ -27,7 +27,7 @@ public class TransactionExecutorImpl implements TransactionExecutor {
     }
 
     @Override
-    public void makeAfterCommit(final Runnable runnable) {
+    public void afterCommit(final Runnable runnable) {
         TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
             @Override
             public void afterCommit() {

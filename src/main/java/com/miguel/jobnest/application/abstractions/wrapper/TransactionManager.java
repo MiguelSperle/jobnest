@@ -1,6 +1,6 @@
 package com.miguel.jobnest.application.abstractions.wrapper;
 
-public interface TransactionExecutor {
+public interface TransactionManager {
     void runTransaction(Runnable runnable);
-    void makeAfterCommit(Runnable runnable);
+    void afterCommit(Runnable runnable);
 }

@@ -1,7 +1,7 @@
 package com.miguel.jobnest.infrastructure.persistence;
 
 import com.miguel.jobnest.application.abstractions.repositories.SubscriptionRepository;
-import com.miguel.jobnest.application.abstractions.wrapper.TransactionExecutor;
+import com.miguel.jobnest.application.abstractions.wrapper.TransactionManager;
 import com.miguel.jobnest.domain.entities.Subscription;
 import com.miguel.jobnest.domain.events.DomainEvent;
 import com.miguel.jobnest.domain.pagination.Pagination;
@@ -26,7 +26,7 @@ import java.util.Optional;
 public class SubscriptionRepositoryImpl implements SubscriptionRepository {
     private final JpaSubscriptionRepository jpaSubscriptionRepository;
     private final EventOutboxRepository eventOutboxRepository;
-    private final TransactionExecutor transactionExecutor;
+    private final TransactionManager transactionManager;
 
     private static final String SUBSCRIPTION_EVENTS_EXCHANGE = "subscription.events";
     private static final String SUBSCRIPTION_CREATED_ROUTING_KEY = "subscription.created";
@@ -34,11 +34,11 @@ public class SubscriptionRepositoryImpl implements SubscriptionRepository {
     public SubscriptionRepositoryImpl(
             final JpaSubscriptionRepository jpaSubscriptionRepository,
             final EventOutboxRepository eventOutboxRepository,
-            final TransactionExecutor transactionExecutor
+            final TransactionManager transactionManager
     ) {
         this.jpaSubscriptionRepository = jpaSubscriptionRepository;
         this.eventOutboxRepository = eventOutboxRepository;
-        this.transactionExecutor = transactionExecutor;
+        this.transactionManager = transactionManager;
     }
 
     @Override
@@ -48,7 +48,7 @@ public class SubscriptionRepositoryImpl implements SubscriptionRepository {
 
     @Override
     public Subscription save(final Subscription subscription) {
-        this.transactionExecutor.runTransaction(() -> {
+        this.transactionManager.runTransaction(() -> {
             this.jpaSubscriptionRepository.save(JpaSubscriptionEntity.toEntity(subscription));
             for (DomainEvent domainEvent : subscription.getDomainEvents()) {
                 this.eventOutboxRepository.save(JpaEventOutboxEntity.newJpaEventOutboxEntity(

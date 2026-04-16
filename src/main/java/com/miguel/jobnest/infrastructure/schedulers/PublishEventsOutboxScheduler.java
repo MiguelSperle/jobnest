@@ -1,6 +1,6 @@
 package com.miguel.jobnest.infrastructure.schedulers;
 
-import com.miguel.jobnest.application.abstractions.wrapper.TransactionExecutor;
+import com.miguel.jobnest.application.abstractions.wrapper.TransactionManager;
 import com.miguel.jobnest.infrastructure.abstractions.services.EventBusService;
 import com.miguel.jobnest.infrastructure.abstractions.repositories.EventOutboxRepository;
 import com.miguel.jobnest.infrastructure.enums.EventOutboxStatus;
@@ -16,16 +16,16 @@ import java.util.List;
 public class PublishEventsOutboxScheduler {
     private final EventOutboxRepository eventOutboxRepository;
     private final EventBusService eventBusService;
-    private final TransactionExecutor transactionExecutor;
+    private final TransactionManager transactionManager;
 
     public PublishEventsOutboxScheduler(
             final EventOutboxRepository eventOutboxRepository,
             final EventBusService eventBusService,
-            final TransactionExecutor transactionExecutor
+            final TransactionManager transactionManager
     ) {
         this.eventOutboxRepository = eventOutboxRepository;
         this.eventBusService = eventBusService;
-        this.transactionExecutor = transactionExecutor;
+        this.transactionManager = transactionManager;
     }
 
     private static final Logger log = LoggerFactory.getLogger(PublishEventsOutboxScheduler.class);
@@ -34,7 +34,7 @@ public class PublishEventsOutboxScheduler {
     public void publishEvent() {
         log.info("Starting publish events outbox scheduler");
 
-        this.transactionExecutor.runTransaction(() -> {
+        this.transactionManager.runTransaction(() -> {
             final List<JpaEventOutboxEntity> pendingJpaEventsOutbox = this.eventOutboxRepository.findFirst10ByStatus(EventOutboxStatus.PENDING.name());
 
             log.info("Found {} unpublished events", pendingJpaEventsOutbox.size());
