@@ -18,7 +18,7 @@ both for those who publish job vacancies and for those who seek to apply for the
 </p>
 
 <p>
-It's important to emphasize that this is a study project designed to explore and implement complex concepts, such as: 
+It is important to emphasize that this is a study project designed to explore and implement complex concepts, such as: 
 Clean Architecture, SOLID Principles, Messaging System combined with the implementation of the Inbox and Outbox pattern, 
 Database Transactions, Unit Testing and Idempotency.
 </p>
