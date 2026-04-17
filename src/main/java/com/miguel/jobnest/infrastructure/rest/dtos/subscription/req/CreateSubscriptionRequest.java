@@ -9,8 +9,9 @@ public record CreateSubscriptionRequest(
         @Size(min = 36, max = 36, message = "JobVacancyId should have exactly 36 characters")
         String jobVacancyId
 ) {
-    public CreateSubscriptionUseCaseInput toInput(byte[] bytesFile) {
+    public CreateSubscriptionUseCaseInput toInput(final String userId, final byte[] bytesFile) {
         return CreateSubscriptionUseCaseInput.with(
+                userId,
                 bytesFile,
                 this.jobVacancyId
         );

@@ -1,7 +1,6 @@
 package com.miguel.jobnest.application.usecases.jobvacancy;
 
 import com.miguel.jobnest.application.abstractions.repositories.JobVacancyRepository;
-import com.miguel.jobnest.application.abstractions.services.SecurityService;
 import com.miguel.jobnest.application.usecases.jobvacancy.inputs.CreateJobVacancyUseCaseInput;
 import com.miguel.jobnest.domain.builders.UserBuilder;
 import com.miguel.jobnest.domain.entities.User;
@@ -27,9 +26,6 @@ public class CreateJobVacancyUseCaseTest {
     @Mock
     private JobVacancyRepository jobVacancyRepository;
 
-    @Mock
-    private SecurityService securityService;
-
     @Test
     void shouldCreateJobVacancy_whenCallExecute() {
         final User user = UserBuilder.user().id(IdentifierUtils.generateNewId()).build();
@@ -39,6 +35,7 @@ public class CreateJobVacancyUseCaseTest {
         final String companyName = "Company Name";
 
         final CreateJobVacancyUseCaseInput input = CreateJobVacancyUseCaseInput.with(
+                user.getId(),
                 title,
                 description,
                 SeniorityLevel.JUNIOR.name(),
@@ -46,12 +43,10 @@ public class CreateJobVacancyUseCaseTest {
                 companyName
         );
 
-        Mockito.when(this.securityService.getPrincipal()).thenReturn(user.getId());
         Mockito.when(this.jobVacancyRepository.save(Mockito.any())).thenAnswer(returnsFirstArg());
 
         this.useCase.execute(input);
 
-        Mockito.verify(this.securityService, Mockito.times(1)).getPrincipal();
         Mockito.verify(this.jobVacancyRepository, Mockito.times(1)).save(Mockito.argThat(jobVacancySaved ->
                 Objects.nonNull(jobVacancySaved.getId()) &&
                         Objects.equals(jobVacancySaved.getUserId(), user.getId()) &&

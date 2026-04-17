@@ -1,7 +1,7 @@
 package com.miguel.jobnest.infrastructure.configurations.security;
 
-import com.miguel.jobnest.application.abstractions.services.JwtService;
-import com.miguel.jobnest.domain.jwt.DecodedJwtToken;
+import com.auth0.jwt.interfaces.DecodedJWT;
+import com.miguel.jobnest.infrastructure.abstractions.services.JwtDecoderService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -20,7 +20,7 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 public class SecurityFilter extends OncePerRequestFilter {
-    private final JwtService jwtService;
+    private final JwtDecoderService jwtDecoderService;
     private final HandlerExceptionResolver handlerExceptionResolver;
 
     @Override
@@ -33,14 +33,17 @@ public class SecurityFilter extends OncePerRequestFilter {
             final String jwtToken = this.recoverToken(request);
 
             if (jwtToken != null) {
-                final DecodedJwtToken decodedJwtToken = this.jwtService.validateJwt(jwtToken);
+                final DecodedJWT decodedJWT = this.jwtDecoderService.decodeJwt(jwtToken);
+
+                final String role = decodedJWT.getClaim("role").asString();
+                final String userId = decodedJWT.getSubject();
 
                 final List<SimpleGrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority(
-                        "ROLE_" + decodedJwtToken.role()
+                        "ROLE_" + role
                 ));
 
                 final UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-                        decodedJwtToken.subject(), null, authorities
+                        userId, null, authorities
                 );
 
                 SecurityContextHolder.getContext().setAuthentication(authentication);

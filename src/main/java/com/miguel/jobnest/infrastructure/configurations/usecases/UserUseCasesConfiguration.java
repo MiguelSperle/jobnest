@@ -4,8 +4,7 @@ import com.miguel.jobnest.application.abstractions.providers.CodeGenerator;
 import com.miguel.jobnest.application.abstractions.providers.PasswordEncryption;
 import com.miguel.jobnest.application.abstractions.repositories.UserCodeRepository;
 import com.miguel.jobnest.application.abstractions.repositories.UserRepository;
-import com.miguel.jobnest.application.abstractions.services.JwtService;
-import com.miguel.jobnest.application.abstractions.services.SecurityService;
+import com.miguel.jobnest.application.abstractions.services.JwtGeneratorService;
 import com.miguel.jobnest.application.abstractions.wrapper.TransactionManager;
 import com.miguel.jobnest.application.abstractions.usecases.user.*;
 import com.miguel.jobnest.application.usecases.user.*;
@@ -63,58 +62,42 @@ public class UserUseCasesConfiguration {
     public AuthenticateUserUseCase authenticateUserUseCase(
             final UserRepository userRepository,
             final PasswordEncryption passwordEncryption,
-            final JwtService jwtService
+            final JwtGeneratorService jwtGeneratorService
     ) {
         return new DefaultAuthenticateUserUseCase(
                 userRepository,
                 passwordEncryption,
-                jwtService
+                jwtGeneratorService
         );
     }
 
     @Bean
-    public GetAuthenticatedUserUseCase getAuthenticatedUserUseCase(
-            final UserRepository userRepository,
-            final SecurityService securityService
-    ) {
-        return new DefaultGetAuthenticatedUserUseCase(
-                userRepository,
-                securityService
-        );
+    public GetAuthenticatedUserUseCase getAuthenticatedUserUseCase(final UserRepository userRepository) {
+        return new DefaultGetAuthenticatedUserUseCase(userRepository);
     }
 
     @Bean
-    public UpdateUserUseCase updateUserUseCase(
-            final UserRepository userRepository,
-            final SecurityService securityService
-    ) {
-        return new DefaultUpdateUserUseCase(
-                userRepository,
-                securityService
-        );
+    public UpdateUserUseCase updateUserUseCase(final UserRepository userRepository) {
+        return new DefaultUpdateUserUseCase(userRepository);
     }
 
     @Bean
     public UpdateUserPasswordUseCase updateUserPasswordUseCase(
             final UserRepository userRepository,
-            final PasswordEncryption passwordEncryption,
-            final SecurityService securityService
+            final PasswordEncryption passwordEncryption
     ) {
         return new DefaultUpdateUserPasswordUseCase(
                 userRepository,
-                passwordEncryption,
-                securityService
+                passwordEncryption
         );
     }
 
     @Bean
     public SoftDeleteUserUseCase deleteUserUseCase(
-            final UserRepository userRepository,
-            final SecurityService securityService
+            final UserRepository userRepository
     ) {
         return new DefaultSoftDeleteUserUseCase(
-                userRepository,
-                securityService
+                userRepository
         );
     }
 }

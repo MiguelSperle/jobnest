@@ -26,8 +26,9 @@ public record CreateJobVacancyRequest(
         @Size(max = 80, message = "Company queueName should not exceed 80 characters")
         String companyName
 ) {
-    public CreateJobVacancyUseCaseInput toInput() {
+    public CreateJobVacancyUseCaseInput toInput(final String userId) {
         return CreateJobVacancyUseCaseInput.with(
+                userId,
                 this.title,
                 this.description,
                 this.seniorityLevel,

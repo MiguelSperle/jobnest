@@ -1,7 +1,6 @@
 package com.miguel.jobnest.application.usecases.subscription;
 
 import com.miguel.jobnest.application.abstractions.repositories.SubscriptionRepository;
-import com.miguel.jobnest.application.abstractions.services.SecurityService;
 import com.miguel.jobnest.application.abstractions.services.UploadService;
 import com.miguel.jobnest.application.abstractions.usecases.subscription.CreateSubscriptionUseCase;
 import com.miguel.jobnest.application.usecases.subscription.inputs.CreateSubscriptionUseCaseInput;
@@ -12,23 +11,18 @@ import com.miguel.jobnest.domain.exceptions.DomainException;
 public class DefaultCreateSubscriptionUseCase implements CreateSubscriptionUseCase {
     private final SubscriptionRepository subscriptionRepository;
     private final UploadService uploadService;
-    private final SecurityService securityService;
 
     public DefaultCreateSubscriptionUseCase(
             final SubscriptionRepository subscriptionRepository,
-            final UploadService uploadService,
-            final SecurityService securityService
+            final UploadService uploadService
     ) {
         this.subscriptionRepository = subscriptionRepository;
         this.uploadService = uploadService;
-        this.securityService = securityService;
     }
 
     @Override
     public void execute(final CreateSubscriptionUseCaseInput input) {
-        final String authenticatedUserId = this.securityService.getPrincipal();
-
-        if (this.verifySubscriptionAlreadyExistsByUserIdAndJobVacancyId(authenticatedUserId, input.jobVacancyId())) {
+        if (this.verifySubscriptionAlreadyExistsByUserIdAndJobVacancyId(input.userId(), input.jobVacancyId())) {
             throw DomainException.with("You are already subscribed in this job vacancy", 409);
         }
 
@@ -37,7 +31,7 @@ public class DefaultCreateSubscriptionUseCase implements CreateSubscriptionUseCa
         try {
             resumeUrl = this.uploadService.uploadFile(input.bytesFile(), "resume-file", "image");
 
-            final Subscription newSubscription = Subscription.newSubscription(authenticatedUserId, input.jobVacancyId(), resumeUrl);
+            final Subscription newSubscription = Subscription.newSubscription(input.userId(), input.jobVacancyId(), resumeUrl);
 
             newSubscription.registerEvent(new SubscriptionCreatedEvent(
                     newSubscription.getId(),

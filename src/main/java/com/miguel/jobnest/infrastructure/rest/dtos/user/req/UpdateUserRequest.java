@@ -30,8 +30,9 @@ public record UpdateUserRequest(
         @Size(max = 50, message = "Country should not exceed 50 characters")
         String country
 ) {
-    public UpdateUserUseCaseInput toInput() {
+    public UpdateUserUseCaseInput toInput(final String userId) {
         return UpdateUserUseCaseInput.with(
+                userId,
                 this.name,
                 this.email,
                 this.description,

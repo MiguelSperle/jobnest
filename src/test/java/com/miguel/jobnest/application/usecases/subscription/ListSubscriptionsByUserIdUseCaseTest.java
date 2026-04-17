@@ -1,7 +1,6 @@
 package com.miguel.jobnest.application.usecases.subscription;
 
 import com.miguel.jobnest.application.abstractions.repositories.SubscriptionRepository;
-import com.miguel.jobnest.application.abstractions.services.SecurityService;
 import com.miguel.jobnest.application.usecases.subscription.inputs.ListSubscriptionsByUserIdUseCaseInput;
 import com.miguel.jobnest.application.usecases.subscription.outputs.ListSubscriptionsByUserIdUseCaseOutput;
 import com.miguel.jobnest.domain.builders.SubscriptionBuilder;
@@ -31,9 +30,6 @@ public class ListSubscriptionsByUserIdUseCaseTest {
     @Mock
     private SubscriptionRepository subscriptionRepository;
 
-    @Mock
-    private SecurityService securityService;
-
     @Test
     void shouldListSubscriptionsByUserId_whenCallExecute() {
         final User userCandidate = UserBuilder.user().id(IdentifierUtils.generateNewId()).build();
@@ -54,6 +50,7 @@ public class ListSubscriptionsByUserIdUseCaseTest {
         );
 
         final ListSubscriptionsByUserIdUseCaseInput input = ListSubscriptionsByUserIdUseCaseInput.with(
+                userCandidate.getId(),
                 searchQuery
         );
 
@@ -61,7 +58,6 @@ public class ListSubscriptionsByUserIdUseCaseTest {
                 metadata, subscriptions
         );
 
-        Mockito.when(this.securityService.getPrincipal()).thenReturn(userCandidate.getId());
         Mockito.when(this.subscriptionRepository.findAllPaginatedByUserId(Mockito.any(), Mockito.any())).thenReturn(paginatedSubscriptions);
 
         final ListSubscriptionsByUserIdUseCaseOutput output = this.useCase.execute(input);
@@ -72,7 +68,6 @@ public class ListSubscriptionsByUserIdUseCaseTest {
         Assertions.assertEquals(paginatedSubscriptions.items(), output.paginatedSubscriptions().items());
         Assertions.assertEquals(subscriptions.size(), output.paginatedSubscriptions().metadata().totalItems());
 
-        Mockito.verify(this.securityService, Mockito.times(1)).getPrincipal();
         Mockito.verify(this.subscriptionRepository, Mockito.times(1)).findAllPaginatedByUserId(Mockito.any(), Mockito.any());
     }
 
@@ -93,6 +88,7 @@ public class ListSubscriptionsByUserIdUseCaseTest {
         );
 
         final ListSubscriptionsByUserIdUseCaseInput input = ListSubscriptionsByUserIdUseCaseInput.with(
+                user.getId(),
                 searchQuery
         );
 
@@ -100,7 +96,6 @@ public class ListSubscriptionsByUserIdUseCaseTest {
                 metadata, List.of()
         );
 
-        Mockito.when(this.securityService.getPrincipal()).thenReturn(user.getId());
         Mockito.when(this.subscriptionRepository.findAllPaginatedByUserId(Mockito.any(), Mockito.any())).thenReturn(paginatedSubscriptions);
 
         final ListSubscriptionsByUserIdUseCaseOutput output = this.useCase.execute(input);

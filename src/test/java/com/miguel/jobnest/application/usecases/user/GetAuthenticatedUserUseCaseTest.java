@@ -1,7 +1,7 @@
 package com.miguel.jobnest.application.usecases.user;
 
 import com.miguel.jobnest.application.abstractions.repositories.UserRepository;
-import com.miguel.jobnest.application.abstractions.services.SecurityService;
+import com.miguel.jobnest.application.usecases.user.inputs.GetAuthenticatedUserUseCaseInput;
 import com.miguel.jobnest.application.usecases.user.outputs.GetAuthenticatedUserUseCaseOutput;
 import com.miguel.jobnest.domain.builders.UserBuilder;
 import com.miguel.jobnest.domain.entities.User;
@@ -25,17 +25,15 @@ public class GetAuthenticatedUserUseCaseTest {
     @Mock
     private UserRepository userRepository;
 
-    @Mock
-    private SecurityService securityService;
-
     @Test
     void shouldGetAuthenticatedUser_whenCallExecute() {
         final User user = UserBuilder.user().id(IdentifierUtils.generateNewId()).build();
 
-        Mockito.when(this.securityService.getPrincipal()).thenReturn(user.getId());
         Mockito.when(this.userRepository.findById(Mockito.any())).thenReturn(Optional.of(user));
 
-        final GetAuthenticatedUserUseCaseOutput output = this.useCase.execute();
+        final GetAuthenticatedUserUseCaseInput input = GetAuthenticatedUserUseCaseInput.with(user.getId());
+
+        final GetAuthenticatedUserUseCaseOutput output = this.useCase.execute(input);
 
         Assertions.assertNotNull(output);
         Assertions.assertNotNull(output.user());
@@ -50,7 +48,6 @@ public class GetAuthenticatedUserUseCaseTest {
         Assertions.assertEquals(user.getCountry(), output.user().getCountry());
         Assertions.assertEquals(user.getCreatedAt(), output.user().getCreatedAt());
 
-        Mockito.verify(this.securityService, Mockito.times(1)).getPrincipal();
         Mockito.verify(this.userRepository, Mockito.times(1)).findById(Mockito.any());
     }
 
@@ -58,8 +55,10 @@ public class GetAuthenticatedUserUseCaseTest {
     void shouldThrowNotFoundException_whenCallExecute_becauseUserDoesNotExist() {
         Mockito.when(this.userRepository.findById(Mockito.any())).thenReturn(Optional.empty());
 
+        final GetAuthenticatedUserUseCaseInput input = GetAuthenticatedUserUseCaseInput.with(IdentifierUtils.generateNewId());
+
         final var ex = Assertions.assertThrows(NotFoundException.class, () ->
-                this.useCase.execute()
+                this.useCase.execute(input)
         );
 
         final String expectedErrorMessage = "User not found";

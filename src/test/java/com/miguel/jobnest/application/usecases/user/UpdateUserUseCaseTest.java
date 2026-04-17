@@ -1,7 +1,6 @@
 package com.miguel.jobnest.application.usecases.user;
 
 import com.miguel.jobnest.application.abstractions.repositories.UserRepository;
-import com.miguel.jobnest.application.abstractions.services.SecurityService;
 import com.miguel.jobnest.application.usecases.user.inputs.UpdateUserUseCaseInput;
 import com.miguel.jobnest.domain.builders.UserBuilder;
 import com.miguel.jobnest.domain.entities.User;
@@ -28,9 +27,6 @@ public class UpdateUserUseCaseTest {
     @Mock
     private UserRepository userRepository;
 
-    @Mock
-    private SecurityService securityService;
-
     @Test
     void shouldUpdateUser_whenCallExecute() {
         final User user = UserBuilder.user().id(IdentifierUtils.generateNewId())
@@ -50,6 +46,7 @@ public class UpdateUserUseCaseTest {
         final String country = "United States";
 
         final UpdateUserUseCaseInput input = UpdateUserUseCaseInput.with(
+                user.getId(),
                 name,
                 email,
                 description,
@@ -58,13 +55,11 @@ public class UpdateUserUseCaseTest {
                 country
         );
 
-        Mockito.when(this.securityService.getPrincipal()).thenReturn(user.getId());
         Mockito.when(this.userRepository.findById(Mockito.any())).thenReturn(Optional.of(user));
         Mockito.when(this.userRepository.save(Mockito.any())).thenAnswer(returnsFirstArg());
 
         this.useCase.execute(input);
 
-        Mockito.verify(this.securityService, Mockito.times(1)).getPrincipal();
         Mockito.verify(this.userRepository, Mockito.times(1)).findById(Mockito.any());
         Mockito.verify(this.userRepository, Mockito.times(1)).save(Mockito.argThat(userSaved ->
                 Objects.equals(userSaved.getName(), input.name()) &&
@@ -86,6 +81,7 @@ public class UpdateUserUseCaseTest {
         final String country = "United States";
 
         final UpdateUserUseCaseInput input = UpdateUserUseCaseInput.with(
+                IdentifierUtils.generateNewId(),
                 name,
                 email,
                 description,

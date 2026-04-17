@@ -2,7 +2,6 @@ package com.miguel.jobnest.application.usecases.user;
 
 import com.miguel.jobnest.application.abstractions.providers.PasswordEncryption;
 import com.miguel.jobnest.application.abstractions.repositories.UserRepository;
-import com.miguel.jobnest.application.abstractions.services.SecurityService;
 import com.miguel.jobnest.application.usecases.user.inputs.UpdateUserPasswordUseCaseInput;
 import com.miguel.jobnest.domain.builders.UserBuilder;
 import com.miguel.jobnest.domain.entities.User;
@@ -33,20 +32,17 @@ public class UpdateUserPasswordUseCaseTest {
     @Mock
     private PasswordEncryption passwordEncryption;
 
-    @Mock
-    private SecurityService securityService;
-
     @Test
     void shouldUpdateUserPassword_whenCallExecute() {
         final User user = UserBuilder.user().id(IdentifierUtils.generateNewId()).password("1234te2").build();
         final String password = "123456A";
 
         final UpdateUserPasswordUseCaseInput input = UpdateUserPasswordUseCaseInput.with(
+                user.getId(),
                 user.getPassword(),
                 password
         );
 
-        Mockito.when(this.securityService.getPrincipal()).thenReturn(user.getId());
         Mockito.when(this.userRepository.findById(Mockito.any())).thenReturn(Optional.of(user));
         Mockito.when(this.passwordEncryption.matches(Mockito.any(), Mockito.any())).thenReturn(true);
         Mockito.when(this.passwordEncryption.encode(Mockito.any())).thenReturn(input.password());
@@ -54,7 +50,6 @@ public class UpdateUserPasswordUseCaseTest {
 
         this.useCase.execute(input);
 
-        Mockito.verify(this.securityService, Mockito.times(1)).getPrincipal();
         Mockito.verify(this.userRepository, Mockito.times(1)).findById(Mockito.any());
         Mockito.verify(this.passwordEncryption, Mockito.times(1)).matches(Mockito.any(), Mockito.any());
         Mockito.verify(this.passwordEncryption, Mockito.times(1)).encode(Mockito.any());
@@ -69,6 +64,7 @@ public class UpdateUserPasswordUseCaseTest {
         final String password = "123456A";
 
         final UpdateUserPasswordUseCaseInput input = UpdateUserPasswordUseCaseInput.with(
+                IdentifierUtils.generateNewId(),
                 currentPassword,
                 password
         );
@@ -92,11 +88,11 @@ public class UpdateUserPasswordUseCaseTest {
         final String password = "123456A";
 
         final UpdateUserPasswordUseCaseInput input = UpdateUserPasswordUseCaseInput.with(
+                user.getId(),
                 user.getPassword(),
                 password
         );
 
-        Mockito.when(this.securityService.getPrincipal()).thenReturn(user.getId());
         Mockito.when(this.userRepository.findById(Mockito.any())).thenReturn(Optional.of(user));
         Mockito.when(this.passwordEncryption.matches(Mockito.any(), Mockito.any())).thenReturn(false);
 

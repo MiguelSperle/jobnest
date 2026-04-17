@@ -28,8 +28,8 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiError.from(errors, HttpStatus.BAD_REQUEST.getReasonPhrase()));
     }
 
-    @ExceptionHandler(JwtTokenValidationFailedException.class)
-    public ResponseEntity<ApiError> handleJwtTokenValidationFailedException(final JwtTokenValidationFailedException ex) {
+    @ExceptionHandler(JwtTokenDecodingFailedException.class)
+    public ResponseEntity<ApiError> handleJwtTokenDecodingFailedException(final JwtTokenDecodingFailedException ex) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ApiError.from(
                 Collections.singletonList(ex.getMessage()), HttpStatus.UNAUTHORIZED.getReasonPhrase()
         ));

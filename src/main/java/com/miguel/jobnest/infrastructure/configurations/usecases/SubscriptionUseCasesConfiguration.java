@@ -1,7 +1,6 @@
 package com.miguel.jobnest.infrastructure.configurations.usecases;
 
 import com.miguel.jobnest.application.abstractions.repositories.SubscriptionRepository;
-import com.miguel.jobnest.application.abstractions.services.SecurityService;
 import com.miguel.jobnest.application.abstractions.services.UploadService;
 import com.miguel.jobnest.application.abstractions.usecases.subscription.*;
 import com.miguel.jobnest.application.usecases.subscription.*;
@@ -13,24 +12,20 @@ public class SubscriptionUseCasesConfiguration {
     @Bean
     public CreateSubscriptionUseCase createSubscriptionUseCase(
             final SubscriptionRepository subscriptionRepository,
-            final UploadService uploadService,
-            final SecurityService securityService
+            final UploadService uploadService
     ) {
         return new DefaultCreateSubscriptionUseCase(
                 subscriptionRepository,
-                uploadService,
-                securityService
+                uploadService
         );
     }
 
     @Bean
     public ListSubscriptionsByUserIdUseCase listSubscriptionsByUserIdUseCase(
-            final SubscriptionRepository subscriptionRepository,
-            final SecurityService securityService
+            final SubscriptionRepository subscriptionRepository
     ) {
         return new DefaultListSubscriptionsByUserIdUseCase(
-                subscriptionRepository,
-                securityService
+                subscriptionRepository
         );
     }
 

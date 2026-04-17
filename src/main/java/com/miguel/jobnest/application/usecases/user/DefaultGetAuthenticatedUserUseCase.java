@@ -1,29 +1,24 @@
 package com.miguel.jobnest.application.usecases.user;
 
 import com.miguel.jobnest.application.abstractions.repositories.UserRepository;
-import com.miguel.jobnest.application.abstractions.services.SecurityService;
 import com.miguel.jobnest.application.abstractions.usecases.user.GetAuthenticatedUserUseCase;
+import com.miguel.jobnest.application.usecases.user.inputs.GetAuthenticatedUserUseCaseInput;
 import com.miguel.jobnest.application.usecases.user.outputs.GetAuthenticatedUserUseCaseOutput;
 import com.miguel.jobnest.domain.entities.User;
 import com.miguel.jobnest.domain.exceptions.NotFoundException;
 
 public class DefaultGetAuthenticatedUserUseCase implements GetAuthenticatedUserUseCase {
     private final UserRepository userRepository;
-    private final SecurityService securityService;
 
     public DefaultGetAuthenticatedUserUseCase(
-            final UserRepository userRepository,
-            final SecurityService securityService
+            final UserRepository userRepository
     ) {
         this.userRepository = userRepository;
-        this.securityService = securityService;
     }
 
     @Override
-    public GetAuthenticatedUserUseCaseOutput execute() {
-        final String authenticatedUserId = this.securityService.getPrincipal();
-
-        final User user = this.getUserById(authenticatedUserId);
+    public GetAuthenticatedUserUseCaseOutput execute(final GetAuthenticatedUserUseCaseInput input) {
+        final User user = this.getUserById(input.userId());
 
         return GetAuthenticatedUserUseCaseOutput.from(user);
     }

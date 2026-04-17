@@ -9,7 +9,7 @@ public record ResetUserPasswordRequest(
         @Size(min = 5, max = 100, message = "Password should contain between 5 and 100 characters")
         String password
 ) {
-    public ResetUserPasswordUseCaseInput toInput(String code) {
+    public ResetUserPasswordUseCaseInput toInput(final String code) {
         return ResetUserPasswordUseCaseInput.with(code, this.password);
     }
 }

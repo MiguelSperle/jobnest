@@ -1,7 +1,6 @@
 package com.miguel.jobnest.application.usecases.jobvacancy;
 
 import com.miguel.jobnest.application.abstractions.repositories.JobVacancyRepository;
-import com.miguel.jobnest.application.abstractions.services.SecurityService;
 import com.miguel.jobnest.application.usecases.jobvacancy.inputs.ListJobVacanciesByUserIdUseCaseInput;
 import com.miguel.jobnest.application.usecases.jobvacancy.outputs.ListJobVacanciesByUserIdUseCaseOutput;
 import com.miguel.jobnest.domain.builders.JobVacancyBuilder;
@@ -30,9 +29,6 @@ public class ListJobVacanciesByUserIdUseCaseTest {
     @Mock
     private JobVacancyRepository jobVacancyRepository;
 
-    @Mock
-    private SecurityService securityService;
-
     @Test
     void shouldListJobVacanciesByUserId_whenCallExecute() {
         final User user = UserBuilder.user().id(IdentifierUtils.generateNewId()).build();
@@ -53,6 +49,7 @@ public class ListJobVacanciesByUserIdUseCaseTest {
         );
 
         final ListJobVacanciesByUserIdUseCaseInput input = ListJobVacanciesByUserIdUseCaseInput.with(
+                user.getId(),
                 searchQuery
         );
 
@@ -60,7 +57,6 @@ public class ListJobVacanciesByUserIdUseCaseTest {
                 metadata, jobVacancies
         );
 
-        Mockito.when(this.securityService.getPrincipal()).thenReturn(user.getId());
         Mockito.when(this.jobVacancyRepository.findAllPaginatedByUserId(Mockito.any(), Mockito.any())).thenReturn(paginatedJobVacancies);
 
         final ListJobVacanciesByUserIdUseCaseOutput output = this.useCase.execute(input);
@@ -71,7 +67,6 @@ public class ListJobVacanciesByUserIdUseCaseTest {
         Assertions.assertEquals(paginatedJobVacancies.items(), output.paginatedJobVacancies().items());
         Assertions.assertEquals(jobVacancies.size(), output.paginatedJobVacancies().metadata().totalItems());
 
-        Mockito.verify(this.securityService, Mockito.times(1)).getPrincipal();
         Mockito.verify(this.jobVacancyRepository, Mockito.times(1)).findAllPaginatedByUserId(Mockito.any(), Mockito.any());
     }
 
@@ -92,6 +87,7 @@ public class ListJobVacanciesByUserIdUseCaseTest {
         );
 
         final ListJobVacanciesByUserIdUseCaseInput input = ListJobVacanciesByUserIdUseCaseInput.with(
+                user.getId(),
                 searchQuery
         );
 
@@ -99,7 +95,6 @@ public class ListJobVacanciesByUserIdUseCaseTest {
                 metadata, List.of()
         );
 
-        Mockito.when(this.securityService.getPrincipal()).thenReturn(user.getId());
         Mockito.when(this.jobVacancyRepository.findAllPaginatedByUserId(Mockito.any(), Mockito.any())).thenReturn(paginatedJobVacancies);
 
         final ListJobVacanciesByUserIdUseCaseOutput output = this.useCase.execute(input);

@@ -2,7 +2,7 @@ package com.miguel.jobnest.application.usecases.user;
 
 import com.miguel.jobnest.application.abstractions.providers.PasswordEncryption;
 import com.miguel.jobnest.application.abstractions.repositories.UserRepository;
-import com.miguel.jobnest.application.abstractions.services.JwtService;
+import com.miguel.jobnest.application.abstractions.services.JwtGeneratorService;
 import com.miguel.jobnest.application.abstractions.usecases.user.AuthenticateUserUseCase;
 import com.miguel.jobnest.application.usecases.user.inputs.AuthenticateUserUseCaseInput;
 import com.miguel.jobnest.application.usecases.user.outputs.AuthenticateUserUseCaseOutput;
@@ -13,16 +13,16 @@ import com.miguel.jobnest.domain.exceptions.DomainException;
 public class DefaultAuthenticateUserUseCase implements AuthenticateUserUseCase {
     private final UserRepository userRepository;
     private final PasswordEncryption passwordEncryption;
-    private final JwtService jwtService;
+    private final JwtGeneratorService jwtGeneratorService;
 
     public DefaultAuthenticateUserUseCase(
             final UserRepository userRepository,
             final PasswordEncryption passwordEncryption,
-            final JwtService jwtService
+            final JwtGeneratorService jwtGeneratorService
     ) {
         this.userRepository = userRepository;
         this.passwordEncryption = passwordEncryption;
-        this.jwtService = jwtService;
+        this.jwtGeneratorService = jwtGeneratorService;
     }
 
     @Override
@@ -41,7 +41,7 @@ public class DefaultAuthenticateUserUseCase implements AuthenticateUserUseCase {
             throw DomainException.with("User has been deleted", 403);
         }
 
-        final String jwtGenerated = this.jwtService.generateJwt(user.getId(), user.getAuthorizationRole().name());
+        final String jwtGenerated = this.jwtGeneratorService.generateJwt(user.getId(), user.getAuthorizationRole().name());
 
         return AuthenticateUserUseCaseOutput.from(jwtGenerated);
     }

@@ -38,8 +38,10 @@ public class SubscriptionCandidateRestController implements SubscriptionCandidat
 
     @Override
     @IdempotencyKey
-    public ResponseEntity<MessageResponse> createSubscription(final CreateSubscriptionRequest request, final MultipartFile resumeFile) throws IOException {
-        this.createSubscriptionUseCase.execute(request.toInput(resumeFile.getBytes()));
+    public ResponseEntity<MessageResponse> createSubscription(
+            final CreateSubscriptionRequest request, final MultipartFile resumeFile, final String userId
+    ) throws IOException {
+        this.createSubscriptionUseCase.execute(request.toInput(userId, resumeFile.getBytes()));
 
         return ResponseEntity.status(HttpStatus.CREATED).body(MessageResponse.from("Subscription created successfully"));
     }
@@ -49,10 +51,11 @@ public class SubscriptionCandidateRestController implements SubscriptionCandidat
             final int page,
             final int perPage,
             final String sort,
-            final String direction
+            final String direction,
+            final String userId
     ) {
         final ListSubscriptionsByUserIdUseCaseOutput output = this.listSubscriptionsByUserIdUseCase.execute(
-                ListSubscriptionsByUserIdUseCaseInput.with(SearchQuery.newSearchQuery(page, perPage, sort, direction))
+                ListSubscriptionsByUserIdUseCaseInput.with(userId, SearchQuery.newSearchQuery(page, perPage, sort, direction))
         );
 
         return ResponseEntity.ok().body(ListSubscriptionsByUserIdResponse.from(output));

@@ -19,7 +19,7 @@ public class RabbitMQEventBusService implements EventBusService {
     private static final Logger log = LoggerFactory.getLogger(RabbitMQEventBusService.class);
 
     @Override
-    public void publish(JpaEventOutboxEntity jpaEventOutboxEntity) {
+    public void publish(final JpaEventOutboxEntity jpaEventOutboxEntity) {
         try {
             this.rabbitTemplate.convertAndSend(jpaEventOutboxEntity.getExchange(), jpaEventOutboxEntity.getRoutingKey(), jpaEventOutboxEntity.getPayload());
         } catch (Exception ex) {

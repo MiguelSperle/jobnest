@@ -7,12 +7,10 @@ public class FileDestructionFailedExceptionTest {
     @Test
     void shouldReturnFileDestructionFailedException_whenCallWith() {
         final String message = "Error message";
-        final Throwable cause = new RuntimeException();
 
-        final var ex = FileDestructionFailedException.with(message, cause);
+        final var ex = FileDestructionFailedException.with(message);
 
         Assertions.assertNotNull(ex);
         Assertions.assertEquals(message, ex.getMessage());
-        Assertions.assertEquals(cause, ex.getCause());
     }
 }

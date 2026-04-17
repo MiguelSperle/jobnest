@@ -5,6 +5,7 @@ import com.miguel.jobnest.infrastructure.rest.dtos.MessageResponse;
 import com.miguel.jobnest.infrastructure.rest.dtos.subscription.req.CreateSubscriptionRequest;
 import com.miguel.jobnest.infrastructure.rest.dtos.subscription.res.ListSubscriptionsByUserIdResponse;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -13,14 +14,19 @@ import java.io.IOException;
 @RequestMapping("/api/v1/candidate/subscriptions")
 public interface SubscriptionCandidateControllerAPI {
     @PostMapping
-    ResponseEntity<MessageResponse> createSubscription(@RequestPart CreateSubscriptionRequest request, @RequestPart MultipartFile resumeFile) throws IOException;
+    ResponseEntity<MessageResponse> createSubscription(
+            @RequestPart CreateSubscriptionRequest request,
+            @RequestPart MultipartFile resumeFile,
+            @AuthenticationPrincipal String userId
+    ) throws IOException;
 
     @GetMapping
     ResponseEntity<Pagination<ListSubscriptionsByUserIdResponse>> listSubscriptionsByUserId(
             @RequestParam(name = "page", required = false, defaultValue = "0") int page,
             @RequestParam(name = "perPage", required = false, defaultValue = "10") int perPage,
             @RequestParam(name = "sort", required = false, defaultValue = "createdAt") String sort,
-            @RequestParam(name = "direction", required = false, defaultValue = "desc") String direction
+            @RequestParam(name = "direction", required = false, defaultValue = "desc") String direction,
+            @AuthenticationPrincipal String userId
     );
 
     @PatchMapping("/{subscriptionId}")

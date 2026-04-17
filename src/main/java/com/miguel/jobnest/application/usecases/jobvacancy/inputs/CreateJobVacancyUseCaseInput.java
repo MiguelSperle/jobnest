@@ -1,6 +1,7 @@
 package com.miguel.jobnest.application.usecases.jobvacancy.inputs;
 
 public record CreateJobVacancyUseCaseInput(
+        String userId,
         String title,
         String description,
         String seniorityLevel,
@@ -8,6 +9,7 @@ public record CreateJobVacancyUseCaseInput(
         String companyName
 ) {
     public static CreateJobVacancyUseCaseInput with(
+            final String userId,
             final String title,
             final String description,
             final String seniorityLevel,
@@ -15,6 +17,7 @@ public record CreateJobVacancyUseCaseInput(
             final String companyName
     ) {
         return new CreateJobVacancyUseCaseInput(
+                userId,
                 title,
                 description,
                 seniorityLevel,

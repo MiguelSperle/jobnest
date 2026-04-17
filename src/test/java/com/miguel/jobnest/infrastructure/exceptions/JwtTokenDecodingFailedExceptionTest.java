@@ -3,12 +3,12 @@ package com.miguel.jobnest.infrastructure.exceptions;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class FileUploadFailedExceptionTest {
+public class JwtTokenDecodingFailedExceptionTest {
     @Test
-    void shouldReturnFileUploadFailedException_whenCallWith() {
+    void shouldReturnJwtTokenDecodingFailedException_whenCallWith() {
         final String message = "Error message";
 
-        final var ex = FileUploadFailedException.with(message);
+        final var ex = JwtTokenDecodingFailedException.with(message);
 
         Assertions.assertNotNull(ex);
         Assertions.assertEquals(message, ex.getMessage());

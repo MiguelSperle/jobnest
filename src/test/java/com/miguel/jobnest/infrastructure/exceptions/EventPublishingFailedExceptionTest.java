@@ -7,12 +7,10 @@ public class EventPublishingFailedExceptionTest {
     @Test
     void shouldReturnEventPublishingFailedException_whenCallWith() {
         final String message = "Error message";
-        final Throwable cause = new RuntimeException();
 
-        final var ex = EventPublishingFailedException.with(message, cause);
+        final var ex = EventPublishingFailedException.with(message);
 
         Assertions.assertNotNull(ex);
         Assertions.assertEquals(message, ex.getMessage());
-        Assertions.assertEquals(cause, ex.getCause());
     }
 }

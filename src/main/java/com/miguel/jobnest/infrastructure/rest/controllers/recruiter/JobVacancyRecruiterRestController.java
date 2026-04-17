@@ -39,24 +39,24 @@ public class JobVacancyRecruiterRestController implements JobVacancyRecruiterCon
 
     @Override
     @IdempotencyKey
-    public ResponseEntity<MessageResponse> createJobVacancy(final CreateJobVacancyRequest request) {
-        this.createJobVacancyUseCase.execute(request.toInput());
+    public ResponseEntity<MessageResponse> createJobVacancy(final CreateJobVacancyRequest request, final String userId) {
+        this.createJobVacancyUseCase.execute(request.toInput(userId));
 
         return ResponseEntity.status(HttpStatus.CREATED).body(MessageResponse.from("Job vacancy created successfully"));
     }
 
     @Override
     public ResponseEntity<Pagination<ListJobVacanciesByUserIdResponse>> listJobVacanciesByUserId(
-            final String userId,
             final int page,
             final int perPage,
             final String search,
             final String sort,
             final String direction,
-            final Map<String, String> filters
+            final Map<String, String> filters,
+            final String userId
     ) {
         final ListJobVacanciesByUserIdUseCaseOutput output = this.listJobVacanciesByUserIdUseCase.execute(
-                ListJobVacanciesByUserIdUseCaseInput.with(SearchQuery.newSearchQuery(page, perPage, search, sort, direction, filters))
+                ListJobVacanciesByUserIdUseCaseInput.with(userId, SearchQuery.newSearchQuery(page, perPage, search, sort, direction, filters))
         );
 
         return ResponseEntity.ok().body(ListJobVacanciesByUserIdResponse.from(output));

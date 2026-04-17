@@ -1,6 +1,8 @@
 package com.miguel.jobnest.infrastructure.rest.controllers;
 
 import com.miguel.jobnest.application.abstractions.usecases.user.*;
+import com.miguel.jobnest.application.usecases.user.inputs.GetAuthenticatedUserUseCaseInput;
+import com.miguel.jobnest.application.usecases.user.inputs.SoftDeleteUserUseCaseInput;
 import com.miguel.jobnest.application.usecases.user.inputs.UpdateUserToVerifiedUseCaseInput;
 import com.miguel.jobnest.application.usecases.user.outputs.GetAuthenticatedUserUseCaseOutput;
 import com.miguel.jobnest.infrastructure.abstractions.rest.controllers.UserControllerAPI;
@@ -55,29 +57,29 @@ public class UserRestController implements UserControllerAPI {
     }
 
     @Override
-    public ResponseEntity<GetAuthenticatedUserResponse> getAuthenticatedUser() {
-        final GetAuthenticatedUserUseCaseOutput output = this.getAuthenticatedUserUseCase.execute();
+    public ResponseEntity<GetAuthenticatedUserResponse> getAuthenticatedUser(String userId) {
+        final GetAuthenticatedUserUseCaseOutput output = this.getAuthenticatedUserUseCase.execute(GetAuthenticatedUserUseCaseInput.with(userId));
 
         return ResponseEntity.ok().body(GetAuthenticatedUserResponse.from(output));
     }
 
     @Override
-    public ResponseEntity<MessageResponse> updateUser(final UpdateUserRequest request) {
-        this.updateUserUseCase.execute(request.toInput());
+    public ResponseEntity<MessageResponse> updateUser(final UpdateUserRequest request, final String userId) {
+        this.updateUserUseCase.execute(request.toInput(userId));
 
         return ResponseEntity.ok().body(MessageResponse.from("User updated successfully"));
     }
 
     @Override
-    public ResponseEntity<MessageResponse> updateUserPassword(final UpdateUserPasswordRequest request) {
-        this.updateUserPasswordUseCase.execute(request.toInput());
+    public ResponseEntity<MessageResponse> updateUserPassword(final UpdateUserPasswordRequest request, final String userId) {
+        this.updateUserPasswordUseCase.execute(request.toInput(userId));
 
         return ResponseEntity.ok().body(MessageResponse.from("User password updated successfully"));
     }
 
     @Override
-    public ResponseEntity<MessageResponse> deleteUser() {
-        this.softDeleteUserUseCase.execute();
+    public ResponseEntity<MessageResponse> deleteUser(final String userId) {
+        this.softDeleteUserUseCase.execute(SoftDeleteUserUseCaseInput.with(userId));
 
         return ResponseEntity.ok().body(MessageResponse.from("User deleted successfully"));
     }

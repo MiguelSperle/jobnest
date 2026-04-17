@@ -1,7 +1,6 @@
 package com.miguel.jobnest.application.usecases.subscription;
 
 import com.miguel.jobnest.application.abstractions.repositories.SubscriptionRepository;
-import com.miguel.jobnest.application.abstractions.services.SecurityService;
 import com.miguel.jobnest.application.abstractions.services.UploadService;
 import com.miguel.jobnest.application.usecases.subscription.inputs.CreateSubscriptionUseCaseInput;
 import com.miguel.jobnest.domain.builders.JobVacancyBuilder;
@@ -33,9 +32,6 @@ public class CreateSubscriptionUseCaseTest {
     @Mock
     private UploadService uploadService;
 
-    @Mock
-    private SecurityService securityService;
-
     @Test
     void shouldCreateSubscription_whenCallExecute() {
         final User userCandidate = UserBuilder.user().id(IdentifierUtils.generateNewId()).build();
@@ -44,18 +40,17 @@ public class CreateSubscriptionUseCaseTest {
         final String resumeUrl = "resume-url/resume-file/1Ab.pdf";
 
         final CreateSubscriptionUseCaseInput input = CreateSubscriptionUseCaseInput.with(
+                userCandidate.getId(),
                 new byte[0],
                 jobVacancy.getId()
         );
 
-        Mockito.when(this.securityService.getPrincipal()).thenReturn(userCandidate.getId());
         Mockito.when(this.subscriptionRepository.existsByUserIdAndJobVacancyId(Mockito.any(), Mockito.any())).thenReturn(false);
         Mockito.when(this.uploadService.uploadFile(Mockito.any(), Mockito.any(), Mockito.any())).thenReturn(resumeUrl);
         Mockito.when(this.subscriptionRepository.save(Mockito.any())).thenAnswer(returnsFirstArg());
 
         this.useCase.execute(input);
 
-        Mockito.verify(this.securityService, Mockito.times(1)).getPrincipal();
         Mockito.verify(this.subscriptionRepository, Mockito.times(1)).existsByUserIdAndJobVacancyId(Mockito.any(), Mockito.any());
         Mockito.verify(this.uploadService, Mockito.times(1)).uploadFile(Mockito.any(), Mockito.any(), Mockito.any());
         Mockito.verify(this.subscriptionRepository, Mockito.times(1)).save(Mockito.argThat(subscriptionSaved ->
@@ -74,11 +69,11 @@ public class CreateSubscriptionUseCaseTest {
         final JobVacancy jobVacancy = JobVacancyBuilder.jobVacancy().id(IdentifierUtils.generateNewId()).build();
 
         final CreateSubscriptionUseCaseInput input = CreateSubscriptionUseCaseInput.with(
+                userCandidate.getId(),
                 new byte[0],
                 jobVacancy.getId()
         );
 
-        Mockito.when(this.securityService.getPrincipal()).thenReturn(userCandidate.getId());
         Mockito.when(this.subscriptionRepository.existsByUserIdAndJobVacancyId(Mockito.any(), Mockito.any())).thenReturn(true);
 
         final var ex = Assertions.assertThrows(DomainException.class, () ->
@@ -91,7 +86,6 @@ public class CreateSubscriptionUseCaseTest {
         Assertions.assertEquals(expectedErrorMessage, ex.getMessage());
         Assertions.assertEquals(expectedStatusCode, ex.getStatusCode());
 
-        Mockito.verify(this.securityService, Mockito.times(1)).getPrincipal();
         Mockito.verify(this.subscriptionRepository, Mockito.times(1)).existsByUserIdAndJobVacancyId(Mockito.any(), Mockito.any());
     }
 
@@ -103,11 +97,11 @@ public class CreateSubscriptionUseCaseTest {
         final String resumeUrl = "resume-url/resume-file/1Ab.pdf";
 
         final CreateSubscriptionUseCaseInput input = CreateSubscriptionUseCaseInput.with(
+                userCandidate.getId(),
                 new byte[0],
                 jobVacancy.getId()
         );
 
-        Mockito.when(this.securityService.getPrincipal()).thenReturn(userCandidate.getId());
         Mockito.when(this.subscriptionRepository.existsByUserIdAndJobVacancyId(Mockito.any(), Mockito.any())).thenReturn(false);
         Mockito.when(this.uploadService.uploadFile(Mockito.any(), Mockito.any(), Mockito.any())).thenReturn(resumeUrl);
         Mockito.when(this.subscriptionRepository.save(Mockito.any())).thenThrow(new RuntimeException());
@@ -115,7 +109,6 @@ public class CreateSubscriptionUseCaseTest {
 
         Assertions.assertThrows(RuntimeException.class, () -> this.useCase.execute(input));
 
-        Mockito.verify(this.securityService, Mockito.times(1)).getPrincipal();
         Mockito.verify(this.subscriptionRepository, Mockito.times(1)).existsByUserIdAndJobVacancyId(Mockito.any(), Mockito.any());
         Mockito.verify(this.uploadService, Mockito.times(1)).uploadFile(Mockito.any(), Mockito.any(), Mockito.any());
         Mockito.verify(this.subscriptionRepository, Mockito.times(1)).save(Mockito.any());

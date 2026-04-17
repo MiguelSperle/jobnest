@@ -1,29 +1,24 @@
 package com.miguel.jobnest.application.usecases.user;
 
 import com.miguel.jobnest.application.abstractions.repositories.UserRepository;
-import com.miguel.jobnest.application.abstractions.services.SecurityService;
 import com.miguel.jobnest.application.abstractions.usecases.user.SoftDeleteUserUseCase;
+import com.miguel.jobnest.application.usecases.user.inputs.SoftDeleteUserUseCaseInput;
 import com.miguel.jobnest.domain.entities.User;
 import com.miguel.jobnest.domain.enums.UserStatus;
 import com.miguel.jobnest.domain.exceptions.NotFoundException;
 
 public class DefaultSoftDeleteUserUseCase implements SoftDeleteUserUseCase {
     private final UserRepository userRepository;
-    private final SecurityService securityService;
 
     public DefaultSoftDeleteUserUseCase(
-            final UserRepository userRepository,
-            final SecurityService securityService
+            final UserRepository userRepository
     ) {
         this.userRepository = userRepository;
-        this.securityService = securityService;
     }
 
     @Override
-    public void execute() {
-        final String authenticatedUserId = this.securityService.getPrincipal();
-
-        final User user = this.getUserById(authenticatedUserId);
+    public void execute(final SoftDeleteUserUseCaseInput input) {
+        final User user = this.getUserById(input.userId());
 
         final User updatedUser = user.withUserStatus(UserStatus.DELETED);
 

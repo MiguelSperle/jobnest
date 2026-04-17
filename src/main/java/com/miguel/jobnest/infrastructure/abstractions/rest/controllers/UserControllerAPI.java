@@ -7,6 +7,7 @@ import com.miguel.jobnest.infrastructure.rest.dtos.user.req.UpdateUserRequest;
 import com.miguel.jobnest.infrastructure.rest.dtos.user.res.GetAuthenticatedUserResponse;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("/api/v1/users")
@@ -18,14 +19,14 @@ public interface UserControllerAPI {
     ResponseEntity<MessageResponse> resetUserPassword(@PathVariable String code, @RequestBody @Valid ResetUserPasswordRequest request);
 
     @GetMapping("/me")
-    ResponseEntity<GetAuthenticatedUserResponse> getAuthenticatedUser();
+    ResponseEntity<GetAuthenticatedUserResponse> getAuthenticatedUser(@AuthenticationPrincipal String userId);
 
     @PatchMapping("/update/information")
-    ResponseEntity<MessageResponse> updateUser(@RequestBody @Valid UpdateUserRequest request);
+    ResponseEntity<MessageResponse> updateUser(@RequestBody @Valid UpdateUserRequest request, @AuthenticationPrincipal String userId);
 
     @PatchMapping("/update/password")
-    ResponseEntity<MessageResponse> updateUserPassword(@RequestBody @Valid UpdateUserPasswordRequest request);
+    ResponseEntity<MessageResponse> updateUserPassword(@RequestBody @Valid UpdateUserPasswordRequest request, @AuthenticationPrincipal String userId);
 
     @DeleteMapping("/delete")
-    ResponseEntity<MessageResponse> deleteUser();
+    ResponseEntity<MessageResponse> deleteUser(@AuthenticationPrincipal String userId);
 }

@@ -2,7 +2,6 @@ package com.miguel.jobnest.infrastructure.configurations.usecases;
 
 import com.miguel.jobnest.application.abstractions.repositories.JobVacancyRepository;
 import com.miguel.jobnest.application.abstractions.repositories.SubscriptionRepository;
-import com.miguel.jobnest.application.abstractions.services.SecurityService;
 import com.miguel.jobnest.application.abstractions.wrapper.TransactionManager;
 import com.miguel.jobnest.application.abstractions.usecases.jobvacancy.*;
 import com.miguel.jobnest.application.usecases.jobvacancy.*;
@@ -12,24 +11,16 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class JobVacancyUseCasesConfiguration {
     @Bean
-    public CreateJobVacancyUseCase createJobVacancyUseCase(
-            final JobVacancyRepository jobVacancyRepository,
-            final SecurityService securityService
-    ) {
-        return new DefaultCreateJobVacancyUseCase(
-                jobVacancyRepository,
-                securityService
-        );
+    public CreateJobVacancyUseCase createJobVacancyUseCase(final JobVacancyRepository jobVacancyRepository) {
+        return new DefaultCreateJobVacancyUseCase(jobVacancyRepository);
     }
 
     @Bean
     public ListJobVacanciesByUserIdUseCase listJobVacanciesByUserIdUseCase(
-            final JobVacancyRepository jobVacancyRepository,
-            final SecurityService securityService
+            final JobVacancyRepository jobVacancyRepository
     ) {
         return new DefaultListJobVacanciesByUserIdUseCase(
-                jobVacancyRepository,
-                securityService
+                jobVacancyRepository
         );
     }
 

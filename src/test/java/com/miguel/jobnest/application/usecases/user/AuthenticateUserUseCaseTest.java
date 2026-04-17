@@ -2,7 +2,7 @@ package com.miguel.jobnest.application.usecases.user;
 
 import com.miguel.jobnest.application.abstractions.providers.PasswordEncryption;
 import com.miguel.jobnest.application.abstractions.repositories.UserRepository;
-import com.miguel.jobnest.application.abstractions.services.JwtService;
+import com.miguel.jobnest.application.abstractions.services.JwtGeneratorService;
 import com.miguel.jobnest.application.usecases.user.inputs.AuthenticateUserUseCaseInput;
 import com.miguel.jobnest.application.usecases.user.outputs.AuthenticateUserUseCaseOutput;
 import com.miguel.jobnest.domain.builders.UserBuilder;
@@ -32,7 +32,7 @@ public class AuthenticateUserUseCaseTest {
     private PasswordEncryption passwordEncryption;
 
     @Mock
-    private JwtService jwtService;
+    private JwtGeneratorService jwtGeneratorService;
 
     @Test
     void shouldAuthenticateUser_whenCallExecute() {
@@ -47,7 +47,7 @@ public class AuthenticateUserUseCaseTest {
 
         Mockito.when(this.userRepository.findByEmail(Mockito.any())).thenReturn(Optional.of(user));
         Mockito.when(this.passwordEncryption.matches(Mockito.any(), Mockito.any())).thenReturn(true);
-        Mockito.when(this.jwtService.generateJwt(Mockito.any(), Mockito.any())).thenReturn(jwt);
+        Mockito.when(this.jwtGeneratorService.generateJwt(Mockito.any(), Mockito.any())).thenReturn(jwt);
 
         final AuthenticateUserUseCaseOutput output = this.useCase.execute(input);
 
@@ -57,7 +57,7 @@ public class AuthenticateUserUseCaseTest {
 
         Mockito.verify(this.userRepository, Mockito.times(1)).findByEmail(Mockito.any());
         Mockito.verify(this.passwordEncryption, Mockito.times(1)).matches(Mockito.any(), Mockito.any());
-        Mockito.verify(this.jwtService, Mockito.times(1)).generateJwt(Mockito.any(), Mockito.any());
+        Mockito.verify(this.jwtGeneratorService, Mockito.times(1)).generateJwt(Mockito.any(), Mockito.any());
     }
 
     @Test
