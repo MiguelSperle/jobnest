@@ -1,6 +1,6 @@
 package com.miguel.jobnest.infrastructure.idempotency;
 
-import com.miguel.jobnest.infrastructure.abstractions.services.RedisService;
+import com.miguel.jobnest.infrastructure.abstractions.services.CacheService;
 import com.miguel.jobnest.infrastructure.exceptions.IdempotencyKeyAlreadyExistsException;
 import com.miguel.jobnest.infrastructure.exceptions.IdempotencyKeyRequiredException;
 import com.miguel.jobnest.infrastructure.exceptions.IdempotencyKeyUnsupportedMethodException;
@@ -27,16 +27,16 @@ import java.util.stream.Collectors;
 
 @Component
 public class IdempotencyKeyFilter extends OncePerRequestFilter {
-    private final RedisService redisService;
+    private final CacheService cacheService;
     private final RequestMappingHandlerMapping requestMappingHandlerMapping;
     private final HandlerExceptionResolver handlerExceptionResolver;
 
     public IdempotencyKeyFilter(
-            final RedisService redisService,
+            final CacheService cacheService,
             final RequestMappingHandlerMapping requestMappingHandlerMapping,
             final HandlerExceptionResolver handlerExceptionResolver
     ) {
-        this.redisService = redisService;
+        this.cacheService = cacheService;
         this.requestMappingHandlerMapping = requestMappingHandlerMapping;
         this.handlerExceptionResolver = handlerExceptionResolver;
     }
@@ -65,7 +65,7 @@ public class IdempotencyKeyFilter extends OncePerRequestFilter {
 
                 final String redisKey = IDEMPOTENCY_KEY_REDIS_PREFIX.concat(idempotencyKeyHeader);
 
-                final Optional<IdempotencyKeyValue> existsIdempotencyKeyValue = this.redisService.get(redisKey, IdempotencyKeyValue.class);
+                final Optional<IdempotencyKeyValue> existsIdempotencyKeyValue = this.cacheService.get(redisKey, IdempotencyKeyValue.class);
 
                 if (existsIdempotencyKeyValue.isPresent() && existsIdempotencyKeyValue.get().isDone()) {
                     response.setStatus(existsIdempotencyKeyValue.get().statusCode());
@@ -80,7 +80,7 @@ public class IdempotencyKeyFilter extends OncePerRequestFilter {
                 final long timeout = idempotencyKeyValues.timeout();
                 final TimeUnit timeUnit = idempotencyKeyValues.timeUnit();
 
-                final Boolean isAbsent = this.redisService.setIfAbsent(redisKey, IdempotencyKeyValue.init(), timeout, timeUnit);
+                final Boolean isAbsent = this.cacheService.setIfAbsent(redisKey, IdempotencyKeyValue.init(), timeout, timeUnit);
 
                 if (Boolean.FALSE.equals(isAbsent)) {
                     throw IdempotencyKeyAlreadyExistsException.with("Idempotency key already exists");
@@ -104,7 +104,7 @@ public class IdempotencyKeyFilter extends OncePerRequestFilter {
                         contentCachingResponseWrapper.getStatus(), body, headers
                 );
 
-                this.redisService.set(redisKey, idempotencyKeyValueDone, timeout, timeUnit);
+                this.cacheService.set(redisKey, idempotencyKeyValueDone, timeout, timeUnit);
             } else {
                 filterChain.doFilter(request, response);
             }

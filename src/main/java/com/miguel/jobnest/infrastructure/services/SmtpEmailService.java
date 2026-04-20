@@ -11,17 +11,17 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 @Service
-public class SmtpEmailServiceImpl implements EmailService {
+public class SmtpEmailService implements EmailService {
     private final JavaMailSender javaMailSender;
 
-    public SmtpEmailServiceImpl(final JavaMailSender javaMailSender) {
+    public SmtpEmailService(final JavaMailSender javaMailSender) {
         this.javaMailSender = javaMailSender;
     }
 
     @Value("${spring.mail.username}")
     private String from;
 
-    private static final Logger log = LoggerFactory.getLogger(SmtpEmailServiceImpl.class);
+    private static final Logger log = LoggerFactory.getLogger(SmtpEmailService.class);
 
     @Override
     public void sendEmail(final String to, final String text, final String subject) {

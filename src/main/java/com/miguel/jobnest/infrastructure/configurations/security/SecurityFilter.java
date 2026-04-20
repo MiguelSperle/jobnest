@@ -1,7 +1,7 @@
 package com.miguel.jobnest.infrastructure.configurations.security;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.miguel.jobnest.infrastructure.abstractions.services.JwtDecoderService;
+import com.miguel.jobnest.infrastructure.abstractions.services.JwtTokenDecoderService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -20,7 +20,7 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 public class SecurityFilter extends OncePerRequestFilter {
-    private final JwtDecoderService jwtDecoderService;
+    private final JwtTokenDecoderService jwtTokenDecoderService;
     private final HandlerExceptionResolver handlerExceptionResolver;
 
     @Override
@@ -33,7 +33,7 @@ public class SecurityFilter extends OncePerRequestFilter {
             final String jwtToken = this.recoverToken(request);
 
             if (jwtToken != null) {
-                final DecodedJWT decodedJWT = this.jwtDecoderService.decodeJwt(jwtToken);
+                final DecodedJWT decodedJWT = this.jwtTokenDecoderService.decodeJwt(jwtToken);
 
                 final String role = decodedJWT.getClaim("role").asString();
                 final String userId = decodedJWT.getSubject();

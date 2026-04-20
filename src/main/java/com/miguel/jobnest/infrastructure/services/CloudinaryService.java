@@ -12,14 +12,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Service
-public class CloudinaryServiceImpl implements UploadService {
+public class CloudinaryService implements UploadService {
     private final Cloudinary cloudinary;
 
-    public CloudinaryServiceImpl(final Cloudinary cloudinary) {
+    public CloudinaryService(final Cloudinary cloudinary) {
         this.cloudinary = cloudinary;
     }
 
-    private static final Logger log = LoggerFactory.getLogger(CloudinaryServiceImpl.class);
+    private static final Logger log = LoggerFactory.getLogger(CloudinaryService.class);
 
     @Override
     public String uploadFile(final byte[] bytesFile, final String folderName, final String resourceType) {

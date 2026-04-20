@@ -3,7 +3,7 @@ package com.miguel.jobnest.infrastructure.services;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.miguel.jobnest.infrastructure.abstractions.services.JwtDecoderService;
+import com.miguel.jobnest.infrastructure.abstractions.services.JwtTokenDecoderService;
 import com.miguel.jobnest.infrastructure.exceptions.JwtTokenDecodingFailedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,11 +11,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
-public class JwtDecoderServiceImpl implements JwtDecoderService {
+public class JwtTokenDecoderServiceImpl implements JwtTokenDecoderService {
     @Value("${security.token.secret}")
     private String secret;
 
-    private static final Logger log = LoggerFactory.getLogger(JwtDecoderServiceImpl.class);
+    private static final Logger log = LoggerFactory.getLogger(JwtTokenDecoderServiceImpl.class);
 
     @Override
     public DecodedJWT decodeJwt(final String jwt) {

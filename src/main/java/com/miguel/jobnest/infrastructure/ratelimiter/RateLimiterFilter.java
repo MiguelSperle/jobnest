@@ -1,6 +1,6 @@
 package com.miguel.jobnest.infrastructure.ratelimiter;
 
-import com.miguel.jobnest.infrastructure.abstractions.services.RedisService;
+import com.miguel.jobnest.infrastructure.abstractions.services.CacheService;
 import com.miguel.jobnest.infrastructure.exceptions.TooManyRequestsException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
@@ -17,14 +17,14 @@ import java.util.List;
 @Component
 @Order(value = Ordered.HIGHEST_PRECEDENCE)
 public class RateLimiterFilter extends OncePerRequestFilter {
-    private final RedisService redisService;
+    private final CacheService cacheService;
     private final HandlerExceptionResolver handlerExceptionResolver;
 
     public RateLimiterFilter(
-            final RedisService redisService,
+            final CacheService cacheService,
             final HandlerExceptionResolver handlerExceptionResolver
     ) {
-        this.redisService = redisService;
+        this.cacheService = cacheService;
         this.handlerExceptionResolver = handlerExceptionResolver;
     }
 
@@ -56,7 +56,7 @@ public class RateLimiterFilter extends OncePerRequestFilter {
             final String clientIp = this.extractClientIp(request);
             final String redisKey = RATE_LIMIT_REDIS_PREFIX.concat(clientIp);
 
-            final Long count = this.redisService.execute(FIXED_WINDOW_SCRIPT, Long.class, List.of(redisKey), FIXED_WINDOW_TIMEOUT);
+            final Long count = this.cacheService.execute(FIXED_WINDOW_SCRIPT, Long.class, List.of(redisKey), FIXED_WINDOW_TIMEOUT);
 
             if (count != null && count > MAX_REQUESTS_ALLOWED) {
                 throw TooManyRequestsException.with("Too many requests occurred. Please wait a moment before trying again");

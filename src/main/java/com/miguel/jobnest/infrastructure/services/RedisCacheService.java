@@ -1,6 +1,6 @@
 package com.miguel.jobnest.infrastructure.services;
 
-import com.miguel.jobnest.infrastructure.abstractions.services.RedisService;
+import com.miguel.jobnest.infrastructure.abstractions.services.CacheService;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.stereotype.Component;
@@ -10,10 +10,10 @@ import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 @Component
-public class RedisServiceImpl implements RedisService {
+public class RedisCacheService implements CacheService {
     private final RedisTemplate<String, Object> redisTemplate;
 
-    public RedisServiceImpl(final RedisTemplate<String, Object> redisTemplate) {
+    public RedisCacheService(final RedisTemplate<String, Object> redisTemplate) {
         this.redisTemplate = redisTemplate;
     }
 

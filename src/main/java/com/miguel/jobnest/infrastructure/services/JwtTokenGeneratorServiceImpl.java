@@ -2,7 +2,7 @@ package com.miguel.jobnest.infrastructure.services;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.miguel.jobnest.application.abstractions.services.JwtGeneratorService;
+import com.miguel.jobnest.application.abstractions.services.JwtTokenGeneratorService;
 import com.miguel.jobnest.infrastructure.exceptions.JwtTokenGenerationFailedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,11 +12,11 @@ import org.springframework.stereotype.Service;
 import java.time.Instant;
 
 @Service
-public class JwtGeneratorServiceImpl implements JwtGeneratorService {
+public class JwtTokenGeneratorServiceImpl implements JwtTokenGeneratorService {
     @Value("${security.token.secret}")
     private String secret;
 
-    private static final Logger log = LoggerFactory.getLogger(JwtGeneratorServiceImpl.class);
+    private static final Logger log = LoggerFactory.getLogger(JwtTokenGeneratorServiceImpl.class);
 
     @Override
     public String generateJwt(final String userId, final String role) {

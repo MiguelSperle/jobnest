@@ -1,5 +1,5 @@
 package com.miguel.jobnest.application.abstractions.services;
 
-public interface JwtGeneratorService {
+public interface JwtTokenGeneratorService {
     String generateJwt(String userId, String role);
 }
