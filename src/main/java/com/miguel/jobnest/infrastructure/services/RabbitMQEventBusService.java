@@ -6,9 +6,9 @@ import com.miguel.jobnest.infrastructure.persistence.jpa.entities.JpaEventOutbox
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-@Component
+@Service
 public class RabbitMQEventBusService implements EventBusService {
     private final RabbitTemplate rabbitTemplate;
 
@@ -22,7 +22,7 @@ public class RabbitMQEventBusService implements EventBusService {
     public void publish(final JpaEventOutboxEntity jpaEventOutboxEntity) {
         try {
             this.rabbitTemplate.convertAndSend(jpaEventOutboxEntity.getExchange(), jpaEventOutboxEntity.getRoutingKey(), jpaEventOutboxEntity.getPayload());
-        } catch (Exception ex) {
+        } catch (final Exception ex) {
             log.error("Failed to publish event: {}", jpaEventOutboxEntity.getEventType(), ex);
             throw EventPublishingFailedException.with("Failed to publish event");
         }

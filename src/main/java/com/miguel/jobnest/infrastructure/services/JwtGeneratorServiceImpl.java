@@ -7,11 +7,11 @@ import com.miguel.jobnest.infrastructure.exceptions.JwtTokenGenerationFailedExce
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 
-@Component
+@Service
 public class JwtGeneratorServiceImpl implements JwtGeneratorService {
     @Value("${security.token.secret}")
     private String secret;
