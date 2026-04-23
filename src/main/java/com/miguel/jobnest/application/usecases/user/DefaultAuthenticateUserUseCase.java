@@ -2,7 +2,7 @@ package com.miguel.jobnest.application.usecases.user;
 
 import com.miguel.jobnest.application.abstractions.providers.PasswordEncryption;
 import com.miguel.jobnest.application.abstractions.repositories.UserRepository;
-import com.miguel.jobnest.application.abstractions.services.JwtTokenGeneratorService;
+import com.miguel.jobnest.application.abstractions.services.JwtTokenService;
 import com.miguel.jobnest.application.abstractions.usecases.user.AuthenticateUserUseCase;
 import com.miguel.jobnest.application.usecases.user.inputs.AuthenticateUserUseCaseInput;
 import com.miguel.jobnest.application.usecases.user.outputs.AuthenticateUserUseCaseOutput;
@@ -10,19 +10,21 @@ import com.miguel.jobnest.domain.entities.User;
 import com.miguel.jobnest.domain.enums.UserStatus;
 import com.miguel.jobnest.domain.exceptions.DomainException;
 
+import java.util.List;
+
 public class DefaultAuthenticateUserUseCase implements AuthenticateUserUseCase {
     private final UserRepository userRepository;
     private final PasswordEncryption passwordEncryption;
-    private final JwtTokenGeneratorService jwtTokenGeneratorService;
+    private final JwtTokenService jwtTokenService;
 
     public DefaultAuthenticateUserUseCase(
             final UserRepository userRepository,
             final PasswordEncryption passwordEncryption,
-            final JwtTokenGeneratorService jwtTokenGeneratorService
+            final JwtTokenService jwtTokenService
     ) {
         this.userRepository = userRepository;
         this.passwordEncryption = passwordEncryption;
-        this.jwtTokenGeneratorService = jwtTokenGeneratorService;
+        this.jwtTokenService = jwtTokenService;
     }
 
     @Override
@@ -41,7 +43,7 @@ public class DefaultAuthenticateUserUseCase implements AuthenticateUserUseCase {
             throw DomainException.with("User has been deleted", 403);
         }
 
-        final String jwtGenerated = this.jwtTokenGeneratorService.generateJwt(user.getId(), user.getAuthorizationRole().name());
+        final String jwtGenerated = this.jwtTokenService.generateAccessToken(user.getId(), user.getAuthorizationRole().name(), List.of());
 
         return AuthenticateUserUseCaseOutput.from(jwtGenerated);
     }

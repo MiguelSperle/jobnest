@@ -1,30 +1,27 @@
 package com.miguel.jobnest.infrastructure.configurations.security;
 
-import lombok.RequiredArgsConstructor;
+import com.miguel.jobnest.infrastructure.configurations.security.authentication.JwtConverter;
+import com.miguel.jobnest.infrastructure.configurations.security.authentication.handlers.CustomAccessDeniedHandler;
+import com.miguel.jobnest.infrastructure.configurations.security.authentication.handlers.CustomAuthenticationEntryPointHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.access.AccessDeniedHandler;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
-@RequiredArgsConstructor
 public class SecurityConfiguration {
-    private final SecurityFilter securityFilter;
-    private final AuthenticationEntryPoint authenticationEntryPoint;
-    private final AccessDeniedHandler accessDeniedHandler;
-
     @Bean
     public SecurityFilterChain securityFilterChain(final HttpSecurity httpSecurity) {
         return httpSecurity.csrf(AbstractHttpConfigurer::disable)
@@ -45,14 +42,26 @@ public class SecurityConfiguration {
                                 .requestMatchers(HttpMethod.PATCH, "/api/v1/candidate/subscriptions/{subscriptionId}").hasRole("CANDIDATE")
                                 .requestMatchers(HttpMethod.GET, "/api/v1/recruiter/subscriptions/{jobVacancyId}").hasRole("RECRUITER")
                                 .anyRequest().authenticated())
-                .exceptionHandling((exceptions) -> exceptions.authenticationEntryPoint(this.authenticationEntryPoint).accessDeniedHandler(this.accessDeniedHandler))
-                .addFilterBefore(this.securityFilter, UsernamePasswordAuthenticationFilter.class)
+                .oauth2ResourceServer(oauth2ResourceServer -> {
+                    oauth2ResourceServer.authenticationEntryPoint(new CustomAuthenticationEntryPointHandler());
+                    oauth2ResourceServer.accessDeniedHandler(new CustomAccessDeniedHandler());
+                    oauth2ResourceServer.jwt(jwtConfigurer -> jwtConfigurer.jwtAuthenticationConverter(new JwtConverter()));
+                })
                 .build();
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(final AuthenticationConfiguration authenticationConfiguration) {
-        return authenticationConfiguration.getAuthenticationManager();
+    public CorsConfigurationSource corsConfigurationSource() {
+        final CorsConfiguration corsConfiguration = new CorsConfiguration();
+        corsConfiguration.addAllowedOrigin("http://localhost:3000");
+        corsConfiguration.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
+        corsConfiguration.setAllowedHeaders(List.of("Authorization", "Content-Type", "x-idempotency-key"));
+        corsConfiguration.setAllowCredentials(true);
+
+        final UrlBasedCorsConfigurationSource urlBasedCorsConfigurationSource = new UrlBasedCorsConfigurationSource();
+        urlBasedCorsConfigurationSource.registerCorsConfiguration("/**", corsConfiguration);
+
+        return urlBasedCorsConfigurationSource;
     }
 
     @Bean

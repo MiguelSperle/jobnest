@@ -68,8 +68,8 @@ public class IdempotencyKeyFilter extends OncePerRequestFilter {
                 final Optional<IdempotencyKeyValue> existsIdempotencyKeyValue = this.cacheService.get(redisKey, IdempotencyKeyValue.class);
 
                 if (existsIdempotencyKeyValue.isPresent() && existsIdempotencyKeyValue.get().isDone()) {
-                    response.setStatus(existsIdempotencyKeyValue.get().statusCode());
                     response.getWriter().write(existsIdempotencyKeyValue.get().body());
+                    response.setStatus(existsIdempotencyKeyValue.get().status());
                     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
                     response.addHeader(IdempotencyKey.IDEMPOTENCY_RESPONSE_HEADER, "true");
                     existsIdempotencyKeyValue.get().headers().forEach(response::setHeader);
@@ -86,25 +86,28 @@ public class IdempotencyKeyFilter extends OncePerRequestFilter {
                     throw IdempotencyKeyAlreadyExistsException.with("Idempotency key already exists");
                 }
 
-                final ContentCachingResponseWrapper contentCachingResponseWrapper = new ContentCachingResponseWrapper(response);
-                filterChain.doFilter(request, contentCachingResponseWrapper);
+                final ContentCachingResponseWrapper responseWrapper = new ContentCachingResponseWrapper(response);
+                filterChain.doFilter(request, responseWrapper);
 
-                final byte[] bodyArray = contentCachingResponseWrapper.getContentAsByteArray();
-                contentCachingResponseWrapper.copyBodyToResponse();
+                if (this.isCacheableResponse(responseWrapper)) {
+                    final String body = new String(responseWrapper.getContentAsByteArray(), responseWrapper.getCharacterEncoding());
 
-                final String body = new String(bodyArray, contentCachingResponseWrapper.getCharacterEncoding());
+                    final Map<String, String> headers = responseWrapper.getHeaderNames().stream().collect(Collectors.toMap(
+                            headerName -> headerName,
+                            headerName -> Objects.toString(responseWrapper.getHeader(headerName), ""),
+                            (v1, v2) -> v1
+                    ));
 
-                final Map<String, String> headers = contentCachingResponseWrapper.getHeaderNames().stream().collect(Collectors.toMap(
-                        headerName -> headerName,
-                        headerName -> Objects.toString(contentCachingResponseWrapper.getHeader(headerName), ""),
-                        (v1, v2) -> v1
-                ));
+                    final IdempotencyKeyValue idempotencyKeyValue = IdempotencyKeyValue.done(
+                            responseWrapper.getStatus(), body, headers
+                    );
 
-                final IdempotencyKeyValue idempotencyKeyValueDone = IdempotencyKeyValue.done(
-                        contentCachingResponseWrapper.getStatus(), body, headers
-                );
+                    this.cacheService.set(redisKey, idempotencyKeyValue, timeout, timeUnit);
+                } else {
+                    this.cacheService.delete(redisKey);
+                }
 
-                this.cacheService.set(redisKey, idempotencyKeyValueDone, timeout, timeUnit);
+                responseWrapper.copyBodyToResponse();
             } else {
                 filterChain.doFilter(request, response);
             }
@@ -140,5 +143,9 @@ public class IdempotencyKeyFilter extends OncePerRequestFilter {
 
     private boolean isSupportedMethod(final HttpServletRequest request) {
         return request.getMethod().equals("POST") || request.getMethod().equals("PATCH");
+    }
+
+    private boolean isCacheableResponse(final ContentCachingResponseWrapper responseWrapper) {
+        return responseWrapper.getStatus() >= 200 && responseWrapper.getStatus() < 300;
     }
 }

@@ -37,3 +37,6 @@ build/
 
 ### Docker Volumes ###
 docker_conf/
+
+### PRIVATE KEY ###
+/src/main/resources/app.private.key

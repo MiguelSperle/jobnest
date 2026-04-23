@@ -18,12 +18,12 @@ public class RedisCacheService implements CacheService {
     }
 
     @Override
-    public <T> Optional<T> get(final String key, final Class<T> type) {
+    public <T> Optional<T> get(final String key, final Class<T> resultType) {
         final Object result = this.redisTemplate.opsForValue().get(key);
 
-        if (!type.isInstance(result)) return Optional.empty();
+        if (!resultType.isInstance(result)) return Optional.empty();
 
-        return Optional.of(type.cast(result));
+        return Optional.of(resultType.cast(result));
     }
 
     @Override
@@ -39,5 +39,10 @@ public class RedisCacheService implements CacheService {
     @Override
     public <T> T execute(final String script, final Class<T> resultType, final List<String> keys, final long timeout) {
         return this.redisTemplate.execute(new DefaultRedisScript<>(script, resultType), keys, timeout);
+    }
+
+    @Override
+    public void delete(final String key) {
+        this.redisTemplate.delete(key);
     }
 }

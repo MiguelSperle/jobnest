@@ -4,7 +4,7 @@ import com.miguel.jobnest.application.abstractions.providers.CodeGenerator;
 import com.miguel.jobnest.application.abstractions.providers.PasswordEncryption;
 import com.miguel.jobnest.application.abstractions.repositories.UserCodeRepository;
 import com.miguel.jobnest.application.abstractions.repositories.UserRepository;
-import com.miguel.jobnest.application.abstractions.services.JwtTokenGeneratorService;
+import com.miguel.jobnest.application.abstractions.services.JwtTokenService;
 import com.miguel.jobnest.application.abstractions.wrapper.TransactionManager;
 import com.miguel.jobnest.application.abstractions.usecases.user.*;
 import com.miguel.jobnest.application.usecases.user.*;
@@ -62,12 +62,12 @@ public class UserUseCasesConfiguration {
     public AuthenticateUserUseCase authenticateUserUseCase(
             final UserRepository userRepository,
             final PasswordEncryption passwordEncryption,
-            final JwtTokenGeneratorService jwtTokenGeneratorService
+            final JwtTokenService jwtTokenService
     ) {
         return new DefaultAuthenticateUserUseCase(
                 userRepository,
                 passwordEncryption,
-                jwtTokenGeneratorService
+                jwtTokenService
         );
     }
 

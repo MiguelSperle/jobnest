@@ -30,8 +30,8 @@ public class CloudinaryService implements UploadService {
 
             return (String) this.cloudinary.uploader().upload(bytesFile, options).get("secure_url");
         } catch (final Exception ex) {
-            log.error("Failed to upload file with bytes size: {} in folder: {} with resource type: {}", bytesFile.length, folderName, resourceType, ex);
-            throw FileUploadFailedException.with("Failed to upload file");
+            log.error("Failed to upload file | sizeBytesFile: {}, folderName: {}, resourceType: {}", bytesFile.length, folderName, resourceType, ex);
+            throw FileUploadFailedException.with("Failed to upload file", ex);
         }
     }
 
@@ -43,8 +43,8 @@ public class CloudinaryService implements UploadService {
 
             this.cloudinary.uploader().destroy(publicId, options);
         } catch (final Exception ex) {
-            log.error("Failed to destroy file with publicId: {} with resource type: {}", publicId, resourceType, ex);
-            throw FileDestructionFailedException.with("Failed to destroy file");
+            log.error("Failed to destroy file | publicId: {}, resourceType: {}", publicId, resourceType, ex);
+            throw FileDestructionFailedException.with("Failed to destroy file", ex);
         }
     }
 }

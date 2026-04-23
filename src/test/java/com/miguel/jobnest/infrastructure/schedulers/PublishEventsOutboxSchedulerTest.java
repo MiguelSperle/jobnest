@@ -40,14 +40,14 @@ public class PublishEventsOutboxSchedulerTest {
             return runnable;
         }).when(this.transactionManager).runTransaction(Mockito.any());
         Mockito.when(this.eventOutboxRepository.findFirst10ByStatus(Mockito.any())).thenReturn(List.of(jpaEventOutboxEntity));
-        Mockito.doNothing().when(this.eventBusService).publish(Mockito.any());
+        Mockito.doNothing().when(this.eventBusService).publishEvent(Mockito.any());
         Mockito.doNothing().when(this.eventOutboxRepository).save(Mockito.any());
 
         this.publishEventsOutboxScheduler.publishEvent();
 
         Mockito.verify(this.transactionManager, Mockito.times(1)).runTransaction(Mockito.any());
         Mockito.verify(this.eventOutboxRepository, Mockito.times(1)).findFirst10ByStatus(Mockito.any());
-        Mockito.verify(this.eventBusService, Mockito.times(1)).publish(Mockito.any());
+        Mockito.verify(this.eventBusService, Mockito.times(1)).publishEvent(Mockito.any());
         Mockito.verify(this.eventOutboxRepository, Mockito.times(1)).save(Mockito.argThat(jpaEventOutboxEntitySaved ->
                 jpaEventOutboxEntitySaved.getEventOutboxStatus() == EventOutboxStatus.PUBLISHED
         ));
@@ -66,7 +66,7 @@ public class PublishEventsOutboxSchedulerTest {
 
         Mockito.verify(this.transactionManager, Mockito.times(1)).runTransaction(Mockito.any());
         Mockito.verify(this.eventOutboxRepository, Mockito.times(1)).findFirst10ByStatus(Mockito.any());
-        Mockito.verify(this.eventBusService, Mockito.never()).publish(Mockito.any());
+        Mockito.verify(this.eventBusService, Mockito.never()).publishEvent(Mockito.any());
         Mockito.verify(this.eventOutboxRepository, Mockito.never()).save(Mockito.any());
     }
 }

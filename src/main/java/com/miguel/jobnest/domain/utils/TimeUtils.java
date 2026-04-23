@@ -2,7 +2,10 @@ package com.miguel.jobnest.domain.utils;
 
 import java.time.LocalDateTime;
 
-public class TimeUtils {
+public final class TimeUtils {
+    private TimeUtils() {
+    }
+
     public static LocalDateTime now() {
         return LocalDateTime.now();
     }

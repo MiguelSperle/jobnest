@@ -56,56 +56,56 @@ public class RabbitMQProperties {
         public void setDeadLetterQueueProperties(final DeadLetterQueueProperties deadLetterQueueProperties) {
             this.deadLetterQueueProperties = deadLetterQueueProperties;
         }
-    }
 
-    public static class ExchangeProperties {
-        private String name;
-        private String type;
+        public static class ExchangeProperties {
+            private String name;
+            private String type;
 
-        public String getName() {
-            return this.name;
+            public String getName() {
+                return this.name;
+            }
+
+            public void setName(final String name) {
+                this.name = name;
+            }
+
+            public String getType() {
+                return this.type;
+            }
+
+            public void setType(final String type) {
+                this.type = type;
+            }
         }
 
-        public void setName(final String name) {
-            this.name = name;
-        }
+        public static class DeadLetterQueueProperties {
+            private String exchange;
+            private String routingKey;
+            private String queue;
 
-        public String getType() {
-            return this.type;
-        }
+            public String getExchange() {
+                return this.exchange;
+            }
 
-        public void setType(final String type) {
-            this.type = type;
-        }
-    }
+            public void setExchange(final String exchange) {
+                this.exchange = exchange;
+            }
 
-    public static class DeadLetterQueueProperties {
-        private String exchange;
-        private String routingKey;
-        private String queue;
+            public String getRoutingKey() {
+                return this.routingKey;
+            }
 
-        public String getExchange() {
-            return this.exchange;
-        }
+            public void setRoutingKey(final String routingKey) {
+                this.routingKey = routingKey;
+            }
 
-        public void setExchange(final String exchange) {
-            this.exchange = exchange;
-        }
+            public String getQueue() {
+                return this.queue;
+            }
 
-        public String getRoutingKey() {
-            return this.routingKey;
-        }
-
-        public void setRoutingKey(final String routingKey) {
-            this.routingKey = routingKey;
-        }
-
-        public String getQueue() {
-            return this.queue;
-        }
-
-        public void setQueue(final String queue) {
-            this.queue = queue;
+            public void setQueue(final String queue) {
+                this.queue = queue;
+            }
         }
     }
 }

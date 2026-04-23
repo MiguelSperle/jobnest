@@ -1,11 +1,11 @@
 package com.miguel.jobnest.infrastructure.exceptions;
 
 public class FileUploadFailedException extends RuntimeException {
-    public FileUploadFailedException(String message) {
+    public FileUploadFailedException(final String message, final Throwable cause) {
         super(message);
     }
 
-    public static FileUploadFailedException with(String message) {
-        return new FileUploadFailedException(message);
+    public static FileUploadFailedException with(final String message, final Throwable cause) {
+        return new FileUploadFailedException(message, cause);
     }
 }

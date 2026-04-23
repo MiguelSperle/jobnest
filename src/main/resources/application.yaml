@@ -49,12 +49,15 @@ spring:
     api-secret: ${CLOUDINARY_API_SECRET}
 
 security:
-  token:
-    secret: ${JWT_SECRET}
+  jwt:
+    public:
+      key: classpath:app.public.key
+    private:
+      key: classpath:app.private.key
 
 amqp:
   queues:
-    user-code-created:
+    user-code-created-queue-properties:
       exchange-properties:
         name: user.code.events
         type: direct
@@ -64,7 +67,7 @@ amqp:
         exchange: user.code.events.dlq
         routing-key: user.code.created.dlq
         queue: user.code.created.queue.dlq
-    subscription-created:
+    subscription-created-queue-properties:
       exchange-properties:
         name: subscription.events
         type: direct

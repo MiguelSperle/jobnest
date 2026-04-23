@@ -19,12 +19,12 @@ public class RabbitMQEventBusService implements EventBusService {
     private static final Logger log = LoggerFactory.getLogger(RabbitMQEventBusService.class);
 
     @Override
-    public void publish(final JpaEventOutboxEntity jpaEventOutboxEntity) {
+    public void publishEvent(final JpaEventOutboxEntity jpaEventOutboxEntity) {
         try {
             this.rabbitTemplate.convertAndSend(jpaEventOutboxEntity.getExchange(), jpaEventOutboxEntity.getRoutingKey(), jpaEventOutboxEntity.getPayload());
         } catch (final Exception ex) {
-            log.error("Failed to publish event: {}", jpaEventOutboxEntity.getEventType(), ex);
-            throw EventPublishingFailedException.with("Failed to publish event");
+            log.error("Failed to publish event | eventType: {}", jpaEventOutboxEntity.getEventType(), ex);
+            throw EventPublishingFailedException.with("Failed to publish event", ex);
         }
     }
 }

@@ -11,7 +11,7 @@ public class IdempotencyKeyValueTest {
         final IdempotencyKeyValue idempotencyKeyValue = IdempotencyKeyValue.init();
 
         Assertions.assertNotNull(idempotencyKeyValue);
-        Assertions.assertEquals(0, idempotencyKeyValue.statusCode());
+        Assertions.assertEquals(0, idempotencyKeyValue.status());
         Assertions.assertEquals("", idempotencyKeyValue.body());
         Assertions.assertEquals(Map.of(), idempotencyKeyValue.headers());
         Assertions.assertFalse(idempotencyKeyValue.isDone());
@@ -25,7 +25,7 @@ public class IdempotencyKeyValueTest {
         final IdempotencyKeyValue idempotencyKeyValue = IdempotencyKeyValue.done(statusCode, body, Map.of());
 
         Assertions.assertNotNull(idempotencyKeyValue);
-        Assertions.assertEquals(statusCode, idempotencyKeyValue.statusCode());
+        Assertions.assertEquals(statusCode, idempotencyKeyValue.status());
         Assertions.assertEquals(body, idempotencyKeyValue.body());
         Assertions.assertEquals(Map.of(), idempotencyKeyValue.headers());
         Assertions.assertTrue(idempotencyKeyValue.isDone());

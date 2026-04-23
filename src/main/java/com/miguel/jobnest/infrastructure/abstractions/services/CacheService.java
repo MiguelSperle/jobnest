@@ -5,8 +5,9 @@ import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 public interface CacheService {
-    <T> Optional<T> get(String key, Class<T> type);
+    <T> Optional<T> get(String key, Class<T> resultType);
     <T> void set(String key, T value, long timeout, TimeUnit timeUnit);
     <T> Boolean setIfAbsent(String key, T value, long timeout, TimeUnit timeUnit);
     <T> T execute(String script, Class<T> resultType, List<String> keys, long timeout);
+    void delete(String key);
 }

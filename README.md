@@ -20,7 +20,7 @@ both for those who publish job vacancies and for those who seek to apply for the
 <p>
 It is important to emphasize that this is a study project designed to explore and implement complex concepts, such as: 
 Clean Architecture, SOLID, Messaging System combined with the implementation of the Inbox and Outbox pattern, 
-Database Transactions, Idempotency, Rate Limiter and Unit Testing.
+Database Transactions, Idempotency, Rate Limiter, Unit Testing and Authentication with JWT.
 </p>
 
 <p>
@@ -76,7 +76,6 @@ docker-compose up -d
 | `CLOUDINARY_CLOUD_NAME` | To identify your account on Cloudinary
 | `CLOUDINARY_API_KEY` | To authenticate with Cloudinary
 | `CLOUDINARY_API_SECRET` | To authenticate with Cloudinary
-| `JWT_SECRET` | To sign and verify JSON Web Tokens
 
 <h3>👨🏻‍💻 Contributors</h3>
 

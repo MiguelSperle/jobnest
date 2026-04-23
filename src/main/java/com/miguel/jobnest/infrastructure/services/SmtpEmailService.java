@@ -36,8 +36,8 @@ public class SmtpEmailService implements EmailService {
 
             this.javaMailSender.send(mimeMessage);
         } catch (Exception ex) {
-            log.error("Failed to send email to: {}", to, ex);
-            throw EmailSendFailedException.with("Failed to send email");
+            log.error("Failed to send email | to: {}, subject: {}", to, subject, ex);
+            throw EmailSendFailedException.with("Failed to send email", ex);
         }
     }
 }

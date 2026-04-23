@@ -40,7 +40,7 @@ public class PublishEventsOutboxScheduler {
             log.info("Found {} unpublished events", pendingJpaEventsOutbox.size());
 
             for (JpaEventOutboxEntity pendingJpaEventOutbox : pendingJpaEventsOutbox) {
-                this.eventBusService.publish(pendingJpaEventOutbox);
+                this.eventBusService.publishEvent(pendingJpaEventOutbox);
                 this.eventOutboxRepository.save(pendingJpaEventOutbox.withEventOutboxStatus(EventOutboxStatus.PUBLISHED));
                 log.info("Event with id: {} has been successfully published", pendingJpaEventOutbox.getEventId());
             }

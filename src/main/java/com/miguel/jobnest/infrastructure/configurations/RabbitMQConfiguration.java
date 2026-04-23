@@ -12,11 +12,6 @@ import java.util.List;
 
 @Configuration
 public class RabbitMQConfiguration {
-    private final RabbitMQProperties rabbitMQProperties;
-
-    public RabbitMQConfiguration(final RabbitMQProperties rabbitMQProperties) {
-        this.rabbitMQProperties = rabbitMQProperties;
-    }
 
     @Bean
     public RabbitTemplate rabbitTemplate(final ConnectionFactory connectionFactory) {
@@ -31,10 +26,10 @@ public class RabbitMQConfiguration {
     }
 
     @Bean
-    public Declarables declarables() {
+    public Declarables declarables(final RabbitMQProperties rabbitMQProperties) {
         final List<Declarable> declarables = new ArrayList<>();
 
-        this.rabbitMQProperties.getQueues().forEach((key, queueProperties) -> {
+        rabbitMQProperties.getQueues().forEach((key, queueProperties) -> {
             final Exchange exchange = this.configureExchange(queueProperties.getExchangeProperties());
             declarables.add(exchange);
 
@@ -52,7 +47,7 @@ public class RabbitMQConfiguration {
         return new Declarables(declarables);
     }
 
-    private Exchange configureExchange(final RabbitMQProperties.ExchangeProperties exchangeProperties) {
+    private Exchange configureExchange(final RabbitMQProperties.QueueProperties.ExchangeProperties exchangeProperties) {
         return switch (exchangeProperties.getType()) {
             case "topic" -> new TopicExchange(exchangeProperties.getName(), true, false);
             case "fanout" -> new FanoutExchange(exchangeProperties.getName(), true, false);
@@ -61,7 +56,7 @@ public class RabbitMQConfiguration {
         };
     }
 
-    private Queue configureQueue(final String queue, final RabbitMQProperties.DeadLetterQueueProperties deadLetterQueueProperties) {
+    private Queue configureQueue(final String queue, final RabbitMQProperties.QueueProperties.DeadLetterQueueProperties deadLetterQueueProperties) {
         final QueueBuilder queueBuilder = QueueBuilder.durable(queue);
 
         if (deadLetterQueueProperties != null) {
@@ -72,7 +67,7 @@ public class RabbitMQConfiguration {
         return queueBuilder.build();
     }
 
-    private List<Declarable> configureDeadLetterQueue(final RabbitMQProperties.DeadLetterQueueProperties deadLetterQueueProperties) {
+    private List<Declarable> configureDeadLetterQueue(final RabbitMQProperties.QueueProperties.DeadLetterQueueProperties deadLetterQueueProperties) {
         final List<Declarable> deadLetterQueueDeclarables = new ArrayList<>();
 
         final DirectExchange directExchange = new DirectExchange(deadLetterQueueProperties.getExchange(), true, false);
