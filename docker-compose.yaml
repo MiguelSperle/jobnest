@@ -1,36 +1,36 @@
 services:
-#  app:
-#    build:
-#      context: .
-#      dockerfile: Dockerfile
-#    container_name: jobnest-backend
-#    image: jobnest-app:${APP_VERSION:-latest}
-#    ports:
-#      - "8080:8080"
-#    environment:
-#      DB_HOST: ${DB_HOST}
-#      DB_NAME: ${DB_NAME}
-#      DB_USERNAME: ${DB_USERNAME}
-#      DB_PASSWORD: ${DB_PASSWORD}
-#      RABBITMQ_HOST: ${RABBITMQ_HOST}
-#      RABBITMQ_USERNAME: ${RABBITMQ_USERNAME}
-#      RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD}
-#      REDIS_HOST: ${REDIS_HOST}
-#      MAIL_USERNAME: ${MAIL_USERNAME}
-#      MAIL_PASSWORD: ${MAIL_PASSWORD}
-#      CLOUDINARY_CLOUD_NAME: ${CLOUDINARY_CLOUD_NAME}
-#      CLOUDINARY_API_KEY: ${CLOUDINARY_API_KEY}
-#      CLOUDINARY_API_SECRET: ${CLOUDINARY_API_SECRET}
-#      JWT_SECRET: ${JWT_SECRET}
-#    depends_on:
-#      rabbitmq:
-#        condition: service_healthy
-#      postgres:
-#        condition: service_healthy
-#      redis:
-#        condition: service_healthy
-#    networks:
-#      - jobnest-network
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: jobnest-backend
+    image: jobnest-app:${APP_VERSION:-latest}
+    ports:
+      - "8080:8080"
+    environment:
+      DB_HOST: ${DB_HOST}
+      DB_NAME: ${DB_NAME}
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+      RABBITMQ_HOST: ${RABBITMQ_HOST}
+      RABBITMQ_USERNAME: ${RABBITMQ_USERNAME}
+      RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD}
+      REDIS_HOST: ${REDIS_HOST}
+      MAIL_USERNAME: ${MAIL_USERNAME}
+      MAIL_PASSWORD: ${MAIL_PASSWORD}
+      CLOUDINARY_CLOUD_NAME: ${CLOUDINARY_CLOUD_NAME}
+      CLOUDINARY_API_KEY: ${CLOUDINARY_API_KEY}
+      CLOUDINARY_API_SECRET: ${CLOUDINARY_API_SECRET}
+      JWT_SECRET: ${JWT_SECRET}
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - jobnest-network
 
   postgres:
     container_name: jobnest-database
