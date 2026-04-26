@@ -20,7 +20,6 @@ import org.springframework.web.util.ContentCachingResponseWrapper;
 
 import java.lang.reflect.Method;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -72,7 +71,7 @@ public class IdempotencyKeyFilter extends OncePerRequestFilter {
                     response.setStatus(existsIdempotencyKeyValue.get().status());
                     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
                     response.addHeader(IdempotencyKey.IDEMPOTENCY_RESPONSE_HEADER, "true");
-                    existsIdempotencyKeyValue.get().headers().forEach(response::setHeader);
+                    existsIdempotencyKeyValue.get().headers().forEach(response::addHeader);
                     return;
                 }
 
@@ -89,25 +88,22 @@ public class IdempotencyKeyFilter extends OncePerRequestFilter {
                 final ContentCachingResponseWrapper responseWrapper = new ContentCachingResponseWrapper(response);
                 filterChain.doFilter(request, responseWrapper);
 
-                if (this.isCacheableResponse(responseWrapper)) {
-                    final String body = new String(responseWrapper.getContentAsByteArray(), responseWrapper.getCharacterEncoding());
-
-                    final Map<String, String> headers = responseWrapper.getHeaderNames().stream().collect(Collectors.toMap(
-                            headerName -> headerName,
-                            headerName -> Objects.toString(responseWrapper.getHeader(headerName), ""),
-                            (v1, v2) -> v1
-                    ));
-
-                    final IdempotencyKeyValue idempotencyKeyValue = IdempotencyKeyValue.done(
-                            responseWrapper.getStatus(), body, headers
-                    );
-
-                    this.cacheService.set(redisKey, idempotencyKeyValue, timeout, timeUnit);
-                } else {
-                    this.cacheService.delete(redisKey);
-                }
-
+                final byte[] bodyArray = responseWrapper.getContentAsByteArray();
                 responseWrapper.copyBodyToResponse();
+
+                final String body = new String(bodyArray, responseWrapper.getCharacterEncoding());
+
+                final Map<String, String> headers = responseWrapper.getHeaderNames().stream().collect(Collectors.toMap(
+                        headerName -> headerName,
+                        responseWrapper::getHeader,
+                        (v1, v2) -> v1
+                ));
+
+                final IdempotencyKeyValue idempotencyKeyValue = IdempotencyKeyValue.done(
+                        responseWrapper.getStatus(), body, headers
+                );
+
+                this.cacheService.set(redisKey, idempotencyKeyValue, timeout, timeUnit);
             } else {
                 filterChain.doFilter(request, response);
             }
@@ -143,9 +139,5 @@ public class IdempotencyKeyFilter extends OncePerRequestFilter {
 
     private boolean isSupportedMethod(final HttpServletRequest request) {
         return request.getMethod().equals("POST") || request.getMethod().equals("PATCH");
-    }
-
-    private boolean isCacheableResponse(final ContentCachingResponseWrapper responseWrapper) {
-        return responseWrapper.getStatus() >= 200 && responseWrapper.getStatus() < 300;
     }
 }
