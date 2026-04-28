@@ -6,6 +6,7 @@ import com.miguel.jobnest.infrastructure.rest.dtos.subscription.req.CreateSubscr
 import com.miguel.jobnest.infrastructure.rest.dtos.subscription.res.ListSubscriptionsByUserIdResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -17,7 +18,7 @@ public interface SubscriptionCandidateControllerAPI {
     ResponseEntity<MessageResponse> createSubscription(
             @RequestPart CreateSubscriptionRequest request,
             @RequestPart MultipartFile resumeFile,
-            @AuthenticationPrincipal String userId
+            @AuthenticationPrincipal Jwt jwt
     ) throws IOException;
 
     @GetMapping
@@ -26,7 +27,7 @@ public interface SubscriptionCandidateControllerAPI {
             @RequestParam(name = "perPage", required = false, defaultValue = "10") int perPage,
             @RequestParam(name = "sort", required = false, defaultValue = "createdAt") String sort,
             @RequestParam(name = "direction", required = false, defaultValue = "desc") String direction,
-            @AuthenticationPrincipal String userId
+            @AuthenticationPrincipal Jwt jwt
     );
 
     @PatchMapping("/{subscriptionId}")

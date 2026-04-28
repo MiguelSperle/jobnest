@@ -8,6 +8,7 @@ import com.miguel.jobnest.infrastructure.rest.dtos.jobvacancy.res.ListJobVacanci
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -15,7 +16,7 @@ import java.util.Map;
 @RequestMapping("/api/v1/recruiter/job-vacancies")
 public interface JobVacancyRecruiterControllerAPI {
     @PostMapping
-    ResponseEntity<MessageResponse> createJobVacancy(@RequestBody @Valid CreateJobVacancyRequest request, @AuthenticationPrincipal String userId);
+    ResponseEntity<MessageResponse> createJobVacancy(@RequestBody @Valid CreateJobVacancyRequest request, @AuthenticationPrincipal Jwt jwt);
 
     @GetMapping
     ResponseEntity<Pagination<ListJobVacanciesByUserIdResponse>> listJobVacanciesByUserId(
@@ -25,7 +26,7 @@ public interface JobVacancyRecruiterControllerAPI {
             @RequestParam(name = "sort", required = false, defaultValue = "createdAt") String sort,
             @RequestParam(name = "direction", required = false, defaultValue = "desc") String direction,
             @RequestParam Map<String, String> filters,
-            @AuthenticationPrincipal String userId
+            @AuthenticationPrincipal Jwt jwt
     );
 
     @PatchMapping("/{jobVacancyId}")

@@ -13,6 +13,7 @@ import com.miguel.jobnest.infrastructure.rest.dtos.user.req.UpdateUserRequest;
 import com.miguel.jobnest.infrastructure.rest.dtos.user.req.UpdateUserPasswordRequest;
 import com.miguel.jobnest.infrastructure.rest.dtos.user.res.GetAuthenticatedUserResponse;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -57,29 +58,29 @@ public class UserRestController implements UserControllerAPI {
     }
 
     @Override
-    public ResponseEntity<GetAuthenticatedUserResponse> getAuthenticatedUser(String userId) {
-        final GetAuthenticatedUserUseCaseOutput output = this.getAuthenticatedUserUseCase.execute(GetAuthenticatedUserUseCaseInput.with(userId));
+    public ResponseEntity<GetAuthenticatedUserResponse> getAuthenticatedUser(final Jwt jwt) {
+        final GetAuthenticatedUserUseCaseOutput output = this.getAuthenticatedUserUseCase.execute(GetAuthenticatedUserUseCaseInput.with(jwt.getSubject()));
 
         return ResponseEntity.ok().body(GetAuthenticatedUserResponse.from(output));
     }
 
     @Override
-    public ResponseEntity<MessageResponse> updateUser(final UpdateUserRequest request, final String userId) {
-        this.updateUserUseCase.execute(request.toInput(userId));
+    public ResponseEntity<MessageResponse> updateUser(final UpdateUserRequest request, final Jwt jwt) {
+        this.updateUserUseCase.execute(request.toInput(jwt.getSubject()));
 
         return ResponseEntity.ok().body(MessageResponse.from("User updated successfully"));
     }
 
     @Override
-    public ResponseEntity<MessageResponse> updateUserPassword(final UpdateUserPasswordRequest request, final String userId) {
-        this.updateUserPasswordUseCase.execute(request.toInput(userId));
+    public ResponseEntity<MessageResponse> updateUserPassword(final UpdateUserPasswordRequest request, final Jwt jwt) {
+        this.updateUserPasswordUseCase.execute(request.toInput(jwt.getSubject()));
 
         return ResponseEntity.ok().body(MessageResponse.from("User password updated successfully"));
     }
 
     @Override
-    public ResponseEntity<MessageResponse> deleteUser(final String userId) {
-        this.softDeleteUserUseCase.execute(SoftDeleteUserUseCaseInput.with(userId));
+    public ResponseEntity<MessageResponse> deleteUser(final Jwt jwt) {
+        this.softDeleteUserUseCase.execute(SoftDeleteUserUseCaseInput.with(jwt.getSubject()));
 
         return ResponseEntity.ok().body(MessageResponse.from("User deleted successfully"));
     }

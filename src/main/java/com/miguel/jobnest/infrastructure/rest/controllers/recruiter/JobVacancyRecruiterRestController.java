@@ -14,6 +14,7 @@ import com.miguel.jobnest.infrastructure.rest.dtos.jobvacancy.req.UpdateJobVacan
 import com.miguel.jobnest.infrastructure.rest.dtos.jobvacancy.res.ListJobVacanciesByUserIdResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -39,8 +40,8 @@ public class JobVacancyRecruiterRestController implements JobVacancyRecruiterCon
 
     @Override
     @IdempotencyKey
-    public ResponseEntity<MessageResponse> createJobVacancy(final CreateJobVacancyRequest request, final String userId) {
-        this.createJobVacancyUseCase.execute(request.toInput(userId));
+    public ResponseEntity<MessageResponse> createJobVacancy(final CreateJobVacancyRequest request, final Jwt jwt) {
+        this.createJobVacancyUseCase.execute(request.toInput(jwt.getSubject()));
 
         return ResponseEntity.status(HttpStatus.CREATED).body(MessageResponse.from("Job vacancy created successfully"));
     }
@@ -53,10 +54,10 @@ public class JobVacancyRecruiterRestController implements JobVacancyRecruiterCon
             final String sort,
             final String direction,
             final Map<String, String> filters,
-            final String userId
+            final Jwt jwt
     ) {
         final ListJobVacanciesByUserIdUseCaseOutput output = this.listJobVacanciesByUserIdUseCase.execute(
-                ListJobVacanciesByUserIdUseCaseInput.with(userId, SearchQuery.newSearchQuery(page, perPage, search, sort, direction, filters))
+                ListJobVacanciesByUserIdUseCaseInput.with(jwt.getSubject(), SearchQuery.newSearchQuery(page, perPage, search, sort, direction, filters))
         );
 
         return ResponseEntity.ok().body(ListJobVacanciesByUserIdResponse.from(output));

@@ -20,7 +20,6 @@ import org.springframework.web.util.ContentCachingResponseWrapper;
 
 import java.lang.reflect.Method;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -96,7 +95,7 @@ public class IdempotencyKeyFilter extends OncePerRequestFilter {
 
                 final Map<String, String> headers = responseWrapper.getHeaderNames().stream().collect(Collectors.toMap(
                         headerName -> headerName,
-                        Objects.requireNonNull(responseWrapper::getHeader),
+                        responseWrapper::getHeader,
                         (v1, v2) -> v1
                 ));
 

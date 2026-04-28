@@ -15,6 +15,7 @@ import com.miguel.jobnest.infrastructure.rest.dtos.subscription.req.CreateSubscr
 import com.miguel.jobnest.infrastructure.rest.dtos.subscription.res.ListSubscriptionsByUserIdResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -39,9 +40,9 @@ public class SubscriptionCandidateRestController implements SubscriptionCandidat
     @Override
     @IdempotencyKey
     public ResponseEntity<MessageResponse> createSubscription(
-            final CreateSubscriptionRequest request, final MultipartFile resumeFile, final String userId
+            final CreateSubscriptionRequest request, final MultipartFile resumeFile, final Jwt jwt
     ) throws IOException {
-        this.createSubscriptionUseCase.execute(request.toInput(userId, resumeFile.getBytes()));
+        this.createSubscriptionUseCase.execute(request.toInput(jwt.getSubject(), resumeFile.getBytes()));
 
         return ResponseEntity.status(HttpStatus.CREATED).body(MessageResponse.from("Subscription created successfully"));
     }
@@ -52,10 +53,10 @@ public class SubscriptionCandidateRestController implements SubscriptionCandidat
             final int perPage,
             final String sort,
             final String direction,
-            final String userId
+            final Jwt jwt
     ) {
         final ListSubscriptionsByUserIdUseCaseOutput output = this.listSubscriptionsByUserIdUseCase.execute(
-                ListSubscriptionsByUserIdUseCaseInput.with(userId, SearchQuery.newSearchQuery(page, perPage, sort, direction))
+                ListSubscriptionsByUserIdUseCaseInput.with(jwt.getSubject(), SearchQuery.newSearchQuery(page, perPage, sort, direction))
         );
 
         return ResponseEntity.ok().body(ListSubscriptionsByUserIdResponse.from(output));
