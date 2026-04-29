@@ -25,7 +25,7 @@ It is important to emphasize that this project was developed for educational pur
 
 <p>
 This project covers the following concepts: Clean Architecture, SOLID, Messaging System combined with the implementation of the Inbox and Outbox pattern, 
-Integration with Cloud Storage Service, Database Transactions, Idempotency, Rate Limiter, Unit Testing and Authentication with JWT.
+Integration with Cloud Storage Service, Database Transactions, Idempotency, Rate Limiting, Unit Testing and JWT-based authentication.
 </p>
 
 <p>
