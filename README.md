@@ -7,20 +7,25 @@
     <img src="https://img.shields.io/badge/Spring_data_jpa-6DB33F?style=for-the-badge&logo=hibernate&logoColor=white" alt="Spring Data Jpa Badge" />
     <img src="https://img.shields.io/badge/-postgresql-336791?style=for-the-badge&logo=postgresql&logoColor=white" alt="Postgres Badge"/>
     <img src="https://img.shields.io/badge/-rabbitmq-%23FF6600?style=for-the-badge&logo=rabbitmq&logoColor=white" alt="RabbitMQ Badge"/>
+    <img src="https://img.shields.io/badge/Redis-DC382D?style=for-the-badge&logo=redis&logoColor=white" alt="Redis Badge" />
+    <img src="https://img.shields.io/badge/Cloudinary-3448C5?style=for-the-badge&logo=cloudinary&logoColor=white" alt="Cloudinary Badge" />
     <img src="https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white" alt="Docker Badge"/>
     <img src="https://img.shields.io/badge/junit-%23E33332?style=for-the-badge&logo=junit5&logoColor=white" alt="Junit Badge"/>
     <img src="https://img.shields.io/badge/Mockito-25A162?style=for-the-badge" alt="Mockito Badge" />
 </p>
 
 <p>
-To summarize, Jobnest is a backend application designed to efficiently manage and support job vacancy searches. It provides a complete set of functionalities that a system of this kind typically offers, 
-both for those who publish job vacancies and for those who seek to apply for them.
+In summary, Jobnest is a backend application designed to efficiently manage and provide job vacancies. 
+It offers a comprehensive set of features for both recruiters posting job openings and job seekers applying for them.
 </p>
 
 <p>
-It is important to emphasize that this is a study project designed to explore and implement complex concepts, such as: 
-Clean Architecture, SOLID, Messaging System combined with the implementation of the Inbox and Outbox pattern, 
-Database Transactions, Idempotency, Rate Limiter, Unit Testing and Authentication with JWT.
+It is important to emphasize that this project was developed for educational purposes, focusing on the exploration and implementation of complex concepts.
+</p>
+
+<p>
+This project covers the following concepts: Clean Architecture, SOLID, Messaging System combined with the implementation of the Inbox and Outbox pattern, 
+Integration with Cloud Storage Service, Database Transactions, Idempotency, Rate Limiter, Unit Testing and Authentication with JWT.
 </p>
 
 <p>
