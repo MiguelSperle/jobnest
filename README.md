@@ -10,6 +10,8 @@
     <img src="https://img.shields.io/badge/Redis-DC382D?style=for-the-badge&logo=redis&logoColor=white" alt="Redis Badge" />
     <img src="https://img.shields.io/badge/Cloudinary-3448C5?style=for-the-badge&logo=cloudinary&logoColor=white" alt="Cloudinary Badge" />
     <img src="https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white" alt="Docker Badge"/>
+    <img src="https://img.shields.io/badge/junit-%23E33332?logo=junit5&logoColor=white&style=for-the-badge" alt="JUnit Badge" />
+    <img src="https://img.shields.io/badge/Mockito-1F3D1F?style=for-the-badge" alt="Mockito Badge" />
 </p>
 
 <p>
@@ -23,7 +25,7 @@ It is important to emphasize that this project was developed for educational pur
 
 <p>
 This project covers the following concepts: Clean Architecture, SOLID, Messaging System combined with the implementation of the Inbox and Outbox pattern, 
-Integration with Cloud Storage Service, Database Transactions, Idempotency, Rate Limiting, Unit Testing and JWT-based authentication.
+Integration with Cloud Storage Service, Database Transactions, Idempotency, Rate Limiting, Containerization, Unit Testing and Authentication with JWT.
 </p>
 
 <p>
