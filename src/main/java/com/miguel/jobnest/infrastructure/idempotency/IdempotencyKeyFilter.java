@@ -88,22 +88,25 @@ public class IdempotencyKeyFilter extends OncePerRequestFilter {
                 final ContentCachingResponseWrapper responseWrapper = new ContentCachingResponseWrapper(response);
                 filterChain.doFilter(request, responseWrapper);
 
-                final byte[] bodyArray = responseWrapper.getContentAsByteArray();
+                if (this.isCacheableResponse(responseWrapper)) {
+                    final String body = new String(responseWrapper.getContentAsByteArray(), responseWrapper.getCharacterEncoding());
+
+                    final Map<String, String> headers = responseWrapper.getHeaderNames().stream().collect(Collectors.toMap(
+                            headerName -> headerName,
+                            responseWrapper::getHeader,
+                            (v1, v2) -> v1
+                    ));
+
+                    final IdempotencyKeyValue idempotencyKeyValue = IdempotencyKeyValue.done(
+                            responseWrapper.getStatus(), body, headers
+                    );
+
+                    this.cacheService.set(redisKey, idempotencyKeyValue, timeout, timeUnit);
+                } else {
+                    this.cacheService.delete(redisKey);
+                }
+
                 responseWrapper.copyBodyToResponse();
-
-                final String body = new String(bodyArray, responseWrapper.getCharacterEncoding());
-
-                final Map<String, String> headers = responseWrapper.getHeaderNames().stream().collect(Collectors.toMap(
-                        headerName -> headerName,
-                        responseWrapper::getHeader,
-                        (v1, v2) -> v1
-                ));
-
-                final IdempotencyKeyValue idempotencyKeyValue = IdempotencyKeyValue.done(
-                        responseWrapper.getStatus(), body, headers
-                );
-
-                this.cacheService.set(redisKey, idempotencyKeyValue, timeout, timeUnit);
             } else {
                 filterChain.doFilter(request, response);
             }
@@ -139,5 +142,9 @@ public class IdempotencyKeyFilter extends OncePerRequestFilter {
 
     private boolean isSupportedMethod(final HttpServletRequest request) {
         return request.getMethod().equals("POST") || request.getMethod().equals("PATCH");
+    }
+
+    private boolean isCacheableResponse(final ContentCachingResponseWrapper responseWrapper) {
+        return responseWrapper.getStatus() >= 200 && responseWrapper.getStatus() < 300;
     }
 }
