@@ -20,12 +20,13 @@ It offers a comprehensive set of features for both recruiters posting job openin
 </p>
 
 <p>
-It is important to emphasize that this project was developed for educational purposes, focusing on the exploration and implementation of complex concepts.
+It is important to emphasize that this project was developed for educational purposes, 
+focusing on the exploration and implementation of previously studied topics.
 </p>
 
 <p>
-This project covers the following concepts: Clean Architecture, SOLID, Messaging System combined with the implementation of the Inbox and Outbox pattern, 
-Integration with Cloud Storage Service, Database Transactions, Idempotency, Rate Limiting, Containerization, Unit Testing and Authentication with JWT.
+This project covers the following topics: Clean Architecture, SOLID, Messaging System combined with the implementation of the Inbox and Outbox patterns, 
+Integration with Cloud Storage Service, Authentication using JWT, Database Transactions, Idempotency, Rate Limiting, and Unit Testing.
 </p>
 
 <p>
