@@ -25,7 +25,7 @@ focusing on the exploration and implementation of previously studied topics.
 </p>
 
 <p>
-This project implements the following topics: Traditional Monolithic Architecture with Clean Architecture, SOLID, Messaging System combined with the implementation of the Inbox and Outbox patterns, 
+This project implements the following topics: Clean Architecture, SOLID, Messaging System combined with the implementation of the Inbox and Outbox patterns, 
 Integration with Cloud Storage Service, Authentication using JWT, Database Transactions, Idempotency, Rate Limiting, and Unit Testing.
 </p>
 
