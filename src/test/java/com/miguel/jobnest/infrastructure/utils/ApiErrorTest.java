@@ -1,7 +1,6 @@
-package com.miguel.jobnest.infrastructure.api;
+package com.miguel.jobnest.infrastructure.utils;
 
 import com.miguel.jobnest.domain.utils.TimeUtils;
-import com.miguel.jobnest.infrastructure.utils.ApiError;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -14,7 +13,7 @@ public class ApiErrorTest {
         final String message = "Message";
         final LocalDateTime timestamp = TimeUtils.now();
 
-        final ApiError apiError = ApiError.from(message, timestamp);
+        final ApiError apiError = ApiError.from(message, 200, timestamp);
 
         Assertions.assertNotNull(apiError);
         Assertions.assertEquals(message, apiError.message());
@@ -25,10 +24,13 @@ public class ApiErrorTest {
     @Test
     void shouldReturnApiErrorWithErrors_whenCallFrom() {
         final String message = "Message";
-        final List<String> errors = List.of("Error 1", "Error 2");
+        final List<ApiError.Error> errors = List.of(
+                new ApiError.Error("field1", "Error 1"),
+                new ApiError.Error("field2", "Error 2")
+        );
         final LocalDateTime timestamp = TimeUtils.now();
 
-        final ApiError apiError = ApiError.from(message, errors, timestamp);
+        final ApiError apiError = ApiError.from(message, 400, errors, timestamp);
 
 
         Assertions.assertNotNull(apiError);
