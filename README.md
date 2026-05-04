@@ -52,7 +52,7 @@ mvn clean install
 
 ### 4. Variáveis de Ambiente
 
-Crie um arquivo `.env` na raiz do projeto e configure as variáveis de ambiente necessárias para a aplicação:
+Crie um arquivo `.env` na raiz do projeto e configure as variáveis de ambiente necessárias:
 
 ```env
 DB_HOST=
