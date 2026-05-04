@@ -5,8 +5,8 @@
 ## 🚀 Visão Geral
 
 Jobnest é uma aplicação backend para gerenciamento de vagas de emprego, desenvolvida para atender tanto recrutadores que
-anunciam oportunidades quanto candidatos que buscam um emprego, com funcionalidades comuns para ambos os perfis e 
-específicas para cada um deles.
+anunciam oportunidades quanto candidatos que buscam emprego, contemplando funcionalidades compartilhadas para ambos os perfis e 
+funcionalidades exclusivas para cada um.
 
 > ⚠️ Este projeto foi desenvolvido para fins educacionais, com foco na exploração e
 aplicação de tópicos previamente estudados.
