@@ -50,7 +50,7 @@ cd jobnest
 mvn clean install
 ```
 
-### 4. Variáveis de Ambiente
+### 4. Configurar as variáveis de ambiente
 
 Crie um arquivo `.env` na raiz do projeto e configure as variáveis de ambiente necessárias:
 
