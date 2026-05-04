@@ -11,7 +11,7 @@ específicas para cada um deles.
 > ⚠️ Este projeto foi desenvolvido para fins educacionais, com foco na exploração e
 aplicação de tópicos previamente estudados.
 
-### Principais tópicos aplicados:
+### Principais tópicos abordados:
 
 Arquitetura Monolítica, Arquitetura Limpa, SOLID, Comunicação Assíncrona combinada com padrões Inbox/Outbox,
 Integração com Serviço de Armazenamento em Nuvem, Autenticação utilizando JWT, Transações de Banco de Dados, Idempotência,
