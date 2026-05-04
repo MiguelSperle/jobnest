@@ -20,10 +20,10 @@ Rate Limiting e Testes Unitários.
 ## ⚙️ Tecnologias Utilizadas
 
 ![Java](https://img.shields.io/badge/Java-21-000?style=for-the-badge&logo=openjdk&logoColor=white&labelColor=ED8B00)
+![MAVEN](https://img.shields.io/badge/Maven-C71A36?style=for-the-badge&logo=apachemaven&logoColor=white)
 ![Spring Boot](https://img.shields.io/badge/-Spring%20Boot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white)
 ![Spring Security](https://img.shields.io/badge/-Spring%20Security-6DB33F?style=for-the-badge&logo=springsecurity&logoColor=white)
 ![Spring Data JPA](https://img.shields.io/badge/Spring_data_jpa-6DB33F?style=for-the-badge&logo=hibernate&logoColor=white)
-![MAVEN](https://img.shields.io/badge/Maven-C71A36?style=for-the-badge&logo=apachemaven&logoColor=white)
 ![POSTGRESQL](https://img.shields.io/badge/-postgresql-336791?style=for-the-badge&logo=postgresql&logoColor=white)
 ![RABBITMQ](https://img.shields.io/badge/-rabbitmq-%23FF6600?style=for-the-badge&logo=rabbitmq&logoColor=white)
 ![REDIS](https://img.shields.io/badge/Redis-DC382D?style=for-the-badge&logo=redis&logoColor=white)
