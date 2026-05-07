@@ -8,13 +8,19 @@ Jobnest é um sistema de busca de emprego desenvolvido para atender tanto recrut
 que buscam um emprego. O sistema contempla funcionalidades compartilhadas entre os dois tipos de perfil (recrutador e candidato), 
 além de funcionalidades exclusivas para cada um deles.
 
-> ⚠️ Este projeto foi desenvolvido para fins educacionais, com foco na exploração e aplicação de tópicos previamente estudados.
+> ⚠️ Este projeto foi desenvolvido para fins educacionais, com foco na exploração e no aprofundamento de tópicos previamente estudados.
 
 ### Principais tópicos abordados:
 
-Arquitetura Limpa, SOLID, Comunicação Assíncrona combinada com padrões Inbox/Outbox,
-Integração com Serviço de Armazenamento em Nuvem, Autenticação via JWT, Transações de Banco de Dados, Idempotência,
-Rate Limiting e Testes Unitários.
+- Arquitetura Limpa
+- SOLID
+- Comunicação Assíncrona combinada com os padrões Inbox/Outbox
+- Integração com Serviço de Armazenamento em Nuvem
+- Autenticação via JWT
+- Transações de Banco de Dados
+- Idempotência
+- Rate Limiting
+- Testes Unitários
 
 ## ⚙️ Tecnologias Utilizadas
 
