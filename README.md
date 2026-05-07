@@ -4,17 +4,16 @@
 
 ## 🚀 Visão Geral
 
-Jobnest é uma aplicação backend para gerenciamento de vagas de emprego, desenvolvida para atender tanto recrutadores que
-anunciam oportunidades quanto candidatos que buscam emprego, contemplando funcionalidades compartilhadas entre os perfis e
-funcionalidades exclusivas para cada um.
+Jobnest é um sistema de busca de emprego desenvolvido para atender tanto recrutadores, que anunciam oportunidades, quanto candidatos, 
+que buscam um emprego. O sistema contempla funcionalidades compartilhadas entre os dois tipos de perfil (recrutador e candidato), 
+além de funcionalidades exclusivas para cada um deles.
 
-> ⚠️ Este projeto foi desenvolvido para fins educacionais, com foco na exploração e
-aplicação de tópicos previamente estudados.
+> ⚠️ Este projeto foi desenvolvido para fins educacionais, com foco na exploração e aplicação de tópicos previamente estudados.
 
 ### Principais tópicos abordados:
 
 Arquitetura Limpa, SOLID, Comunicação Assíncrona combinada com padrões Inbox/Outbox,
-Integração com Serviço de Armazenamento em Nuvem, Autenticação utilizando JWT, Transações de Banco de Dados, Idempotência,
+Integração com Serviço de Armazenamento em Nuvem, Autenticação via JWT, Transações de Banco de Dados, Idempotência,
 Rate Limiting e Testes Unitários.
 
 ## ⚙️ Tecnologias Utilizadas
