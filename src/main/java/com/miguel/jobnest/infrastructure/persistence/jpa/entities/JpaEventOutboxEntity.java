@@ -2,7 +2,7 @@ package com.miguel.jobnest.infrastructure.persistence.jpa.entities;
 
 import com.miguel.jobnest.domain.utils.IdentifierUtils;
 import com.miguel.jobnest.domain.utils.TimeUtils;
-import com.miguel.jobnest.infrastructure.enums.EventOutboxStatus;
+import com.miguel.jobnest.infrastructure.persistence.jpa.enums.EventOutboxStatus;
 import jakarta.persistence.*;
 import lombok.Builder;
 
@@ -94,39 +94,12 @@ public class JpaEventOutboxEntity {
         );
     }
 
-    public JpaEventOutboxEntity updateStatus(final EventOutboxStatus status) {
-        return new JpaEventOutboxEntity(
-                this.id,
-                this.eventId,
-                this.payload,
-                this.aggregateId,
-                this.aggregateType,
-                this.eventType,
-                status,
-                this.exchange,
-                this.routingKey,
-                this.createdAt
-        );
-    }
-
-    public String getId() {
-        return this.id;
-    }
-
     public String getEventId() {
         return this.eventId;
     }
 
     public byte[] getPayload() {
         return this.payload;
-    }
-
-    public String getAggregateId() {
-        return this.aggregateId;
-    }
-
-    public String getAggregateType() {
-        return this.aggregateType;
     }
 
     public String getEventType() {
@@ -137,15 +110,15 @@ public class JpaEventOutboxEntity {
         return this.status;
     }
 
+    public void setStatus(final EventOutboxStatus status) {
+        this.status = status;
+    }
+
     public String getExchange() {
         return this.exchange;
     }
 
     public String getRoutingKey() {
         return this.routingKey;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return this.createdAt;
     }
 }

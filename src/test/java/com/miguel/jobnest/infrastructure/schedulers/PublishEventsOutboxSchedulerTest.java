@@ -4,7 +4,7 @@ import com.miguel.jobnest.application.abstractions.wrapper.TransactionManager;
 import com.miguel.jobnest.domain.utils.IdentifierUtils;
 import com.miguel.jobnest.infrastructure.abstractions.repositories.EventOutboxRepository;
 import com.miguel.jobnest.infrastructure.abstractions.services.EventBusService;
-import com.miguel.jobnest.infrastructure.enums.EventOutboxStatus;
+import com.miguel.jobnest.infrastructure.persistence.jpa.enums.EventOutboxStatus;
 import com.miguel.jobnest.infrastructure.persistence.jpa.entities.JpaEventOutboxEntity;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

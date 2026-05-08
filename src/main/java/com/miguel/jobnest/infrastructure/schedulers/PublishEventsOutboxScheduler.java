@@ -3,7 +3,7 @@ package com.miguel.jobnest.infrastructure.schedulers;
 import com.miguel.jobnest.application.abstractions.wrapper.TransactionManager;
 import com.miguel.jobnest.infrastructure.abstractions.services.EventBusService;
 import com.miguel.jobnest.infrastructure.abstractions.repositories.EventOutboxRepository;
-import com.miguel.jobnest.infrastructure.enums.EventOutboxStatus;
+import com.miguel.jobnest.infrastructure.persistence.jpa.enums.EventOutboxStatus;
 import com.miguel.jobnest.infrastructure.persistence.jpa.entities.JpaEventOutboxEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,7 +41,8 @@ public class PublishEventsOutboxScheduler {
 
             for (JpaEventOutboxEntity pendingJpaEventOutbox : pendingJpaEventsOutbox) {
                 this.eventBusService.publishEvent(pendingJpaEventOutbox);
-                this.eventOutboxRepository.save(pendingJpaEventOutbox.updateStatus(EventOutboxStatus.PUBLISHED));
+                pendingJpaEventOutbox.setStatus(EventOutboxStatus.PUBLISHED);
+                this.eventOutboxRepository.save(pendingJpaEventOutbox);
                 log.info("Event with id: {} has been successfully published", pendingJpaEventOutbox.getEventId());
             }
         });
