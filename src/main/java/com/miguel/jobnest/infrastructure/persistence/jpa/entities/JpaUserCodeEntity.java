@@ -71,28 +71,4 @@ public class JpaUserCodeEntity {
                 this.createdAt
         );
     }
-
-    public String getId() {
-        return this.id;
-    }
-
-    public String getUserId() {
-        return this.userId;
-    }
-
-    public String getCode() {
-        return this.code;
-    }
-
-    public UserCodeType getUserCodeType() {
-        return this.userCodeType;
-    }
-
-    public LocalDateTime getExpiresIn() {
-        return this.expiresIn;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return this.createdAt;
-    }
 }

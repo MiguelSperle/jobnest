@@ -51,7 +51,7 @@ public class SubscriptionRepositoryImpl implements SubscriptionRepository {
         this.transactionManager.runTransaction(() -> {
             this.jpaSubscriptionRepository.save(JpaSubscriptionEntity.toEntity(subscription));
             for (DomainEvent domainEvent : subscription.getDomainEvents()) {
-                this.eventOutboxRepository.save(JpaEventOutboxEntity.newJpaEventOutboxEntity(
+                this.eventOutboxRepository.save(JpaEventOutboxEntity.newEventOutbox(
                         domainEvent.eventId(),
                         Json.writeValueAsBytes(domainEvent),
                         domainEvent.aggregateId(),

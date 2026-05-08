@@ -92,40 +92,4 @@ public class JpaJobVacancyEntity {
                 this.createdAt
         );
     }
-
-    public String getId() {
-        return this.id;
-    }
-
-    public String getUserId() {
-        return this.userId;
-    }
-
-    public String getTitle() {
-        return this.title;
-    }
-
-    public String getDescription() {
-        return this.description;
-    }
-
-    public SeniorityLevel getSeniorityLevel() {
-        return this.seniorityLevel;
-    }
-
-    public Modality getModality() {
-        return this.modality;
-    }
-
-    public String getCompanyName() {
-        return this.companyName;
-    }
-
-    public Boolean getIsDeleted() {
-        return this.isDeleted;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return this.createdAt;
-    }
 }

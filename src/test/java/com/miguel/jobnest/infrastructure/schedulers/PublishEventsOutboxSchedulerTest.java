@@ -32,7 +32,7 @@ public class PublishEventsOutboxSchedulerTest {
     @Test
     void shouldPublishPendingEventsOutbox_whenPublishEventsOutboxSchedulerRuns() {
         final JpaEventOutboxEntity jpaEventOutboxEntity = JpaEventOutboxEntity.builder().eventId(IdentifierUtils.generateNewId())
-                .eventOutboxStatus(EventOutboxStatus.PENDING).build();
+                .status(EventOutboxStatus.PENDING).build();
 
         Mockito.doAnswer(invocationOnMock -> {
             final Runnable runnable = invocationOnMock.getArgument(0);
@@ -49,7 +49,7 @@ public class PublishEventsOutboxSchedulerTest {
         Mockito.verify(this.eventOutboxRepository, Mockito.times(1)).findFirst10ByStatus(Mockito.any());
         Mockito.verify(this.eventBusService, Mockito.times(1)).publishEvent(Mockito.any());
         Mockito.verify(this.eventOutboxRepository, Mockito.times(1)).save(Mockito.argThat(jpaEventOutboxEntitySaved ->
-                jpaEventOutboxEntitySaved.getEventOutboxStatus() == EventOutboxStatus.PUBLISHED
+                jpaEventOutboxEntitySaved.getStatus() == EventOutboxStatus.PUBLISHED
         ));
     }
 

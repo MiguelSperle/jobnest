@@ -70,28 +70,4 @@ public class JpaSubscriptionEntity {
                 this.createdAt
         );
     }
-
-    public String getId() {
-        return this.id;
-    }
-
-    public String getUserId() {
-        return this.userId;
-    }
-
-    public String getJobVacancyId() {
-        return this.jobVacancyId;
-    }
-
-    public String getResumeUrl() {
-        return this.resumeUrl;
-    }
-
-    public Boolean getIsCanceled() {
-        return this.isCanceled;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return this.createdAt;
-    }
 }

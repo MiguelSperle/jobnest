@@ -42,7 +42,7 @@ public class UserCodeRepositoryImpl implements UserCodeRepository {
         this.transactionManager.runTransaction(() -> {
             this.jpaUserCodeRepository.save(JpaUserCodeEntity.toEntity(userCode));
             for (DomainEvent domainEvent : userCode.getDomainEvents()) {
-                this.eventOutboxRepository.save(JpaEventOutboxEntity.newJpaEventOutboxEntity(
+                this.eventOutboxRepository.save(JpaEventOutboxEntity.newEventOutbox(
                         domainEvent.eventId(),
                         Json.writeValueAsBytes(domainEvent),
                         domainEvent.aggregateId(),

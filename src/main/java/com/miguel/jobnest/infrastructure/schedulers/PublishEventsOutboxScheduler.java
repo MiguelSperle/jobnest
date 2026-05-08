@@ -41,7 +41,7 @@ public class PublishEventsOutboxScheduler {
 
             for (JpaEventOutboxEntity pendingJpaEventOutbox : pendingJpaEventsOutbox) {
                 this.eventBusService.publishEvent(pendingJpaEventOutbox);
-                this.eventOutboxRepository.save(pendingJpaEventOutbox.withEventOutboxStatus(EventOutboxStatus.PUBLISHED));
+                this.eventOutboxRepository.save(pendingJpaEventOutbox.updateStatus(EventOutboxStatus.PUBLISHED));
                 log.info("Event with id: {} has been successfully published", pendingJpaEventOutbox.getEventId());
             }
         });

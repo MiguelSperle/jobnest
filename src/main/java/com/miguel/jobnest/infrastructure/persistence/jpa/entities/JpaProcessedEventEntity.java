@@ -45,20 +45,4 @@ public class JpaProcessedEventEntity {
                 TimeUtils.now()
         );
     }
-
-    public String getId() {
-        return this.id;
-    }
-
-    public String getEventId() {
-        return this.eventId;
-    }
-
-    public String getListener() {
-        return this.listener;
-    }
-
-    public LocalDateTime getProcessedAt() {
-        return this.processedAt;
-    }
 }

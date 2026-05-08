@@ -106,48 +106,4 @@ public class JpaUserEntity {
                 this.createdAt
         );
     }
-
-    public String getId() {
-        return this.id;
-    }
-
-    public String getName() {
-        return this.name;
-    }
-
-    public String getEmail() {
-        return this.email;
-    }
-
-    public String getDescription() {
-        return this.description;
-    }
-
-    public String getPassword() {
-        return this.password;
-    }
-
-    public UserStatus getUserStatus() {
-        return this.userStatus;
-    }
-
-    public AuthorizationRole getAuthorizationRole() {
-        return this.authorizationRole;
-    }
-
-    public String getCity() {
-        return this.city;
-    }
-
-    public String getState() {
-        return this.state;
-    }
-
-    public String getCountry() {
-        return this.country;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return this.createdAt;
-    }
 }

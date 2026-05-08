@@ -32,8 +32,8 @@ public class JpaEventOutboxEntity {
     private String eventType;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "status", nullable = false, length = 10)
-    private EventOutboxStatus eventOutboxStatus;
+    @Column(nullable = false, length = 10)
+    private EventOutboxStatus status;
 
     @Column(nullable = false, length = 100)
     private String exchange;
@@ -54,7 +54,7 @@ public class JpaEventOutboxEntity {
             final String aggregateId,
             final String aggregateType,
             final String eventType,
-            final EventOutboxStatus eventOutboxStatus,
+            final EventOutboxStatus status,
             final String exchange,
             final String routingKey,
             final LocalDateTime createdAt
@@ -65,13 +65,13 @@ public class JpaEventOutboxEntity {
         this.aggregateId = aggregateId;
         this.aggregateType = aggregateType;
         this.eventType = eventType;
-        this.eventOutboxStatus = eventOutboxStatus;
+        this.status = status;
         this.exchange = exchange;
         this.routingKey = routingKey;
         this.createdAt = createdAt;
     }
 
-    public static JpaEventOutboxEntity newJpaEventOutboxEntity(
+    public static JpaEventOutboxEntity newEventOutbox(
             final String eventId,
             final byte[] payload,
             final String aggregateId,
@@ -94,7 +94,7 @@ public class JpaEventOutboxEntity {
         );
     }
 
-    public JpaEventOutboxEntity withEventOutboxStatus(final EventOutboxStatus eventOutboxStatus) {
+    public JpaEventOutboxEntity updateStatus(final EventOutboxStatus status) {
         return new JpaEventOutboxEntity(
                 this.id,
                 this.eventId,
@@ -102,7 +102,7 @@ public class JpaEventOutboxEntity {
                 this.aggregateId,
                 this.aggregateType,
                 this.eventType,
-                eventOutboxStatus,
+                status,
                 this.exchange,
                 this.routingKey,
                 this.createdAt
@@ -133,8 +133,8 @@ public class JpaEventOutboxEntity {
         return this.eventType;
     }
 
-    public EventOutboxStatus getEventOutboxStatus() {
-        return this.eventOutboxStatus;
+    public EventOutboxStatus getStatus() {
+        return this.status;
     }
 
     public String getExchange() {
